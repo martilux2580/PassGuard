@@ -21,23 +21,30 @@ namespace PassGuard
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MenuPanel.BackColor = Color.FromArgb(5, 196, 149); //43, 43, 43
+            MenuPanel.BackColor = Color.FromArgb(20, 211, 164); //43, 43, 43
             LogoPanel.BackColor = Color.FromArgb(0, 184, 137); //31, 31, 31
             OptionsPanel.BackColor = Color.FromArgb(0, 191, 144); //38, 38, 38
             this.BackColor = Color.FromArgb(225, 225, 225); //45, 45, 45
+            ContentPanel.BackColor = Color.FromArgb(225, 225, 225); //225, 225, 225
             var directorio = Directory.GetCurrentDirectory();
             label1.Text = directorio;
             label1.Visible = false;
             LogoPictureBox.Image = Image.FromFile(@"..\..\Images\Logo.png"); //Working Directory inside Release Folder. Loads Image from Image folder.
             LogoPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
             this.Icon = new Icon(@"..\..\Images\LogoIcon64.ico"); //Loads Icon from Image folder.
-            //Determine buttons and functions
+            SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico");
+            
+
+
             //Think of use cases of the app.
+            //Determine buttons and functions
             //Cover all panels with the contents they will have before start coding functionality.
             //When changing window colors, disable black tones (0, 0, 0) so that letters and logo are visible.
 
             //label2.ForeColor = Color.FromArgb(0, 0, 0); //100, 100, 100
             //label3.ForeColor = Color.FromArgb(0, 0, 0); //90, 90, 90
+            //SettingPictureBox.Image = Image.FromFile(@"..\..\Images\Setting.jpg"); //Working Directory inside Release Folder. Loads Image from Image folder.
+            //SettingPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
             //CreateVaultButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             //CreateVaultButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             //button1.Visible = false; //If button not visible, you cannot click it
@@ -51,6 +58,7 @@ namespace PassGuard
         private void CreateVaultButton_Click(object sender, EventArgs e)
         {
             label1.Visible = true;
+            TitleLabel.Text = "CREATING A NEW PASSWORD VAULT";
         }
 
         private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
@@ -66,6 +74,7 @@ namespace PassGuard
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             label1.Visible = false;
+            TitleLabel.Text = "LOADING A PASSWORD VAULT";
         }
 
         private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
@@ -92,5 +101,16 @@ namespace PassGuard
         {
             System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories");
         }
+
+        private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            TitleLabel.Text = "HOME";
+        }
+
+        private void SettingButton_Click(object sender, EventArgs e)
+        {
+            SettingsCMS.Show(SettingButton, new Point(SettingButton.Width - SettingsCMS.Width, SettingButton.Height));
+        }
+
     }
 }
