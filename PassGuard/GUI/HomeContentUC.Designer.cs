@@ -66,6 +66,7 @@ namespace PassGuard.GUI
             // 
             // TimePanel
             // 
+            this.TimePanel.AutoSize = true;
             this.TimePanel.Controls.Add(this.DateLabel);
             this.TimePanel.Controls.Add(this.TimeLabel);
             this.TimePanel.Location = new System.Drawing.Point(0, 171);
@@ -84,6 +85,7 @@ namespace PassGuard.GUI
             this.Load += new System.EventHandler(this.HomeContentUC_Load);
             this.TimePanel.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
