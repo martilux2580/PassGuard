@@ -31,6 +31,7 @@ namespace PassGuard
         {
             this.components = new System.ComponentModel.Container();
             this.MenuPanel = new System.Windows.Forms.Panel();
+            this.CreateQuickPassButton = new System.Windows.Forms.Button();
             this.LoadVaultButton = new System.Windows.Forms.Button();
             this.CreateVaultButton = new System.Windows.Forms.Button();
             this.LogoPanel = new System.Windows.Forms.Panel();
@@ -43,6 +44,7 @@ namespace PassGuard
             this.ToolTipNewPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ToolTipLoadPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ContentPanel = new System.Windows.Forms.Panel();
+            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.label1 = new System.Windows.Forms.Label();
             this.SettingsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SettingsCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,8 +61,6 @@ namespace PassGuard
             this.exportVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CreateQuickPassButton = new System.Windows.Forms.Button();
-            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.MenuPanel.SuspendLayout();
             this.LogoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
@@ -80,6 +80,25 @@ namespace PassGuard
             this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new System.Drawing.Size(384, 698);
             this.MenuPanel.TabIndex = 2;
+            // 
+            // CreateQuickPassButton
+            // 
+            this.CreateQuickPassButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
+            this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
+            this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 364);
+            this.CreateQuickPassButton.Name = "CreateQuickPassButton";
+            this.CreateQuickPassButton.Size = new System.Drawing.Size(384, 100);
+            this.CreateQuickPassButton.TabIndex = 6;
+            this.CreateQuickPassButton.Text = "Create Quick Password";
+            this.ToolTipNewPassVault.SetToolTip(this.CreateQuickPassButton, "Create a quick + safe password.");
+            this.CreateQuickPassButton.UseVisualStyleBackColor = true;
+            this.CreateQuickPassButton.Click += new System.EventHandler(this.CreateQuickPassButton_Click);
+            this.CreateQuickPassButton.MouseEnter += new System.EventHandler(this.CreateQuickPassButton_MouseEnter);
+            this.CreateQuickPassButton.MouseLeave += new System.EventHandler(this.CreateQuickPassButton_MouseLeave);
             // 
             // LoadVaultButton
             // 
@@ -226,6 +245,15 @@ namespace PassGuard
             this.ContentPanel.Size = new System.Drawing.Size(1195, 534);
             this.ContentPanel.TabIndex = 4;
             // 
+            // homeContentUC1
+            // 
+            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.homeContentUC1.AutoSize = true;
+            this.homeContentUC1.Location = new System.Drawing.Point(0, 0);
+            this.homeContentUC1.Name = "homeContentUC1";
+            this.homeContentUC1.Size = new System.Drawing.Size(1198, 534);
+            this.homeContentUC1.TabIndex = 2;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -352,32 +380,6 @@ namespace PassGuard
             this.saveChangesClosePassGuardToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
             this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
             this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
-            // 
-            // CreateQuickPassButton
-            // 
-            this.CreateQuickPassButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
-            this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
-            this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 364);
-            this.CreateQuickPassButton.Name = "CreateQuickPassButton";
-            this.CreateQuickPassButton.Size = new System.Drawing.Size(384, 100);
-            this.CreateQuickPassButton.TabIndex = 6;
-            this.CreateQuickPassButton.Text = "Create Quick Password";
-            this.ToolTipNewPassVault.SetToolTip(this.CreateQuickPassButton, "Create a quick + safe password.");
-            this.CreateQuickPassButton.UseVisualStyleBackColor = true;
-            this.CreateQuickPassButton.Click += new System.EventHandler(this.CreateQuickPassButton_Click);
-            this.CreateQuickPassButton.MouseEnter += new System.EventHandler(this.CreateQuickPassButton_MouseEnter);
-            this.CreateQuickPassButton.MouseLeave += new System.EventHandler(this.CreateQuickPassButton_MouseLeave);
-            // 
-            // homeContentUC1
-            // 
-            this.homeContentUC1.Location = new System.Drawing.Point(0, 0);
-            this.homeContentUC1.Name = "homeContentUC1";
-            this.homeContentUC1.Size = new System.Drawing.Size(1195, 534);
-            this.homeContentUC1.TabIndex = 2;
             // 
             // mainWindow
             // 
