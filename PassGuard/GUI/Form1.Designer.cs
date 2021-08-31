@@ -43,8 +43,6 @@ namespace PassGuard
             this.ToolTipNewPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ToolTipLoadPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.LeftPanel = new System.Windows.Forms.Panel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
             this.SettingsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SettingsCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -53,17 +51,27 @@ namespace PassGuard
             this.changeThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.darkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeComplemenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.createABackupOfYourVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveVaultChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveChangesCloseVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CreateQuickPassButton = new System.Windows.Forms.Button();
+            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.MenuPanel.SuspendLayout();
             this.LogoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
             this.OptionsPanel.SuspendLayout();
             this.ContentPanel.SuspendLayout();
-            this.LeftPanel.SuspendLayout();
             this.SettingsCMS.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuPanel
             // 
+            this.MenuPanel.Controls.Add(this.CreateQuickPassButton);
             this.MenuPanel.Controls.Add(this.LoadVaultButton);
             this.MenuPanel.Controls.Add(this.CreateVaultButton);
             this.MenuPanel.Controls.Add(this.LogoPanel);
@@ -76,13 +84,14 @@ namespace PassGuard
             // LoadVaultButton
             // 
             this.LoadVaultButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.LoadVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.LoadVaultButton.FlatAppearance.BorderSize = 0;
             this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadVaultButton.ForeColor = System.Drawing.Color.Black;
-            this.LoadVaultButton.Location = new System.Drawing.Point(38, 270);
+            this.LoadVaultButton.Location = new System.Drawing.Point(0, 264);
             this.LoadVaultButton.Name = "LoadVaultButton";
-            this.LoadVaultButton.Size = new System.Drawing.Size(309, 59);
+            this.LoadVaultButton.Size = new System.Drawing.Size(384, 100);
             this.LoadVaultButton.TabIndex = 5;
             this.LoadVaultButton.Text = "Load Password Vault";
             this.ToolTipNewPassVault.SetToolTip(this.LoadVaultButton, "Load passwords from a Password Vault.");
@@ -94,13 +103,14 @@ namespace PassGuard
             // CreateVaultButton
             // 
             this.CreateVaultButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CreateVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.CreateVaultButton.FlatAppearance.BorderSize = 0;
             this.CreateVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateVaultButton.ForeColor = System.Drawing.Color.Black;
-            this.CreateVaultButton.Location = new System.Drawing.Point(37, 193);
+            this.CreateVaultButton.Location = new System.Drawing.Point(0, 164);
             this.CreateVaultButton.Name = "CreateVaultButton";
-            this.CreateVaultButton.Size = new System.Drawing.Size(309, 59);
+            this.CreateVaultButton.Size = new System.Drawing.Size(384, 100);
             this.CreateVaultButton.TabIndex = 4;
             this.CreateVaultButton.Text = "New Password Vault";
             this.ToolTipNewPassVault.SetToolTip(this.CreateVaultButton, "Create a Safe Vault to Store your Passwords");
@@ -168,6 +178,7 @@ namespace PassGuard
             // 
             // SettingButton
             // 
+            this.SettingButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.SettingButton.FlatAppearance.BorderSize = 0;
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingButton.Location = new System.Drawing.Point(1054, 39);
@@ -207,29 +218,13 @@ namespace PassGuard
             // 
             // ContentPanel
             // 
-            this.ContentPanel.Controls.Add(this.LeftPanel);
+            this.ContentPanel.Controls.Add(this.homeContentUC1);
             this.ContentPanel.Controls.Add(this.label1);
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContentPanel.Location = new System.Drawing.Point(384, 164);
             this.ContentPanel.Name = "ContentPanel";
             this.ContentPanel.Size = new System.Drawing.Size(1195, 534);
             this.ContentPanel.TabIndex = 4;
-            // 
-            // LeftPanel
-            // 
-            this.LeftPanel.Controls.Add(this.treeView1);
-            this.LeftPanel.Location = new System.Drawing.Point(674, 106);
-            this.LeftPanel.Name = "LeftPanel";
-            this.LeftPanel.Size = new System.Drawing.Size(391, 348);
-            this.LeftPanel.TabIndex = 1;
-            // 
-            // treeView1
-            // 
-            this.treeView1.BackColor = System.Drawing.SystemColors.Menu;
-            this.treeView1.Location = new System.Drawing.Point(4, 182);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(384, 489);
-            this.treeView1.TabIndex = 1;
             // 
             // label1
             // 
@@ -253,11 +248,19 @@ namespace PassGuard
             this.SettingsCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TitleSettingsToolStripMenuItem,
             this.SettingsToolStripSeparator,
-            this.changeThemeToolStripMenuItem});
+            this.changeThemeToolStripMenuItem,
+            this.changeComplemenToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.createABackupOfYourVaultToolStripMenuItem,
+            this.saveVaultChangesToolStripMenuItem,
+            this.saveChangesCloseVaultToolStripMenuItem,
+            this.exportVaultToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.saveChangesClosePassGuardToolStripMenuItem});
             this.SettingsCMS.Name = "SettingsCMS";
             this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SettingsCMS.ShowImageMargin = false;
-            this.SettingsCMS.Size = new System.Drawing.Size(246, 59);
+            this.SettingsCMS.Size = new System.Drawing.Size(270, 215);
             // 
             // TitleSettingsToolStripMenuItem
             // 
@@ -275,7 +278,7 @@ namespace PassGuard
             // SettingsToolStripSeparator
             // 
             this.SettingsToolStripSeparator.Name = "SettingsToolStripSeparator";
-            this.SettingsToolStripSeparator.Size = new System.Drawing.Size(242, 6);
+            this.SettingsToolStripSeparator.Size = new System.Drawing.Size(266, 6);
             // 
             // changeThemeToolStripMenuItem
             // 
@@ -283,20 +286,98 @@ namespace PassGuard
             this.lightToolStripMenuItem,
             this.darkToolStripMenuItem});
             this.changeThemeToolStripMenuItem.Name = "changeThemeToolStripMenuItem";
-            this.changeThemeToolStripMenuItem.Size = new System.Drawing.Size(245, 24);
+            this.changeThemeToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
             this.changeThemeToolStripMenuItem.Text = "Change Theme";
             // 
             // lightToolStripMenuItem
             // 
+            this.lightToolStripMenuItem.Checked = true;
+            this.lightToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.lightToolStripMenuItem.Name = "lightToolStripMenuItem";
             this.lightToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.lightToolStripMenuItem.Text = "Light";
+            this.lightToolStripMenuItem.Click += new System.EventHandler(this.lightToolStripMenuItem_Click);
             // 
             // darkToolStripMenuItem
             // 
             this.darkToolStripMenuItem.Name = "darkToolStripMenuItem";
             this.darkToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.darkToolStripMenuItem.Text = "Dark";
+            this.darkToolStripMenuItem.Click += new System.EventHandler(this.darkToolStripMenuItem_Click);
+            // 
+            // changeComplemenToolStripMenuItem
+            // 
+            this.changeComplemenToolStripMenuItem.Name = "changeComplemenToolStripMenuItem";
+            this.changeComplemenToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.changeComplemenToolStripMenuItem.Text = "Change Outline Colours";
+            this.changeComplemenToolStripMenuItem.Click += new System.EventHandler(this.changeComplemenToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
+            // 
+            // createABackupOfYourVaultToolStripMenuItem
+            // 
+            this.createABackupOfYourVaultToolStripMenuItem.Name = "createABackupOfYourVaultToolStripMenuItem";
+            this.createABackupOfYourVaultToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.createABackupOfYourVaultToolStripMenuItem.Text = "Create a Backup of your Vault";
+            // 
+            // saveVaultChangesToolStripMenuItem
+            // 
+            this.saveVaultChangesToolStripMenuItem.Name = "saveVaultChangesToolStripMenuItem";
+            this.saveVaultChangesToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.saveVaultChangesToolStripMenuItem.Text = "Save Vault Changes";
+            // 
+            // saveChangesCloseVaultToolStripMenuItem
+            // 
+            this.saveChangesCloseVaultToolStripMenuItem.Name = "saveChangesCloseVaultToolStripMenuItem";
+            this.saveChangesCloseVaultToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.saveChangesCloseVaultToolStripMenuItem.Text = "Save Changes + Close Vault";
+            // 
+            // exportVaultToolStripMenuItem
+            // 
+            this.exportVaultToolStripMenuItem.Name = "exportVaultToolStripMenuItem";
+            this.exportVaultToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.exportVaultToolStripMenuItem.Text = "Export Vault Data as PDF";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(266, 6);
+            // 
+            // saveChangesClosePassGuardToolStripMenuItem
+            // 
+            this.saveChangesClosePassGuardToolStripMenuItem.Name = "saveChangesClosePassGuardToolStripMenuItem";
+            this.saveChangesClosePassGuardToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
+            this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
+            this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
+            // 
+            // CreateQuickPassButton
+            // 
+            this.CreateQuickPassButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
+            this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
+            this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 364);
+            this.CreateQuickPassButton.Name = "CreateQuickPassButton";
+            this.CreateQuickPassButton.Size = new System.Drawing.Size(384, 100);
+            this.CreateQuickPassButton.TabIndex = 6;
+            this.CreateQuickPassButton.Text = "Create Quick Password";
+            this.ToolTipNewPassVault.SetToolTip(this.CreateQuickPassButton, "Create a quick + safe password.");
+            this.CreateQuickPassButton.UseVisualStyleBackColor = true;
+            this.CreateQuickPassButton.Click += new System.EventHandler(this.CreateQuickPassButton_Click);
+            this.CreateQuickPassButton.MouseEnter += new System.EventHandler(this.CreateQuickPassButton_MouseEnter);
+            this.CreateQuickPassButton.MouseLeave += new System.EventHandler(this.CreateQuickPassButton_MouseLeave);
+            // 
+            // homeContentUC1
+            // 
+            this.homeContentUC1.Location = new System.Drawing.Point(0, 0);
+            this.homeContentUC1.Name = "homeContentUC1";
+            this.homeContentUC1.Size = new System.Drawing.Size(1195, 534);
+            this.homeContentUC1.TabIndex = 2;
             // 
             // mainWindow
             // 
@@ -318,7 +399,6 @@ namespace PassGuard
             this.OptionsPanel.ResumeLayout(false);
             this.ContentPanel.ResumeLayout(false);
             this.ContentPanel.PerformLayout();
-            this.LeftPanel.ResumeLayout(false);
             this.SettingsCMS.ResumeLayout(false);
             this.SettingsCMS.PerformLayout();
             this.ResumeLayout(false);
@@ -338,8 +418,6 @@ namespace PassGuard
         private System.Windows.Forms.ToolTip ToolTipLoadPassVault;
         private System.Windows.Forms.Label TitleLabel;
         private System.Windows.Forms.Panel ContentPanel;
-        private System.Windows.Forms.Panel LeftPanel;
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip SettingsToolTip;
         private System.Windows.Forms.Button SettingButton;
@@ -349,6 +427,16 @@ namespace PassGuard
         private System.Windows.Forms.ToolStripMenuItem changeThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lightToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem darkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeComplemenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem createABackupOfYourVaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveVaultChangesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveChangesCloseVaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportVaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem saveChangesClosePassGuardToolStripMenuItem;
+        private System.Windows.Forms.Button CreateQuickPassButton;
+        private GUI.HomeContentUC homeContentUC1;
     }
 }
 
