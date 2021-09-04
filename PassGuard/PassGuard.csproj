@@ -59,6 +59,12 @@
     <Compile Include="GUI\AskRGBforSettings.Designer.cs">
       <DependentUpon>AskRGBforSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\CreateQuickPassUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\CreateQuickPassUC.Designer.cs">
+      <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\AskRGBforSettings.resx">
       <DependentUpon>AskRGBforSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CreateQuickPassUC.resx">
+      <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

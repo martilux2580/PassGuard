@@ -251,13 +251,13 @@ namespace PassGuard
             this.homeContentUC1.AutoSize = true;
             this.homeContentUC1.Location = new System.Drawing.Point(0, 0);
             this.homeContentUC1.Name = "homeContentUC1";
-            this.homeContentUC1.Size = new System.Drawing.Size(1198, 534);
+            this.homeContentUC1.Size = new System.Drawing.Size(1207, 534);
             this.homeContentUC1.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 365);
+            this.label1.Location = new System.Drawing.Point(426, 448);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 17);
             this.label1.TabIndex = 1;

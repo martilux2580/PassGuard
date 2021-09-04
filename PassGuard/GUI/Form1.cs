@@ -106,7 +106,13 @@ namespace PassGuard
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
+            GUI.HomeContentUC hc = new GUI.HomeContentUC();
+            hc.Visible = false;
             TitleLabel.Text = "HOME";
+            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Add(hc);
+            hc.Visible = true;
+            
         }
 
         private void SettingButton_Click(object sender, EventArgs e)
@@ -205,6 +211,10 @@ namespace PassGuard
             {
                 label1.Visible = true;
             }
+
+            GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC();
+            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Add(cqr);
         }
     }
 }
