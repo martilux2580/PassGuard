@@ -79,9 +79,11 @@ namespace PassGuard.GUI
             this.DisplayPassLabel = new System.Windows.Forms.Label();
             this.CopyClipboardButton = new System.Windows.Forms.Button();
             this.ClipboardToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
             this.CheckBoxesPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PassLengthNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NPasswordsNUD)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // GenPassButton
@@ -96,9 +98,8 @@ namespace PassGuard.GUI
             // 
             // TitleLabel
             // 
-            this.TitleLabel.AutoSize = true;
             this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleLabel.Location = new System.Drawing.Point(22, 13);
+            this.TitleLabel.Location = new System.Drawing.Point(22, 18);
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(466, 25);
             this.TitleLabel.TabIndex = 1;
@@ -106,7 +107,6 @@ namespace PassGuard.GUI
             // 
             // CheckBoxesPanel
             // 
-            this.CheckBoxesPanel.AutoSize = true;
             this.CheckBoxesPanel.Controls.Add(this.CheckboxCloseQuestion);
             this.CheckBoxesPanel.Controls.Add(this.CheckboxOpenQuestion);
             this.CheckBoxesPanel.Controls.Add(this.PassLengthNUD);
@@ -150,7 +150,7 @@ namespace PassGuard.GUI
             this.CheckBoxesPanel.Controls.Add(this.NumbersCheckbox);
             this.CheckBoxesPanel.Controls.Add(this.LowerCheckbox);
             this.CheckBoxesPanel.Controls.Add(this.UpperCheckbox);
-            this.CheckBoxesPanel.Location = new System.Drawing.Point(41, 41);
+            this.CheckBoxesPanel.Location = new System.Drawing.Point(41, 46);
             this.CheckBoxesPanel.Name = "CheckBoxesPanel";
             this.CheckBoxesPanel.Size = new System.Drawing.Size(1104, 365);
             this.CheckBoxesPanel.TabIndex = 2;
@@ -639,7 +639,7 @@ namespace PassGuard.GUI
             // PasswordTextBox
             // 
             this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PasswordTextBox.Location = new System.Drawing.Point(369, 416);
+            this.PasswordTextBox.Location = new System.Drawing.Point(369, 421);
             this.PasswordTextBox.Multiline = true;
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.ReadOnly = true;
@@ -649,9 +649,8 @@ namespace PassGuard.GUI
             // 
             // DisplayPassLabel
             // 
-            this.DisplayPassLabel.AutoSize = true;
             this.DisplayPassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DisplayPassLabel.Location = new System.Drawing.Point(23, 416);
+            this.DisplayPassLabel.Location = new System.Drawing.Point(23, 421);
             this.DisplayPassLabel.Name = "DisplayPassLabel";
             this.DisplayPassLabel.Size = new System.Drawing.Size(318, 24);
             this.DisplayPassLabel.TabIndex = 4;
@@ -659,11 +658,10 @@ namespace PassGuard.GUI
             // 
             // CopyClipboardButton
             // 
-            this.CopyClipboardButton.AutoSize = true;
             this.CopyClipboardButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.CopyClipboardButton.FlatAppearance.BorderSize = 0;
             this.CopyClipboardButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyClipboardButton.Location = new System.Drawing.Point(1068, 425);
+            this.CopyClipboardButton.Location = new System.Drawing.Point(1068, 430);
             this.CopyClipboardButton.Name = "CopyClipboardButton";
             this.CopyClipboardButton.Size = new System.Drawing.Size(64, 64);
             this.CopyClipboardButton.TabIndex = 5;
@@ -678,22 +676,33 @@ namespace PassGuard.GUI
             this.ClipboardToolTip.InitialDelay = 300;
             this.ClipboardToolTip.ReshowDelay = 60;
             // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.CheckBoxesPanel);
+            this.panel1.Controls.Add(this.CopyClipboardButton);
+            this.panel1.Controls.Add(this.TitleLabel);
+            this.panel1.Controls.Add(this.DisplayPassLabel);
+            this.panel1.Controls.Add(this.PasswordTextBox);
+            this.panel1.Location = new System.Drawing.Point(-1, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1148, 534);
+            this.panel1.TabIndex = 54;
+            // 
             // CreateQuickPassUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.Controls.Add(this.CopyClipboardButton);
-            this.Controls.Add(this.DisplayPassLabel);
-            this.Controls.Add(this.PasswordTextBox);
-            this.Controls.Add(this.CheckBoxesPanel);
-            this.Controls.Add(this.TitleLabel);
+            this.Controls.Add(this.panel1);
             this.Name = "CreateQuickPassUC";
-            this.Size = new System.Drawing.Size(1148, 534);
+            this.Size = new System.Drawing.Size(1150, 537);
             this.Load += new System.EventHandler(this.CreateQuickPassUC_Load);
             this.CheckBoxesPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PassLengthNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NPasswordsNUD)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -750,5 +759,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.CheckBox CheckboxCloseQuestion;
         private System.Windows.Forms.CheckBox CheckboxOpenQuestion;
         private System.Windows.Forms.ToolTip ClipboardToolTip;
+        private System.Windows.Forms.Panel panel1;
     }
 }
