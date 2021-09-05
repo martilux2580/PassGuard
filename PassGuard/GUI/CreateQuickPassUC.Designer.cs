@@ -99,7 +99,7 @@ namespace PassGuard.GUI
             // TitleLabel
             // 
             this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleLabel.Location = new System.Drawing.Point(22, 18);
+            this.TitleLabel.Location = new System.Drawing.Point(19, 18);
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(466, 25);
             this.TitleLabel.TabIndex = 1;
@@ -150,9 +150,9 @@ namespace PassGuard.GUI
             this.CheckBoxesPanel.Controls.Add(this.NumbersCheckbox);
             this.CheckBoxesPanel.Controls.Add(this.LowerCheckbox);
             this.CheckBoxesPanel.Controls.Add(this.UpperCheckbox);
-            this.CheckBoxesPanel.Location = new System.Drawing.Point(41, 46);
+            this.CheckBoxesPanel.Location = new System.Drawing.Point(24, 46);
             this.CheckBoxesPanel.Name = "CheckBoxesPanel";
-            this.CheckBoxesPanel.Size = new System.Drawing.Size(1104, 365);
+            this.CheckBoxesPanel.Size = new System.Drawing.Size(1105, 365);
             this.CheckBoxesPanel.TabIndex = 2;
             // 
             // CheckboxCloseQuestion
@@ -243,7 +243,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxHigherEne.Enabled = false;
             this.CheckboxHigherEne.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxHigherEne.Location = new System.Drawing.Point(896, 193);
+            this.CheckboxHigherEne.Location = new System.Drawing.Point(896, 197);
             this.CheckboxHigherEne.Name = "CheckboxHigherEne";
             this.CheckboxHigherEne.Size = new System.Drawing.Size(50, 30);
             this.CheckboxHigherEne.TabIndex = 47;
@@ -254,7 +254,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxLowerEne.Enabled = false;
             this.CheckboxLowerEne.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxLowerEne.Location = new System.Drawing.Point(845, 193);
+            this.CheckboxLowerEne.Location = new System.Drawing.Point(845, 197);
             this.CheckboxLowerEne.Name = "CheckboxLowerEne";
             this.CheckboxLowerEne.Size = new System.Drawing.Size(46, 30);
             this.CheckboxLowerEne.TabIndex = 46;
@@ -265,7 +265,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxOpenExclamation.Enabled = false;
             this.CheckboxOpenExclamation.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxOpenExclamation.Location = new System.Drawing.Point(734, 257);
+            this.CheckboxOpenExclamation.Location = new System.Drawing.Point(734, 259);
             this.CheckboxOpenExclamation.Name = "CheckboxOpenExclamation";
             this.CheckboxOpenExclamation.Size = new System.Drawing.Size(40, 30);
             this.CheckboxOpenExclamation.TabIndex = 45;
@@ -276,7 +276,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxSemicolon.Enabled = false;
             this.CheckboxSemicolon.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxSemicolon.Location = new System.Drawing.Point(789, 193);
+            this.CheckboxSemicolon.Location = new System.Drawing.Point(789, 197);
             this.CheckboxSemicolon.Name = "CheckboxSemicolon";
             this.CheckboxSemicolon.Size = new System.Drawing.Size(40, 30);
             this.CheckboxSemicolon.TabIndex = 43;
@@ -287,7 +287,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxComma.Enabled = false;
             this.CheckboxComma.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxComma.Location = new System.Drawing.Point(734, 193);
+            this.CheckboxComma.Location = new System.Drawing.Point(734, 197);
             this.CheckboxComma.Name = "CheckboxComma";
             this.CheckboxComma.Size = new System.Drawing.Size(40, 30);
             this.CheckboxComma.TabIndex = 42;
@@ -298,7 +298,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxUnderscore.Enabled = false;
             this.CheckboxUnderscore.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxUnderscore.Location = new System.Drawing.Point(676, 193);
+            this.CheckboxUnderscore.Location = new System.Drawing.Point(676, 197);
             this.CheckboxUnderscore.Name = "CheckboxUnderscore";
             this.CheckboxUnderscore.Size = new System.Drawing.Size(46, 30);
             this.CheckboxUnderscore.TabIndex = 41;
@@ -309,7 +309,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxColon.Enabled = false;
             this.CheckboxColon.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxColon.Location = new System.Drawing.Point(613, 193);
+            this.CheckboxColon.Location = new System.Drawing.Point(613, 197);
             this.CheckboxColon.Name = "CheckboxColon";
             this.CheckboxColon.Size = new System.Drawing.Size(40, 30);
             this.CheckboxColon.TabIndex = 40;
@@ -320,7 +320,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxPeriod.Enabled = false;
             this.CheckboxPeriod.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxPeriod.Location = new System.Drawing.Point(557, 193);
+            this.CheckboxPeriod.Location = new System.Drawing.Point(557, 197);
             this.CheckboxPeriod.Name = "CheckboxPeriod";
             this.CheckboxPeriod.Size = new System.Drawing.Size(40, 30);
             this.CheckboxPeriod.TabIndex = 39;
@@ -331,7 +331,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxLowerCaseTurkish.Enabled = false;
             this.CheckboxLowerCaseTurkish.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxLowerCaseTurkish.Location = new System.Drawing.Point(612, 257);
+            this.CheckboxLowerCaseTurkish.Location = new System.Drawing.Point(612, 259);
             this.CheckboxLowerCaseTurkish.Name = "CheckboxLowerCaseTurkish";
             this.CheckboxLowerCaseTurkish.Size = new System.Drawing.Size(45, 30);
             this.CheckboxLowerCaseTurkish.TabIndex = 37;
@@ -342,7 +342,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxCapitalTurkish.Enabled = false;
             this.CheckboxCapitalTurkish.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxCapitalTurkish.Location = new System.Drawing.Point(676, 257);
+            this.CheckboxCapitalTurkish.Location = new System.Drawing.Point(676, 259);
             this.CheckboxCapitalTurkish.Name = "CheckboxCapitalTurkish";
             this.CheckboxCapitalTurkish.Size = new System.Drawing.Size(50, 30);
             this.CheckboxCapitalTurkish.TabIndex = 36;
@@ -353,7 +353,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxMultiplier.Enabled = false;
             this.CheckboxMultiplier.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxMultiplier.Location = new System.Drawing.Point(1052, 193);
+            this.CheckboxMultiplier.Location = new System.Drawing.Point(1052, 197);
             this.CheckboxMultiplier.Name = "CheckboxMultiplier";
             this.CheckboxMultiplier.Size = new System.Drawing.Size(43, 30);
             this.CheckboxMultiplier.TabIndex = 35;
@@ -364,7 +364,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxSubstract.Enabled = false;
             this.CheckboxSubstract.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxSubstract.Location = new System.Drawing.Point(999, 193);
+            this.CheckboxSubstract.Location = new System.Drawing.Point(999, 197);
             this.CheckboxSubstract.Name = "CheckboxSubstract";
             this.CheckboxSubstract.Size = new System.Drawing.Size(41, 30);
             this.CheckboxSubstract.TabIndex = 34;
@@ -375,7 +375,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxAdd.Enabled = false;
             this.CheckboxAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxAdd.Location = new System.Drawing.Point(950, 193);
+            this.CheckboxAdd.Location = new System.Drawing.Point(950, 197);
             this.CheckboxAdd.Name = "CheckboxAdd";
             this.CheckboxAdd.Size = new System.Drawing.Size(47, 30);
             this.CheckboxAdd.TabIndex = 33;
@@ -386,7 +386,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxCloseCurlyBracket.Enabled = false;
             this.CheckboxCloseCurlyBracket.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxCloseCurlyBracket.Location = new System.Drawing.Point(1052, 131);
+            this.CheckboxCloseCurlyBracket.Location = new System.Drawing.Point(1052, 133);
             this.CheckboxCloseCurlyBracket.Name = "CheckboxCloseCurlyBracket";
             this.CheckboxCloseCurlyBracket.Size = new System.Drawing.Size(41, 30);
             this.CheckboxCloseCurlyBracket.TabIndex = 32;
@@ -397,7 +397,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxOpenCurlyBracket.Enabled = false;
             this.CheckboxOpenCurlyBracket.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxOpenCurlyBracket.Location = new System.Drawing.Point(999, 131);
+            this.CheckboxOpenCurlyBracket.Location = new System.Drawing.Point(999, 133);
             this.CheckboxOpenCurlyBracket.Name = "CheckboxOpenCurlyBracket";
             this.CheckboxOpenCurlyBracket.Size = new System.Drawing.Size(41, 30);
             this.CheckboxOpenCurlyBracket.TabIndex = 31;
@@ -408,7 +408,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxCloseSquareBracket.Enabled = false;
             this.CheckboxCloseSquareBracket.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxCloseSquareBracket.Location = new System.Drawing.Point(950, 131);
+            this.CheckboxCloseSquareBracket.Location = new System.Drawing.Point(950, 133);
             this.CheckboxCloseSquareBracket.Name = "CheckboxCloseSquareBracket";
             this.CheckboxCloseSquareBracket.Size = new System.Drawing.Size(40, 30);
             this.CheckboxCloseSquareBracket.TabIndex = 30;
@@ -419,7 +419,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxOpenSquareBracket.Enabled = false;
             this.CheckboxOpenSquareBracket.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxOpenSquareBracket.Location = new System.Drawing.Point(896, 131);
+            this.CheckboxOpenSquareBracket.Location = new System.Drawing.Point(896, 133);
             this.CheckboxOpenSquareBracket.Name = "CheckboxOpenSquareBracket";
             this.CheckboxOpenSquareBracket.Size = new System.Drawing.Size(40, 30);
             this.CheckboxOpenSquareBracket.TabIndex = 29;
@@ -430,7 +430,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxHigherThan.Enabled = false;
             this.CheckboxHigherThan.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxHigherThan.Location = new System.Drawing.Point(845, 131);
+            this.CheckboxHigherThan.Location = new System.Drawing.Point(845, 133);
             this.CheckboxHigherThan.Name = "CheckboxHigherThan";
             this.CheckboxHigherThan.Size = new System.Drawing.Size(47, 30);
             this.CheckboxHigherThan.TabIndex = 25;
@@ -441,7 +441,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxLessThan.Enabled = false;
             this.CheckboxLessThan.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxLessThan.Location = new System.Drawing.Point(789, 131);
+            this.CheckboxLessThan.Location = new System.Drawing.Point(789, 133);
             this.CheckboxLessThan.Name = "CheckboxLessThan";
             this.CheckboxLessThan.Size = new System.Drawing.Size(47, 30);
             this.CheckboxLessThan.TabIndex = 24;
@@ -452,7 +452,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxEuro.Enabled = false;
             this.CheckboxEuro.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxEuro.Location = new System.Drawing.Point(734, 131);
+            this.CheckboxEuro.Location = new System.Drawing.Point(734, 133);
             this.CheckboxEuro.Name = "CheckboxEuro";
             this.CheckboxEuro.Size = new System.Drawing.Size(46, 30);
             this.CheckboxEuro.TabIndex = 22;
@@ -463,7 +463,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxHashTag.Enabled = false;
             this.CheckboxHashTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxHashTag.Location = new System.Drawing.Point(676, 131);
+            this.CheckboxHashTag.Location = new System.Drawing.Point(676, 133);
             this.CheckboxHashTag.Name = "CheckboxHashTag";
             this.CheckboxHashTag.Size = new System.Drawing.Size(46, 30);
             this.CheckboxHashTag.TabIndex = 20;
@@ -474,7 +474,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxAt.Enabled = false;
             this.CheckboxAt.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxAt.Location = new System.Drawing.Point(613, 131);
+            this.CheckboxAt.Location = new System.Drawing.Point(613, 133);
             this.CheckboxAt.Name = "CheckboxAt";
             this.CheckboxAt.Size = new System.Drawing.Size(56, 30);
             this.CheckboxAt.TabIndex = 19;
@@ -485,7 +485,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxBar.Enabled = false;
             this.CheckboxBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxBar.Location = new System.Drawing.Point(557, 131);
+            this.CheckboxBar.Location = new System.Drawing.Point(557, 133);
             this.CheckboxBar.Name = "CheckboxBar";
             this.CheckboxBar.Size = new System.Drawing.Size(40, 30);
             this.CheckboxBar.TabIndex = 16;
@@ -496,7 +496,7 @@ namespace PassGuard.GUI
             // 
             this.CheckboxEqual.Enabled = false;
             this.CheckboxEqual.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CheckboxEqual.Location = new System.Drawing.Point(557, 257);
+            this.CheckboxEqual.Location = new System.Drawing.Point(557, 259);
             this.CheckboxEqual.Name = "CheckboxEqual";
             this.CheckboxEqual.Size = new System.Drawing.Size(47, 30);
             this.CheckboxEqual.TabIndex = 15;
@@ -639,7 +639,7 @@ namespace PassGuard.GUI
             // PasswordTextBox
             // 
             this.PasswordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PasswordTextBox.Location = new System.Drawing.Point(369, 421);
+            this.PasswordTextBox.Location = new System.Drawing.Point(366, 421);
             this.PasswordTextBox.Multiline = true;
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.ReadOnly = true;
@@ -650,7 +650,7 @@ namespace PassGuard.GUI
             // DisplayPassLabel
             // 
             this.DisplayPassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DisplayPassLabel.Location = new System.Drawing.Point(23, 421);
+            this.DisplayPassLabel.Location = new System.Drawing.Point(20, 421);
             this.DisplayPassLabel.Name = "DisplayPassLabel";
             this.DisplayPassLabel.Size = new System.Drawing.Size(318, 24);
             this.DisplayPassLabel.TabIndex = 4;
@@ -661,7 +661,7 @@ namespace PassGuard.GUI
             this.CopyClipboardButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.CopyClipboardButton.FlatAppearance.BorderSize = 0;
             this.CopyClipboardButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyClipboardButton.Location = new System.Drawing.Point(1068, 430);
+            this.CopyClipboardButton.Location = new System.Drawing.Point(1065, 430);
             this.CopyClipboardButton.Name = "CopyClipboardButton";
             this.CopyClipboardButton.Size = new System.Drawing.Size(64, 64);
             this.CopyClipboardButton.TabIndex = 5;
@@ -678,25 +678,26 @@ namespace PassGuard.GUI
             // 
             // panel1
             // 
-            this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Controls.Add(this.CheckBoxesPanel);
             this.panel1.Controls.Add(this.CopyClipboardButton);
             this.panel1.Controls.Add(this.TitleLabel);
             this.panel1.Controls.Add(this.DisplayPassLabel);
             this.panel1.Controls.Add(this.PasswordTextBox);
-            this.panel1.Location = new System.Drawing.Point(-1, 0);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1148, 534);
+            this.panel1.Size = new System.Drawing.Size(1144, 526);
             this.panel1.TabIndex = 54;
             // 
             // CreateQuickPassUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.panel1);
             this.Name = "CreateQuickPassUC";
-            this.Size = new System.Drawing.Size(1150, 537);
+            this.Size = new System.Drawing.Size(1144, 526);
             this.Load += new System.EventHandler(this.CreateQuickPassUC_Load);
             this.CheckBoxesPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PassLengthNUD)).EndInit();
@@ -704,7 +705,6 @@ namespace PassGuard.GUI
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

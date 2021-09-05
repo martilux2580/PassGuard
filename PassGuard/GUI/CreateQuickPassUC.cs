@@ -15,8 +15,10 @@ namespace PassGuard.GUI
     {
         public CreateQuickPassUC()
         {
+            this.Anchor = AnchorStyles.None;
+            //this.Dock = DockStyle.Fill;
             InitializeComponent();
-            
+
         }
         private CheckBox[] symbolsArray { get; set; } = new CheckBox[34]; //{ get; set; }
         private CheckBox[] fillSymbolsArray(CheckBox[] SymbolsArray)
