@@ -17,7 +17,8 @@ namespace PassGuard
         public mainWindow()
         {
             InitializeComponent();
-            
+            this.Size = this.MinimumSize; //Avoid Bug
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,6 +35,7 @@ namespace PassGuard
             LogoPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
             this.Icon = new Icon(@"..\..\Images\LogoIcon64.ico"); //Loads Icon from Image folder.
             SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico");
+           
 
 
 
@@ -215,6 +217,7 @@ namespace PassGuard
             GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC();
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(cqr);
+            //cqr.BackColor = Color.FromArgb(210, 0, 0);
         }
     }
 }

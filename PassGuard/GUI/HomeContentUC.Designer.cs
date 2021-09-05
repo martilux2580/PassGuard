@@ -76,10 +76,10 @@ namespace PassGuard.GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.TimePanel);
             this.Name = "HomeContentUC";
-            this.Size = new System.Drawing.Size(1207, 534);
+            this.Size = new System.Drawing.Size(1153, 534);
             this.Load += new System.EventHandler(this.HomeContentUC_Load);
             this.TimePanel.ResumeLayout(false);
             this.ResumeLayout(false);

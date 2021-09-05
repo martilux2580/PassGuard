@@ -15,6 +15,7 @@ namespace PassGuard.GUI
     {
         public HomeContentUC()
         {
+            this.Anchor = AnchorStyles.None;
             InitializeComponent();
         }
 
