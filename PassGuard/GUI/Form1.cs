@@ -17,7 +17,8 @@ namespace PassGuard
         public mainWindow()
         {
             InitializeComponent();
-            this.Size = this.MinimumSize; //Avoid Bug
+            this.Size = this.MinimumSize; //We init the form with the minimum size to avoid Minimum Size bug (setting Min Size in Properties to the actual size makes Minimum Size decrease by 20-30 pixels aprox).
+
 
         }
 

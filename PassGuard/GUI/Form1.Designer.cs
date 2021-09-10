@@ -248,10 +248,12 @@ namespace PassGuard
             // 
             // homeContentUC1
             // 
+            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.homeContentUC1.AutoSize = true;
+            this.homeContentUC1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.homeContentUC1.Location = new System.Drawing.Point(0, 0);
             this.homeContentUC1.Name = "homeContentUC1";
-            this.homeContentUC1.Size = new System.Drawing.Size(1207, 534);
+            this.homeContentUC1.Size = new System.Drawing.Size(1207, 370);
             this.homeContentUC1.TabIndex = 2;
             // 
             // label1
@@ -390,6 +392,8 @@ namespace PassGuard
             this.Controls.Add(this.ContentPanel);
             this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.MenuPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1597, 745);
             this.Name = "mainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
