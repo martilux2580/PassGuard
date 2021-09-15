@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Net.Http;
 
 namespace PassGuard.GUI
 {
@@ -99,7 +101,9 @@ namespace PassGuard.GUI
                 foreach(KeyValuePair<CheckBox, string> pair in symbols)
                 {
                     pair.Key.Enabled = false; //Although they are disabled, if they are checked you will do whatever in the ifs.
+                    pair.Key.Checked = false;
                 }
+                SelectAllSymbolsButton.Enabled = false;
             }
 
             if (SymbolsCheckbox.Checked == true)
@@ -108,7 +112,9 @@ namespace PassGuard.GUI
                 {
                     pair.Key.Enabled = true;
                 }
+                SelectAllSymbolsButton.Enabled = true;
             }
+            
         }
 
         private void CopyClipboardButton_Click(object sender, EventArgs e)
@@ -123,18 +129,24 @@ namespace PassGuard.GUI
             }
         }
 
-        private void GenPassButton_Click(object sender, EventArgs e)
+        private async void GenPassButton_Click(object sender, EventArgs e)
         {
             //Clear previous content.
+            PercentageLabel.Text = "0% complete, 0/" + NPasswordsNUD.Value.ToString() +" passwords generated.";
+            PercentageLabel.Refresh();
             PasswordTextBox.Clear();
             StringBuilder sb = new StringBuilder();
 
             //Create a string with the valid characters
+            int countCharacters = 0;
+            bool leftCheckBoxes = false;
             foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
             {
                 if (pair.Key.Checked == true)
                 {
                     sb.Append(pair.Value);
+                    countCharacters++;
+                    leftCheckBoxes = true;
                 }
             }
 
@@ -145,6 +157,7 @@ namespace PassGuard.GUI
                     if (pair.Key.Checked == true)
                     {
                         sb.Append(pair.Value);
+                        countCharacters++;
                     }
                 }
             }
@@ -156,12 +169,17 @@ namespace PassGuard.GUI
             {
                 MessageBox.Show("Cannot generate passwords without characters. \n\nPlease select at least one of the available characters or symbols.");
             }
+            else if ((!leftCheckBoxes) && (countCharacters > PassLengthNUD.Value))
+            {
+                MessageBox.Show("If only passwords with just symbols are requested, the number of symbols required must be equal to or greater than the required length of the passwords.");
+            }
             else //We have valid characters to work with (at least one)
             {
                 //Check if user wants unique and safe passwords.
                 if (CheckPwnageCheckbox.Checked == true) //Checkbox pwn true
                 {
                     int validCount = 0;
+                    //string passwords = null;
 
                     while (validCount != NPasswordsNUD.Value) //Real count of generated passwords
                     {
@@ -169,24 +187,109 @@ namespace PassGuard.GUI
                         string genPass = GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
 
                         //Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
-                        HashSet<char> validChars = new HashSet<char>(validCharacters);
-                        bool containsAll = validChars.IsSubsetOf(genPass);
 
-                        if (containsAll) //If genPass has ALL characters requested 
+                        bool missingChar = false;
+                        foreach (KeyValuePair<CheckBox, string> pair in symbols)//Check if any char checkbox is activated.
                         {
-                            if (CheckPwnage(genPass) == false) //No pwnage found for genPass
+                            if (pair.Key.Checked == true)
                             {
-                                PasswordTextBox.Text += genPass + Environment.NewLine; //Add pass to textbox
-                                validCount += 1; //A valid pass has been created, so we increment it
+                                if (!genPass.Contains(pair.Value))
+                                {
+                                    missingChar = true;
+                                    break;
+                                }
                             }
                         }
+
+                        if (!missingChar)
+                        {
+                            foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
+                            {
+                                if (pair.Key.Checked == true)
+                                {
+                                    for (int i = 0; i < genPass.Length; i++)
+                                    {
+                                        if (pair.Value.Contains(genPass[i]))
+                                        {
+                                            break;
+                                        }
+                                        if (i == genPass.Length - 1)
+                                        {
+                                            missingChar = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!missingChar) //If genPass has ALL characters requested 
+                        {
+                            bool check = await CheckPwnage(genPass);
+                            if (check == false) //No pwnage found for genPass
+                            {
+                                //passwords += genPass + Environment.NewLine;
+                                validCount += 1; //A valid pass has been created, so we increment it
+                                decimal proportion = Decimal.Round((validCount / NPasswordsNUD.Value) * 100, 2);
+                                PercentageLabel.Text = proportion.ToString() + "% complete, " + validCount.ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
+                                PasswordTextBox.Text += genPass + Environment.NewLine; //Add pass to textbox
+
+                            }
+                        }
+                        
                     }
+                    //PasswordTextBox.Text += passwords;
+                    
                 }
                 else //Checkbox pwn false
                 {
-                    for (int i = 0; i < NPasswordsNUD.Value; i++) //Generate requested pass
+                    //Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
+                    string genPass = null;
+                    int validCount = 0;
+                    while(validCount != NPasswordsNUD.Value)
                     {
-                        PasswordTextBox.Text += GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters) + Environment.NewLine;
+                        genPass = GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
+
+                        bool missingChar = false;
+                        foreach (KeyValuePair<CheckBox, string> pair in symbols)//Check if any char checkbox is activated.
+                        {
+                            if (pair.Key.Checked == true)
+                            {
+                                if (!genPass.Contains(pair.Value))
+                                {
+                                    missingChar = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!missingChar)
+                        {
+                            foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
+                            {
+                                if (pair.Key.Checked == true)
+                                {
+                                    for (int i = 0; i < genPass.Length; i++)
+                                    {
+                                        if (pair.Value.Contains(genPass[i]))
+                                        {
+                                            break;
+                                        }
+                                        if (i == genPass.Length - 1)
+                                        {
+                                            missingChar = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (!missingChar)
+                        {
+                            PasswordTextBox.Text += genPass + Environment.NewLine;
+                            validCount++;
+                            decimal proportion = Decimal.Round(((validCount) / NPasswordsNUD.Value) * 100, 2);
+                            PercentageLabel.Text = proportion.ToString() + "% complete, " + (validCount).ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
+                        }
+                        
                     }
                 }
                 
@@ -194,13 +297,12 @@ namespace PassGuard.GUI
 
         }
 
-        private bool CheckPwnage (string password)//Password pwned before? -> returns true, Password not pwned before? -> returns false
+        private string ComputeSHA1 (string password)
         {
-            //Compute hash of given password
             SHA1 sha1 = new SHA1CryptoServiceProvider();
             byte[] passByte = Encoding.UTF8.GetBytes(password);
             byte[] passHash = sha1.ComputeHash(passByte);
-            
+
             //Convert Hash into readable string
             StringBuilder sb = new StringBuilder();
             foreach (byte b in passHash)
@@ -209,36 +311,36 @@ namespace PassGuard.GUI
             }
             string hash = sb.ToString();
 
-            //Manage API
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            string instruction = "/C curl https://api.pwnedpasswords.com/range/"; // /C command1&command2
-            cmd.StartInfo.Arguments = instruction + hash.Substring(0, 5); //First 5 letters of our computed hash sent to webpage.
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Normal; //Hidden for hidden window, normal for visible window.
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.Start();
-            
-            string standard_output;
-            int iterations = 0;
-            while (((standard_output = cmd.StandardOutput.ReadLine()) != null))
-            {
-                int position = standard_output.IndexOf(":"); //Nullreference
-                string headhash = hash.Substring(0, 5).ToLower();
-                string tailhash = standard_output.Substring(0, 35).ToLower();
+            return hash;
+        }
 
-                if (headhash + tailhash == hash)
+        private async Task<bool> CheckPwnage (string password)//Password pwned before? -> returns true, Password not pwned before? -> returns false
+        { 
+            string hash = ComputeSHA1(password);
+            string headhash = hash.Substring(0, 5);
+            string PwnedHashes = await getHashes(headhash);
+
+            StringReader reader = new StringReader(PwnedHashes);
+            string line, tailHash;
+            while ((line = reader.ReadLine()) != null)
+            {
+                tailHash = line.Substring(0, 35);
+                if (headhash.ToUpper() + tailHash.ToUpper() == hash.ToUpper())
                 {
                     return true;
                 }
-                iterations += 1;
             }
-
-            //PasswordTextBox.Text = cmd.StandardOutput.ReadToEnd();
-            
-            cmd.WaitForExit();
-            
             return false;
+        }
+
+        private async Task<string> getHashes(string headHash)
+        {
+            string instruction = "https://api.pwnedpasswords.com/range/";
+            string url = instruction + headHash.ToUpper();
+            HttpClient client = new HttpClient();
+            string response = await client.GetStringAsync(url);
+
+            return response;
         }
 
         private static string GenerateSecurePassword(int length, string validCharacters)
@@ -261,20 +363,17 @@ namespace PassGuard.GUI
             return res.ToString();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            string instruction = "/C curl https://api.pwnedpasswords.com/range/";
-            cmd.StartInfo.Arguments = instruction + "FA224"; // /C command1&command2
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.Start();
-            
-            PasswordTextBox.Text = cmd.StandardOutput.ReadToEnd();
-            cmd.WaitForExit();
+            string instruction = "https://api.pwnedpasswords.com/range/";
+            string url = instruction + "72c9c".ToUpper();
+            HttpClient client = new HttpClient();
+            string response = await client.GetStringAsync(url);
+            PasswordTextBox.Text += response;
         }
+
+        
+        
 
         private void InfoPwnageButton_Click(object sender, EventArgs e)
         {
@@ -283,6 +382,39 @@ namespace PassGuard.GUI
                 "\nFor more info about why should you write down your passwords in this webpage and how is the privacy of searched passwords being kept, " + 
                 "visit https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity." + "\n\nNote: Press Ctrl+C to copy " + 
                 "the content of this dialog.");
+        }
+
+        private void SelectAllSymbolsButton_MouseEnter(object sender, EventArgs e)
+        {
+            SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline);
+        }
+
+        private void SelectAllSymbolsButton_MouseLeave(object sender, EventArgs e)
+        {
+            SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+        }
+
+        private void SelectAllSymbolsButton_Click(object sender, EventArgs e)
+        {
+            if (SymbolsCheckbox.Checked == true)
+            {
+                if (SelectAllSymbolsButton.Text == "Select All Symbols")
+                {
+                    foreach (CheckBox box in symbols.Keys)
+                    {
+                        box.Checked = true;
+                    }
+                    SelectAllSymbolsButton.Text = "Unselect All Symbols";
+                }
+                else if (SelectAllSymbolsButton.Text == "Unselect All Symbols")
+                {
+                    foreach (CheckBox box in symbols.Keys)
+                    {
+                        box.Checked = false;
+                    }
+                    SelectAllSymbolsButton.Text = "Select All Symbols";
+                }
+            }
         }
     }
 }
