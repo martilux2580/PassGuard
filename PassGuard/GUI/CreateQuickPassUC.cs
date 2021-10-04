@@ -112,6 +112,7 @@ namespace PassGuard.GUI
                     pair.Key.Checked = false;
                 }
                 SelectAllSymbolsButton.Enabled = false;
+                SelectAllSymbolsButton.Text = "Select All Symbols";
             }
 
             if (SymbolsCheckbox.Checked == true)//If it has been activated...
@@ -122,7 +123,7 @@ namespace PassGuard.GUI
                 }
                 SelectAllSymbolsButton.Enabled = true;
             }
-            
+
         }
 
         private void CopyClipboardButton_Click(object sender, EventArgs e)
@@ -443,6 +444,7 @@ namespace PassGuard.GUI
                         box.Checked = true;
                     }
                     SelectAllSymbolsButton.Text = "Unselect All Symbols";
+                    
                 }
                 else if (SelectAllSymbolsButton.Text == "Unselect All Symbols") //If not true, uncheck all.
                 {
@@ -451,6 +453,7 @@ namespace PassGuard.GUI
                         box.Checked = false;
                     }
                     SelectAllSymbolsButton.Text = "Select All Symbols";
+                    SymbolsCheckbox.Checked = false;
                 }
             }
         }
