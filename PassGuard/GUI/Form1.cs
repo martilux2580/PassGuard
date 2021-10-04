@@ -176,8 +176,8 @@ namespace PassGuard
         {
             darkToolStripMenuItem.Checked = true;
             lightToolStripMenuItem.Checked = false;
-            ContentPanel.BackColor = Color.FromArgb(45, 45, 45);
-            
+            ContentPanel.BackColor = Color.FromArgb(65, 65, 65);
+
         }
 
         private void lightToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,7 +205,7 @@ namespace PassGuard
 
         private void CreateQuickPassButton_Click(object sender, EventArgs e)
         {
-            TitleLabel.Text = "CREATING A SAFE PASSWORD";
+            TitleLabel.Text = "CREATING SAFE PASSWORDS";
             if (label1.Visible == true)
             {
                 label1.Visible = false;
