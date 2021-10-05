@@ -235,7 +235,7 @@ namespace PassGuard.GUI
             // 
             this.PassLengthNUD.Location = new System.Drawing.Point(365, 231);
             this.PassLengthNUD.Maximum = new decimal(new int[] {
-            256,
+            52,
             0,
             0,
             0});
@@ -275,7 +275,7 @@ namespace PassGuard.GUI
             // 
             this.NPasswordsNUD.Location = new System.Drawing.Point(14, 176);
             this.NPasswordsNUD.Maximum = new decimal(new int[] {
-            2048,
+            512,
             0,
             0,
             0});
@@ -813,7 +813,7 @@ namespace PassGuard.GUI
             // 
             this.PercentageLabel.AutoSize = true;
             this.PercentageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PercentageLabel.Location = new System.Drawing.Point(33, 464);
+            this.PercentageLabel.Location = new System.Drawing.Point(22, 464);
             this.PercentageLabel.Name = "PercentageLabel";
             this.PercentageLabel.Size = new System.Drawing.Size(0, 15);
             this.PercentageLabel.TabIndex = 6;
