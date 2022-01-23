@@ -35,15 +35,7 @@ namespace PassGuard
             LogoPictureBox.Image = Image.FromFile(@"..\..\Images\Logo.png"); //Working Directory inside Release Folder. Loads Image from Image folder.
             LogoPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
             this.Icon = new Icon(@"..\..\Images\LogoIcon64.ico"); //Loads Icon from Image folder.
-            SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico");
-           
-
-
-
-            //Think of use cases of the app.
-            //Determine buttons and functions
-            //Cover all panels with the contents they will have before start coding functionality.
-            //When changing window colors, disable black tones (0, 0, 0) so that letters and logo are visible.
+            SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico"); //Loads Image for the Settings Icon
 
             //lightToolStripMenuItem.Checked = true;
             //label2.ForeColor = Color.FromArgb(0, 0, 0); //100, 100, 100
@@ -56,60 +48,58 @@ namespace PassGuard
             //LogoPictureBox.Image = null; //Remove Image from PictureBox (without removing PictureBox itself)
             //LogoPictureBox.BackColor = Color.FromArgb();
 
-
-
         }
 
         private void CreateVaultButton_Click(object sender, EventArgs e)
         {
             label1.Visible = true;
-            TitleLabel.Text = "CREATING A NEW PASSWORD VAULT";
+            TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
         }
 
         private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
         {
-            CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline);
+            CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
         private void CreateVaultButton_MouseLeave(object sender, EventArgs e)
         {
-            CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular);
+            CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
         }
 
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             label1.Visible = false;
-            TitleLabel.Text = "LOADING A PASSWORD VAULT";
+            TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
         }
 
         private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
         {
-            LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline);
+            LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
         private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
         {
-            LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular);
+            LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
         }
 
         private void DesignerLabel_MouseEnter(object sender, EventArgs e)
         {
-            DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Underline);
+            DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
         private void DesignerLabel_MouseLeave(object sender, EventArgs e)
         {
-            DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Regular);
+            DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Regular); //Regularise the text when mouse is not in the button
         }
 
         private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories");
+            System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories"); //Open browser with webpage.
         }
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            GUI.HomeContentUC hc = new GUI.HomeContentUC();
+            GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
             hc.Visible = false;
             TitleLabel.Text = "HOME";
             ContentPanel.Controls.Clear();
@@ -120,15 +110,15 @@ namespace PassGuard
 
         private void SettingButton_Click(object sender, EventArgs e)
         {
-            SettingsCMS.Show(SettingButton, new Point(SettingButton.Width - SettingsCMS.Width, SettingButton.Height));
+            SettingsCMS.Show(SettingButton, new Point(SettingButton.Width - SettingsCMS.Width, SettingButton.Height)); //Sets where to display the ContextMenuStrip...
             //SettingsCMS.BackColor = Color.FromArgb(45, 45, 45);
             //TitleSettingsToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 45);
         }
 
         private void changeComplemenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings();
-            if (darkToolStripMenuItem.Checked == true)
+            GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(); //Dialog to insert rgb values
+            if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
             {
                 rgb.BackColor = Color.FromArgb(45, 45, 45);
             }
@@ -136,12 +126,12 @@ namespace PassGuard
             {
                 rgb.BackColor = Color.FromArgb(240, 240, 240);
             }
-            rgb.ShowDialog();
-            int redValue = rgb.getRedNUDValue();
+            rgb.ShowDialog();  //Show dialog
+            int redValue = rgb.getRedNUDValue(); //Get rgb values
             int greenValue = rgb.getGreenNUDValue();
             int blueValue = rgb.getBlueNUDValue();
 
-
+            //Correction of rgb values if higher than 235, and then set the colors of the panels
             if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
             {
                 MenuPanel.BackColor = Color.FromArgb(245, 245, 245);
@@ -172,7 +162,7 @@ namespace PassGuard
             
         }
 
-        private void darkToolStripMenuItem_Click(object sender, EventArgs e)
+        private void darkToolStripMenuItem_Click(object sender, EventArgs e) //Check dark toolstrip, uncheck light one and change colors
         {
             darkToolStripMenuItem.Checked = true;
             lightToolStripMenuItem.Checked = false;
@@ -180,14 +170,14 @@ namespace PassGuard
 
         }
 
-        private void lightToolStripMenuItem_Click(object sender, EventArgs e)
+        private void lightToolStripMenuItem_Click(object sender, EventArgs e) //Check light toolstrip, uncheck dark one and change colors
         {
             lightToolStripMenuItem.Checked = true;
             darkToolStripMenuItem.Checked = false;
             ContentPanel.BackColor = Color.FromArgb(240, 240, 240);
         }
 
-        private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
         {
             //Implement "Save Changes" Part
             Application.Exit(); //Close Application
@@ -195,18 +185,18 @@ namespace PassGuard
 
         private void CreateQuickPassButton_MouseEnter(object sender, EventArgs e)
         {
-            CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline);
+            CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
         private void CreateQuickPassButton_MouseLeave(object sender, EventArgs e)
         {
-            CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular);
+            CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
         }
 
         private void CreateQuickPassButton_Click(object sender, EventArgs e)
         {
-            TitleLabel.Text = "CREATING SAFE PASSWORDS";
-            if (label1.Visible == true)
+            TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
+            if (label1.Visible == true) 
             {
                 label1.Visible = false;
             }
@@ -215,7 +205,7 @@ namespace PassGuard
                 label1.Visible = true;
             }
 
-            GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC();
+            GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC(); //Set new UC for the action.
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(cqr);
             //cqr.BackColor = Color.FromArgb(210, 0, 0);

@@ -16,6 +16,7 @@ using System.Reflection;
 
 namespace PassGuard.GUI
 {
+    //UserControl for the Create Quick Password Menu
     public partial class CreateQuickPassUC : UserControl
     {
         public CreateQuickPassUC()
@@ -31,7 +32,7 @@ namespace PassGuard.GUI
         private Dictionary<CheckBox, string> symbols { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
 
         private Dictionary<CheckBox, string> fillCharDict (Dictionary<CheckBox, string> characters)
-        {//Fill the dictionary with corresponding pair CheckBox(characters)-String
+        {   //Fill the dictionary with corresponding pair CheckBox(characters)-String
             const string lower = "abcdefghijklmnopqrstuvwxyz";
             const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const string numbers = "0123456789";
@@ -44,7 +45,7 @@ namespace PassGuard.GUI
         }
 
         private Dictionary<CheckBox, string> fillSymbolsDict(Dictionary<CheckBox, string> symbols)
-        {//Fill the dictionary with corresponding pair CheckBox(symbols)-String
+        {   //Fill the dictionary with corresponding pair CheckBox(symbols)-String
             symbols.Add(CheckBoxExclamation, "!");
             symbols.Add(CheckboxDollar, "$");
             symbols.Add(CheckboxPercentage, "%");
@@ -91,6 +92,7 @@ namespace PassGuard.GUI
 
         private void CreateQuickPassUC_Load(object sender, EventArgs e)
         {
+            //Load Images
             CopyClipboardButton.Image = Image.FromFile(@"..\..\Images\Clipboard32.ico");//Load Clipboard Icon
             InfoPwnageButton.Image = Image.FromFile(@"..\..\Images\Info243.ico");//Load Info Icon
             //Load Dictionaries with their corresponding values.
@@ -434,14 +436,6 @@ namespace PassGuard.GUI
             return res.ToString();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            string instruction = "https://api.pwnedpasswords.com/range/";
-            string url = instruction + "72c9c".ToUpper();
-            HttpClient client = new HttpClient();
-            string response = await client.GetStringAsync(url);
-            PasswordTextBox.Text += response;
-        }
 
         private void InfoPwnageButton_Click(object sender, EventArgs e)
         {
@@ -459,7 +453,7 @@ namespace PassGuard.GUI
 
         private void SelectAllSymbolsButton_MouseLeave(object sender, EventArgs e)
         {
-            SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //If mouse leaves button, regula text
+            SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //If mouse leaves button, regular text
         }
 
         private void SelectAllSymbolsButton_Click(object sender, EventArgs e)
