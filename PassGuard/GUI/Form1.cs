@@ -210,5 +210,10 @@ namespace PassGuard
             ContentPanel.Controls.Add(cqr);
             //cqr.BackColor = Color.FromArgb(210, 0, 0);
         }
+
+        private void TitleLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
