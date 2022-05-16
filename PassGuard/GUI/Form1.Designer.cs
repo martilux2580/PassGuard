@@ -229,7 +229,6 @@ namespace PassGuard
             this.TitleLabel.TabIndex = 0;
             this.TitleLabel.Text = "HOME";
             this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.TitleLabel.Click += new System.EventHandler(this.TitleLabel_Click);
             // 
             // ToolTipNewPassVault
             // 
