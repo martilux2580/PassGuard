@@ -26,31 +26,12 @@ namespace PassGuard
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //MenuPanel.BackColor = Color.FromArgb(20, 211, 164); //43, 43, 43              LeftButtons (+20 base)
-            //LogoPanel.BackColor = Color.FromArgb(0, 184, 137); //31, 31, 31               Logo (-7base)
-            //OptionsPanel.BackColor = Color.FromArgb(0, 191, 144); //38, 38, 38            Title (BASE)
-            //this.BackColor = Color.FromArgb(240, 240, 240); //45, 45, 45                  Form Backcolor (collapsed by 4 panels)
-            //ContentPanel.BackColor = Color.FromArgb(240, 240, 240); //32, 32, 32          Content
-            var directorio = Directory.GetCurrentDirectory();
-            label1.Text = directorio;
-            label1.Visible = false;
-            LogoPictureBox.Image = Image.FromFile(@"..\..\Images\Logo.png"); //Working Directory inside Release Folder. Loads Image from Image folder.
-            LogoPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64.ico"); //Loads Icon from Image folder.
+            LogoPictureBox.Image = Image.FromFile(@"..\..\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder.
+            LogoPictureBox.SizeMode = PictureBoxSizeMode.Zoom; //PictureBoxSizeMode.Zoom
+            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
             SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico"); //Loads Image for the Settings Icon
             setConfigTheme(); //Set theme based on saved config.
             setConfigColours(); //Set outline colours based on saved config.
-
-            //lightToolStripMenuItem.Checked = true;
-            //label2.ForeColor = Color.FromArgb(0, 0, 0); //100, 100, 100
-            //label3.ForeColor = Color.FromArgb(0, 0, 0); //90, 90, 90
-            //SettingPictureBox.Image = Image.FromFile(@"..\..\Images\Setting.jpg"); //Working Directory inside Release Folder. Loads Image from Image folder.
-            //SettingPictureBox.SizeMode = PictureBoxSizeMode.StretchImage; //Makes the image fit into PictureBox by resizing it.
-            //CreateVaultButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            //CreateVaultButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            //button1.Visible = false; //If button not visible, you cannot click it
-            //LogoPictureBox.Image = null; //Remove Image from PictureBox (without removing PictureBox itself)
-            //LogoPictureBox.BackColor = Color.FromArgb();
 
         }
 
@@ -69,7 +50,7 @@ namespace PassGuard
             {
                 lightToolStripMenuItem.Checked = true;
                 darkToolStripMenuItem.Checked = false;
-                ContentPanel.BackColor = Color.FromArgb(240, 240, 240);
+                ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
             }
 
         }
@@ -156,8 +137,7 @@ namespace PassGuard
         private void SettingButton_Click(object sender, EventArgs e)
         {
             SettingsCMS.Show(SettingButton, new Point(SettingButton.Width - SettingsCMS.Width, SettingButton.Height)); //Sets where to display the ContextMenuStrip...
-            //SettingsCMS.BackColor = Color.FromArgb(45, 45, 45);
-            //TitleSettingsToolStripMenuItem.BackColor = Color.FromArgb(45, 45, 45);
+
         }
 
         private void changeComplemenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -167,11 +147,11 @@ namespace PassGuard
             GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(); //Dialog to insert rgb values
             if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
             {
-                rgb.BackColor = Color.FromArgb(45, 45, 45); //Set Color for the RGB selection popup window.
+                rgb.BackColor = Color.FromArgb(116, 118, 117); //Set Color for the RGB selection popup window.
             }
             else if (lightToolStripMenuItem.Checked == true)
             {
-                rgb.BackColor = Color.FromArgb(240, 240, 240); //Set Color for the RGB selection popup window.
+                rgb.BackColor = Color.FromArgb(230, 230, 230); //Set Color for the RGB selection popup window.
             }
             rgb.ShowDialog();  //Show dialog
 
@@ -269,7 +249,7 @@ namespace PassGuard
             }
             darkToolStripMenuItem.Checked = true;
             lightToolStripMenuItem.Checked = false;
-            ContentPanel.BackColor = Color.FromArgb(65, 65, 65);
+            ContentPanel.BackColor = Color.FromArgb(116, 118, 117);
         }
 
         private void lightToolStripMenuItem_Click(object sender, EventArgs e) //Check light toolstrip, uncheck dark one and change colors
@@ -284,7 +264,7 @@ namespace PassGuard
             }
             lightToolStripMenuItem.Checked = true;
             darkToolStripMenuItem.Checked = false;
-            ContentPanel.BackColor = Color.FromArgb(240, 240, 240);
+            ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
         }
 
         private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
@@ -306,19 +286,9 @@ namespace PassGuard
         private void CreateQuickPassButton_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
-            /*if (label1.Visible == true) 
-            {
-                label1.Visible = false;
-            }
-            else
-            {
-                label1.Visible = true;
-            }*/
-
             GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC(); //Set new UC for the action.
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(cqr);
-            //cqr.BackColor = Color.FromArgb(210, 0, 0);
         }
 
     }
