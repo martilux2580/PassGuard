@@ -80,6 +80,9 @@ namespace PassGuard
         {
             label1.Visible = true;
             TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
+            GUI.CreateNewVaultUC cnv = new GUI.CreateNewVaultUC(); //Set new UC for the action.
+            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Add(cnv);
         }
 
         private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
