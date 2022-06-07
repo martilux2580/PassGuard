@@ -104,6 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Utils.cs" />
     <Compile Include="GUI\AskRGBforSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +123,12 @@
     <Compile Include="GUI\CreateQuickPassUC.Designer.cs">
       <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DataRowUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DataRowUC.Designer.cs">
+      <DependentUpon>DataRowUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +142,18 @@
     <Compile Include="GUI\HomeContentUC.Designer.cs">
       <DependentUpon>HomeContentUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\LoadVaultUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\LoadVaultUC.Designer.cs">
+      <DependentUpon>LoadVaultUC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\VaultContentUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\VaultContentUC.Designer.cs">
+      <DependentUpon>VaultContentUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\AskRGBforSettings.resx">
       <DependentUpon>AskRGBforSettings.cs</DependentUpon>
@@ -145,11 +164,20 @@
     <EmbeddedResource Include="GUI\CreateQuickPassUC.resx">
       <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DataRowUC.resx">
+      <DependentUpon>DataRowUC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HomeContentUC.resx">
       <DependentUpon>HomeContentUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LoadVaultUC.resx">
+      <DependentUpon>LoadVaultUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\VaultContentUC.resx">
+      <DependentUpon>VaultContentUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
