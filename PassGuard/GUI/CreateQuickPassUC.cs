@@ -137,6 +137,8 @@ namespace PassGuard.GUI
 
         private async void GenPassButton_Click(object sender, EventArgs e)
         {
+            Core.Utils utils = new Core.Utils();
+
             //Clear previous content + Add Progress in label and textbox.
             PercentageLabel.Text = "0% complete, 0/" + NPasswordsNUD.Value.ToString() +" passwords generated.";
             PercentageLabel.Visible = true;
@@ -185,7 +187,7 @@ namespace PassGuard.GUI
                         while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords
                         {
                             //Save generated pass temporarily
-                            string genPass = GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
+                            string genPass = utils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
 
                             //Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
                             missingChar = false; //If chars are missing, we won´t enter the block of code of generating not pwned passwords.
@@ -236,7 +238,7 @@ namespace PassGuard.GUI
                             }
                             if (!missingChar) //If genPass has ALL characters requested 
                             {
-                                bool check = await CheckPwnage(genPass);
+                                bool check = await utils.CheckPwnage(genPass);
                                 if (check == false) //No pwnage found for genPass
                                 {
                                     validCount += 1; //A valid pass has been created, so we increment it
@@ -264,7 +266,7 @@ namespace PassGuard.GUI
                     while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords requested
                     {
                         
-                        string genPass = GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
+                        string genPass = utils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
                         missingChar = false;
 
                         //Equal Part as above
@@ -327,76 +329,6 @@ namespace PassGuard.GUI
                 }
             }
         }
-
-        private string ComputeSHA1 (string password)
-        {
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
-            byte[] passByte = Encoding.UTF8.GetBytes(password);//Encode Pass
-            byte[] passHash = sha1.ComputeHash(passByte);//Compute SHA1
-
-            //Convert Hash into readable string
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in passHash)
-            {
-                sb.Append(b.ToString("x2"));
-            }
-            string hash = sb.ToString();//Compose bytes to string
-
-            return hash;
-        }
-
-        //Obtain all the hashes that start with headHash from an API of pwned passwords.
-        private async Task<string> getHashes(string headHash)
-        {
-            string instruction = "https://api.pwnedpasswords.com/range/"; 
-            string url = instruction + headHash.ToUpper();
-            HttpClient client = new HttpClient();
-            string response = await client.GetStringAsync(url);
-
-            return response;
-        }
-
-        private async Task<bool> CheckPwnage (string password)//Password pwned before? -> returns true, Password not pwned before? -> returns false
-        {
-            string hash = ComputeSHA1(password); //Compute SHA1
-            string headhash = hash.Substring(0, 5); //Compute first part of hash in order to check hashes.
-            string PwnedHashes = await getHashes(headhash);
-
-            StringReader reader = new StringReader(PwnedHashes);
-            string line, tailHash;
-            while ((line = reader.ReadLine()) != null)//Read all pwned hashes
-            {
-                tailHash = line.Substring(0, 35);
-                if (headhash.ToUpper() + tailHash.ToUpper() == hash.ToUpper()) //If match, pass has been pwned before.
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //https://stackoverflow.com/questions/32932679/using-rngcryptoserviceprovider-to-generate-random-string
-        //https://stackoverflow.com/questions/32932679/using-rngcryptoserviceprovider-to-generate-random-string/32932789#32932789
-        private static string GenerateSecurePassword(int length, string validCharacters) //StackOverflow xD
-        {
-            StringBuilder res = new StringBuilder();
-            using (RNGCryptoServiceProvider cryptoProvider = new RNGCryptoServiceProvider())
-            {
-                while (res.Length != length)
-                {
-                    byte[] oneByte = new byte[1];
-                    cryptoProvider.GetBytes(oneByte);
-                    char character = (char)oneByte[0];
-                    if (validCharacters.Contains(character))
-                    {
-                        res.Append(character);
-                    }
-                }
-            }
-
-            return res.ToString();
-        }
-
 
         private void InfoPwnageButton_Click(object sender, EventArgs e)
         {

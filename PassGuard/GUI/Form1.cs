@@ -99,6 +99,9 @@ namespace PassGuard
         {
             label1.Visible = false;
             TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
+            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(); //Set new UC for the action.
+            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Add(lv);
         }
 
         private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
@@ -128,13 +131,17 @@ namespace PassGuard
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
+            /*GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
             hc.Visible = false;
             TitleLabel.Text = "HOME";
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(hc);
-            hc.Visible = true;
-            
+            hc.Visible = true;*/
+            GUI.VaultContentUC vc = new GUI.VaultContentUC(); //Put the main panel visible.
+            ContentPanel.Controls.Clear(); //this.Parent.Name; //contentpanel
+            ContentPanel.Controls.Add(vc);
+            vc.Visible = true;
+
         }
 
         private void SettingButton_Click(object sender, EventArgs e)
@@ -185,6 +192,7 @@ namespace PassGuard
                     config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
                     config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
                     config.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection("appSettings");
                 }
 
                 MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
@@ -231,6 +239,7 @@ namespace PassGuard
                     config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
                     config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
                     config.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection("appSettings");
                 }
 
                 MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu); //43, 43, 43      
@@ -249,6 +258,7 @@ namespace PassGuard
             {
                 config.AppSettings.Settings["Theme"].Value = "Dark"; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
             }
             darkToolStripMenuItem.Checked = true;
             lightToolStripMenuItem.Checked = false;
@@ -264,6 +274,7 @@ namespace PassGuard
             {
                 config.AppSettings.Settings["Theme"].Value = "Light"; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
             }
             lightToolStripMenuItem.Checked = true;
             darkToolStripMenuItem.Checked = false;

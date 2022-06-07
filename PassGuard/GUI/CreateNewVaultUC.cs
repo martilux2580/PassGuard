@@ -36,6 +36,7 @@ namespace PassGuard.GUI
 
         private void CreateNewVaultButton_Click(object sender, EventArgs e)
         {
+            Core.Utils utils = new Core.Utils();
             String errorMessages = ""; //All the error messages due to input, later print it to user in just one messagebox.
 
             //If any field is blank.
@@ -54,13 +55,13 @@ namespace PassGuard.GUI
                 errorMessages += "    - Invalid Email Format.\n";
             }
 
-            bool validName = Check(VaultNameTextbox.Text, "Lower") || Check(VaultNameTextbox.Text, "Upper") || Check(VaultNameTextbox.Text, "Number"); //Name not composed of symbols.
+            bool validName = utils.Check(VaultNameTextbox.Text, "Lower") || utils.Check(VaultNameTextbox.Text, "Upper") || utils.Check(VaultNameTextbox.Text, "Number"); //Name not composed of symbols.
             if (!validName) //Validate name of vault.
             {
                 errorMessages += "    - The new vault´s name should be composed of letters or numbers.\n";
             }
 
-            bool validPass = Check(VaultPassTextbox.Text, "Lower") && Check(VaultPassTextbox.Text, "Upper") && Check(VaultPassTextbox.Text, "Number") && Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
+            bool validPass = utils.Check(VaultPassTextbox.Text, "Lower") && utils.Check(VaultPassTextbox.Text, "Upper") && utils.Check(VaultPassTextbox.Text, "Number") && utils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
             if (!validPass) //Valid password
             {
                 errorMessages += "    - The password must have upper and lower case letters, numbers, symbols and must have a minimum length of 12 characters.\n";
@@ -82,7 +83,7 @@ namespace PassGuard.GUI
 
             if (!String.IsNullOrEmpty(errorMessages)) //If any error...
             {
-                MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)");
+                MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
             }
             else //No error in params, create vault.
             {
@@ -135,13 +136,14 @@ namespace PassGuard.GUI
                 rnd.NextBytes(salt);
                 string rndsalt = Convert.ToBase64String(salt);
                 //Encrypt and delete previous file.
-                Encrypt(key: getVaultKey(password: (VaultEmailTextbox.Text+VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
+                utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text+VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
                 //Save salt
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
-                config.Save(ConfigurationSaveMode.Modified);
+                config.Save(ConfigurationSaveMode.Modified, true);
+                ConfigurationManager.RefreshSection("appSettings");
 
                 //Inform user
                 var data = "\tEmail: " + VaultEmailTextbox.Text + "\n\tVault Password: " + VaultPassTextbox.Text + "\n\tSecurity Key: " + rndsalt;
@@ -160,71 +162,6 @@ namespace PassGuard.GUI
 
             }
 
-        }
-
-        //Function to encrypt a src file into a dst file given a key with AES.
-        private void Encrypt(byte[] key, String src, String dst)
-        {
-            // Encrypt the source file and write it to the destination file.
-            using (var sourceStream = File.OpenRead(src))
-            using (var destinationStream = File.Create(dst))
-            using (var provider = new AesCryptoServiceProvider())
-            {
-                if (key != null)
-                {
-                    provider.Key = key;
-                }
-
-                using (var cryptoTransform = provider.CreateEncryptor())
-                using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransform, CryptoStreamMode.Write))
-                {
-                    destinationStream.Write(provider.IV, 0, provider.IV.Length);
-                    sourceStream.CopyTo(cryptoStream);
-                }
-            }
-        }
-
-        //Function to derive a 256bit key (with PBKDF2) given a password and a salt.
-        private byte[] getVaultKey(String password, byte[] salt)
-        {
-            Rfc2898DeriveBytes d1 = new Rfc2898DeriveBytes(password, salt, iterations: 100100);
-            return d1.GetBytes(32); //256bit key.
-
-        }
-
-        //Function to check if a string has Lower, Upper, Number or Symbol characters, based on those modes.
-        private bool Check(String str, String mode)
-        {
-            switch (mode)
-            {
-                case "Lower":
-                    foreach(char c in str)
-                    {
-                        if(char.IsLower(c)) { return true; }
-                    }
-                    return false;
-                case "Upper":
-                    foreach (char c in str)
-                    {
-                        if (char.IsUpper(c)) { return true; }
-                    }
-                    return false;
-                case "Number":
-                    foreach (char c in str)
-                    {
-                        if (char.IsDigit(c)) { return true; }
-                    }
-                    return false;
-                case "Symbol":
-                    String validSymbols = "!@#~$%&¬€/()=?¿+*[]{}ñÑ-_.:,;<>¡ªº";
-                    foreach (char c in str)
-                    {
-                        if (validSymbols.Contains(c)) { return true; }
-                    }
-                    return false;
-                default:
-                    return false;
-            }
         }
 
         private void SelectVaultPathButton_Click(object sender, EventArgs e)

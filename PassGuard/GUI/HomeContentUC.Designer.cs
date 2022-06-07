@@ -40,9 +40,10 @@ namespace PassGuard.GUI
             // TimeLabel
             // 
             this.TimeLabel.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TimeLabel.Location = new System.Drawing.Point(3, 0);
+            this.TimeLabel.Location = new System.Drawing.Point(2, 0);
+            this.TimeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(1195, 93);
+            this.TimeLabel.Size = new System.Drawing.Size(896, 76);
             this.TimeLabel.TabIndex = 0;
             this.TimeLabel.Text = "Loading Time....";
             this.TimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -50,9 +51,10 @@ namespace PassGuard.GUI
             // DateLabel
             // 
             this.DateLabel.Font = new System.Drawing.Font("Franklin Gothic Medium Cond", 28.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DateLabel.Location = new System.Drawing.Point(6, 107);
+            this.DateLabel.Location = new System.Drawing.Point(4, 87);
+            this.DateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DateLabel.Name = "DateLabel";
-            this.DateLabel.Size = new System.Drawing.Size(1195, 89);
+            this.DateLabel.Size = new System.Drawing.Size(896, 72);
             this.DateLabel.TabIndex = 1;
             this.DateLabel.Text = "Loading Date....";
             this.DateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -67,19 +69,21 @@ namespace PassGuard.GUI
             this.TimePanel.AutoSize = true;
             this.TimePanel.Controls.Add(this.DateLabel);
             this.TimePanel.Controls.Add(this.TimeLabel);
-            this.TimePanel.Location = new System.Drawing.Point(0, 171);
+            this.TimePanel.Location = new System.Drawing.Point(0, 139);
+            this.TimePanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.TimePanel.Name = "TimePanel";
-            this.TimePanel.Size = new System.Drawing.Size(1204, 196);
+            this.TimePanel.Size = new System.Drawing.Size(903, 159);
             this.TimePanel.TabIndex = 2;
             // 
             // HomeContentUC
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.TimePanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "HomeContentUC";
-            this.Size = new System.Drawing.Size(1153, 534);
+            this.Size = new System.Drawing.Size(865, 434);
             this.Load += new System.EventHandler(this.HomeContentUC_Load);
             this.TimePanel.ResumeLayout(false);
             this.ResumeLayout(false);
