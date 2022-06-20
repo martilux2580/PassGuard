@@ -29,6 +29,7 @@ namespace PassGuard.GUI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.VaultNameTextbox = new System.Windows.Forms.TextBox();
             this.VaultNameLabel = new System.Windows.Forms.Label();
             this.VaultPathLabel = new System.Windows.Forms.Label();
@@ -41,6 +42,8 @@ namespace PassGuard.GUI
             this.UserEmailLabel = new System.Windows.Forms.Label();
             this.VaultEmailTextbox = new System.Windows.Forms.TextBox();
             this.CreateNewVaultButton = new System.Windows.Forms.Button();
+            this.SaveEmailCheckbox = new System.Windows.Forms.CheckBox();
+            this.SaveEmailTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // VaultNameTextbox
@@ -145,7 +148,7 @@ namespace PassGuard.GUI
             this.VaultEmailTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
             this.VaultEmailTextbox.Location = new System.Drawing.Point(348, 50);
             this.VaultEmailTextbox.Name = "VaultEmailTextbox";
-            this.VaultEmailTextbox.Size = new System.Drawing.Size(423, 24);
+            this.VaultEmailTextbox.Size = new System.Drawing.Size(329, 24);
             this.VaultEmailTextbox.TabIndex = 9;
             // 
             // CreateNewVaultButton
@@ -163,10 +166,29 @@ namespace PassGuard.GUI
             this.CreateNewVaultButton.MouseEnter += new System.EventHandler(this.CreateNewVaultButton_MouseEnter);
             this.CreateNewVaultButton.MouseLeave += new System.EventHandler(this.CreateNewVaultButton_MouseLeave);
             // 
+            // SaveEmailCheckbox
+            // 
+            this.SaveEmailCheckbox.AutoSize = true;
+            this.SaveEmailCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveEmailCheckbox.Location = new System.Drawing.Point(683, 52);
+            this.SaveEmailCheckbox.Name = "SaveEmailCheckbox";
+            this.SaveEmailCheckbox.Size = new System.Drawing.Size(88, 19);
+            this.SaveEmailCheckbox.TabIndex = 12;
+            this.SaveEmailCheckbox.Text = "Save Email";
+            this.SaveEmailCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // SaveEmailTooltip
+            // 
+            this.SaveEmailTooltip.AutomaticDelay = 300;
+            this.SaveEmailTooltip.AutoPopDelay = 5000;
+            this.SaveEmailTooltip.InitialDelay = 300;
+            this.SaveEmailTooltip.ReshowDelay = 60;
+            // 
             // CreateNewVaultUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.SaveEmailCheckbox);
             this.Controls.Add(this.CreateNewVaultButton);
             this.Controls.Add(this.UserEmailLabel);
             this.Controls.Add(this.VaultEmailTextbox);
@@ -200,5 +222,7 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Label UserEmailLabel;
         private System.Windows.Forms.TextBox VaultEmailTextbox;
         private System.Windows.Forms.Button CreateNewVaultButton;
+        private System.Windows.Forms.CheckBox SaveEmailCheckbox;
+        private System.Windows.Forms.ToolTip SaveEmailTooltip;
     }
 }

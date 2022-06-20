@@ -44,7 +44,6 @@ namespace PassGuard
             this.ToolTipNewPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ToolTipLoadPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ContentPanel = new System.Windows.Forms.Panel();
-            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.label1 = new System.Windows.Forms.Label();
             this.SettingsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SettingsCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -61,6 +60,7 @@ namespace PassGuard
             this.exportVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.MenuPanel.SuspendLayout();
             this.LogoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
@@ -77,7 +77,7 @@ namespace PassGuard
             this.MenuPanel.Controls.Add(this.LogoPanel);
             this.MenuPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.MenuPanel.Location = new System.Drawing.Point(0, 0);
-            this.MenuPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MenuPanel.Margin = new System.Windows.Forms.Padding(2);
             this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new System.Drawing.Size(288, 574);
             this.MenuPanel.TabIndex = 2;
@@ -91,7 +91,7 @@ namespace PassGuard
             this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
             this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 295);
-            this.CreateQuickPassButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CreateQuickPassButton.Margin = new System.Windows.Forms.Padding(2);
             this.CreateQuickPassButton.Name = "CreateQuickPassButton";
             this.CreateQuickPassButton.Size = new System.Drawing.Size(288, 81);
             this.CreateQuickPassButton.TabIndex = 6;
@@ -111,7 +111,7 @@ namespace PassGuard
             this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadVaultButton.ForeColor = System.Drawing.Color.Black;
             this.LoadVaultButton.Location = new System.Drawing.Point(0, 214);
-            this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(2);
             this.LoadVaultButton.Name = "LoadVaultButton";
             this.LoadVaultButton.Size = new System.Drawing.Size(288, 81);
             this.LoadVaultButton.TabIndex = 5;
@@ -131,7 +131,7 @@ namespace PassGuard
             this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateVaultButton.ForeColor = System.Drawing.Color.Black;
             this.CreateVaultButton.Location = new System.Drawing.Point(0, 133);
-            this.CreateVaultButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CreateVaultButton.Margin = new System.Windows.Forms.Padding(2);
             this.CreateVaultButton.Name = "CreateVaultButton";
             this.CreateVaultButton.Size = new System.Drawing.Size(288, 81);
             this.CreateVaultButton.TabIndex = 4;
@@ -149,7 +149,7 @@ namespace PassGuard
             this.LogoPanel.Controls.Add(this.LogoLabel);
             this.LogoPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.LogoPanel.Location = new System.Drawing.Point(0, 0);
-            this.LogoPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LogoPanel.Margin = new System.Windows.Forms.Padding(2);
             this.LogoPanel.Name = "LogoPanel";
             this.LogoPanel.Size = new System.Drawing.Size(288, 133);
             this.LogoPanel.TabIndex = 3;
@@ -158,7 +158,7 @@ namespace PassGuard
             // 
             this.LogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LogoPictureBox.Location = new System.Drawing.Point(96, 2);
-            this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.LogoPictureBox.Name = "LogoPictureBox";
             this.LogoPictureBox.Size = new System.Drawing.Size(94, 84);
             this.LogoPictureBox.TabIndex = 3;
@@ -199,7 +199,7 @@ namespace PassGuard
             this.OptionsPanel.Controls.Add(this.TitleLabel);
             this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.OptionsPanel.Location = new System.Drawing.Point(288, 0);
-            this.OptionsPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.OptionsPanel.Margin = new System.Windows.Forms.Padding(2);
             this.OptionsPanel.Name = "OptionsPanel";
             this.OptionsPanel.Size = new System.Drawing.Size(898, 133);
             this.OptionsPanel.TabIndex = 3;
@@ -210,7 +210,7 @@ namespace PassGuard
             this.SettingButton.FlatAppearance.BorderSize = 0;
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SettingButton.Location = new System.Drawing.Point(792, 32);
-            this.SettingButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SettingButton.Margin = new System.Windows.Forms.Padding(2);
             this.SettingButton.Name = "SettingButton";
             this.SettingButton.Size = new System.Drawing.Size(63, 68);
             this.SettingButton.TabIndex = 2;
@@ -253,21 +253,10 @@ namespace PassGuard
             this.ContentPanel.Controls.Add(this.label1);
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContentPanel.Location = new System.Drawing.Point(288, 133);
-            this.ContentPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
             this.ContentPanel.Name = "ContentPanel";
             this.ContentPanel.Size = new System.Drawing.Size(898, 441);
             this.ContentPanel.TabIndex = 4;
-            // 
-            // homeContentUC1
-            // 
-            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.homeContentUC1.AutoSize = true;
-            this.homeContentUC1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.homeContentUC1.Location = new System.Drawing.Point(1, 3);
-            this.homeContentUC1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.homeContentUC1.Name = "homeContentUC1";
-            this.homeContentUC1.Size = new System.Drawing.Size(905, 300);
-            this.homeContentUC1.TabIndex = 2;
             // 
             // label1
             // 
@@ -304,7 +293,7 @@ namespace PassGuard
             this.SettingsCMS.Name = "SettingsCMS";
             this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SettingsCMS.ShowImageMargin = false;
-            this.SettingsCMS.Size = new System.Drawing.Size(246, 197);
+            this.SettingsCMS.Size = new System.Drawing.Size(246, 219);
             // 
             // TitleSettingsToolStripMenuItem
             // 
@@ -397,6 +386,17 @@ namespace PassGuard
             this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
             this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
             // 
+            // homeContentUC1
+            // 
+            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.homeContentUC1.AutoSize = true;
+            this.homeContentUC1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.homeContentUC1.Location = new System.Drawing.Point(1, 3);
+            this.homeContentUC1.Margin = new System.Windows.Forms.Padding(2);
+            this.homeContentUC1.Name = "homeContentUC1";
+            this.homeContentUC1.Size = new System.Drawing.Size(905, 300);
+            this.homeContentUC1.TabIndex = 2;
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,7 +407,7 @@ namespace PassGuard
             this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.MenuPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1202, 613);
             this.Name = "mainWindow";

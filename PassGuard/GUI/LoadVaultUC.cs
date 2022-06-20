@@ -65,55 +65,16 @@ namespace PassGuard.GUI
                 String[] saveEncryptedVaultPath = pathforEncryptedVault.Split('\\');
                 saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
 
-                String[] lastValue = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.');
-                lastValue[lastValue.Length-1] = "db3";
-
                 //Calculate key to decrypt vault
                 var key = utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
-                utils.Decrypt(key, Path.Combine(saveEncryptedVaultPath), (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]))); //Decrypt
-                File.Delete(Path.Combine(saveEncryptedVaultPath)); //Delete Decryption
-
-                //Obtain all the contents of the vault.
-                List<String[]> fullResults = new List<String[]>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM VAULT;", m_dbConnection)) //Associate request with connection to vault.)
-                { 
-                    m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
-                    commandExec.ExecuteNonQuery(); //Execute request.
-
-                    using (SQLiteDataReader reader = commandExec.ExecuteReader())//Object Reader.
-                    {
-                        while (reader.Read()) //Reads each row.
-                        {
-                            fullResults.Add(new string[6] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
-                        }
-                    }
-                    
-                    commandExec.Dispose(); //Delete object so it is no longer using the file.
-
-                    //Indicates that creating the SQLiteDatabase went succesfully, so the database can be committed.
-                    tran.Complete(); //Close and commit transaction.
-                    tran.Dispose(); //Dispose transaction so it is no longer using the file.
-
-                    m_dbConnection.Close(); //Close connection to vault.
-                    m_dbConnection.Dispose();
-
-                }
-                    
-                
-
-                //Encrypt the vault again.
-                utils.Encrypt(key, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
 
                 //Show all the contents of the vault (UserControl).
-
-                GUI.VaultContentUC vc = new GUI.VaultContentUC(); //Put the main panel visible.
+                GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key); //Put the main panel visible.
                 var ContentPanel = this.Parent;
                 this.Parent.Controls.Clear(); //this.Parent.Name; //contentpanel
                 ContentPanel.Controls.Add(vc);
                 vc.Visible = true;
+                
 
             }
 
@@ -167,6 +128,20 @@ namespace PassGuard.GUI
         {
             LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
         }
-    
+
+        private void LoadSavedEmailButton_Click(object sender, EventArgs e)
+        {
+            VaultEmailTextbox.Text = ConfigurationManager.AppSettings.Get("Email"); //Modify data in the config file for future executions.
+        }
+
+        private void LoadSavedEmailButton_MouseEnter(object sender, EventArgs e)
+        {
+            LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
+        }
+
+        private void LoadSavedEmailButton_MouseLeave(object sender, EventArgs e)
+        {
+            LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
+        }
     }
 }

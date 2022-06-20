@@ -163,5 +163,111 @@ namespace PassGuard.Core
             }
         }
 
+        internal String EncryptText(byte[] key, String src)
+        {
+            byte[] encrypted;
+            byte[] IV;
+
+            using (var provider = new AesCryptoServiceProvider())
+            {
+                provider.Key = key;
+
+                provider.GenerateIV();
+                IV = provider.IV;
+
+                provider.Mode = CipherMode.CBC;
+
+                // Create the streams used for encryption. 
+                using (var encryptor = provider.CreateEncryptor(provider.Key, provider.IV))
+                using (var msEncrypt = new MemoryStream())
+                {
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var swEncrypt = new StreamWriter(csEncrypt))
+                    {
+                        //Write all data to the stream.
+                        swEncrypt.Write(src);
+                    }
+                    encrypted = msEncrypt.ToArray();
+                }
+                
+            }
+
+            var combinedIvCt = new byte[IV.Length + encrypted.Length];
+            Array.Copy(IV, 0, combinedIvCt, 0, IV.Length);
+            Array.Copy(encrypted, 0, combinedIvCt, IV.Length, encrypted.Length);
+
+            // Return the encrypted bytes from the memory stream. 
+            return Convert.ToBase64String(combinedIvCt);
+
+        }
+
+        internal String DecryptText(byte[] key, String src)
+        {
+            // Declare the string used to hold 
+            // the decrypted text. 
+            string plaintext = null;
+            byte[] cipherTextCombined = Convert.FromBase64String(src);
+
+            // Create an Aes object 
+            // with the specified key and IV. 
+            using (var provider = new AesCryptoServiceProvider())
+            {
+                provider.Key = key;
+
+                byte[] IV = new byte[provider.BlockSize / 8];
+                byte[] cipherText = new byte[cipherTextCombined.Length - IV.Length];
+
+                Array.Copy(cipherTextCombined, IV, IV.Length);
+                Array.Copy(cipherTextCombined, IV.Length, cipherText, 0, cipherText.Length);
+
+                provider.IV = IV;
+
+                provider.Mode = CipherMode.CBC;
+
+                // Create a decrytor to perform the stream transform.
+                ICryptoTransform decryptor = provider.CreateDecryptor(provider.Key, provider.IV);
+
+                // Create the streams used for decryption. 
+                using (var msDecrypt = new MemoryStream(cipherText))
+                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                using (var srDecrypt = new StreamReader(csDecrypt))
+                {
+
+                    // Read the decrypted bytes from the decrypting stream
+                    // and place them in a string.
+                    plaintext = srDecrypt.ReadToEnd();
+                }
+            }
+
+            return plaintext;
+
+        }
+
+        internal String Convert64(String src)
+        {
+            var plainTextBytes = Encoding.Default.GetBytes(src);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        internal String Base64ToString(String src)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(src);
+            return Encoding.Default.GetString(base64EncodedBytes);
+        }
+
+        internal String JoinBase64(String src1, String src2)
+        {
+            var array1 = Convert.FromBase64String(src1);
+            var array2 = Convert.FromBase64String(src2);
+            var comb = CombineByteArray(array1, array2);
+            var data = Encoding.Default.GetString(comb);
+            return data;
+        }
+
+        internal byte[] CombineByteArray(byte[] first, byte[] second)
+        {
+            return first.Concat(second).ToArray();
+        }
+
     }
 }

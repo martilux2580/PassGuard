@@ -39,7 +39,7 @@ namespace PassGuard.GUI
 
         private void AskRGBforSettings_Load(object sender, EventArgs e)
         {
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64.ico"); //Loads Icon from Image folder.
+            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
             WebHelpRGB.Image = System.Drawing.Image.FromFile(@"..\..\Images\Help32.ico");
         }
 
