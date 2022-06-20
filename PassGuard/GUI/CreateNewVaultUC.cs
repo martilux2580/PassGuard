@@ -22,6 +22,7 @@ namespace PassGuard.GUI
             InitializeComponent();
             SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
             VaultPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
+            SaveEmailTooltip.SetToolTip(SaveEmailCheckbox, "If this option is checked and the new vault is created successfully, this email \nwill be saved so that the process of loading the password vault is faster. \nNote: If another vault is created and this option is checked, previously saved email \nwill be deleted and the new email will be saved.");
         }
 
         private void CreateNewVaultButton_MouseEnter(object sender, EventArgs e)
@@ -139,9 +140,13 @@ namespace PassGuard.GUI
                 utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text+VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
-                //Save salt
+                //Save salt and maybe email.
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
+                if (SaveEmailCheckbox.Checked)
+                {
+                    config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
+                }
                 config.Save(ConfigurationSaveMode.Modified, true);
                 ConfigurationManager.RefreshSection("appSettings");
 
@@ -149,7 +154,7 @@ namespace PassGuard.GUI
                 var data = "\tEmail: " + VaultEmailTextbox.Text + "\n\tVault Password: " + VaultPassTextbox.Text + "\n\tSecurity Key: " + rndsalt;
                 var message = "Congrats! Your new Password Vault has been created successfully!\nThe information you must store and remember in order to load and access to your Password Vault is the following: \n\n" 
                     + data + "\n\nNotes: \n\tWithout any of those three values, your Password Vault and its content will be inacessible. \n\tBy clicking OK, those three values will be copied to the clipboard, please save them carefully." 
-                    + "\n\tSecurity Key will be remembered by PassGuard. However, if another Password Vault is created its Security Key will be remembered by PassGuard and the previous key will be deleted, " 
+                    + "\n\tSecurity Key will be remembered by PassGuard, and if the option was checked the email will be also saved. However, if another Password Vault is created, its Security Key will be remembered by PassGuard and the previous key will be deleted, and if the option was checked the email will be remembered and the previously saved email will be deleted, " 
                     + "so make sure you keep save and remember the email, password and Security Key of each Password Vault you create.";
                 DialogResult dialog = MessageBox.Show(text: message, caption: "Success!", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                 if(dialog == DialogResult.OK)

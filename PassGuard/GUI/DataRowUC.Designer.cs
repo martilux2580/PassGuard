@@ -48,7 +48,7 @@ namespace PassGuard.GUI
             this.URLContent.TabIndex = 0;
             this.URLContent.Text = "button1";
             this.URLContent.UseVisualStyleBackColor = true;
-            this.URLContent.Click += new System.EventHandler(this.button1_Click);
+            this.URLContent.Click += new System.EventHandler(this.URLContent_Click);
             // 
             // NameContent
             // 
@@ -61,7 +61,7 @@ namespace PassGuard.GUI
             this.NameContent.TabIndex = 1;
             this.NameContent.Text = "button2";
             this.NameContent.UseVisualStyleBackColor = true;
-            this.NameContent.Click += new System.EventHandler(this.button2_Click);
+            this.NameContent.Click += new System.EventHandler(this.NameContent_Click);
             // 
             // PassContent
             // 
@@ -74,7 +74,7 @@ namespace PassGuard.GUI
             this.PassContent.TabIndex = 3;
             this.PassContent.Text = "button3";
             this.PassContent.UseVisualStyleBackColor = true;
-            this.PassContent.Click += new System.EventHandler(this.button3_Click);
+            this.PassContent.Click += new System.EventHandler(this.PassContent_Click);
             // 
             // UsernameContent
             // 
@@ -87,7 +87,7 @@ namespace PassGuard.GUI
             this.UsernameContent.TabIndex = 2;
             this.UsernameContent.Text = "button4";
             this.UsernameContent.UseVisualStyleBackColor = true;
-            this.UsernameContent.Click += new System.EventHandler(this.button4_Click);
+            this.UsernameContent.Click += new System.EventHandler(this.UsernameContent_Click);
             // 
             // NotesContent
             // 
@@ -100,7 +100,7 @@ namespace PassGuard.GUI
             this.NotesContent.TabIndex = 5;
             this.NotesContent.Text = "button5";
             this.NotesContent.UseVisualStyleBackColor = true;
-            this.NotesContent.Click += new System.EventHandler(this.button5_Click);
+            this.NotesContent.Click += new System.EventHandler(this.NotesContent_Click);
             // 
             // CategoryContent
             // 
@@ -113,7 +113,7 @@ namespace PassGuard.GUI
             this.CategoryContent.TabIndex = 4;
             this.CategoryContent.Text = "button6";
             this.CategoryContent.UseVisualStyleBackColor = true;
-            this.CategoryContent.Click += new System.EventHandler(this.button6_Click);
+            this.CategoryContent.Click += new System.EventHandler(this.CategoryContent_Click);
             // 
             // DataRowUC
             // 
@@ -135,11 +135,11 @@ namespace PassGuard.GUI
 
         #endregion
 
-        private System.Windows.Forms.Button URLContent;
-        private System.Windows.Forms.Button NameContent;
-        private System.Windows.Forms.Button PassContent;
-        private System.Windows.Forms.Button UsernameContent;
-        private System.Windows.Forms.Button NotesContent;
-        private System.Windows.Forms.Button CategoryContent;
+        internal System.Windows.Forms.Button URLContent;
+        internal System.Windows.Forms.Button NameContent;
+        internal System.Windows.Forms.Button PassContent;
+        internal System.Windows.Forms.Button UsernameContent;
+        internal System.Windows.Forms.Button NotesContent;
+        internal System.Windows.Forms.Button CategoryContent;
     }
 }

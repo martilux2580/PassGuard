@@ -131,16 +131,12 @@ namespace PassGuard
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            /*GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
+            GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
             hc.Visible = false;
             TitleLabel.Text = "HOME";
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(hc);
-            hc.Visible = true;*/
-            GUI.VaultContentUC vc = new GUI.VaultContentUC(); //Put the main panel visible.
-            ContentPanel.Controls.Clear(); //this.Parent.Name; //contentpanel
-            ContentPanel.Controls.Add(vc);
-            vc.Visible = true;
+            hc.Visible = true;
 
         }
 

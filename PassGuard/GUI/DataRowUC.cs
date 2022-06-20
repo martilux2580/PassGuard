@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -12,49 +13,74 @@ namespace PassGuard.GUI
 {
     public partial class DataRowUC : UserControl
     {
-        public DataRowUC()
+        private String url { get; set; }
+        private String name { get; set; }
+        private String username { get; set; }
+        private String password { get; set; }
+        private String category { get; set; }
+        private String notes { get; set; }
+
+        private readonly byte[] Key;
+
+        public DataRowUC(List<String> values, byte[] key)
         {
             InitializeComponent();
+            Key = key;
+            url = values[0];
+            name = values[1];
+            username = values[2];
+            password = values[3];
+            category = values[4];
+            notes = values[5];
+
         }
 
         private void DataRowUC_Load(object sender, EventArgs e)
         {
+            Core.Utils utils = new Core.Utils();
 
+            URLContent.Text = utils.DecryptText(key: Key, src: url);
+            NameContent.Text = utils.DecryptText(key: Key, src: name);
+            UsernameContent.Text = utils.DecryptText(key: Key, src: username);
+            PassContent.Text = String.Concat(Enumerable.Repeat("*", 15)); 
+            CategoryContent.Text = utils.DecryptText(key: Key, src: category);
+            NotesContent.Text = utils.DecryptText(key: Key, src: notes);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void PassContent_Click(object sender, EventArgs e)
         {
-            URLContent.Text = URLContent.Location.ToString();
-            NameContent.Text = NameContent.Location.ToString();
-            PassContent.Text = PassContent.Location.ToString();
-            UsernameContent.Text = UsernameContent.Location.ToString();
-            NotesContent.Text = NotesContent.Location.ToString();
-            CategoryContent.Text = CategoryContent.Location.ToString();
+            Core.Utils utils = new Core.Utils();
+
+            Clipboard.SetText(utils.DecryptText(key: Key, src: password));
+            
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void URLContent_Click(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(URLContent.Text)) Clipboard.SetText(" ");
+            else Clipboard.SetText(URLContent.Text);
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void NameContent_Click(object sender, EventArgs e)
         {
-
+            Clipboard.SetText(NameContent.Text);
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void UsernameContent_Click(object sender, EventArgs e)
         {
-
+            Clipboard.SetText(UsernameContent.Text);
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void CategoryContent_Click(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(CategoryContent.Text)) Clipboard.SetText(" ");
+            else Clipboard.SetText(CategoryContent.Text);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void NotesContent_Click(object sender, EventArgs e)
         {
-
+            if (String.IsNullOrWhiteSpace(NotesContent.Text)) Clipboard.SetText(" ");
+            else Clipboard.SetText(NotesContent.Text);
         }
     }
 }

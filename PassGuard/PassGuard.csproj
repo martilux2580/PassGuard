@@ -105,6 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Utils.cs" />
+    <Compile Include="GUI\AddContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\AddContent.Designer.cs">
+      <DependentUpon>AddContent.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\AskRGBforSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +134,18 @@
     </Compile>
     <Compile Include="GUI\DataRowUC.Designer.cs">
       <DependentUpon>DataRowUC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DeleteContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DeleteContent.Designer.cs">
+      <DependentUpon>DeleteContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EditContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EditContent.Designer.cs">
+      <DependentUpon>EditContent.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Form1.cs">
       <SubType>Form</SubType>
@@ -155,6 +173,9 @@
       <DependentUpon>VaultContentUC.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\AddContent.resx">
+      <DependentUpon>AddContent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\AskRGBforSettings.resx">
       <DependentUpon>AskRGBforSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +187,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DataRowUC.resx">
       <DependentUpon>DataRowUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DeleteContent.resx">
+      <DependentUpon>DeleteContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EditContent.resx">
+      <DependentUpon>EditContent.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
