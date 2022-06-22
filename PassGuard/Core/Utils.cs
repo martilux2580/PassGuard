@@ -1,11 +1,16 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Word;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace PassGuard.Core
 {
@@ -267,6 +272,159 @@ namespace PassGuard.Core
         internal byte[] CombineByteArray(byte[] first, byte[] second)
         {
             return first.Concat(second).ToArray();
+        }
+
+
+        internal void CreateDOCX(List<String[]> results, String Vault, String Email, String sk)
+        {
+            object docxLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TempVaultTable.docx";
+            using (var tempDocxFile = File.Create(docxLocation.ToString()))
+            {
+                tempDocxFile.Close();
+                tempDocxFile.Dispose();
+                object oMissing = Missing.Value;
+                object oEndOfDoc = "\\endofdoc";
+                Word.Application app = new Word.Application(); //objword
+                Word.Document docx = app.Documents.Open(ref docxLocation);
+                docx.Activate();
+                docx.PageSetup.TopMargin = (float)5;
+                docx.PageSetup.BottomMargin = (float)5;
+                docx.PageSetup.LeftMargin = (float)5;
+                docx.PageSetup.RightMargin = (float)5;
+                
+
+                var p2 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
+                p2.Range.Font.Name = "Calibri";
+                p2.Range.Font.Size = 15;
+                p2.Range.Text = "PassGuard: Vault Content";
+                p2.Range.Font.Bold = 1;
+                p2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                p2.Range.ParagraphFormat.SpaceAfter = 0;
+                p2.Range.InsertParagraphAfter();
+                p2.Range.Bold = 0;
+
+                var p3 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
+                p3.Range.Font.Name = "Arial";
+                p3.Range.Font.Size = 12;
+                p3.Range.Text = "\vDate: " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DateTime.Now.ToLongDateString()) + "\v\tVault Name: " + Vault + "\v\tPassGuard Saved Email: " + Email + "\v\tPassGuard Saved Security Key (SK): " + sk;
+                p3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+                p3.Range.ParagraphFormat.SpaceAfter = 0;
+                p3.Range.InsertParagraphAfter();
+
+
+                var p4 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
+                p4.Range.Font.Name = "Arial";
+                p4.Range.Font.Size = 8;
+                p4.Range.Text = "\vNote: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored on the day the backup was done.\v";
+                p4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
+                p4.Range.InsertParagraphAfter();
+
+
+                Word.Range wrdRng = docx.Bookmarks.get_Item(ref oEndOfDoc).Range;
+                Table objTable = docx.Tables.Add(Range: wrdRng, NumRows: results.Count+1, NumColumns: 6);
+                objTable.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+                objTable.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+                objTable.Rows.First.Range.Bold = 1;
+
+
+                objTable.Cell(1, 1).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 2).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 3).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 4).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 5).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 6).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+                objTable.Cell(1, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                objTable.Cell(1, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                objTable.Cell(1, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                objTable.Cell(1, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                objTable.Cell(1, 5).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                objTable.Cell(1, 6).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+
+
+                objTable.Cell(1, 1).Range.Text = "URL";
+                objTable.Cell(1, 2).Range.Text = "Name";
+                objTable.Cell(1, 3).Range.Text = "Site Username";
+                objTable.Cell(1, 4).Range.Text = "Site Password";
+                objTable.Cell(1, 5).Range.Text = "Category";
+                objTable.Cell(1, 6).Range.Text = "Notes";
+
+                
+                for (int i = 2; i < results.Count+2; i++)
+                {
+                    objTable.Cell(i, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    objTable.Cell(i, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    objTable.Cell(i, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    objTable.Cell(i, 5).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+
+                    objTable.Cell(i, 1).Range.Text = results[i - 2][0];
+                    objTable.Cell(i, 2).Range.Text = results[i - 2][1];
+                    objTable.Cell(i, 3).Range.Text = results[i - 2][2];
+                    objTable.Cell(i, 4).Range.Text = results[i - 2][3];
+                    objTable.Cell(i, 5).Range.Text = results[i - 2][4];
+                    objTable.Cell(i, 6).Range.Text = results[i - 2][5];
+
+                    objTable.Cell(i, 1).Range.Paragraphs.LineSpacing = (float)10;
+                    objTable.Cell(i, 2).Range.Paragraphs.LineSpacing = (float)10;
+                    objTable.Cell(i, 3).Range.Paragraphs.LineSpacing = (float)10;
+                    objTable.Cell(i, 4).Range.Paragraphs.LineSpacing = (float)10;
+                    objTable.Cell(i, 5).Range.Paragraphs.LineSpacing = (float)10;
+                    objTable.Cell(i, 6).Range.Paragraphs.LineSpacing = (float)10;
+
+                    objTable.Cell(i, 1).Range.Font.Size = 9;
+                    objTable.Cell(i, 2).Range.Font.Size = 9;
+                    objTable.Cell(i, 3).Range.Font.Size = 9;
+                    objTable.Cell(i, 4).Range.Font.Size = 9;
+                    objTable.Cell(i, 5).Range.Font.Size = 9;
+                    objTable.Cell(i, 6).Range.Font.Size = 9;
+                }
+
+                var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable.pdf";
+                docx.SaveAs2(pdfLocation, Word.WdSaveFormat.wdFormatPDF, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
+                docx.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
+                app.Quit(WdSaveOptions.wdDoNotSaveChanges);
+                MessageBox.Show("done");
+            }
+            
+        }
+
+
+        internal void convertDOCXtoPDF()
+        {
+
+            object misValue = System.Reflection.Missing.Value;
+            String PATH_APP_PDF = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Table.pdf";//@"c:\..\MY_WORD_DOCUMENT.pdf";
+
+            var WORD = new Word.Application();
+
+            Word.Document doc = WORD.Documents.Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Table.docx");
+            doc.Activate();
+
+            doc.SaveAs2(@PATH_APP_PDF, Word.WdSaveFormat.wdFormatPDF, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
+
+            doc.Close();
+            WORD.Quit();
+
+
+            releaseObject(doc);
+            releaseObject(WORD);
+
+        }
+
+        internal void releaseObject(object obj)
+        {
+            try
+            {
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                obj = null;
+            }
+            catch (Exception ex)
+            {
+                //TODO
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
 
     }

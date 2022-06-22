@@ -67,6 +67,7 @@ namespace PassGuard.GUI
             this.NotesNormalCMS = new System.Windows.Forms.ToolStripMenuItem();
             this.NotesAscendingCMS = new System.Windows.Forms.ToolStripMenuItem();
             this.NotesDescendingCMS = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportAsPdfButton = new System.Windows.Forms.Button();
             this.HeaderTableLayoutPanel.SuspendLayout();
             this.URLCMS.SuspendLayout();
             this.NameCMS.SuspendLayout();
@@ -195,7 +196,7 @@ namespace PassGuard.GUI
             // AddButton
             // 
             this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddButton.Location = new System.Drawing.Point(42, 404);
+            this.AddButton.Location = new System.Drawing.Point(3, 404);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(135, 32);
             this.AddButton.TabIndex = 2;
@@ -206,7 +207,7 @@ namespace PassGuard.GUI
             // EditButton
             // 
             this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EditButton.Location = new System.Drawing.Point(261, 404);
+            this.EditButton.Location = new System.Drawing.Point(191, 404);
             this.EditButton.Name = "EditButton";
             this.EditButton.Size = new System.Drawing.Size(135, 32);
             this.EditButton.TabIndex = 3;
@@ -217,7 +218,7 @@ namespace PassGuard.GUI
             // HelpButton
             // 
             this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpButton.Location = new System.Drawing.Point(704, 404);
+            this.HelpButton.Location = new System.Drawing.Point(757, 404);
             this.HelpButton.Name = "HelpButton";
             this.HelpButton.Size = new System.Drawing.Size(135, 32);
             this.HelpButton.TabIndex = 5;
@@ -228,7 +229,7 @@ namespace PassGuard.GUI
             // DeleteButton
             // 
             this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DeleteButton.Location = new System.Drawing.Point(485, 404);
+            this.DeleteButton.Location = new System.Drawing.Point(380, 404);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(135, 32);
             this.DeleteButton.TabIndex = 4;
@@ -396,7 +397,7 @@ namespace PassGuard.GUI
             this.NotesAscendingCMS,
             this.NotesDescendingCMS});
             this.NotesCMS.Name = "contextMenuStrip1";
-            this.NotesCMS.Size = new System.Drawing.Size(181, 98);
+            this.NotesCMS.Size = new System.Drawing.Size(170, 76);
             // 
             // NotesCMSSeparator
             // 
@@ -408,28 +409,40 @@ namespace PassGuard.GUI
             this.NotesNormalCMS.Checked = true;
             this.NotesNormalCMS.CheckState = System.Windows.Forms.CheckState.Checked;
             this.NotesNormalCMS.Name = "NotesNormalCMS";
-            this.NotesNormalCMS.Size = new System.Drawing.Size(180, 22);
+            this.NotesNormalCMS.Size = new System.Drawing.Size(169, 22);
             this.NotesNormalCMS.Text = "Normal Order";
             this.NotesNormalCMS.Click += new System.EventHandler(this.NotesNormalCMS_Click);
             // 
             // NotesAscendingCMS
             // 
             this.NotesAscendingCMS.Name = "NotesAscendingCMS";
-            this.NotesAscendingCMS.Size = new System.Drawing.Size(180, 22);
+            this.NotesAscendingCMS.Size = new System.Drawing.Size(169, 22);
             this.NotesAscendingCMS.Text = "Ascending Order";
             this.NotesAscendingCMS.Click += new System.EventHandler(this.NotesAscendingCMS_Click);
             // 
             // NotesDescendingCMS
             // 
             this.NotesDescendingCMS.Name = "NotesDescendingCMS";
-            this.NotesDescendingCMS.Size = new System.Drawing.Size(180, 22);
+            this.NotesDescendingCMS.Size = new System.Drawing.Size(169, 22);
             this.NotesDescendingCMS.Text = "Descending Order";
             this.NotesDescendingCMS.Click += new System.EventHandler(this.NotesDescendingCMS_Click);
+            // 
+            // ExportAsPdfButton
+            // 
+            this.ExportAsPdfButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExportAsPdfButton.Location = new System.Drawing.Point(566, 404);
+            this.ExportAsPdfButton.Name = "ExportAsPdfButton";
+            this.ExportAsPdfButton.Size = new System.Drawing.Size(135, 32);
+            this.ExportAsPdfButton.TabIndex = 6;
+            this.ExportAsPdfButton.Text = "Export as PDF";
+            this.ExportAsPdfButton.UseVisualStyleBackColor = true;
+            this.ExportAsPdfButton.Click += new System.EventHandler(this.ExportAsPdfButton_Click);
             // 
             // VaultContentUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.ExportAsPdfButton);
             this.Controls.Add(this.HelpButton);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.EditButton);
@@ -487,5 +500,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.ToolStripMenuItem NotesNormalCMS;
         private System.Windows.Forms.ToolStripMenuItem NotesAscendingCMS;
         private System.Windows.Forms.ToolStripMenuItem NotesDescendingCMS;
+        private System.Windows.Forms.Button ExportAsPdfButton;
     }
 }

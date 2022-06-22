@@ -301,5 +301,29 @@ namespace PassGuard
             ContentPanel.Controls.Add(cqr);
         }
 
+        private void createABackupOfYourVaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GUI.CreateBackup cb = new GUI.CreateBackup();
+            cb.BackColor = this.ContentPanel.BackColor;
+            cb.ShowDialog();
+
+            if (cb.getSuccess())
+            {
+                MessageBox.Show(text: "Backup of the selected Vault was created successfully :)", caption: "Success", buttons: MessageBoxButtons.OK); 
+                
+            }
+
+        }
+
+        private void configureAnAutoBackupOfAVaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GUI.AutoBackup ab = new GUI.AutoBackup();
+            ab.BackColor = this.ContentPanel.BackColor;
+            ab.ShowDialog();
+
+
+
+
+        }
     }
 }

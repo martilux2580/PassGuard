@@ -786,5 +786,75 @@ namespace PassGuard.GUI
             NotesAscendingCMS.Checked = false;
             NotesDescendingCMS.Checked = true;
         }
+
+        private void ExportAsPdfButton_Click(object sender, EventArgs e)
+        {
+            Core.Utils utils = new Core.Utils();
+
+            String[] saveEncryptedVaultPath = encryptedVaultPath.Split('\\');
+            saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
+
+            String[] lastValue = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.');
+            lastValue[lastValue.Length - 1] = "db3";
+            var encVault = Path.Combine(saveEncryptedVaultPath);
+            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+
+            utils.Decrypt(key: vKey, src: encVault, dst: decVault);
+
+            List<String[]> fullResults = new List<String[]>();
+            using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
+            using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
+            using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+            {
+                m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
+                commandExec.ExecuteNonQuery(); //Execute request.
+
+                using (SQLiteDataReader reader = commandExec.ExecuteReader())//Object Reader.
+                {
+                    while (reader.Read()) //Reads each row.
+                    {
+                        fullResults.Add(new string[6] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
+                    }
+                }
+
+                commandExec.Dispose(); //Delete object so it is no longer using the file.
+
+                //Indicates that creating the SQLiteDatabase went succesfully, so the database can be committed.
+                tran.Complete(); //Close and commit transaction.
+                tran.Dispose(); //Dispose transaction so it is no longer using the file.
+
+                m_dbConnection.Close(); //Close connection to vault.
+                m_dbConnection.Dispose();
+
+
+            }
+
+            foreach (String[] row in fullResults)
+            {
+                row[0] = utils.DecryptText(key: cKey, src: row[0]);
+                row[1] = utils.DecryptText(key: cKey, src: row[1]);
+                row[2] = utils.DecryptText(key: cKey, src: row[2]);
+                row[3] = utils.DecryptText(key: cKey, src: row[3]);
+                row[4] = utils.DecryptText(key: cKey, src: row[4]);
+                row[5] = utils.DecryptText(key: cKey, src: row[5]);
+            }
+
+            utils.CreateDOCX(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
+
+            utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
+            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+
+
+
+
+
+
+
+            /*
+            var xd = DateTime.Now.ToString();
+            utils.convertDOCtoPDF(); //18 pags full text y 1 imagen grande en 4 segs
+            var xd1 = DateTime.Now.ToString();
+            MessageBox.Show("inicio: " + xd + "\nfinal: " + xd1);*/
+        }
     }
 }
