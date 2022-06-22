@@ -1,0 +1,136 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PassGuard.GUI
+{
+    public partial class CreateBackup : Form
+    {
+        private String srcPath { get; set; }
+        private String dstPath { get; set; }
+        private bool success;
+
+        public CreateBackup()
+        {
+            InitializeComponent();
+            SelectVaultBackupPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            VaultBackupPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
+            success = false;
+        }
+
+        public bool getSuccess()
+        {
+            return success;
+        }
+
+        private void SelectVaultBackupPathButton_Click(object sender, EventArgs e)
+        {
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+            // Show the FolderBrowserDialog.
+            DialogResult result = fbd.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                path = fbd.SelectedPath;
+                VaultBackupPathTextbox.Text = path;
+            }
+        }
+
+        private void SendButton_MouseEnter(object sender, EventArgs e)
+        {
+            SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
+        }
+
+        private void SendButton_MouseLeave(object sender, EventArgs e)
+        {
+            SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
+        }
+
+        private void SendButton_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(VaultPathTextbox.Text))
+            {
+                MessageBox.Show(text: "The path for the Vault that is going to be backed up cannot be empty.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
+            }
+            else
+            {
+                srcPath = VaultPathTextbox.Text;
+                dstPath = VaultBackupPathTextbox.Text;
+
+                var tempSplit = srcPath.Split('\\');
+                var fileName = tempSplit[tempSplit.Length - 1].Split('.');
+
+                var nameOfBackup = "Backup" + char.ToUpper(fileName[0][0]) + fileName[0].Substring(1) + DateTime.Now.ToString("-yyyyMMdd-HHmmss") + "." + fileName[1];
+
+                if (!File.Exists(dstPath + "\\" + nameOfBackup))
+                {
+                    File.Copy(sourceFileName: srcPath, destFileName: dstPath + "\\" + nameOfBackup);
+                    success = true;
+
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(text: "There is already a Backup with that name in that directory. Please change that Backup to another folder and try again.", caption: "Backup already exists", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Warning);
+                }
+
+                
+            }
+            
+        }
+
+        private void LoadSavedBackupPathButton_MouseEnter(object sender, EventArgs e)
+        {
+            LoadSavedBackupPathButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
+        }
+
+        private void LoadSavedBackupPathButton_MouseLeave(object sender, EventArgs e)
+        {
+            LoadSavedBackupPathButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
+        }
+
+        private void LoadSavedBackupPathButton_Click(object sender, EventArgs e)
+        {
+            VaultBackupPathTextbox.Text = ConfigurationManager.AppSettings.Get("dstBackupPathForSave"); //Modify data in the config file for future executions.
+        }
+
+        private void SelectVaultPathButton_Click(object sender, EventArgs e)
+        {
+            //Select and Save filepath and extension.
+            string filepath = "";
+            string ext = ""; //File extension
+            bool cancelPathSearch = false;
+            while (ext != ".encrypted" && !cancelPathSearch)
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
+
+                var result = ofd.ShowDialog();
+                filepath = ofd.FileName;
+                ext = Path.GetExtension(filepath).ToLower();
+
+                if (result == DialogResult.Cancel)
+                {
+                    cancelPathSearch = true; //Stop loop, as user hit cancel button.
+                }
+                else if (ext != ".encrypted") //If user specified file with diff extension...
+                {
+                    MessageBox.Show(text: "Selected file must have .encrypted extension.", caption: "Wrong File", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                }
+            }
+            VaultPathTextbox.Text = filepath;
+        }
+
+    }
+}

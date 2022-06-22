@@ -55,9 +55,7 @@ namespace PassGuard
             this.changeComplemenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.createABackupOfYourVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveVaultChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveChangesCloseVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
@@ -285,15 +283,13 @@ namespace PassGuard
             this.changeComplemenToolStripMenuItem,
             this.toolStripSeparator1,
             this.createABackupOfYourVaultToolStripMenuItem,
-            this.saveVaultChangesToolStripMenuItem,
-            this.saveChangesCloseVaultToolStripMenuItem,
-            this.exportVaultToolStripMenuItem,
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem,
             this.toolStripSeparator2,
             this.saveChangesClosePassGuardToolStripMenuItem});
             this.SettingsCMS.Name = "SettingsCMS";
             this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SettingsCMS.ShowImageMargin = false;
-            this.SettingsCMS.Size = new System.Drawing.Size(246, 219);
+            this.SettingsCMS.Size = new System.Drawing.Size(246, 175);
             // 
             // TitleSettingsToolStripMenuItem
             // 
@@ -355,24 +351,14 @@ namespace PassGuard
             this.createABackupOfYourVaultToolStripMenuItem.Name = "createABackupOfYourVaultToolStripMenuItem";
             this.createABackupOfYourVaultToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.createABackupOfYourVaultToolStripMenuItem.Text = "Create a Backup of your Vault";
+            this.createABackupOfYourVaultToolStripMenuItem.Click += new System.EventHandler(this.createABackupOfYourVaultToolStripMenuItem_Click);
             // 
-            // saveVaultChangesToolStripMenuItem
+            // configureAnAutoBackupOfAVaultToolStripMenuItem
             // 
-            this.saveVaultChangesToolStripMenuItem.Name = "saveVaultChangesToolStripMenuItem";
-            this.saveVaultChangesToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.saveVaultChangesToolStripMenuItem.Text = "Save Vault Changes";
-            // 
-            // saveChangesCloseVaultToolStripMenuItem
-            // 
-            this.saveChangesCloseVaultToolStripMenuItem.Name = "saveChangesCloseVaultToolStripMenuItem";
-            this.saveChangesCloseVaultToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.saveChangesCloseVaultToolStripMenuItem.Text = "Save Changes + Close Vault";
-            // 
-            // exportVaultToolStripMenuItem
-            // 
-            this.exportVaultToolStripMenuItem.Name = "exportVaultToolStripMenuItem";
-            this.exportVaultToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.exportVaultToolStripMenuItem.Text = "Export Vault Data as PDF";
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem.Name = "configureAnAutoBackupOfAVaultToolStripMenuItem";
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem.Text = "Configure an AutoBackup of a Vault";
+            this.configureAnAutoBackupOfAVaultToolStripMenuItem.Click += new System.EventHandler(this.configureAnAutoBackupOfAVaultToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -452,13 +438,11 @@ namespace PassGuard
         private System.Windows.Forms.ToolStripMenuItem changeComplemenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem createABackupOfYourVaultToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveVaultChangesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveChangesCloseVaultToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportVaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem saveChangesClosePassGuardToolStripMenuItem;
         private System.Windows.Forms.Button CreateQuickPassButton;
         private GUI.HomeContentUC homeContentUC1;
+        private System.Windows.Forms.ToolStripMenuItem configureAnAutoBackupOfAVaultToolStripMenuItem;
     }
 }
 

@@ -63,5 +63,14 @@ namespace PassGuard.GUI
             System.Diagnostics.Process.Start("https://htmlcolorcodes.com/es");
         }
 
+        private void SendRGBButton_MouseEnter(object sender, EventArgs e)
+        {
+            SendRGBButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline); //Underline the text when mouse is in the button
+        }
+
+        private void SendRGBButton_MouseLeave(object sender, EventArgs e)
+        {
+            SendRGBButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular); //Underline the text when mouse is in the button
+        }
     }
 }
