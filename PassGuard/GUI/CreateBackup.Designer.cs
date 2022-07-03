@@ -95,9 +95,9 @@ namespace PassGuard.GUI
             this.LoadSavedBackupPathButton.Location = new System.Drawing.Point(15, 110);
             this.LoadSavedBackupPathButton.Margin = new System.Windows.Forms.Padding(2);
             this.LoadSavedBackupPathButton.Name = "LoadSavedBackupPathButton";
-            this.LoadSavedBackupPathButton.Size = new System.Drawing.Size(171, 31);
+            this.LoadSavedBackupPathButton.Size = new System.Drawing.Size(179, 31);
             this.LoadSavedBackupPathButton.TabIndex = 22;
-            this.LoadSavedBackupPathButton.Text = "Load Saved Backup Path";
+            this.LoadSavedBackupPathButton.Text = "Load Saved AutoBackup Path";
             this.LoadSavedBackupPathButton.UseVisualStyleBackColor = true;
             this.LoadSavedBackupPathButton.Click += new System.EventHandler(this.LoadSavedBackupPathButton_Click);
             this.LoadSavedBackupPathButton.MouseEnter += new System.EventHandler(this.LoadSavedBackupPathButton_MouseEnter);

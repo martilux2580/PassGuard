@@ -33,6 +33,7 @@ namespace PassGuard.GUI
             this.GenPassButton = new System.Windows.Forms.Button();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.CheckBoxesPanel = new System.Windows.Forms.Panel();
+            this.NoteSymbolsButton = new System.Windows.Forms.Button();
             this.SelectAllSymbolsButton = new System.Windows.Forms.Button();
             this.InfoPwnageButton = new System.Windows.Forms.Button();
             this.CheckPwnageCheckbox = new System.Windows.Forms.CheckBox();
@@ -85,7 +86,6 @@ namespace PassGuard.GUI
             this.panel1 = new System.Windows.Forms.Panel();
             this.PercentageLabel = new System.Windows.Forms.Label();
             this.SymbolsTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.NoteSymbolsButton = new System.Windows.Forms.Button();
             this.CheckBoxesPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PassLengthNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NPasswordsNUD)).BeginInit();
@@ -94,6 +94,8 @@ namespace PassGuard.GUI
             // 
             // GenPassButton
             // 
+            this.GenPassButton.FlatAppearance.BorderSize = 0;
+            this.GenPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GenPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GenPassButton.Location = new System.Drawing.Point(336, 250);
             this.GenPassButton.Margin = new System.Windows.Forms.Padding(2);
@@ -103,6 +105,8 @@ namespace PassGuard.GUI
             this.GenPassButton.Text = "Generate Password(s)";
             this.GenPassButton.UseVisualStyleBackColor = true;
             this.GenPassButton.Click += new System.EventHandler(this.GenPassButton_Click);
+            this.GenPassButton.MouseEnter += new System.EventHandler(this.GenPassButton_MouseEnter);
+            this.GenPassButton.MouseLeave += new System.EventHandler(this.GenPassButton_MouseLeave);
             // 
             // TitleLabel
             // 
@@ -169,6 +173,21 @@ namespace PassGuard.GUI
             this.CheckBoxesPanel.Name = "CheckBoxesPanel";
             this.CheckBoxesPanel.Size = new System.Drawing.Size(838, 284);
             this.CheckBoxesPanel.TabIndex = 2;
+            // 
+            // NoteSymbolsButton
+            // 
+            this.NoteSymbolsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.NoteSymbolsButton.FlatAppearance.BorderSize = 0;
+            this.NoteSymbolsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.NoteSymbolsButton.Location = new System.Drawing.Point(700, 9);
+            this.NoteSymbolsButton.Name = "NoteSymbolsButton";
+            this.NoteSymbolsButton.Size = new System.Drawing.Size(120, 23);
+            this.NoteSymbolsButton.TabIndex = 7;
+            this.NoteSymbolsButton.Text = "Note about Symbols";
+            this.NoteSymbolsButton.UseVisualStyleBackColor = true;
+            this.NoteSymbolsButton.Click += new System.EventHandler(this.NoteSymbolsButton_Click);
+            this.NoteSymbolsButton.MouseEnter += new System.EventHandler(this.NoteSymbolsButton_MouseEnter);
+            this.NoteSymbolsButton.MouseLeave += new System.EventHandler(this.NoteSymbolsButton_MouseLeave);
             // 
             // SelectAllSymbolsButton
             // 
@@ -881,21 +900,6 @@ namespace PassGuard.GUI
             this.SymbolsTooltip.AutoPopDelay = 10000;
             this.SymbolsTooltip.InitialDelay = 300;
             this.SymbolsTooltip.ReshowDelay = 60;
-            // 
-            // NoteSymbolsButton
-            // 
-            this.NoteSymbolsButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.NoteSymbolsButton.FlatAppearance.BorderSize = 0;
-            this.NoteSymbolsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.NoteSymbolsButton.Location = new System.Drawing.Point(700, 9);
-            this.NoteSymbolsButton.Name = "NoteSymbolsButton";
-            this.NoteSymbolsButton.Size = new System.Drawing.Size(120, 23);
-            this.NoteSymbolsButton.TabIndex = 7;
-            this.NoteSymbolsButton.Text = "Note about Symbols";
-            this.NoteSymbolsButton.UseVisualStyleBackColor = true;
-            this.NoteSymbolsButton.Click += new System.EventHandler(this.NoteSymbolsButton_Click);
-            this.NoteSymbolsButton.MouseEnter += new System.EventHandler(this.NoteSymbolsButton_MouseEnter);
-            this.NoteSymbolsButton.MouseLeave += new System.EventHandler(this.NoteSymbolsButton_MouseLeave);
             // 
             // CreateQuickPassUC
             // 

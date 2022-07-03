@@ -21,9 +21,16 @@ namespace PassGuard.GUI
         public CreateBackup()
         {
             InitializeComponent();
-            SelectVaultBackupPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-            SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            try
+            {
+                SelectVaultBackupPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
             VaultBackupPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
             success = false;
         }
@@ -59,33 +66,21 @@ namespace PassGuard.GUI
 
         private void SendButton_Click(object sender, EventArgs e)
         {
+            Core.Utils utils = new Core.Utils();
             if (String.IsNullOrEmpty(VaultPathTextbox.Text))
             {
                 MessageBox.Show(text: "The path for the Vault that is going to be backed up cannot be empty.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
             }
             else
             {
-                srcPath = VaultPathTextbox.Text;
-                dstPath = VaultBackupPathTextbox.Text;
-
-                var tempSplit = srcPath.Split('\\');
-                var fileName = tempSplit[tempSplit.Length - 1].Split('.');
-
-                var nameOfBackup = "Backup" + char.ToUpper(fileName[0][0]) + fileName[0].Substring(1) + DateTime.Now.ToString("-yyyyMMdd-HHmmss") + "." + fileName[1];
-
-                if (!File.Exists(dstPath + "\\" + nameOfBackup))
+                if(utils.CreateBackup(srcPath: VaultPathTextbox.Text, dstPath: VaultBackupPathTextbox.Text))
                 {
-                    File.Copy(sourceFileName: srcPath, destFileName: dstPath + "\\" + nameOfBackup);
-                    success = true;
-
-                    this.Close();
+                    MessageBox.Show(text: "Backup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                 }
                 else
                 {
                     MessageBox.Show(text: "There is already a Backup with that name in that directory. Please change that Backup to another folder and try again.", caption: "Backup already exists", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Warning);
                 }
-
-                
             }
             
         }

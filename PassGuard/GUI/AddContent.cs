@@ -71,8 +71,14 @@ namespace PassGuard.GUI
                 namesInDB[i] = utils.DecryptText(key: Key, src: namesInDB[i]);
             }
             addedSuccess = false;
-
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            try
+            {
+                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
 
         private void AddButton_MouseEnter(object sender, EventArgs e)

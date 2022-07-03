@@ -39,15 +39,15 @@ namespace PassGuard.GUI
             this.BackupPathLabel = new System.Windows.Forms.Label();
             this.FrequencyLabel = new System.Windows.Forms.Label();
             this.FrequencyCombobox = new System.Windows.Forms.ComboBox();
+            this.NoteLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SetupAutoBackupButton
             // 
-            this.SetupAutoBackupButton.Enabled = false;
             this.SetupAutoBackupButton.FlatAppearance.BorderSize = 0;
             this.SetupAutoBackupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SetupAutoBackupButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SetupAutoBackupButton.Location = new System.Drawing.Point(262, 202);
+            this.SetupAutoBackupButton.Location = new System.Drawing.Point(262, 201);
             this.SetupAutoBackupButton.Name = "SetupAutoBackupButton";
             this.SetupAutoBackupButton.Size = new System.Drawing.Size(174, 36);
             this.SetupAutoBackupButton.TabIndex = 2;
@@ -97,6 +97,7 @@ namespace PassGuard.GUI
             this.VaultPathTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VaultPathTextbox.Location = new System.Drawing.Point(269, 58);
             this.VaultPathTextbox.Name = "VaultPathTextbox";
+            this.VaultPathTextbox.ReadOnly = true;
             this.VaultPathTextbox.Size = new System.Drawing.Size(325, 22);
             this.VaultPathTextbox.TabIndex = 22;
             // 
@@ -119,6 +120,7 @@ namespace PassGuard.GUI
             this.BackupPathFilesTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BackupPathFilesTextbox.Location = new System.Drawing.Point(269, 102);
             this.BackupPathFilesTextbox.Name = "BackupPathFilesTextbox";
+            this.BackupPathFilesTextbox.ReadOnly = true;
             this.BackupPathFilesTextbox.Size = new System.Drawing.Size(325, 22);
             this.BackupPathFilesTextbox.TabIndex = 26;
             // 
@@ -157,11 +159,21 @@ namespace PassGuard.GUI
             this.FrequencyCombobox.Size = new System.Drawing.Size(325, 24);
             this.FrequencyCombobox.TabIndex = 29;
             // 
+            // NoteLabel
+            // 
+            this.NoteLabel.AutoSize = true;
+            this.NoteLabel.Location = new System.Drawing.Point(259, 24);
+            this.NoteLabel.Name = "NoteLabel";
+            this.NoteLabel.Size = new System.Drawing.Size(408, 13);
+            this.NoteLabel.TabIndex = 30;
+            this.NoteLabel.Text = "Note: AutoBackup will execute and create backups only when PassGuard is running.";
+            // 
             // AutoBackup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(682, 261);
+            this.Controls.Add(this.NoteLabel);
             this.Controls.Add(this.FrequencyCombobox);
             this.Controls.Add(this.FrequencyLabel);
             this.Controls.Add(this.SelectVaultBackupFilesPathButton);
@@ -194,5 +206,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Label BackupPathLabel;
         private System.Windows.Forms.Label FrequencyLabel;
         private System.Windows.Forms.ComboBox FrequencyCombobox;
+        private System.Windows.Forms.Label NoteLabel;
     }
 }

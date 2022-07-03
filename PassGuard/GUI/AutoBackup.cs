@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,14 +15,106 @@ namespace PassGuard.GUI
 {
     public partial class AutoBackup : Form
     {
-        public AutoBackup()
+        private Dictionary<int, String> frequencies = new Dictionary<int, String>();
+        private String AutoBackupState;
+        private String pathOfVaultBackedUp;
+        private String pathForBackups;
+        private String lastDateBackup;
+        private String frequencyBackup;
+        private bool setupSuccess;
+
+        private Form mainWindow;
+
+        public bool GetSetupSuccess()
+        {
+            return setupSuccess;
+        }
+
+        public String GetAutoBackupState()
+        {
+            return AutoBackupState;
+        }
+
+        public String GetPathOfVaultBackedUp()
+        {
+            return pathOfVaultBackedUp;
+        }
+
+        public String GetPathForBackups()
+        {
+            return pathForBackups;
+        }
+
+        public String GetLastDateBackup()
+        {
+            return lastDateBackup;
+        }
+
+        public String GetFrequencyBackup()
+        {
+            return frequencyBackup;
+        }
+
+        public AutoBackup(Form MainWindow)
         {
             InitializeComponent();
-            SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-            SelectVaultBackupFilesPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            mainWindow = MainWindow;
+            try
+            {
+                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+                SelectVaultBackupFilesPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+            setupSuccess = false;
             SetupFrequencyCombobox();
+            try
+            {
+                SetupInitialValues();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load previous AutoBackup config.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
 
+        }
+
+        private void SetupInitialValues()
+        {
+            if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "false")
+            {
+                ActivateBackupCheckbox.Checked = false;
+                NoteLabel.Enabled = false;
+
+                FrequencyCombobox.Enabled = false;
+                VaultPathLabel.Enabled = false;
+                VaultPathTextbox.Enabled = false;
+                SelectVaultPathButton.Enabled = false;
+                BackupPathLabel.Enabled = false;
+                BackupPathFilesTextbox.Enabled = false;
+                SelectVaultBackupFilesPathButton.Enabled = false;
+                FrequencyLabel.Enabled = false;
+            }
+            else if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+            {
+                ActivateBackupCheckbox.Checked = true;
+                NoteLabel.Enabled = true;
+
+                FrequencyCombobox.Enabled = true;
+                VaultPathLabel.Enabled = true;
+                SelectVaultPathButton.Enabled = true;
+                BackupPathLabel.Enabled = true;
+                SelectVaultBackupFilesPathButton.Enabled = true;
+                FrequencyLabel.Enabled = true;
+
+            }
+
+            VaultPathTextbox.Text = ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"); //Modify data in the config file for future executions.
+            BackupPathFilesTextbox.Text = ConfigurationManager.AppSettings.Get("dstBackupPathForSave"); //Modify data in the config file for future executions.
+            FrequencyCombobox.Text = frequencies[Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))];
 
         }
 
@@ -34,34 +127,60 @@ namespace PassGuard.GUI
             FrequencyCombobox.Items.Add("Every week.");
             FrequencyCombobox.Items.Add("Every month.");
 
+            frequencies.Add(0, "");
+            frequencies.Add(1, "After any change on the contents of the Vault.");
+            frequencies.Add(2, "Just before closing the Aplication.");
+            frequencies.Add(3, "Every day.");
+            frequencies.Add(4, "Every week.");
+            frequencies.Add(5, "Every month.");
+
         }
 
         private void SetupAutoBackupButton_Click(object sender, EventArgs e)
         {
-            String errorMessages = "";
-            if (String.IsNullOrEmpty(VaultPathTextbox.Text) || String.IsNullOrEmpty(BackupPathFilesTextbox.Text) || String.IsNullOrEmpty(FrequencyCombobox.Text))
+            Core.Utils utils = new Core.Utils();
+            if (ActivateBackupCheckbox.Checked == false)
             {
-                errorMessages += "There cannot be fields left in blank.";
-            }
-            
-            if (!String.IsNullOrEmpty(errorMessages)) //If any error...
-            {
-                MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
+                AutoBackupState = "false";
+                pathOfVaultBackedUp = VaultPathTextbox.Text; //""
+                pathForBackups = BackupPathFilesTextbox.Text;
+                lastDateBackup = DateTime.Now.ToString(); //If it is the very first time, no value will be saved in config, with this we set a value
+                frequencyBackup = "0";
+
+                setupSuccess = true;
+
+                this.Close();
 
             }
             else
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                Core.Utils utils = new Core.Utils();
-                /*config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
-                config.Save(ConfigurationSaveMode.Modified, true);
-                ConfigurationManager.RefreshSection("appSettings");*/
+                String errorMessages = "";
+                if (String.IsNullOrEmpty(VaultPathTextbox.Text) || String.IsNullOrEmpty(BackupPathFilesTextbox.Text) || String.IsNullOrEmpty(FrequencyCombobox.Text))
+                {
+                    errorMessages += "There cannot be fields left in blank.";
+                }
 
+                if (!String.IsNullOrEmpty(errorMessages)) //If any error...
+                {
+                    MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 
+                }
+                else
+                {
+                    AutoBackupState = "true";
+                    pathOfVaultBackedUp = VaultPathTextbox.Text; 
+                    pathForBackups = BackupPathFilesTextbox.Text;
+                    lastDateBackup = DateTime.Now.ToString(); 
+                    frequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString();
+
+                    setupSuccess = true;
+
+                    this.Close();
+                                   
+
+                }
             }
-
             
-
 
             
         }
@@ -69,18 +188,18 @@ namespace PassGuard.GUI
         {
             if(ActivateBackupCheckbox.Checked == true)
             {
+
+                NoteLabel.Enabled = true;
                 FrequencyCombobox.Enabled = true;
                 VaultPathLabel.Enabled = true;
-                VaultPathTextbox.Enabled = true;
                 SelectVaultPathButton.Enabled = true;
                 BackupPathLabel.Enabled = true;
-                BackupPathFilesTextbox.Enabled = true;
                 SelectVaultBackupFilesPathButton.Enabled = true;
                 FrequencyLabel.Enabled = true;
-                SetupAutoBackupButton.Enabled = true;
             }
             else if(ActivateBackupCheckbox.Checked == false)
             {
+                NoteLabel.Enabled = false;
                 FrequencyCombobox.Enabled = false; 
                 VaultPathLabel.Enabled = false;
                 VaultPathTextbox.Enabled = false;
@@ -89,7 +208,10 @@ namespace PassGuard.GUI
                 BackupPathFilesTextbox.Enabled = false;
                 SelectVaultBackupFilesPathButton.Enabled = false;
                 FrequencyLabel.Enabled = false;
-                SetupAutoBackupButton.Enabled = false;
+
+                VaultPathTextbox.Text = "";
+                BackupPathFilesTextbox.Text = "";
+                FrequencyCombobox.Text = "";
             }
             
         }
@@ -131,7 +253,7 @@ namespace PassGuard.GUI
             if (result == DialogResult.OK)
             {
                 path = fbd.SelectedPath;
-                VaultPathTextbox.Text = path;
+                BackupPathFilesTextbox.Text = path;
             }
         }
     }
