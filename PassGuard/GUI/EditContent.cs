@@ -93,8 +93,14 @@ namespace PassGuard.GUI
             }
             editedSuccess = false;
 
-
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            try
+            {
+                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
 
         private void EditButton_Click(object sender, EventArgs e)
@@ -147,10 +153,12 @@ namespace PassGuard.GUI
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decPath))
                 {
                     var keyToSearch = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
-                    var sql = "SELECT * FROM Vault WHERE Name = '" + keyToSearch + "';";
+                    var sql = "SELECT * FROM Vault WHERE Name = @name1;";
                     using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
                     {
                         m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
+                        commandExec.Prepare();
+                        commandExec.Parameters.Add("@name1", DbType.String).Value = keyToSearch;
                         commandExec.ExecuteNonQuery(); //Execute request.
 
                         using (SQLiteDataReader reader = commandExec.ExecuteReader())//Object Reader.

@@ -1,6 +1,17 @@
-﻿using Microsoft.Office.Interop.Word;
+﻿using iText.IO.Font;
+using iText.IO.Image;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,7 +21,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Word = Microsoft.Office.Interop.Word;
+using System.Threading;
+
 
 namespace PassGuard.Core
 {
@@ -18,19 +30,27 @@ namespace PassGuard.Core
     {
         internal string ComputeSHA1(string password)
         {
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
-            byte[] passByte = Encoding.UTF8.GetBytes(password);//Encode Pass
-            byte[] passHash = sha1.ComputeHash(passByte);//Compute SHA1
-
-            //Convert Hash into readable string
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in passHash)
+            if (String.IsNullOrEmpty(password))
             {
-                sb.Append(b.ToString("x2"));
+                return null;
             }
-            string hash = sb.ToString();//Compose bytes to string
+            else
+            {
+                SHA1 sha1 = new SHA1CryptoServiceProvider();
+                byte[] passByte = Encoding.UTF8.GetBytes(password);//Encode Pass
+                byte[] passHash = sha1.ComputeHash(passByte);//Compute SHA1
 
-            return hash;
+                //Convert Hash into readable string
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in passHash)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+                string hash = sb.ToString();//Compose bytes to string
+
+                return hash;
+            }
+            
         }
 
         //Obtain all the hashes that start with headHash from an API of pwned passwords.
@@ -39,9 +59,16 @@ namespace PassGuard.Core
             string instruction = "https://api.pwnedpasswords.com/range/";
             string url = instruction + headHash.ToUpper();
             HttpClient client = new HttpClient();
-            string response = await client.GetStringAsync(url);
-
-            return response;
+            try
+            {
+                string response = await client.GetStringAsync(url);
+                return response;
+            }
+            catch (HttpRequestException)
+            {
+                return "";
+            }
+            
         }
 
         internal async Task<bool> CheckPwnage(string password)//Password pwned before? -> returns true, Password not pwned before? -> returns false
@@ -170,88 +197,95 @@ namespace PassGuard.Core
 
         internal String EncryptText(byte[] key, String src)
         {
-            byte[] encrypted;
-            byte[] IV;
-
-            using (var provider = new AesCryptoServiceProvider())
+            try
             {
-                provider.Key = key;
+                byte[] encrypted;
+                byte[] IV;
 
-                provider.GenerateIV();
-                IV = provider.IV;
-
-                provider.Mode = CipherMode.CBC;
-
-                // Create the streams used for encryption. 
-                using (var encryptor = provider.CreateEncryptor(provider.Key, provider.IV))
-                using (var msEncrypt = new MemoryStream())
+                using (var provider = new AesCryptoServiceProvider())
                 {
-                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    using (var swEncrypt = new StreamWriter(csEncrypt))
+                    provider.Key = key;
+
+                    provider.GenerateIV();
+                    IV = provider.IV;
+
+                    provider.Mode = CipherMode.CBC;
+
+                    // Create the streams used for encryption. 
+                    using (var encryptor = provider.CreateEncryptor(provider.Key, provider.IV))
+                    using (var msEncrypt = new MemoryStream())
                     {
-                        //Write all data to the stream.
-                        swEncrypt.Write(src);
+                        using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                        using (var swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(src);
+                        }
+                        encrypted = msEncrypt.ToArray();
                     }
-                    encrypted = msEncrypt.ToArray();
+
                 }
-                
+
+                var combinedIvCt = new byte[IV.Length + encrypted.Length];
+                Array.Copy(IV, 0, combinedIvCt, 0, IV.Length);
+                Array.Copy(encrypted, 0, combinedIvCt, IV.Length, encrypted.Length);
+
+                // Return the encrypted bytes from the memory stream. 
+                return Convert.ToBase64String(combinedIvCt);
             }
-
-            var combinedIvCt = new byte[IV.Length + encrypted.Length];
-            Array.Copy(IV, 0, combinedIvCt, 0, IV.Length);
-            Array.Copy(encrypted, 0, combinedIvCt, IV.Length, encrypted.Length);
-
-            // Return the encrypted bytes from the memory stream. 
-            return Convert.ToBase64String(combinedIvCt);
-
+            catch (Exception)
+            {
+                return "void";
+            }
         }
 
         internal String DecryptText(byte[] key, String src)
         {
-            // Declare the string used to hold 
-            // the decrypted text. 
-            string plaintext = null;
-            byte[] cipherTextCombined = Convert.FromBase64String(src);
-
-            // Create an Aes object 
-            // with the specified key and IV. 
-            using (var provider = new AesCryptoServiceProvider())
+            try
             {
-                provider.Key = key;
+                // Declare the string used to hold 
+                // the decrypted text. 
+                string plaintext = null;
+                byte[] cipherTextCombined = Convert.FromBase64String(src);
 
-                byte[] IV = new byte[provider.BlockSize / 8];
-                byte[] cipherText = new byte[cipherTextCombined.Length - IV.Length];
-
-                Array.Copy(cipherTextCombined, IV, IV.Length);
-                Array.Copy(cipherTextCombined, IV.Length, cipherText, 0, cipherText.Length);
-
-                provider.IV = IV;
-
-                provider.Mode = CipherMode.CBC;
-
-                // Create a decrytor to perform the stream transform.
-                ICryptoTransform decryptor = provider.CreateDecryptor(provider.Key, provider.IV);
-
-                // Create the streams used for decryption. 
-                using (var msDecrypt = new MemoryStream(cipherText))
-                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                using (var srDecrypt = new StreamReader(csDecrypt))
+                // Create an Aes object 
+                // with the specified key and IV. 
+                using (var provider = new AesCryptoServiceProvider())
                 {
+                    provider.Key = key;
 
-                    // Read the decrypted bytes from the decrypting stream
-                    // and place them in a string.
-                    plaintext = srDecrypt.ReadToEnd();
+                    byte[] IV = new byte[provider.BlockSize / 8];
+                    byte[] cipherText = new byte[cipherTextCombined.Length - IV.Length];
+
+                    Array.Copy(cipherTextCombined, IV, IV.Length);
+                    Array.Copy(cipherTextCombined, IV.Length, cipherText, 0, cipherText.Length);
+
+                    provider.IV = IV;
+
+                    provider.Mode = CipherMode.CBC;
+
+                    // Create a decrytor to perform the stream transform.
+                    ICryptoTransform decryptor = provider.CreateDecryptor(provider.Key, provider.IV);
+
+                    // Create the streams used for decryption. 
+                    using (var msDecrypt = new MemoryStream(cipherText))
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (var srDecrypt = new StreamReader(csDecrypt))
+                    {
+
+                        // Read the decrypted bytes from the decrypting stream
+                        // and place them in a string.
+                        plaintext = srDecrypt.ReadToEnd();
+                    }
                 }
+
+                return plaintext;
+            }
+            catch (Exception)
+            {
+                return src;
             }
 
-            return plaintext;
-
-        }
-
-        internal String Convert64(String src)
-        {
-            var plainTextBytes = Encoding.Default.GetBytes(src);
-            return Convert.ToBase64String(plainTextBytes);
         }
 
         internal String Base64ToString(String src)
@@ -260,171 +294,218 @@ namespace PassGuard.Core
             return Encoding.Default.GetString(base64EncodedBytes);
         }
 
-        internal String JoinBase64(String src1, String src2)
+        internal void CreatePDF(List<String[]> results, String Vault, String Email, String sk)
         {
-            var array1 = Convert.FromBase64String(src1);
-            var array2 = Convert.FromBase64String(src2);
-            var comb = CombineByteArray(array1, array2);
-            var data = Encoding.Default.GetString(comb);
-            return data;
-        }
-
-        internal byte[] CombineByteArray(byte[] first, byte[] second)
-        {
-            return first.Concat(second).ToArray();
-        }
-
-
-        internal void CreateDOCX(List<String[]> results, String Vault, String Email, String sk)
-        {
-            object docxLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TempVaultTable.docx";
-            using (var tempDocxFile = File.Create(docxLocation.ToString()))
+            var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".pdf";
+            if (!File.Exists(pdfLocation))
             {
-                tempDocxFile.Close();
-                tempDocxFile.Dispose();
-                object oMissing = Missing.Value;
-                object oEndOfDoc = "\\endofdoc";
-                Word.Application app = new Word.Application(); //objword
-                Word.Document docx = app.Documents.Open(ref docxLocation);
-                docx.Activate();
-                docx.PageSetup.TopMargin = (float)5;
-                docx.PageSetup.BottomMargin = (float)5;
-                docx.PageSetup.LeftMargin = (float)5;
-                docx.PageSetup.RightMargin = (float)5;
-                
+                var file = File.Create(pdfLocation);
+                file.Close();
 
-                var p2 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
-                p2.Range.Font.Name = "Calibri";
-                p2.Range.Font.Size = 15;
-                p2.Range.Text = "PassGuard: Vault Content";
-                p2.Range.Font.Bold = 1;
-                p2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                p2.Range.ParagraphFormat.SpaceAfter = 0;
-                p2.Range.InsertParagraphAfter();
-                p2.Range.Bold = 0;
+                PdfWriter writer = new PdfWriter(pdfLocation);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document doc = new Document(pdf);
+                doc.SetMargins(8, 8, 8, 8);
 
-                var p3 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
-                p3.Range.Font.Name = "Arial";
-                p3.Range.Font.Size = 12;
-                p3.Range.Text = "\vDate: " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DateTime.Now.ToLongDateString()) + "\v\tVault Name: " + Vault + "\v\tPassGuard Saved Email: " + Email + "\v\tPassGuard Saved Security Key (SK): " + sk;
-                p3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-                p3.Range.ParagraphFormat.SpaceAfter = 0;
-                p3.Range.InsertParagraphAfter();
+                var title = new Paragraph("PassGuard: Vault Content").SetBold().SetFontSize(15);
+                title.SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+                doc.Add(title);
 
+                var intro = new Paragraph("Date: " + DateTime.Now.ToString("D", new CultureInfo("en-US")) + ":").SetFontSize(12); //CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DateTime.Now.ToLongDateString())
+                intro.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+                intro.SetFixedLeading(14);
+                intro.SetMarginBottom(0f);
+                doc.Add(intro);
 
-                var p4 = docx.Paragraphs.Add(System.Reflection.Missing.Value);
-                p4.Range.Font.Name = "Arial";
-                p4.Range.Font.Size = 8;
-                p4.Range.Text = "\vNote: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored on the day the backup was done.\v";
-                p4.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;
-                p4.Range.InsertParagraphAfter();
+                var intro2 = new Paragraph("Vault Name: " + Vault + "\nVault Filename: " + Vault + ".encrypted" + "\nPassGuard Saved Email: " + Email + "\nPassGuard Saved Security Key (SK): " + sk).SetFontSize(12);
+                intro2.SetPaddingLeft(40f);
+                intro2.SetFixedLeading(14);
+                intro2.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+                doc.Add(intro2);
 
+                var note = new Paragraph("Note: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored the day the backup was done.").SetFontSize(8);
+                note.SetMarginTop(0f);
+                note.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+                note.SetMarginBottom(16f);
+                doc.Add(note);
 
-                Word.Range wrdRng = docx.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                Table objTable = docx.Tables.Add(Range: wrdRng, NumRows: results.Count+1, NumColumns: 6);
-                objTable.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
-                objTable.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
-                objTable.Rows.First.Range.Bold = 1;
+                Table content = new Table(numColumns: 6).UseAllAvailableWidth();
+                content.SetWidth(UnitValue.CreatePercentValue(100));
+                content.SetFixedLayout();
+                content.SetBorderCollapse(iText.Layout.Properties.BorderCollapsePropertyValue.SEPARATE);
+                content.SetBorderBottom(null);
+                content.SetMarginBottom(0f);
+                content.SetPaddingBottom(0f);
 
+                content.AddCell("URL").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Name").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Site Username").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Site Password").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Category").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Notes").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
 
-                objTable.Cell(1, 1).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 2).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 3).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 4).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 5).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 6).Range.Font.Underline = WdUnderline.wdUnderlineSingle;
-                objTable.Cell(1, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                objTable.Cell(1, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                objTable.Cell(1, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                objTable.Cell(1, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                objTable.Cell(1, 5).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                objTable.Cell(1, 6).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                doc.Add(content);
 
+                Table content2 = new Table(numColumns: 6).UseAllAvailableWidth();
+                content2.SetWidth(UnitValue.CreatePercentValue(100));
+                content2.SetFixedLayout();
+                content2.SetMarginBottom(0.1f);
 
-                objTable.Cell(1, 1).Range.Text = "URL";
-                objTable.Cell(1, 2).Range.Text = "Name";
-                objTable.Cell(1, 3).Range.Text = "Site Username";
-                objTable.Cell(1, 4).Range.Text = "Site Password";
-                objTable.Cell(1, 5).Range.Text = "Category";
-                objTable.Cell(1, 6).Range.Text = "Notes";
-
-                
-                for (int i = 2; i < results.Count+2; i++)
+                for (int i = 0; i < results.Count; i++)
                 {
-                    objTable.Cell(i, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                    objTable.Cell(i, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                    objTable.Cell(i, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                    objTable.Cell(i, 5).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-
-                    objTable.Cell(i, 1).Range.Text = results[i - 2][0];
-                    objTable.Cell(i, 2).Range.Text = results[i - 2][1];
-                    objTable.Cell(i, 3).Range.Text = results[i - 2][2];
-                    objTable.Cell(i, 4).Range.Text = results[i - 2][3];
-                    objTable.Cell(i, 5).Range.Text = results[i - 2][4];
-                    objTable.Cell(i, 6).Range.Text = results[i - 2][5];
-
-                    objTable.Cell(i, 1).Range.Paragraphs.LineSpacing = (float)10;
-                    objTable.Cell(i, 2).Range.Paragraphs.LineSpacing = (float)10;
-                    objTable.Cell(i, 3).Range.Paragraphs.LineSpacing = (float)10;
-                    objTable.Cell(i, 4).Range.Paragraphs.LineSpacing = (float)10;
-                    objTable.Cell(i, 5).Range.Paragraphs.LineSpacing = (float)10;
-                    objTable.Cell(i, 6).Range.Paragraphs.LineSpacing = (float)10;
-
-                    objTable.Cell(i, 1).Range.Font.Size = 9;
-                    objTable.Cell(i, 2).Range.Font.Size = 9;
-                    objTable.Cell(i, 3).Range.Font.Size = 9;
-                    objTable.Cell(i, 4).Range.Font.Size = 9;
-                    objTable.Cell(i, 5).Range.Font.Size = 9;
-                    objTable.Cell(i, 6).Range.Font.Size = 9;
+                    for (int j = 0; j < 6; j++)
+                    {
+                        content2.AddCell(results[i][j]).SetFontSize(9);
+                    }
                 }
 
-                var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable.pdf";
-                docx.SaveAs2(pdfLocation, Word.WdSaveFormat.wdFormatPDF, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
-                docx.Close(WdSaveOptions.wdDoNotSaveChanges, WdOriginalFormat.wdOriginalDocumentFormat, false);
-                app.Quit(WdSaveOptions.wdDoNotSaveChanges);
-                MessageBox.Show("done");
+                doc.Add(content2);
+
+                doc.Close();
+
+                MessageBox.Show(text: "PDF with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
             }
-            
+            else { MessageBox.Show(text: "There is already a file with the name of the PDF. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
         }
 
-
-        internal void convertDOCXtoPDF()
+        internal bool CreateBackup(String srcPath, String dstPath)
         {
+            var tempSplit = srcPath.Split('\\');
+            var fileName = tempSplit[tempSplit.Length - 1].Split('.');
+            var nameOfBackup = "Backup" + char.ToUpper(fileName[0][0]) + fileName[0].Substring(1) + DateTime.Now.ToString("-yyyyMMdd-HHmmss") + "." + fileName[1];
 
-            object misValue = System.Reflection.Missing.Value;
-            String PATH_APP_PDF = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Table.pdf";//@"c:\..\MY_WORD_DOCUMENT.pdf";
+            if (!File.Exists(dstPath + "\\" + nameOfBackup))
+            {
+                try
+                {
+                    File.Copy(sourceFileName: srcPath, destFileName: dstPath + "\\" + nameOfBackup);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
 
-            var WORD = new Word.Application();
-
-            Word.Document doc = WORD.Documents.Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Table.docx");
-            doc.Activate();
-
-            doc.SaveAs2(@PATH_APP_PDF, Word.WdSaveFormat.wdFormatPDF, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
-
-            doc.Close();
-            WORD.Quit();
-
-
-            releaseObject(doc);
-            releaseObject(WORD);
-
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        internal void releaseObject(object obj)
+        //Infinite method
+        internal void AutoBackupTime()
         {
-            try
+            Core.Utils utils = new Core.Utils();
+
+            while (true)
             {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                obj = null;
+                var mode = ConfigurationManager.AppSettings.Get("FrequencyAutoBackup");
+                var pathVault = ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup");
+                var dstPath = ConfigurationManager.AppSettings.Get("dstBackupPathForSave");
+                var lastDate = ConfigurationManager.AppSettings.Get("LastDateAutoBackup");
+                var active = ConfigurationManager.AppSettings.Get("AutoBackupState");
+                if (active == "true")
+                {
+                    switch (Int32.Parse(mode))
+                    {
+                        case 3:
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 15)
+                            {
+                                if (File.Exists(pathVault) && Directory.Exists(dstPath))
+                                {
+                                    if (utils.CreateBackup(pathVault, dstPath: dstPath))
+                                    {
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
+                                        config.Save(ConfigurationSaveMode.Modified, true);
+                                        ConfigurationManager.RefreshSection("appSettings");
+                                        MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                        Thread.Sleep(30000);
+
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault. Please review AutoBackup config and check all the paths and files exist. \nThis message will be shown everytime AutoBackup tries to make a backup until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                    Thread.Sleep(60000);
+                                }
+                            }
+                            break;
+                        case 4:
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 30)
+                            {
+                                if (File.Exists(pathVault) && Directory.Exists(dstPath))
+                                {
+                                    if (utils.CreateBackup(pathVault, dstPath: dstPath))
+                                    {
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
+                                        config.Save(ConfigurationSaveMode.Modified, true);
+                                        ConfigurationManager.RefreshSection("appSettings");
+                                        MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                                    }
+                                    else
+                                    {
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
+                                        config.Save(ConfigurationSaveMode.Modified, true);
+                                        ConfigurationManager.RefreshSection("appSettings");
+                                        MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                        Thread.Sleep(30000);
+
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault. Please review AutoBackup config and check all the paths and files exist. \nThis message will be shown everytime AutoBackup tries to make a backup until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                    Thread.Sleep(60000);
+                                }
+                            }
+                            break;
+                        case 5:
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 45)
+                            {
+                                if (File.Exists(pathVault) && Directory.Exists(dstPath))
+                                {
+                                    if (utils.CreateBackup(pathVault, dstPath: dstPath))
+                                    {
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
+                                        config.Save(ConfigurationSaveMode.Modified, true);
+                                        ConfigurationManager.RefreshSection("appSettings");
+                                        MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                        Thread.Sleep(30000);
+
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault. Please review AutoBackup config and check all the paths and files exist. \nThis message will be shown everytime AutoBackup tries to make a backup until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                                    Thread.Sleep(60000);
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (active == "false")
+                {
+                    break;
+                }
             }
-            catch (Exception ex)
-            {
-                //TODO
-            }
-            finally
-            {
-                GC.Collect();
-            }
+
+
+
         }
 
     }

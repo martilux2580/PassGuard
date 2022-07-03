@@ -39,8 +39,9 @@ namespace PassGuard.GUI
             this.BLabel = new System.Windows.Forms.Label();
             this.WebHelpRGB = new System.Windows.Forms.Button();
             this.NoteRGBLabel = new System.Windows.Forms.Label();
-            this.SendRGBButton = new System.Windows.Forms.Button();
             this.RGBWebToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.LoadSavedConfigButton = new System.Windows.Forms.Button();
+            this.SendButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
@@ -151,21 +152,6 @@ namespace PassGuard.GUI
             this.NoteRGBLabel.TabIndex = 8;
             this.NoteRGBLabel.Text = "Note: RGB combinations in which all 3 values are less than 32 are not available.";
             // 
-            // SendRGBButton
-            // 
-            this.SendRGBButton.FlatAppearance.BorderSize = 0;
-            this.SendRGBButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SendRGBButton.Location = new System.Drawing.Point(321, 98);
-            this.SendRGBButton.Margin = new System.Windows.Forms.Padding(2);
-            this.SendRGBButton.Name = "SendRGBButton";
-            this.SendRGBButton.Size = new System.Drawing.Size(76, 24);
-            this.SendRGBButton.TabIndex = 9;
-            this.SendRGBButton.Text = "Send";
-            this.SendRGBButton.UseVisualStyleBackColor = true;
-            this.SendRGBButton.Click += new System.EventHandler(this.SendRGBButton_Click);
-            this.SendRGBButton.MouseEnter += new System.EventHandler(this.SendRGBButton_MouseEnter);
-            this.SendRGBButton.MouseLeave += new System.EventHandler(this.SendRGBButton_MouseLeave);
-            // 
             // RGBWebToolTip
             // 
             this.RGBWebToolTip.AutomaticDelay = 300;
@@ -173,13 +159,43 @@ namespace PassGuard.GUI
             this.RGBWebToolTip.InitialDelay = 300;
             this.RGBWebToolTip.ReshowDelay = 60;
             // 
+            // LoadSavedConfigButton
+            // 
+            this.LoadSavedConfigButton.FlatAppearance.BorderSize = 0;
+            this.LoadSavedConfigButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LoadSavedConfigButton.Location = new System.Drawing.Point(278, 70);
+            this.LoadSavedConfigButton.Margin = new System.Windows.Forms.Padding(2);
+            this.LoadSavedConfigButton.Name = "LoadSavedConfigButton";
+            this.LoadSavedConfigButton.Size = new System.Drawing.Size(119, 24);
+            this.LoadSavedConfigButton.TabIndex = 10;
+            this.LoadSavedConfigButton.Text = "Load Saved Colour";
+            this.LoadSavedConfigButton.UseVisualStyleBackColor = true;
+            this.LoadSavedConfigButton.Click += new System.EventHandler(this.LoadSavedConfigButton_Click);
+            this.LoadSavedConfigButton.MouseEnter += new System.EventHandler(this.LoadSavedConfigButton_MouseEnter);
+            this.LoadSavedConfigButton.MouseLeave += new System.EventHandler(this.LoadSavedConfigButton_MouseLeave);
+            // 
+            // SendButton
+            // 
+            this.SendButton.FlatAppearance.BorderSize = 0;
+            this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SendButton.Location = new System.Drawing.Point(278, 100);
+            this.SendButton.Margin = new System.Windows.Forms.Padding(2);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(119, 24);
+            this.SendButton.TabIndex = 11;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            this.SendButton.MouseEnter += new System.EventHandler(this.SendButton_MouseEnter);
+            this.SendButton.MouseLeave += new System.EventHandler(this.SendButton_MouseLeave);
+            // 
             // AskRGBforSettings
             // 
-            this.AcceptButton = this.SendRGBButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(415, 161);
-            this.Controls.Add(this.SendRGBButton);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.LoadSavedConfigButton);
             this.Controls.Add(this.NoteRGBLabel);
             this.Controls.Add(this.WebHelpRGB);
             this.Controls.Add(this.BlueNUD);
@@ -215,7 +231,8 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Label BLabel;
         private System.Windows.Forms.Button WebHelpRGB;
         private System.Windows.Forms.Label NoteRGBLabel;
-        private System.Windows.Forms.Button SendRGBButton;
         private System.Windows.Forms.ToolTip RGBWebToolTip;
+        private System.Windows.Forms.Button LoadSavedConfigButton;
+        private System.Windows.Forms.Button SendButton;
     }
 }

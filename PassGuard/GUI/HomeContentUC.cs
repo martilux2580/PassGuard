@@ -27,11 +27,11 @@ namespace PassGuard.GUI
         private void Timer_Tick(object sender, EventArgs e)
         {
             TimeLabel.Text = DateTime.Now.ToLongTimeString(); //When a tick occurs, change text and date to actual date, to simulate a clock.
-            DateLabel.Text = DateTime.Now.ToLongDateString(); 
+            DateLabel.Text = DateTime.Now.ToString("D", new CultureInfo("en-US")); //DateTime.Now.ToLongDateString();
+
             //CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DateTime.Now.ToLongDateString());  //"Miércoles, 31 De Septiembre De 2021";
 
 
         }
-
     }
 }

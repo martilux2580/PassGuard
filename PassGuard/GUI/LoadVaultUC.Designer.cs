@@ -41,13 +41,15 @@ namespace PassGuard.GUI
             this.LoadSavedSKButton = new System.Windows.Forms.Button();
             this.LoadVaultButton = new System.Windows.Forms.Button();
             this.LoadSavedEmailButton = new System.Windows.Forms.Button();
+            this.SaveEmailButton = new System.Windows.Forms.Button();
+            this.SaveSKButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // VaultEmailLabel
             // 
             this.VaultEmailLabel.AutoSize = true;
             this.VaultEmailLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VaultEmailLabel.Location = new System.Drawing.Point(124, 80);
+            this.VaultEmailLabel.Location = new System.Drawing.Point(87, 80);
             this.VaultEmailLabel.Name = "VaultEmailLabel";
             this.VaultEmailLabel.Size = new System.Drawing.Size(89, 18);
             this.VaultEmailLabel.TabIndex = 18;
@@ -56,16 +58,16 @@ namespace PassGuard.GUI
             // VaultEmailTextbox
             // 
             this.VaultEmailTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.VaultEmailTextbox.Location = new System.Drawing.Point(353, 77);
+            this.VaultEmailTextbox.Location = new System.Drawing.Point(243, 77);
             this.VaultEmailTextbox.Name = "VaultEmailTextbox";
-            this.VaultEmailTextbox.Size = new System.Drawing.Size(284, 24);
+            this.VaultEmailTextbox.Size = new System.Drawing.Size(289, 24);
             this.VaultEmailTextbox.TabIndex = 17;
             // 
             // VaultPassLabel
             // 
             this.VaultPassLabel.AutoSize = true;
             this.VaultPassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VaultPassLabel.Location = new System.Drawing.Point(124, 155);
+            this.VaultPassLabel.Location = new System.Drawing.Point(87, 155);
             this.VaultPassLabel.Name = "VaultPassLabel";
             this.VaultPassLabel.Size = new System.Drawing.Size(132, 18);
             this.VaultPassLabel.TabIndex = 14;
@@ -75,17 +77,17 @@ namespace PassGuard.GUI
             // VaultPassTextbox
             // 
             this.VaultPassTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.VaultPassTextbox.Location = new System.Drawing.Point(353, 152);
+            this.VaultPassTextbox.Location = new System.Drawing.Point(243, 152);
             this.VaultPassTextbox.Name = "VaultPassTextbox";
             this.VaultPassTextbox.PasswordChar = '*';
-            this.VaultPassTextbox.Size = new System.Drawing.Size(423, 24);
+            this.VaultPassTextbox.Size = new System.Drawing.Size(564, 24);
             this.VaultPassTextbox.TabIndex = 13;
             // 
             // SecurityKeyLabel
             // 
             this.SecurityKeyLabel.AutoSize = true;
             this.SecurityKeyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SecurityKeyLabel.Location = new System.Drawing.Point(124, 231);
+            this.SecurityKeyLabel.Location = new System.Drawing.Point(87, 231);
             this.SecurityKeyLabel.Name = "SecurityKeyLabel";
             this.SecurityKeyLabel.Size = new System.Drawing.Size(132, 18);
             this.SecurityKeyLabel.TabIndex = 12;
@@ -94,10 +96,10 @@ namespace PassGuard.GUI
             // SecurityKeyTextbox
             // 
             this.SecurityKeyTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.SecurityKeyTextbox.Location = new System.Drawing.Point(353, 228);
+            this.SecurityKeyTextbox.Location = new System.Drawing.Point(243, 228);
             this.SecurityKeyTextbox.Name = "SecurityKeyTextbox";
             this.SecurityKeyTextbox.PasswordChar = '*';
-            this.SecurityKeyTextbox.Size = new System.Drawing.Size(284, 24);
+            this.SecurityKeyTextbox.Size = new System.Drawing.Size(289, 24);
             this.SecurityKeyTextbox.TabIndex = 11;
             // 
             // SelectVaultPathButton
@@ -105,7 +107,7 @@ namespace PassGuard.GUI
             this.SelectVaultPathButton.FlatAppearance.BorderSize = 0;
             this.SelectVaultPathButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SelectVaultPathButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.SelectVaultPathButton.Location = new System.Drawing.Point(751, 301);
+            this.SelectVaultPathButton.Location = new System.Drawing.Point(782, 301);
             this.SelectVaultPathButton.Name = "SelectVaultPathButton";
             this.SelectVaultPathButton.Size = new System.Drawing.Size(25, 25);
             this.SelectVaultPathButton.TabIndex = 21;
@@ -116,7 +118,7 @@ namespace PassGuard.GUI
             // 
             this.VaultPathLabel.AutoSize = true;
             this.VaultPathLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VaultPathLabel.Location = new System.Drawing.Point(124, 305);
+            this.VaultPathLabel.Location = new System.Drawing.Point(87, 305);
             this.VaultPathLabel.Name = "VaultPathLabel";
             this.VaultPathLabel.Size = new System.Drawing.Size(95, 18);
             this.VaultPathLabel.TabIndex = 20;
@@ -126,15 +128,17 @@ namespace PassGuard.GUI
             // 
             this.VaultPathTextbox.Enabled = false;
             this.VaultPathTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.VaultPathTextbox.Location = new System.Drawing.Point(353, 302);
+            this.VaultPathTextbox.Location = new System.Drawing.Point(243, 302);
             this.VaultPathTextbox.Name = "VaultPathTextbox";
-            this.VaultPathTextbox.Size = new System.Drawing.Size(392, 24);
+            this.VaultPathTextbox.Size = new System.Drawing.Size(533, 24);
             this.VaultPathTextbox.TabIndex = 19;
             // 
             // LoadSavedSKButton
             // 
+            this.LoadSavedSKButton.FlatAppearance.BorderSize = 0;
+            this.LoadSavedSKButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadSavedSKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadSavedSKButton.Location = new System.Drawing.Point(643, 227);
+            this.LoadSavedSKButton.Location = new System.Drawing.Point(538, 227);
             this.LoadSavedSKButton.Name = "LoadSavedSKButton";
             this.LoadSavedSKButton.Size = new System.Drawing.Size(133, 25);
             this.LoadSavedSKButton.TabIndex = 22;
@@ -149,7 +153,7 @@ namespace PassGuard.GUI
             this.LoadVaultButton.FlatAppearance.BorderSize = 0;
             this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F);
-            this.LoadVaultButton.Location = new System.Drawing.Point(353, 369);
+            this.LoadVaultButton.Location = new System.Drawing.Point(360, 369);
             this.LoadVaultButton.Name = "LoadVaultButton";
             this.LoadVaultButton.Size = new System.Drawing.Size(176, 33);
             this.LoadVaultButton.TabIndex = 23;
@@ -161,8 +165,10 @@ namespace PassGuard.GUI
             // 
             // LoadSavedEmailButton
             // 
+            this.LoadSavedEmailButton.FlatAppearance.BorderSize = 0;
+            this.LoadSavedEmailButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadSavedEmailButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadSavedEmailButton.Location = new System.Drawing.Point(643, 76);
+            this.LoadSavedEmailButton.Location = new System.Drawing.Point(538, 76);
             this.LoadSavedEmailButton.Name = "LoadSavedEmailButton";
             this.LoadSavedEmailButton.Size = new System.Drawing.Size(133, 25);
             this.LoadSavedEmailButton.TabIndex = 24;
@@ -172,10 +178,38 @@ namespace PassGuard.GUI
             this.LoadSavedEmailButton.MouseEnter += new System.EventHandler(this.LoadSavedEmailButton_MouseEnter);
             this.LoadSavedEmailButton.MouseLeave += new System.EventHandler(this.LoadSavedEmailButton_MouseLeave);
             // 
+            // SaveEmailButton
+            // 
+            this.SaveEmailButton.FlatAppearance.BorderSize = 0;
+            this.SaveEmailButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SaveEmailButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveEmailButton.Location = new System.Drawing.Point(674, 76);
+            this.SaveEmailButton.Name = "SaveEmailButton";
+            this.SaveEmailButton.Size = new System.Drawing.Size(133, 25);
+            this.SaveEmailButton.TabIndex = 26;
+            this.SaveEmailButton.Text = "Save Email";
+            this.SaveEmailButton.UseVisualStyleBackColor = true;
+            this.SaveEmailButton.Click += new System.EventHandler(this.SaveEmailButton_Click);
+            // 
+            // SaveSKButton
+            // 
+            this.SaveSKButton.FlatAppearance.BorderSize = 0;
+            this.SaveSKButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SaveSKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveSKButton.Location = new System.Drawing.Point(674, 227);
+            this.SaveSKButton.Name = "SaveSKButton";
+            this.SaveSKButton.Size = new System.Drawing.Size(133, 25);
+            this.SaveSKButton.TabIndex = 25;
+            this.SaveSKButton.Text = "Save SK";
+            this.SaveSKButton.UseVisualStyleBackColor = true;
+            this.SaveSKButton.Click += new System.EventHandler(this.SaveSKButton_Click);
+            // 
             // LoadVaultUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.SaveEmailButton);
+            this.Controls.Add(this.SaveSKButton);
             this.Controls.Add(this.LoadSavedEmailButton);
             this.Controls.Add(this.LoadVaultButton);
             this.Controls.Add(this.LoadSavedSKButton);
@@ -209,5 +243,7 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button LoadSavedSKButton;
         private System.Windows.Forms.Button LoadVaultButton;
         private System.Windows.Forms.Button LoadSavedEmailButton;
+        private System.Windows.Forms.Button SaveEmailButton;
+        private System.Windows.Forms.Button SaveSKButton;
     }
 }

@@ -19,13 +19,27 @@ namespace PassGuard.GUI
         public LoadVaultUC()
         {
             InitializeComponent();
-            SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            try
+            {
+                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
 
         }
 
         private void LoadSavedSKButton_Click(object sender, EventArgs e)
         {
-            SecurityKeyTextbox.Text = ConfigurationManager.AppSettings.Get("SecurityKey"); //Modify data in the config file for future executions.
+            try
+            {
+                SecurityKeyTextbox.Text = ConfigurationManager.AppSettings.Get("SecurityKey"); //Modify data in the config file for future executions.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
 
         private void LoadVaultButton_Click(object sender, EventArgs e)
@@ -43,7 +57,7 @@ namespace PassGuard.GUI
             {
                 var test = new System.Net.Mail.MailAddress(VaultEmailTextbox.Text);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorMessages += "    - Invalid Email Format.\n";
             }
@@ -64,17 +78,39 @@ namespace PassGuard.GUI
                 String pathforEncryptedVault = VaultPathTextbox.Text;
                 String[] saveEncryptedVaultPath = pathforEncryptedVault.Split('\\');
                 saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
+                String[] vaultPath = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.');
 
-                //Calculate key to decrypt vault
-                var key = utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
+                try
+                {
+                    //Calculate key to decrypt vault
+                    var key = utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
 
-                //Show all the contents of the vault (UserControl).
-                GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key); //Put the main panel visible.
-                var ContentPanel = this.Parent;
-                this.Parent.Controls.Clear(); //this.Parent.Name; //contentpanel
-                ContentPanel.Controls.Add(vc);
-                vc.Visible = true;
-                
+                    //Show all the contents of the vault (UserControl).
+                    GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
+                    var ContentPanel = this.Parent;
+                    this.Parent.Controls.Clear(); //this.Parent.Name; //contentpanel
+                    ContentPanel.Controls.Add(vc);
+                    vc.Visible = true;
+                }
+                catch(Exception ex)
+                {
+                    if ((ex is FormatException) || (ex is System.Security.Cryptography.CryptographicException))
+                    {
+                        MessageBox.Show(text: "PassGuard could not unlock your Vault. Check the input credentials.", caption: "Not correct credentials.", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                    }
+                    else
+                    {
+                        MessageBox.Show(text: "PassGuard could not unlock or open the Vault. Check the inserted credentials, verify the file is not corrupted and try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                    }
+                }
+                finally
+                {
+                    if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultPath[0] + ".db3")))
+                    {
+                        File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultPath[0] + ".db3"));
+                    }
+                }
+
 
             }
 
@@ -142,6 +178,36 @@ namespace PassGuard.GUI
         private void LoadSavedEmailButton_MouseLeave(object sender, EventArgs e)
         {
             LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
+        }
+
+        private void SaveEmailButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified, true);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+        }
+
+        private void SaveSKButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                config.AppSettings.Settings["SecurityKey"].Value = SecurityKeyTextbox.Text; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified, true);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
     }
 }

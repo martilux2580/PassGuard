@@ -20,7 +20,14 @@ namespace PassGuard.GUI
         public CreateNewVaultUC()
         {
             InitializeComponent();
-            SelectVaultPathButton.Image = Image.FromFile(@"..\..\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            try
+            {
+                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
             VaultPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
             SaveEmailTooltip.SetToolTip(SaveEmailCheckbox, "If this option is checked and the new vault is created successfully, this email \nwill be saved so that the process of loading the password vault is faster. \nNote: If another vault is created and this option is checked, previously saved email \nwill be deleted and the new email will be saved.");
         }
@@ -51,7 +58,7 @@ namespace PassGuard.GUI
             {
                 var test = new System.Net.Mail.MailAddress(VaultEmailTextbox.Text);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorMessages += "    - Invalid Email Format.\n";
             }
@@ -102,14 +109,6 @@ namespace PassGuard.GUI
                     command.ExecuteNonQuery(); //Execute request.
                     command.Dispose(); //Delete object so it is no longer using the file.
 
-                    //CUIDADO QUE NINGUNO DE LOS CAMPOS EN LOS QUE SE INTRODUZCAN DATOS TENGAN COMILLAS O COSAS RARAS, QUE LUEGO ESO AL GUARDARLO DA PROBLEMA....
-                    /*sql = "INSERT INTO Vault (Url, Name, Username, SitePassword, Notes) values ('xd.com', 'xd', 'xDD', 'elpepasos68', 'cat1', 'notastanlargascomoquiera');";
-                    command = new SQLiteCommand(sql, m_dbConnection); //Associate request with connection to vault.
-                    command.ExecuteNonQuery(); //Execute request.
-                    command.Dispose(); //Delete object so it is no longer using the file.
-                    */
-
-
                     //Indicates that creating the SQLiteDatabase went succesfully, so the database can be committed.
                     tran.Complete(); //Close and commit transaction.
                     tran.Dispose(); //Dispose transaction so it is no longer using the file.
@@ -137,31 +136,39 @@ namespace PassGuard.GUI
                 rnd.NextBytes(salt);
                 string rndsalt = Convert.ToBase64String(salt);
                 //Encrypt and delete previous file.
-                utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text+VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
+                utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
+
+
                 //Save salt and maybe email.
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
-                if (SaveEmailCheckbox.Checked)
+                try
                 {
-                    config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
-                }
-                config.Save(ConfigurationSaveMode.Modified, true);
-                ConfigurationManager.RefreshSection("appSettings");
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                    config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
+                    if (SaveEmailCheckbox.Checked)
+                    {
+                        config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
+                    }
+                    config.Save(ConfigurationSaveMode.Modified, true);
+                    ConfigurationManager.RefreshSection("appSettings");
 
-                //Inform user
-                var data = "\tEmail: " + VaultEmailTextbox.Text + "\n\tVault Password: " + VaultPassTextbox.Text + "\n\tSecurity Key: " + rndsalt;
-                var message = "Congrats! Your new Password Vault has been created successfully!\nThe information you must store and remember in order to load and access to your Password Vault is the following: \n\n" 
-                    + data + "\n\nNotes: \n\tWithout any of those three values, your Password Vault and its content will be inacessible. \n\tBy clicking OK, those three values will be copied to the clipboard, please save them carefully." 
-                    + "\n\tSecurity Key will be remembered by PassGuard, and if the option was checked the email will be also saved. However, if another Password Vault is created, its Security Key will be remembered by PassGuard and the previous key will be deleted, and if the option was checked the email will be remembered and the previously saved email will be deleted, " 
-                    + "so make sure you keep save and remember the email, password and Security Key of each Password Vault you create.";
-                DialogResult dialog = MessageBox.Show(text: message, caption: "Success!", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
-                if(dialog == DialogResult.OK)
+                    //Inform user
+                    var data = "\tVault Name: " + VaultNameTextbox.Text + "\n\tFilename: " + VaultNameTextbox.Text + ".encrypted" + "\n\tEmail: " + VaultEmailTextbox.Text + "\n\tVault Password: " + VaultPassTextbox.Text + "\n\tSecurity Key: " + rndsalt;
+                    var message = "Congrats! Your new Password Vault has been created successfully!\nThe information you must store and remember in order to load and access to your Password Vault is the following: \n\n"
+                        + data + "\n\nNotes: \n\tWithout any of those three values, your Password Vault and its content will be inacessible. \n\tBy clicking OK, those three values will be copied to the clipboard, please save them carefully."
+                        + "\n\tSecurity Key will be remembered by PassGuard, and if the option was checked the email will be also saved. However, if another Password Vault is created, its Security Key will be remembered by PassGuard and the previous key will be deleted, and if the option was checked the email will be remembered and the previously saved email will be deleted, "
+                        + "so make sure you keep save and remember the email, password and Security Key of each Password Vault you create.";
+                    DialogResult dialog = MessageBox.Show(text: message, caption: "Success!", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                    if (dialog == DialogResult.OK)
+                    {
+                        Clipboard.SetText(data.Replace("\t", ""));
+                    }
+                }
+                catch(Exception)
                 {
-                    Clipboard.SetText(data.Replace("\t", ""));
+                    MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
                 }
-
                 //Leave everything as if the user wanted to create a new password vault...
                 VaultNameTextbox.Text = VaultPassTextbox.Text = ConfirmPassVaultTextbox.Text = "";
 

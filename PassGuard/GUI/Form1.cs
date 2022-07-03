@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
-using System.Collections.Specialized;
+
 
 namespace PassGuard
 {
     public partial class mainWindow : Form
     {
-        
+
+        internal Task autobackup = null;
+
         public mainWindow()
         {
             InitializeComponent();
@@ -26,12 +28,37 @@ namespace PassGuard
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LogoPictureBox.Image = Image.FromFile(@"..\..\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder.
-            LogoPictureBox.SizeMode = PictureBoxSizeMode.Zoom; //PictureBoxSizeMode.Zoom
-            this.Icon = new Icon(@"..\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
-            SettingButton.Image = Image.FromFile(@"..\..\Images\Setting.ico"); //Loads Image for the Settings Icon
-            setConfigTheme(); //Set theme based on saved config.
-            setConfigColours(); //Set outline colours based on saved config.
+            Core.Utils utils = new Core.Utils();
+            try
+            {
+                LogoPictureBox.Image = Image.FromFile(@".\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder. //@"..\..\Images\Logo123.png"
+                LogoPictureBox.SizeMode = PictureBoxSizeMode.Zoom; //PictureBoxSizeMode.Zoom
+                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
+                SettingButton.Image = Image.FromFile(@".\Images\Setting.ico"); //Loads Image for the Settings Icon
+            }
+            catch(FileNotFoundException)
+            {
+                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+
+            try
+            {
+                setConfigTheme(); //Set theme based on saved config.
+                setConfigColours(); //Set outline colours based on saved config.
+
+                //Code for regulating AutoBackup when it is enabled and has a time frequency (every day, week or month).
+                int[] timeCodes = new int[] { 3, 4, 5 };
+            
+                if ((ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") && timeCodes.Contains(Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))))
+                {
+                    autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+                }
+            }
+            catch (ConfigurationErrorsException)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, some features like colours setups or AutoBackup could not be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                //Not controlling In32.Parse exceptions, if config works the data will always be a number in string format, it will parse it correctly.
+            }
 
         }
 
@@ -46,12 +73,14 @@ namespace PassGuard
                 lightToolStripMenuItem.Checked = false;
                 ContentPanel.BackColor = Color.FromArgb(116, 118, 117); //65, 65, 65
             }
-            else if(sAttr == "Light")
+            else if (sAttr == "Light")
             {
                 lightToolStripMenuItem.Checked = true;
                 darkToolStripMenuItem.Checked = false;
                 ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
             }
+            
+            
 
         }
 
@@ -73,6 +102,8 @@ namespace PassGuard
             MenuPanel.BackColor = Color.FromArgb(getRedMenu, getGreenMenu, getBlueMenu);
             LogoPanel.BackColor = Color.FromArgb(getRedLogo, getGreenLogo, getBlueLogo);
             OptionsPanel.BackColor = Color.FromArgb(getRedOptions, getGreenOptions, getBlueOptions);
+            
+
 
         }
 
@@ -126,7 +157,14 @@ namespace PassGuard
 
         private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories"); //Open browser with webpage.
+            try
+            {
+                System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories"); //Open browser with webpage.
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "Webpage could not be opened.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -148,138 +186,162 @@ namespace PassGuard
 
         private void changeComplemenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-
-            GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(); //Dialog to insert rgb values
-            if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
+            try
             {
-                rgb.BackColor = Color.FromArgb(116, 118, 117); //Set Color for the RGB selection popup window.
-            }
-            else if (lightToolStripMenuItem.Checked == true)
-            {
-                rgb.BackColor = Color.FromArgb(230, 230, 230); //Set Color for the RGB selection popup window.
-            }
-            rgb.ShowDialog();  //Show dialog
 
-            int redValue = rgb.getRedNUDValue(); //Get rgb values
-            int greenValue = rgb.getGreenNUDValue();
-            int blueValue = rgb.getBlueNUDValue();
-            int newRedMenu, newGreenMenu, newBlueMenu = 0; //Organise them for config file.
-            int newRedLogo, newGreenLogo, newBlueLogo = 0;
-            int newRedOptions, newGreenOptions, newBlueOptions = 0;
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
-            //Correction of rgb values if higher than 235 and lower than 32, and then set the colors of the panels
-            if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
-            {
-                newRedMenu = newGreenMenu = newBlueMenu = 245;
-                newRedLogo = newGreenLogo = newBlueLogo = 255;
-                newRedOptions = newGreenOptions = newBlueOptions = 250;
-
-                DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes) //Change config file and save values.
+                int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B };
+                GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(actualColours); //Dialog to insert rgb values
+                if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
                 {
-                    config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                    config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                    config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                    config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                    config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                    config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                    config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                    config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                    config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
-                    config.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection("appSettings");
+                    rgb.BackColor = Color.FromArgb(116, 118, 117); //Set Color for the RGB selection popup window.
                 }
+                else if (lightToolStripMenuItem.Checked == true)
+                {
+                    rgb.BackColor = Color.FromArgb(230, 230, 230); //Set Color for the RGB selection popup window.
+                }
+                rgb.ShowDialog();  //Show dialog
 
-                MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
-                LogoPanel.BackColor = Color.FromArgb(255, 255, 255); 
-                OptionsPanel.BackColor = Color.FromArgb(250, 250, 250); 
+                int redValue = rgb.getRedNUDValue(); //Get rgb values
+                int greenValue = rgb.getGreenNUDValue();
+                int blueValue = rgb.getBlueNUDValue();
+                int newRedMenu, newGreenMenu, newBlueMenu = 0; //Organise them for config file.
+                int newRedLogo, newGreenLogo, newBlueLogo = 0;
+                int newRedOptions, newGreenOptions, newBlueOptions = 0;
+
+                //Correction of rgb values if higher than 235 and lower than 32, and then set the colors of the panels
+                if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
+                {
+                    newRedMenu = newGreenMenu = newBlueMenu = 245;
+                    newRedLogo = newGreenLogo = newBlueLogo = 255;
+                    newRedOptions = newGreenOptions = newBlueOptions = 250;
+
+                    DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.Yes) //Change config file and save values.
+                    {
+                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
+                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
+                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
+                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
+                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
+                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
+                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
+                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
+                        config.Save(ConfigurationSaveMode.Modified);
+                        ConfigurationManager.RefreshSection("appSettings");
+                    }
+
+                    MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
+                    LogoPanel.BackColor = Color.FromArgb(255, 255, 255);
+                    OptionsPanel.BackColor = Color.FromArgb(250, 250, 250);
+                }
+                else //Correction of rgb values if they are too dark, so I can add 20 to diff between each panel and stil below 255.
+                {
+                    if ((redValue > 235) || (greenValue > 235) || (blueValue > 235))
+                    {
+                        if (redValue > 235)
+                        {
+                            redValue = 235;
+                        }
+                        if (greenValue > 235)
+                        {
+                            greenValue = 235;
+                        }
+                        if (blueValue > 235)
+                        {
+                            blueValue = 235;
+                        }
+                    }
+                    newRedMenu = redValue + 20;
+                    newGreenMenu = greenValue + 20;
+                    newBlueMenu = blueValue + 20;
+                    newRedLogo = redValue; //Input?
+                    newGreenLogo = greenValue;
+                    newBlueLogo = blueValue;
+                    newRedOptions = redValue + 10;
+                    newGreenOptions = greenValue + 10;
+                    newBlueOptions = blueValue + 10;
+
+                    DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.Yes)
+                    {
+                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
+                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
+                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
+                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
+                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
+                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
+                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
+                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
+                        config.Save(ConfigurationSaveMode.Modified);
+                        ConfigurationManager.RefreshSection("appSettings");
+                    }
+
+                    MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu); //43, 43, 43      
+                    LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo); //31, 31, 31    -10
+                    OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo); //-
+                }
             }
-            else if (!((redValue < 32) && (greenValue < 32) && (greenValue < 32))) //Correction of rgb values if they are too dark.
+            catch (Exception)
             {
-                if ((redValue > 235) || (greenValue > 235) || (blueValue > 235))
-                {
-                    if (redValue > 235)
-                    {
-                        redValue = 235;
-                    }
-                    if (greenValue > 235)
-                    {
-                        greenValue = 235;
-                    }
-                    if (blueValue > 235)
-                    {
-                        blueValue = 235;
-                    }
-                }
-                newRedMenu = redValue + 20;
-                newGreenMenu = greenValue + 20;
-                newBlueMenu = blueValue + 20;
-                newRedLogo = redValue;
-                newGreenLogo = greenValue;
-                newBlueLogo = blueValue;
-                newRedOptions = redValue + 10;
-                newGreenOptions = greenValue + 10;
-                newBlueOptions = blueValue + 10;
-
-                DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
-                {
-                    config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                    config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                    config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                    config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                    config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                    config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                    config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                    config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                    config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
-                    config.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection("appSettings");
-                }
-
-                MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu); //43, 43, 43      
-                LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo); //31, 31, 31    -10
-                OptionsPanel.BackColor = Color.FromArgb(newRedOptions,newGreenLogo, newBlueLogo); //-
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
             }
-            
         }
 
         private void darkToolStripMenuItem_Click(object sender, EventArgs e) //Check dark toolstrip, uncheck light one and change colors
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-
-            DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
-            if(dialog == DialogResult.Yes)
+            try
             {
-                config.AppSettings.Settings["Theme"].Value = "Dark"; //Modify data in the config file for future executions.
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+                DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    config.AppSettings.Settings["Theme"].Value = "Dark"; //Modify data in the config file for future executions.
+                    config.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection("appSettings");
+                }
+                darkToolStripMenuItem.Checked = true;
+                lightToolStripMenuItem.Checked = false;
+                ContentPanel.BackColor = Color.FromArgb(116, 118, 117);
+
             }
-            darkToolStripMenuItem.Checked = true;
-            lightToolStripMenuItem.Checked = false;
-            ContentPanel.BackColor = Color.FromArgb(116, 118, 117);
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+
         }
 
         private void lightToolStripMenuItem_Click(object sender, EventArgs e) //Check light toolstrip, uncheck dark one and change colors
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-
-            DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.Yes)
+            try
             {
-                config.AppSettings.Settings["Theme"].Value = "Light"; //Modify data in the config file for future executions.
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+                DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    config.AppSettings.Settings["Theme"].Value = "Light"; //Modify data in the config file for future executions.
+                    config.Save(ConfigurationSaveMode.Modified);
+                    ConfigurationManager.RefreshSection("appSettings");
+                }
+                lightToolStripMenuItem.Checked = true;
+                darkToolStripMenuItem.Checked = false;
+                ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
             }
-            lightToolStripMenuItem.Checked = true;
-            darkToolStripMenuItem.Checked = false;
-            ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
         }
 
         private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
         {
-            //Implement "Save Changes" Part
+            //Implement "Save Changes" Part?
             Application.Exit(); //Close Application
         }
 
@@ -317,13 +379,135 @@ namespace PassGuard
 
         private void configureAnAutoBackupOfAVaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GUI.AutoBackup ab = new GUI.AutoBackup();
-            ab.BackColor = this.ContentPanel.BackColor;
-            ab.ShowDialog();
+            try
+            {
+                Core.Utils utils = new Core.Utils();
+                var previousState = ConfigurationManager.AppSettings.Get("AutoBackupState");
+                var previousFrequency = ConfigurationManager.AppSettings.Get("FrequencyAutoBackup");
+                int[] timeCodes = new int[] { 3, 4, 5 };
+
+                GUI.AutoBackup ab = new GUI.AutoBackup(this);
+                ab.BackColor = this.ContentPanel.BackColor;
+                ab.ShowDialog();
+
+                if (ab.GetSetupSuccess())
+                {
+                    var newState = ab.GetAutoBackupState();
+                    var newVaultPath = ab.GetPathOfVaultBackedUp();
+                    var newBackupsPath = ab.GetPathForBackups();
+                    var newFrequencyAutoBackup = ab.GetFrequencyBackup();
+                    var newLastDateBackup = ab.GetLastDateBackup();
+
+                    if (newState == "false") //Your new state is AutoBackup deactivated
+                    {
+                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                        config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
+                        config.Save(ConfigurationSaveMode.Modified, true);
+                        ConfigurationManager.RefreshSection("appSettings");
+
+                        try
+                        {
+                            if ((previousState == "true") && (timeCodes.Contains(Int32.Parse(previousFrequency)))) //If your previous frequency was a time one, the task is running, so stop it. If not, the task isnt running.
+                            {
+                                autobackup.Wait(millisecondsTimeout: 12000); //Wait until changes make task finish its work.
+                                autobackup.Dispose();
+                                GC.Collect();
+                            }
+                            autobackup = null;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is ObjectDisposedException || ex is ArgumentOutOfRangeException || ex is AggregateException || ex is InvalidOperationException)
+                            {
+                                MessageBox.Show(text: "AutoBackup process could not stop.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                            }
+                        }
+
+                    }
+                    else if (newState == "true")
+                    {
+                        if (previousState == "false") //Before, AutoBackup was deactivated, so task isnt running.
+                        {
+                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                            config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
+                            config.Save(ConfigurationSaveMode.Modified, true);
+                            ConfigurationManager.RefreshSection("appSettings");
+
+                            if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup)))
+                            {
+                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+                            }
+
+                        }
+                        else if (previousState == "true")
+                        {
+                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                            config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
+                            config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
+                            config.Save(ConfigurationSaveMode.Modified, true);
+                            ConfigurationManager.RefreshSection("appSettings");
+
+                            if (timeCodes.Contains(Int32.Parse(previousFrequency)))
+                            {
+                                autobackup.Wait(millisecondsTimeout: 5000); //Wait so that changes in config reach the task and its work is updated
+                            }
+                            else
+                            {
+                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+
+                            }
+
+                        }
+                    }
 
 
+                    MessageBox.Show(text: "AutoBackup was configured successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+        }
 
+        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Core.Utils utils = new Core.Utils();
 
+            try
+            {
+                if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+                {
+                    if (2 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
+                    {
+                        if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
+                        {
+                            MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(text: "PassGuard could not access config file, Autobackup could not check state of backup.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+            }
+            
         }
     }
 }

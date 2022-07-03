@@ -70,7 +70,7 @@ namespace PassGuard.GUI
             this.TimePanel.Controls.Add(this.DateLabel);
             this.TimePanel.Controls.Add(this.TimeLabel);
             this.TimePanel.Location = new System.Drawing.Point(0, 139);
-            this.TimePanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TimePanel.Margin = new System.Windows.Forms.Padding(2);
             this.TimePanel.Name = "TimePanel";
             this.TimePanel.Size = new System.Drawing.Size(903, 159);
             this.TimePanel.TabIndex = 2;
@@ -81,7 +81,7 @@ namespace PassGuard.GUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.TimePanel);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "HomeContentUC";
             this.Size = new System.Drawing.Size(865, 434);
             this.Load += new System.EventHandler(this.HomeContentUC_Load);

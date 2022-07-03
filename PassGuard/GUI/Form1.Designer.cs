@@ -44,6 +44,7 @@ namespace PassGuard
             this.ToolTipNewPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ToolTipLoadPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ContentPanel = new System.Windows.Forms.Panel();
+            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.label1 = new System.Windows.Forms.Label();
             this.SettingsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SettingsCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -58,7 +59,6 @@ namespace PassGuard
             this.configureAnAutoBackupOfAVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
             this.MenuPanel.SuspendLayout();
             this.LogoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
@@ -256,6 +256,17 @@ namespace PassGuard
             this.ContentPanel.Size = new System.Drawing.Size(898, 441);
             this.ContentPanel.TabIndex = 4;
             // 
+            // homeContentUC1
+            // 
+            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.homeContentUC1.AutoSize = true;
+            this.homeContentUC1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.homeContentUC1.Location = new System.Drawing.Point(1, 3);
+            this.homeContentUC1.Margin = new System.Windows.Forms.Padding(2);
+            this.homeContentUC1.Name = "homeContentUC1";
+            this.homeContentUC1.Size = new System.Drawing.Size(905, 300);
+            this.homeContentUC1.TabIndex = 2;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -289,7 +300,7 @@ namespace PassGuard
             this.SettingsCMS.Name = "SettingsCMS";
             this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SettingsCMS.ShowImageMargin = false;
-            this.SettingsCMS.Size = new System.Drawing.Size(246, 175);
+            this.SettingsCMS.Size = new System.Drawing.Size(246, 153);
             // 
             // TitleSettingsToolStripMenuItem
             // 
@@ -372,17 +383,6 @@ namespace PassGuard
             this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
             this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
             // 
-            // homeContentUC1
-            // 
-            this.homeContentUC1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.homeContentUC1.AutoSize = true;
-            this.homeContentUC1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.homeContentUC1.Location = new System.Drawing.Point(1, 3);
-            this.homeContentUC1.Margin = new System.Windows.Forms.Padding(2);
-            this.homeContentUC1.Name = "homeContentUC1";
-            this.homeContentUC1.Size = new System.Drawing.Size(905, 300);
-            this.homeContentUC1.TabIndex = 2;
-            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,6 +399,7 @@ namespace PassGuard
             this.Name = "mainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PassGuard™";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MenuPanel.ResumeLayout(false);
             this.LogoPanel.ResumeLayout(false);
