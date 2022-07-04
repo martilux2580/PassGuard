@@ -11,17 +11,19 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form that saves the data of a new entry in the Vault.
     public partial class AddContent : Form
     {
-        private String url {get; set;}
+        //Attributes to save the new data.
+        private String url {get; set;} 
         private String name { get; set; }
         private String username { get; set; }
         private String password { get; set; }
         private String category { get; set; }
         private String notes { get; set; }
-        private List<String> namesInDB;
-        private bool addedSuccess;
-        private readonly byte[] Key;
+        private List<String> namesInDB; //List of names already in Vault.
+        private bool addedSuccess; //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
+        private readonly byte[] Key; //Key 
 
         public bool getAddedSuccess()
         {
@@ -66,7 +68,7 @@ namespace PassGuard.GUI
 
             Key = key;
             namesInDB = names;
-            for (int i = 0; i < namesInDB.Count; i++)
+            for (int i = 0; i < namesInDB.Count; i++) //Decrypt names
             {
                 namesInDB[i] = utils.DecryptText(key: Key, src: namesInDB[i]);
             }
@@ -110,7 +112,7 @@ namespace PassGuard.GUI
             {
                 MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
             }
-            else //No error in params, create vault.
+            else //No error in params, set params.
             {
                 url = utils.EncryptText(key: Key, src: URLTextbox.Text);
                 name = utils.EncryptText(key: Key, src: NameTextbox.Text);
@@ -119,15 +121,13 @@ namespace PassGuard.GUI
                 category = utils.EncryptText(key: Key, src: CategoryTextbox.Text);
                 notes = utils.EncryptText(key: Key, src: NotesTextbox.Text);
 
-                addedSuccess = true;
+                addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 
                 this.Close();
 
-                
             }
 
          }
-
 
     }
 }

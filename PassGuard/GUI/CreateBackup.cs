@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form to create a backup of a selected Vault in a selected dstPath
     public partial class CreateBackup : Form
     {
         private String srcPath { get; set; }
@@ -43,7 +44,7 @@ namespace PassGuard.GUI
         private void SelectVaultBackupPathButton_Click(object sender, EventArgs e)
         {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            FolderBrowserDialog fbd = new FolderBrowserDialog(); //Folder Selector
 
             // Show the FolderBrowserDialog.
             DialogResult result = fbd.ShowDialog();
@@ -61,7 +62,7 @@ namespace PassGuard.GUI
 
         private void SendButton_MouseLeave(object sender, EventArgs e)
         {
-            SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
+            SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Regular the text when mouse is in the button
         }
 
         private void SendButton_Click(object sender, EventArgs e)
@@ -73,7 +74,7 @@ namespace PassGuard.GUI
             }
             else
             {
-                if(utils.CreateBackup(srcPath: VaultPathTextbox.Text, dstPath: VaultBackupPathTextbox.Text))
+                if(utils.CreateBackup(srcPath: VaultPathTextbox.Text, dstPath: VaultBackupPathTextbox.Text)) //If utils.CreateBackup could do its job....
                 {
                     MessageBox.Show(text: "Backup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                 }
@@ -106,9 +107,9 @@ namespace PassGuard.GUI
             string filepath = "";
             string ext = ""; //File extension
             bool cancelPathSearch = false;
-            while (ext != ".encrypted" && !cancelPathSearch)
+            while (ext != ".encrypted" && !cancelPathSearch) //Search of a file until one with given extension is given, or the search is cancelled.
             {
-                OpenFileDialog ofd = new OpenFileDialog();
+                OpenFileDialog ofd = new OpenFileDialog(); //File Selector
                 ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
 
                 var result = ofd.ShowDialog();

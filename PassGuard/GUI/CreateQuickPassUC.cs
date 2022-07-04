@@ -17,17 +17,17 @@ namespace PassGuard.GUI
         public CreateQuickPassUC()
         {
             this.Anchor = AnchorStyles.None;
-            //this.Dock = DockStyle.Fill;
             InitializeComponent();
 
         }
 
-        
+        //Dictionaries containing the relation between a checkbox and the char/text it represents.
         private Dictionary<CheckBox, string> characters { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
         private Dictionary<CheckBox, string> symbols { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
 
+        //Fill the dictionary with corresponding pair CheckBox(characters)-String
         private Dictionary<CheckBox, string> fillCharDict (Dictionary<CheckBox, string> characters)
-        {   //Fill the dictionary with corresponding pair CheckBox(characters)-String
+        {   
             const string lower = "abcdefghijklmnopqrstuvwxyz";
             const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const string numbers = "0123456789";
@@ -39,8 +39,9 @@ namespace PassGuard.GUI
             return characters;
         }
 
+        //Fill the dictionary with corresponding pair CheckBox(symbols)-String
         private Dictionary<CheckBox, string> fillSymbolsDict(Dictionary<CheckBox, string> symbols)
-        {   //Fill the dictionary with corresponding pair CheckBox(symbols)-String
+        {   
             symbols.Add(CheckBoxExclamation, "!");
             symbols.Add(CheckboxDollar, "$");
             symbols.Add(CheckboxPercentage, "%");
@@ -142,6 +143,7 @@ namespace PassGuard.GUI
             }
         }
 
+        //Set all the checkboxes enable property as true or false whether check is true or false.
         private void SetEnabled(bool check)
         {
             if(check)
@@ -159,7 +161,7 @@ namespace PassGuard.GUI
             try
             {
                 Core.Utils utils = new Core.Utils();
-                SetEnabled(false);
+                SetEnabled(false); //Unset every checkbox, so that meanwhile passwords are being generated there arent any errors for clicking other buttons/checkboxes.
 
                 //Clear previous content + Add Progress in label and textbox.
                 PercentageLabel.Text = "0% complete, 0/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
@@ -353,12 +355,11 @@ namespace PassGuard.GUI
             }
             catch (Exception)
             {
-                PasswordTextBox.Text = "";
                 MessageBox.Show(text: "PassGuard could not generate the requested passwords, please try again later", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
             }
             finally
             {
-                SetEnabled(true);
+                SetEnabled(true); //Re-enable checkboxes
             }
         }
 
@@ -410,7 +411,7 @@ namespace PassGuard.GUI
         {
             if(CheckPwnageCheckbox.Checked == true)
             {
-                PassLengthNUD.Minimum = 14; //Set minimum (longer) length when Checkbox is checked.
+                PassLengthNUD.Minimum = 16; //Set minimum (longer) length when Checkbox is checked.
                 PassLengthNUD.Value = PassLengthNUD.Minimum;
             }
 

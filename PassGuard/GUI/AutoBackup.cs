@@ -13,17 +13,16 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form to configure an AutoBackup of a selected Vault in a selected pathForBackups and with selected frequency.
     public partial class AutoBackup : Form
     {
         private Dictionary<int, String> frequencies = new Dictionary<int, String>();
-        private String AutoBackupState;
-        private String pathOfVaultBackedUp;
-        private String pathForBackups;
-        private String lastDateBackup;
-        private String frequencyBackup;
+        private String AutoBackupState; //AutoBackup true (activated) or false
+        private String pathOfVaultBackedUp; //Path of the Vault to be backed up.
+        private String pathForBackups; //Path where the Backups will be saved.
+        private String lastDateBackup; //Date when the last backup was made (more oriented to modes 3, 4, 5).
+        private String frequencyBackup; //Mode for the frequency
         private bool setupSuccess;
-
-        private Form mainWindow;
 
         public bool GetSetupSuccess()
         {
@@ -58,7 +57,6 @@ namespace PassGuard.GUI
         public AutoBackup(Form MainWindow)
         {
             InitializeComponent();
-            mainWindow = MainWindow;
             try
             {
                 SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
@@ -82,6 +80,7 @@ namespace PassGuard.GUI
 
         }
 
+        //Loads the values saved from previous configurations of AutoBackup
         private void SetupInitialValues()
         {
             if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "false")
@@ -118,6 +117,7 @@ namespace PassGuard.GUI
 
         }
 
+        //Add to Dictionary the equivalence of int mode - String text description of frequency
         private void SetupFrequencyCombobox()
         {
             FrequencyCombobox.Items.Add("");
@@ -139,15 +139,15 @@ namespace PassGuard.GUI
         private void SetupAutoBackupButton_Click(object sender, EventArgs e)
         {
             Core.Utils utils = new Core.Utils();
-            if (ActivateBackupCheckbox.Checked == false)
+            if (ActivateBackupCheckbox.Checked == false) //It it was deactivated...
             {
                 AutoBackupState = "false";
-                pathOfVaultBackedUp = VaultPathTextbox.Text; //""
+                pathOfVaultBackedUp = VaultPathTextbox.Text; //Empty string
                 pathForBackups = BackupPathFilesTextbox.Text;
-                lastDateBackup = DateTime.Now.ToString(); //If it is the very first time, no value will be saved in config, with this we set a value
+                lastDateBackup = DateTime.Now.ToString(); //If it is the very first time we set AutoBackup, no value will be saved in config, with this we set a value and prevent errors.
                 frequencyBackup = "0";
 
-                setupSuccess = true;
+                setupSuccess = true; //Everything was set correctly, activate signal for Form1
 
                 this.Close();
 
@@ -165,25 +165,23 @@ namespace PassGuard.GUI
                     MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 
                 }
-                else
+                else //Activated Autobackup
                 {
                     AutoBackupState = "true";
                     pathOfVaultBackedUp = VaultPathTextbox.Text; 
                     pathForBackups = BackupPathFilesTextbox.Text;
                     lastDateBackup = DateTime.Now.ToString(); 
-                    frequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString();
+                    frequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString(); //String value of int mode of the frequency.
 
-                    setupSuccess = true;
+                    setupSuccess = true; //Everything was set correctly, activate signal for Form1
 
                     this.Close();
-                                   
 
                 }
             }
-            
 
-            
         }
+
         private void ActivateBackupCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if(ActivateBackupCheckbox.Checked == true)
@@ -224,7 +222,7 @@ namespace PassGuard.GUI
             bool cancelPathSearch = false;
             while (ext != ".encrypted" && !cancelPathSearch)
             {
-                OpenFileDialog ofd = new OpenFileDialog();
+                OpenFileDialog ofd = new OpenFileDialog(); //File Selector
                 ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
 
                 var result = ofd.ShowDialog();
@@ -246,7 +244,7 @@ namespace PassGuard.GUI
         private void SelectVaultBackupFilesPathButton_Click(object sender, EventArgs e)
         {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            FolderBrowserDialog fbd = new FolderBrowserDialog(); //Folder selector
 
             // Show the FolderBrowserDialog.
             DialogResult result = fbd.ShowDialog();

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form to edit the data of a Password in the Vault (Similar to other UC...)
     public partial class EditContent : Form
     {
         private String url { get; set; }
@@ -21,16 +22,16 @@ namespace PassGuard.GUI
         private String category { get; set; }
         private String notes { get; set; }
 
-        private List<String> namesInDB;
+        private List<String> namesInDB; //Names already in the Vault
         private readonly byte[] Key;
         private readonly String decPath;
         private bool editedSuccess;
         private String nameToBeEdited;
-        private readonly Dictionary<String, String> map; //No duplicate keys, (enc, dec)
+        private readonly Dictionary<String, String> map; //No duplicate keys, EncryptedName/DecryptedName
 
         internal String getHashofName(String name)
         {
-            return map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
+            return map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Return the key, given the value.
         }
         
         public bool getEditedSuccess()
@@ -81,13 +82,13 @@ namespace PassGuard.GUI
 
             namesInDB = names;
             map = new Dictionary<string, string>();
-            foreach(String enc in namesInDB)
+            foreach(String enc in namesInDB) //Create dictionary with encrypted name, decrypted name.
             {
                 map.Add(enc, utils.DecryptText(key: Key, src: enc));
             }
 
             NameCombobox.Items.Add("");
-            foreach (String name in namesInDB)
+            foreach (String name in namesInDB) //Decrypt names in DB.
             {
                 NameCombobox.Items.Add(utils.DecryptText(key: Key, src: name));
             }
@@ -113,6 +114,8 @@ namespace PassGuard.GUI
                 errorMessages += "Non-optional fields (Name, Username, Password) cannot be left blank.";
             }
 
+            //If the list of decrypted names contains the name in the textbox, and it is a different name from the one selected in the combobox, there is an error.
+            //We can edit a password and maintain the name, but what we cannot do is select a name in the combobox and change the name to a name that is already in the Vault.
             if ((map.Values.ToList<String>().Contains(NameTextbox.Text)) && (NameTextbox.Text != NameCombobox.Text))
             {
                 errorMessages += "There is already a saved password with that name in the vault.";
@@ -124,7 +127,7 @@ namespace PassGuard.GUI
             }
             else //No error in params, create vault.
             {
-                nameToBeEdited = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
+                nameToBeEdited = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Get encrypted name of the values to be edited.
 
                 url = utils.EncryptText(key: Key, src: URLTextbox.Text);
                 name = utils.EncryptText(key: Key, src: NameTextbox.Text);
@@ -146,7 +149,7 @@ namespace PassGuard.GUI
         {
             Core.Utils utils = new Core.Utils();
 
-            if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text)))
+            if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text))) //Fetch the data of the name selected.
             {
                 List<String[]> fullResults = new List<String[]>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
@@ -182,6 +185,7 @@ namespace PassGuard.GUI
                     }
                 }
 
+                //Set values in textboxes
                 URLTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][0]);
                 NameTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][1]);
                 UsernameTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][2]);

@@ -26,11 +26,13 @@ using System.Threading;
 
 namespace PassGuard.Core
 {
+    //Class with many not UI-related methods.
     class Utils
     {
+        //Returns the SHA1 equivalent of a String password
         internal string ComputeSHA1(string password)
         {
-            if (String.IsNullOrEmpty(password))
+            if (String.IsNullOrEmpty(password)) //This if for controlling errors...
             {
                 return null;
             }
@@ -61,17 +63,19 @@ namespace PassGuard.Core
             HttpClient client = new HttpClient();
             try
             {
-                string response = await client.GetStringAsync(url);
+                //HTTP request to the API and await for the list of hashes and their appearances in the API....
+                string response = await client.GetStringAsync(url); 
                 return response;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException) //Error control
             {
                 return "";
             }
             
         }
 
-        internal async Task<bool> CheckPwnage(string password)//Password pwned before? -> returns true, Password not pwned before? -> returns false
+        //Compound the SHA1 of password, get all the hashes with a headhash, and if the compound is in the hashes returns true as password has been pwned, if not returns false
+        internal async Task<bool> CheckPwnage(string password)
         {
             string hash = ComputeSHA1(password); //Compute SHA1
             string headhash = hash.Substring(0, 5); //Compute first part of hash in order to check hashes.
@@ -97,7 +101,7 @@ namespace PassGuard.Core
             StringBuilder res = new StringBuilder();
             using (RNGCryptoServiceProvider cryptoProvider = new RNGCryptoServiceProvider())
             {
-                while (res.Length != length)
+                while (res.Length != length) //Compound passwords byte-a-byte
                 {
                     byte[] oneByte = new byte[1];
                     cryptoProvider.GetBytes(oneByte);
@@ -112,7 +116,7 @@ namespace PassGuard.Core
             return res.ToString();
         }
 
-        //Function to check if a string has Lower, Upper, Number or Symbol characters, based on those modes.
+        //Function to check if a string has Lower, Upper, Number or Symbol characters, based on those modes (Lower, Upper, Number, Symbol).
         internal bool Check(String str, String mode)
         {
             switch (mode)
@@ -157,13 +161,13 @@ namespace PassGuard.Core
             {
                 if (key != null)
                 {
-                    provider.Key = key;
+                    provider.Key = key; //Set key
                 }
 
                 using (var cryptoTransform = provider.CreateEncryptor())
                 using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransform, CryptoStreamMode.Write))
                 {
-                    destinationStream.Write(provider.IV, 0, provider.IV.Length);
+                    destinationStream.Write(provider.IV, 0, provider.IV.Length); //Writes a block of bytes from offset 0 to the length.
                     sourceStream.CopyTo(cryptoStream);
                 }
             }
@@ -174,7 +178,6 @@ namespace PassGuard.Core
         {
             Rfc2898DeriveBytes d1 = new Rfc2898DeriveBytes(password, salt, iterations: 100100);
             return d1.GetBytes(32); //256bit key.
-
         }
 
         //Function to decrypt a src file into a dst file given a key with AES.
@@ -195,6 +198,12 @@ namespace PassGuard.Core
             }
         }
 
+        //Encrypt/Decrypt need key and salt.
+        //EncryptText/DecryptText need key and IV.
+            //If we encrypt the same text two times, diff ciphertext will be returned due to random IV.
+            //Not sure what happens if we encrypt with same key and salt two times the same file.
+
+        //Encrypt a src text with a key using AES, IV is prepended initially.
         internal String EncryptText(byte[] key, String src)
         {
             try
@@ -211,7 +220,7 @@ namespace PassGuard.Core
 
                     provider.Mode = CipherMode.CBC;
 
-                    // Create the streams used for encryption. 
+                    //Create the streams used for encryption. 
                     using (var encryptor = provider.CreateEncryptor(provider.Key, provider.IV))
                     using (var msEncrypt = new MemoryStream())
                     {
@@ -230,7 +239,7 @@ namespace PassGuard.Core
                 Array.Copy(IV, 0, combinedIvCt, 0, IV.Length);
                 Array.Copy(encrypted, 0, combinedIvCt, IV.Length, encrypted.Length);
 
-                // Return the encrypted bytes from the memory stream. 
+                //Return the encrypted bytes from the memory stream. 
                 return Convert.ToBase64String(combinedIvCt);
             }
             catch (Exception)
@@ -239,17 +248,16 @@ namespace PassGuard.Core
             }
         }
 
+        //Decrypts a src text with a key, separating IV from ciphertext.
         internal String DecryptText(byte[] key, String src)
         {
             try
             {
-                // Declare the string used to hold 
-                // the decrypted text. 
+                //Declare the string used to hold the decrypted text. 
                 string plaintext = null;
                 byte[] cipherTextCombined = Convert.FromBase64String(src);
 
-                // Create an Aes object 
-                // with the specified key and IV. 
+                //Create an Aes object with the specified key and IV. 
                 using (var provider = new AesCryptoServiceProvider())
                 {
                     provider.Key = key;
@@ -264,71 +272,73 @@ namespace PassGuard.Core
 
                     provider.Mode = CipherMode.CBC;
 
-                    // Create a decrytor to perform the stream transform.
+                    //Create a decrytor to perform the stream transform.
                     ICryptoTransform decryptor = provider.CreateDecryptor(provider.Key, provider.IV);
 
-                    // Create the streams used for decryption. 
+                    //Create the streams used for decryption. 
                     using (var msDecrypt = new MemoryStream(cipherText))
                     using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     using (var srDecrypt = new StreamReader(csDecrypt))
                     {
-
-                        // Read the decrypted bytes from the decrypting stream
-                        // and place them in a string.
+                        //Read the decrypted bytes from the decrypting stream and place them in a string.
                         plaintext = srDecrypt.ReadToEnd();
                     }
                 }
-
                 return plaintext;
             }
-            catch (Exception)
+            catch (Exception) //If error, return decrypted string.
             {
                 return src;
             }
 
         }
 
+        //Returns a String in Default Encoding given a src string in base64.
         internal String Base64ToString(String src)
         {
             var base64EncodedBytes = Convert.FromBase64String(src);
             return Encoding.Default.GetString(base64EncodedBytes);
         }
 
+        //Create a PDF given the results of all the rows, name of Vault, Email and SK.
         internal void CreatePDF(List<String[]> results, String Vault, String Email, String sk)
         {
-            var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".pdf";
+            var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".pdf"; //Name of file
             if (!File.Exists(pdfLocation))
             {
                 var file = File.Create(pdfLocation);
-                file.Close();
+                file.Close(); //Close so Create is not using the file.
 
                 PdfWriter writer = new PdfWriter(pdfLocation);
                 PdfDocument pdf = new PdfDocument(writer);
                 Document doc = new Document(pdf);
                 doc.SetMargins(8, 8, 8, 8);
 
-                var title = new Paragraph("PassGuard: Vault Content").SetBold().SetFontSize(15);
+                var title = new Paragraph("PassGuard: Vault Content").SetBold().SetFontSize(15); //Title
                 title.SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
                 doc.Add(title);
 
-                var intro = new Paragraph("Date: " + DateTime.Now.ToString("D", new CultureInfo("en-US")) + ":").SetFontSize(12); //CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DateTime.Now.ToLongDateString())
+                var intro = new Paragraph("Date: " + DateTime.Now.ToString("D", new CultureInfo("en-US")) + ", " + DateTime.Now.ToString("HH:mm:ss")).SetFontSize(12); //Date
                 intro.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
                 intro.SetFixedLeading(14);
                 intro.SetMarginBottom(0f);
                 doc.Add(intro);
 
+                //Data of Vault
                 var intro2 = new Paragraph("Vault Name: " + Vault + "\nVault Filename: " + Vault + ".encrypted" + "\nPassGuard Saved Email: " + Email + "\nPassGuard Saved Security Key (SK): " + sk).SetFontSize(12);
                 intro2.SetPaddingLeft(40f);
                 intro2.SetFixedLeading(14);
                 intro2.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
                 doc.Add(intro2);
 
+                //Note
                 var note = new Paragraph("Note: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored the day the backup was done.").SetFontSize(8);
                 note.SetMarginTop(0f);
                 note.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
                 note.SetMarginBottom(16f);
                 doc.Add(note);
 
+                //Table with headers
                 Table content = new Table(numColumns: 6).UseAllAvailableWidth();
                 content.SetWidth(UnitValue.CreatePercentValue(100));
                 content.SetFixedLayout();
@@ -346,6 +356,7 @@ namespace PassGuard.Core
 
                 doc.Add(content);
 
+                //Table with content
                 Table content2 = new Table(numColumns: 6).UseAllAvailableWidth();
                 content2.SetWidth(UnitValue.CreatePercentValue(100));
                 content2.SetFixedLayout();
@@ -368,6 +379,7 @@ namespace PassGuard.Core
             else { MessageBox.Show(text: "There is already a file with the name of the PDF. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
         }
 
+        //Create a backup located in srcPath in dstPath
         internal bool CreateBackup(String srcPath, String dstPath)
         {
             var tempSplit = srcPath.Split('\\');
@@ -385,7 +397,6 @@ namespace PassGuard.Core
                 {
                     return false;
                 }
-
             }
             else
             {
@@ -393,7 +404,8 @@ namespace PassGuard.Core
             }
         }
 
-        //Infinite method
+        //Infinite method for checking AutoBackup if its range is every day/week/month
+        //If enough time have passed since lastDate of backup, create a backup. Keep checking everytime if it is time to create a backup.
         internal void AutoBackupTime()
         {
             Core.Utils utils = new Core.Utils();
@@ -410,7 +422,7 @@ namespace PassGuard.Core
                     switch (Int32.Parse(mode))
                     {
                         case 3:
-                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 15)
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalDays >= 1) //Difference between last backup and now is +1day
                             {
                                 if (File.Exists(pathVault) && Directory.Exists(dstPath))
                                 {
@@ -426,7 +438,6 @@ namespace PassGuard.Core
                                     {
                                         MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                                         Thread.Sleep(30000);
-
                                     }
                                 }
                                 else
@@ -437,7 +448,7 @@ namespace PassGuard.Core
                             }
                             break;
                         case 4:
-                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 30)
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalDays >= 7) //Difference between last backup and now is +1week
                             {
                                 if (File.Exists(pathVault) && Directory.Exists(dstPath))
                                 {
@@ -457,7 +468,6 @@ namespace PassGuard.Core
                                         ConfigurationManager.RefreshSection("appSettings");
                                         MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                                         Thread.Sleep(30000);
-
                                     }
                                 }
                                 else
@@ -468,7 +478,7 @@ namespace PassGuard.Core
                             }
                             break;
                         case 5:
-                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalSeconds >= 45)
+                            if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalDays >= 30) //Difference between last backup and now is +1month
                             {
                                 if (File.Exists(pathVault) && Directory.Exists(dstPath))
                                 {
@@ -484,7 +494,6 @@ namespace PassGuard.Core
                                     {
                                         MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later. \nThis message will be shown every 30 seconds until the issue is solved or AutoBackup is deactivated.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                                         Thread.Sleep(30000);
-
                                     }
                                 }
                                 else
@@ -498,14 +507,11 @@ namespace PassGuard.Core
                             break;
                     }
                 }
-                else if (active == "false")
+                else if (active == "false") //Signal to stop this method in the Task
                 {
                     break;
                 }
             }
-
-
-
         }
 
     }

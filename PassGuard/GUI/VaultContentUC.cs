@@ -14,15 +14,16 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //UC Component that shows the table with the content of your Vault and more components to manage the data of it.
     public partial class VaultContentUC : UserControl
     {
-        private enum Order
+        private enum Order //Enum for the order of each column
         {
             Normal,
             Asc,
             Desc
         }
-        private enum DBColumns
+        private enum DBColumns //Enum for the valid names 
         {
             NULLVALUESS,
             Url,
@@ -32,12 +33,12 @@ namespace PassGuard.GUI
             Category,
             Notes
         }
-        private List<DataRowUC> DataRowUCList = new List<DataRowUC>();
+        private List<DataRowUC> DataRowUCList = new List<DataRowUC>(); //List of DataRows with the data of the passwords.
         private String encryptedVaultPath;
         private readonly String vaultEmail;
         private readonly String vaultPass;
-        private readonly byte[] vKey;
-        private readonly byte[] cKey;
+        private readonly byte[] vKey; //Vault
+        private readonly byte[] cKey; //Content
 
         public VaultContentUC(String path, String email, String pass, byte[] key, String SK)
         {
@@ -49,16 +50,19 @@ namespace PassGuard.GUI
             vaultPass = pass;
             vKey = key;
 
+            //Calculate cKey
             var keyVStr = utils.Base64ToString(Convert.ToBase64String(vKey));
             var skStr = utils.Base64ToString(SK);
             cKey = utils.getVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
 
+            //Load the content of the Vault without any column order, and set the CMS for the orders.
             LoadContent(Order.Normal, DBColumns.NULLVALUESS);
             SetCMS();
             
 
         }
 
+        //Sets the contents for the CMS of each header button (except SitePassword)
         private void SetCMS()
         {
             var titleURL = new ToolStripLabel("ORDER BY URL");
@@ -97,24 +101,24 @@ namespace PassGuard.GUI
         {
             Core.Utils utils = new Core.Utils();
 
+            //Set Path for encrypted Vault (for the Path.Combine())
             String[] saveEncryptedVaultPath = encryptedVaultPath.Split('\\');
             saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
 
-            String[] lastValue = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.');
-            lastValue[lastValue.Length - 1] = "db3";
-            var encVault = Path.Combine(saveEncryptedVaultPath);
-            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+            String[] lastValue = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.'); //[filename, filextension]
+            lastValue[lastValue.Length - 1] = "db3"; //FileExtension
+            var encVault = Path.Combine(saveEncryptedVaultPath); //Set path for encrypted vault.
+            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])); //Set path for decrypted vault.
 
-            utils.Decrypt(key: vKey, src: encVault, dst: decVault);
+            utils.Decrypt(key: vKey, src: encVault, dst: decVault); //Decrypt Vault
 
             //Obtain all the contents of the vault.
-
-            if ((order != Order.Normal) && (col!= DBColumns.NULLVALUESS))
+            if ((order != Order.Normal) && (col!= DBColumns.NULLVALUESS)) //If order diff from normal, we have to order. If col diff from NULLVALUESS we have to order.
             {
-                List<String> fullResults = new List<String>();
+                List<String> fullResults = new List<String>(); //Get all the values from the column the user wants to order
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT " + col.ToString() + " FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT " + col.ToString() + " FROM Vault;", m_dbConnection)) //Associate request with connection to vault.
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -139,10 +143,11 @@ namespace PassGuard.GUI
 
                 }
                 Dictionary<String, String> map = new Dictionary<string, string>();
-                foreach(String allColumnData in fullResults) 
+                foreach(String allColumnData in fullResults) //Map the values of the column the user wants to order with its decrypted text.
                 {
                     map.Add(allColumnData, utils.DecryptText(key: cKey, src: allColumnData));
                 }
+                //Sort the values of that dictionary (decrypted values of the column) as the user wants. Nullvalues will go first in ascending order, last in descending order.
                 var ColList = map.Values.ToList<String>();
                 List<String> sortedList = new List<string>();
                 if(order == Order.Asc) 
@@ -156,14 +161,14 @@ namespace PassGuard.GUI
                 }
 
                 String[] orderedRow = new String[6];
-                DataRowUCList.Clear();
+                DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
                     {
-                        var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key;
+                        var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
                         var sql = "SELECT * FROM Vault WHERE " + col.ToString() + " = @col1;";
                         using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
@@ -186,10 +191,10 @@ namespace PassGuard.GUI
 
                             commandExec.Dispose(); //Delete object so it is no longer using the file.
 
-                            DataRowUC data = new DataRowUC(orderedRow.ToList<String>(), cKey);
+                            DataRowUC data = new DataRowUC(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
 
-                            DataRowUCList.Add(data);
-                            map.Remove(keyToSearch);
+                            DataRowUCList.Add(data); //Add it to the list.
+                            map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
 
                         }
 
@@ -202,14 +207,14 @@ namespace PassGuard.GUI
                     m_dbConnection.Dispose();
                 }
 
-                ContentFlowLayoutPanel.Controls.Clear();
-                foreach (DataRowUC row in DataRowUCList)
+                ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
+                foreach (DataRowUC row in DataRowUCList) 
                 {
-                    ContentFlowLayoutPanel.Controls.Add(row);
+                    ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
                 }
 
             }
-            else if (order == Order.Normal)
+            else if (order == Order.Normal) //Order is normal, or it is first time loading content in the table...
             {
                 List<String[]> fullResults = new List<String[]>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
@@ -240,23 +245,23 @@ namespace PassGuard.GUI
                 }
 
                 ContentFlowLayoutPanel.Controls.Clear();
-                DataRowUCList.Clear();
+                DataRowUCList.Clear(); //Clear previous content in the list and in the table.
                 Random rnd = new Random();
                 foreach (String[] row in fullResults)
                 {
-                    DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
+                    DataRowUC data = new DataRowUC(row.ToList<String>(), cKey); //Create row and add it to list.
 
                     DataRowUCList.Add(data);
                 }
 
                 foreach (DataRowUC row in DataRowUCList)
                 {
-                    ContentFlowLayoutPanel.Controls.Add(row);
+                    ContentFlowLayoutPanel.Controls.Add(row); //Add datarows to table.
                 }
             }
 
-            utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
-            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+            utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); //Encrypt Vault
+            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])); //Delete decrypted vault
 
         }
 
@@ -290,7 +295,7 @@ namespace PassGuard.GUI
             Core.Utils utils = new Core.Utils();
 
             String[] lastvalue = encryptedVaultPath.Split('\\');
-            var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+            var vaultpath = lastvalue[lastvalue.Length - 1].Split('.'); //Path for decryption
             try
             {
                 utils.Decrypt(vKey, encryptedVaultPath, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")));
@@ -298,7 +303,7 @@ namespace PassGuard.GUI
                 List<String> names = new List<String>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Fetch names already in Vault
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -323,7 +328,7 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.AddContent add = new GUI.AddContent(names, cKey);
+                GUI.AddContent add = new GUI.AddContent(names, cKey); //Invoke Form and retrieve new data
                 add.BackColor = this.Parent.BackColor;
                 add.ShowDialog();
 
@@ -340,7 +345,7 @@ namespace PassGuard.GUI
                     using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                     using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
-                        var sql = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@url1, @name2, @username3, @sitepassword4, @category5, @notes6);";
+                        var sql = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@url1, @name2, @username3, @sitepassword4, @category5, @notes6);"; //Insert value
                         using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
@@ -355,7 +360,7 @@ namespace PassGuard.GUI
 
                             commandExec.ExecuteNonQuery(); //Execute request.
 
-                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Get everything from Vault in order to display it.
                             {
                                 commandRetrieveAll.ExecuteNonQuery(); //Execute request.
 
@@ -383,28 +388,29 @@ namespace PassGuard.GUI
                         }
                     }
 
-                    ContentFlowLayoutPanel.Controls.Clear();
+                    ContentFlowLayoutPanel.Controls.Clear(); //Clear contents from table and list of datarows
                     DataRowUCList.Clear();
                     foreach (String[] row in fullResults)
                     {
-                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
+                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey); //Add data rows to list
 
                         DataRowUCList.Add(data);
                     }
 
                     foreach (DataRowUC row in DataRowUCList)
                     {
-                        ContentFlowLayoutPanel.Controls.Add(row);
+                        ContentFlowLayoutPanel.Controls.Add(row); //Add new values to the table.
                     }
                 }
 
-                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath);
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete decryption
             
-                if (add.getAddedSuccess())
+                if (add.getAddedSuccess()) //If autobackup is enabled after each change in the Vault, create backup
                 {
                     if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
                     {
+                        //Check the change in current vault is the vault autobackup has configured to be backed up.
                         if (String.Equals(a:Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
@@ -439,7 +445,7 @@ namespace PassGuard.GUI
             }
             finally
             {
-                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //If error occurred and state is compromised, delete changes in Vault.
                 {
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
                 }
@@ -453,7 +459,7 @@ namespace PassGuard.GUI
 
             String[] lastvalue = encryptedVaultPath.Split('\\');
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
-            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Path of decrypted Vault
             try
             {
                 utils.Decrypt(vKey, encryptedVaultPath, decVault);
@@ -461,7 +467,7 @@ namespace PassGuard.GUI
                 List<String> names = new List<String>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Get names already in DB-
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -486,17 +492,17 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.DeleteContent del = new GUI.DeleteContent(names, cKey, decVault); //names, cKey, decVault
+                GUI.DeleteContent del = new GUI.DeleteContent(names, cKey, decVault); //Invoke delete form and get data for deletion of one row or all database.
                 del.BackColor = this.Parent.BackColor;
                 del.ShowDialog();
 
-                if (del.getDeletedSuccess())
+                if (del.getDeletedSuccess()) //If valid data is for deleting one row.
                 {
                     List<String[]> fullResults = new List<String[]>();
                     using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                     using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
-                        var sql = "DELETE FROM Vault WHERE Name = @name1;";
+                        var sql = "DELETE FROM Vault WHERE Name = @name1;"; //Delete the row
                         using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
@@ -534,27 +540,29 @@ namespace PassGuard.GUI
                         }
                     }
 
+                    //Clear table and lists
                     ContentFlowLayoutPanel.Controls.Clear();
                     DataRowUCList.Clear();
+                    //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
                         DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
-
+                    //Add datarows to table.
                     foreach (DataRowUC row in DataRowUCList)
                     {
                         ContentFlowLayoutPanel.Controls.Add(row);
                     }
                 }
-                else if (del.getDeletedAllSuccess())
+                else if (del.getDeletedAllSuccess()) //If valid data is for deleting all contents in the Vault.
                 {
                     List<String[]> fullResults = new List<String[]>();
                     using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                     using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
-                        using (SQLiteCommand commandExec = new SQLiteCommand("DELETE FROM Vault", m_dbConnection)) //Associate request with connection to vault.)
+                        using (SQLiteCommand commandExec = new SQLiteCommand("DELETE FROM Vault", m_dbConnection)) //Delete everything from Vault.
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                             commandExec.ExecuteNonQuery(); //Execute request.
@@ -586,29 +594,31 @@ namespace PassGuard.GUI
 
                         }
                     }
-
+                    //Clear data from table and lists
                     ContentFlowLayoutPanel.Controls.Clear();
                     DataRowUCList.Clear();
+                    //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
                         DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
-
+                    //Add datarows to table.
                     foreach (DataRowUC row in DataRowUCList)
                     {
                         ContentFlowLayoutPanel.Controls.Add(row);
                     }
                 }
 
-                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath);
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-                if (del.getDeletedSuccess() || del.getDeletedAllSuccess())
+                if (del.getDeletedSuccess() || del.getDeletedAllSuccess()) 
                 {
-                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") //If autobackup was set for every change in the Vault
                     {
+                        //If the Vault we are making changes is the same vault set to autobackup, and the mode is 1, do autobackup.
                         if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
@@ -643,7 +653,7 @@ namespace PassGuard.GUI
             }
             finally
             {
-                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old files in case of errors
                 {
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
                 }
@@ -656,7 +666,7 @@ namespace PassGuard.GUI
             Core.Utils utils = new Core.Utils();
             String[] lastvalue = encryptedVaultPath.Split('\\');
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
-            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+            var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Decrypt vault path
 
             try
             {
@@ -665,7 +675,7 @@ namespace PassGuard.GUI
                 List<String> names = new List<String>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Fetch all names already in Vault
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -690,7 +700,7 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.EditContent edit = new GUI.EditContent(names, cKey, decVault);
+                GUI.EditContent edit = new GUI.EditContent(names, cKey, decVault); //Invoke edit form and retrieve data
                 edit.BackColor = this.Parent.BackColor;
                 edit.ShowDialog();
 
@@ -707,7 +717,7 @@ namespace PassGuard.GUI
                     using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                     using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
-                        var sql = "UPDATE Vault SET Url = @url1, Name = @name2, Username = @username3, SitePassword = @sitepassword4, Category = @category5, Notes = @notes6 WHERE Name = @nameedit7;";
+                        var sql = "UPDATE Vault SET Url = @url1, Name = @name2, Username = @username3, SitePassword = @sitepassword4, Category = @category5, Notes = @notes6 WHERE Name = @nameedit7;"; //Update row
                         using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
@@ -750,29 +760,31 @@ namespace PassGuard.GUI
 
                         }
                     }
-
+                    //Clear table and lists
                     ContentFlowLayoutPanel.Controls.Clear();
                     DataRowUCList.Clear();
+                    //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
                         DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
-
+                    //Add datarows to table.
                     foreach (DataRowUC row in DataRowUCList)
                     {
                         ContentFlowLayoutPanel.Controls.Add(row);
                     }
                 }
 
-                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath);
-                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+                File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
                 if (edit.getEditedSuccess())
                 {
-                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") //If autobackup was set to every change in the Vault....
                     {
+                        //If the Vault we are making changes is the same vault set to autobackup, and the mode is 1, do autobackup.
                         if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
@@ -807,7 +819,7 @@ namespace PassGuard.GUI
             }
             finally
             {
-                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old data in case of errors
                 {
                     File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
                 }
@@ -838,6 +850,7 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Normal, DBColumns.Url);
 
                 URLNormalToolStripMenuItem.Checked = true;
@@ -874,10 +887,11 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Asc, DBColumns.Url);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
+                URLNormalToolStripMenuItem.Checked = false;
+                URLAscendingToolStripMenuItem.Checked = true;
                 URLDescendingToolStripMenuItem.Checked = false;
             }
             catch (Exception ex)
@@ -910,11 +924,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Desc, DBColumns.Url);
 
-                URLNormalToolStripMenuItem.Checked = true;
+                URLNormalToolStripMenuItem.Checked = false;
                 URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                URLDescendingToolStripMenuItem.Checked = true;
             }
             catch (Exception ex)
             {
@@ -946,11 +961,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Normal, DBColumns.Name);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NameNormalCMS.Checked = true;
+                NameAscendingCMS.Checked = false;
+                NameDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -982,11 +998,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Asc, DBColumns.Name);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NameNormalCMS.Checked = false;
+                NameAscendingCMS.Checked = true;
+                NameDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1019,11 +1036,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Desc, DBColumns.Name);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NameNormalCMS.Checked = false;
+                NameAscendingCMS.Checked = false;
+                NameDescendingCMS.Checked = true;
             }
             catch (Exception ex)
             {
@@ -1056,11 +1074,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Normal, DBColumns.Username);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                UsernameNormalCMS.Checked = true;
+                UsernameAscendingCMS.Checked = false;
+                UsernameDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1092,11 +1111,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Asc, DBColumns.Username);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                UsernameNormalCMS.Checked = false;
+                UsernameAscendingCMS.Checked = true;
+                UsernameDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1128,11 +1148,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Desc, DBColumns.Username);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                UsernameNormalCMS.Checked = false;
+                UsernameAscendingCMS.Checked = false;
+                UsernameDescendingCMS.Checked = true;
             }
             catch (Exception ex)
             {
@@ -1164,11 +1185,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Normal, DBColumns.Category);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                CategoryNormalCMS.Checked = true;
+                CategoryAscendingCMS.Checked = false;
+                CategoryDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1200,11 +1222,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Asc, DBColumns.Category);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                CategoryNormalCMS.Checked = false;
+                CategoryAscendingCMS.Checked = true;
+                CategoryDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1237,11 +1260,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Desc, DBColumns.Category);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                CategoryNormalCMS.Checked = false;
+                CategoryAscendingCMS.Checked = false;
+                CategoryDescendingCMS.Checked = true;
             }
             catch (Exception ex)
             {
@@ -1274,11 +1298,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Normal, DBColumns.Notes);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NotesNormalCMS.Checked = true;
+                NotesAscendingCMS.Checked = false;
+                NotesDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1311,11 +1336,12 @@ namespace PassGuard.GUI
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             try
             {
+                //Load the ordered content depending on column and order, and set toolstrip check property.
                 LoadContent(Order.Asc, DBColumns.Notes);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NotesNormalCMS.Checked = false;
+                NotesAscendingCMS.Checked = true;
+                NotesDescendingCMS.Checked = false;
             }
             catch (Exception ex)
             {
@@ -1349,9 +1375,9 @@ namespace PassGuard.GUI
             {
                 LoadContent(Order.Desc, DBColumns.Notes);
 
-                URLNormalToolStripMenuItem.Checked = true;
-                URLAscendingToolStripMenuItem.Checked = false;
-                URLDescendingToolStripMenuItem.Checked = false;
+                NotesNormalCMS.Checked = false;
+                NotesAscendingCMS.Checked = false;
+                NotesDescendingCMS.Checked = true;
             }
             catch (Exception ex)
             {
@@ -1398,7 +1424,7 @@ namespace PassGuard.GUI
                 List<String[]> fullResults = new List<String[]>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
                 using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Get everything in order to write it in PDF.
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -1423,6 +1449,7 @@ namespace PassGuard.GUI
 
                 }
 
+                //Decrypt data.
                 foreach (String[] row in fullResults)
                 {
                     row[0] = utils.DecryptText(key: cKey, src: row[0]);
@@ -1435,7 +1462,7 @@ namespace PassGuard.GUI
 
                 utils.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
 
-                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
+                utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); 
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
             }
             catch (Exception ex)
@@ -1459,12 +1486,13 @@ namespace PassGuard.GUI
             }
             finally
             {
-                if (File.Exists(decVault))
+                if (File.Exists(decVault)) //Delete old files in case of error.
                 {
                     File.Delete(decVault);
                 }
             }
             
         }
+
     }
 }

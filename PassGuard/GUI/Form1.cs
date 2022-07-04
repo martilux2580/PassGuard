@@ -13,6 +13,7 @@ using System.Configuration;
 
 namespace PassGuard
 {
+    //MainWindow of the Application
     public partial class mainWindow : Form
     {
 
@@ -22,8 +23,6 @@ namespace PassGuard
         {
             InitializeComponent();
             this.Size = this.MinimumSize; //We init the form with the minimum size to avoid Minimum Size bug (setting Min Size in Properties to the actual size makes Minimum Size decrease by 20-30 pixels aprox).
-            
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,11 +46,11 @@ namespace PassGuard
                 setConfigColours(); //Set outline colours based on saved config.
 
                 //Code for regulating AutoBackup when it is enabled and has a time frequency (every day, week or month).
-                int[] timeCodes = new int[] { 3, 4, 5 };
-            
+                int[] timeCodes = new int[] { 3, 4, 5 }; //Modes for everyday, week or month.
+                //If Autobackup is activated and has time frequency, start a task with the function to check every time if a backup has to be made.
                 if ((ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") && timeCodes.Contains(Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))))
                 {
-                    autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+                    autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start a task with a method
                 }
             }
             catch (ConfigurationErrorsException)
@@ -71,7 +70,7 @@ namespace PassGuard
             {
                 darkToolStripMenuItem.Checked = true;
                 lightToolStripMenuItem.Checked = false;
-                ContentPanel.BackColor = Color.FromArgb(116, 118, 117); //65, 65, 65
+                ContentPanel.BackColor = Color.FromArgb(116, 118, 117); 
             }
             else if (sAttr == "Light")
             {
@@ -79,8 +78,6 @@ namespace PassGuard
                 darkToolStripMenuItem.Checked = false;
                 ContentPanel.BackColor = Color.FromArgb(230, 230, 230);
             }
-            
-            
 
         }
 
@@ -102,18 +99,15 @@ namespace PassGuard
             MenuPanel.BackColor = Color.FromArgb(getRedMenu, getGreenMenu, getBlueMenu);
             LogoPanel.BackColor = Color.FromArgb(getRedLogo, getGreenLogo, getBlueLogo);
             OptionsPanel.BackColor = Color.FromArgb(getRedOptions, getGreenOptions, getBlueOptions);
-            
-
 
         }
 
         private void CreateVaultButton_Click(object sender, EventArgs e)
         {
-            label1.Visible = true;
             TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
             GUI.CreateNewVaultUC cnv = new GUI.CreateNewVaultUC(); //Set new UC for the action.
-            ContentPanel.Controls.Clear();
-            ContentPanel.Controls.Add(cnv);
+            ContentPanel.Controls.Clear(); //Clear everything inside the Content Panel
+            ContentPanel.Controls.Add(cnv); //Add the UC to the panel
         }
 
         private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
@@ -128,10 +122,9 @@ namespace PassGuard
 
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
-            label1.Visible = false;
             TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
             GUI.LoadVaultUC lv = new GUI.LoadVaultUC(); //Set new UC for the action.
-            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Clear(); 
             ContentPanel.Controls.Add(lv);
         }
 
@@ -191,7 +184,7 @@ namespace PassGuard
 
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
-                int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B };
+                int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B }; //Create array with actual colours to send it to the form.
                 GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(actualColours); //Dialog to insert rgb values
                 if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
                 {
@@ -230,7 +223,7 @@ namespace PassGuard
                         config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
                         config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
                         config.Save(ConfigurationSaveMode.Modified);
-                        ConfigurationManager.RefreshSection("appSettings");
+                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                     }
 
                     MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
@@ -257,7 +250,7 @@ namespace PassGuard
                     newRedMenu = redValue + 20;
                     newGreenMenu = greenValue + 20;
                     newBlueMenu = blueValue + 20;
-                    newRedLogo = redValue; //Input?
+                    newRedLogo = redValue; //Input in RGB Form will be for the logo, Menu and Options will be modified.
                     newGreenLogo = greenValue;
                     newBlueLogo = blueValue;
                     newRedOptions = redValue + 10;
@@ -277,12 +270,12 @@ namespace PassGuard
                         config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
                         config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
                         config.Save(ConfigurationSaveMode.Modified);
-                        ConfigurationManager.RefreshSection("appSettings");
+                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                     }
 
-                    MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu); //43, 43, 43      
-                    LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo); //31, 31, 31    -10
-                    OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo); //-
+                    MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu); 
+                    LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo); 
+                    OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo); 
                 }
             }
             catch (Exception)
@@ -302,7 +295,7 @@ namespace PassGuard
                 {
                     config.AppSettings.Settings["Theme"].Value = "Dark"; //Modify data in the config file for future executions.
                     config.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection("appSettings");
+                    ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                 }
                 darkToolStripMenuItem.Checked = true;
                 lightToolStripMenuItem.Checked = false;
@@ -327,7 +320,7 @@ namespace PassGuard
                 {
                     config.AppSettings.Settings["Theme"].Value = "Light"; //Modify data in the config file for future executions.
                     config.Save(ConfigurationSaveMode.Modified);
-                    ConfigurationManager.RefreshSection("appSettings");
+                    ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                 }
                 lightToolStripMenuItem.Checked = true;
                 darkToolStripMenuItem.Checked = false;
@@ -341,7 +334,7 @@ namespace PassGuard
 
         private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
         {
-            //Implement "Save Changes" Part?
+            //Implement "Save Changes" Part? Things already are saved in each change by encrypting again.
             Application.Exit(); //Close Application
         }
 
@@ -384,13 +377,13 @@ namespace PassGuard
                 Core.Utils utils = new Core.Utils();
                 var previousState = ConfigurationManager.AppSettings.Get("AutoBackupState");
                 var previousFrequency = ConfigurationManager.AppSettings.Get("FrequencyAutoBackup");
-                int[] timeCodes = new int[] { 3, 4, 5 };
+                int[] timeCodes = new int[] { 3, 4, 5 }; //Codes for time modes (everyday, everyweek, everymonth)
 
                 GUI.AutoBackup ab = new GUI.AutoBackup(this);
                 ab.BackColor = this.ContentPanel.BackColor;
                 ab.ShowDialog();
 
-                if (ab.GetSetupSuccess())
+                if (ab.GetSetupSuccess()) //If we exited autobackup form from the bottom, then everything was set up correctly.
                 {
                     var newState = ab.GetAutoBackupState();
                     var newVaultPath = ab.GetPathOfVaultBackedUp();
@@ -407,7 +400,7 @@ namespace PassGuard
                         config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
                         config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
                         config.Save(ConfigurationSaveMode.Modified, true);
-                        ConfigurationManager.RefreshSection("appSettings");
+                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
                         try
                         {
@@ -439,11 +432,11 @@ namespace PassGuard
                             config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
                             config.Save(ConfigurationSaveMode.Modified, true);
-                            ConfigurationManager.RefreshSection("appSettings");
+                            ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-                            if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup)))
+                            if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup))) //Autobackup before wasnt set, so start a task.
                             {
-                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start task with autobackup.
                             }
 
                         }
@@ -456,15 +449,15 @@ namespace PassGuard
                             config.AppSettings.Settings["LastDateAutoBackup"].Value = newLastDateBackup; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["FrequencyAutoBackup"].Value = newFrequencyAutoBackup; //Modify data in the config file for future executions.
                             config.Save(ConfigurationSaveMode.Modified, true);
-                            ConfigurationManager.RefreshSection("appSettings");
+                            ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-                            if (timeCodes.Contains(Int32.Parse(previousFrequency)))
+                            if (timeCodes.Contains(Int32.Parse(previousFrequency))) //Previous state was activated, we wait so that changes to config make effect and task is reset with new parameters.
                             {
                                 autobackup.Wait(millisecondsTimeout: 5000); //Wait so that changes in config reach the task and its work is updated
                             }
-                            else
+                            else //Previous state was activated but with mode 1 or 2, so task is not active -> we have to run it..
                             {
-                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime());
+                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start task with autobackup.
 
                             }
 
@@ -489,7 +482,7 @@ namespace PassGuard
             {
                 if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
                 {
-                    if (2 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
+                    if (2 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))) //If app is closing and the mode is 2 (after each close of app), make backup.
                     {
                         if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
                         {

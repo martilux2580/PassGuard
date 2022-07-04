@@ -15,6 +15,7 @@ using System.Configuration;
 
 namespace PassGuard.GUI
 {
+    //User Control Component to setup the data to create a new Password Vault.
     public partial class CreateNewVaultUC : UserControl
     {
         public CreateNewVaultUC()
@@ -81,9 +82,9 @@ namespace PassGuard.GUI
             }
 
             //Deal with path.
-            List<String> checkEncryptedPath = VaultPathTextbox.Text.Split('\\').ToList();
-            checkEncryptedPath[0] = checkEncryptedPath[0] + "\\";
-            checkEncryptedPath.Add(VaultNameTextbox.Text + ".encrypted");
+            List<String> checkEncryptedPath = VaultPathTextbox.Text.Split('\\').ToList(); //Separate the path by \
+            checkEncryptedPath[0] = checkEncryptedPath[0] + "\\"; //In the first place, add the \, so it is C:\ and not just C:
+            checkEncryptedPath.Add(VaultNameTextbox.Text + ".encrypted"); //Add in the folder path the name of the file and its extension.
             if (File.Exists(Path.Combine(checkEncryptedPath.ToArray()))) //There is not already a vault in that location.
             {
                 errorMessages += "    - In the specified path there is already created a Password Vault with the same file name.\n";
@@ -139,8 +140,6 @@ namespace PassGuard.GUI
                 utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
-
-
                 //Save salt and maybe email.
                 try
                 {
@@ -179,7 +178,7 @@ namespace PassGuard.GUI
         private void SelectVaultPathButton_Click(object sender, EventArgs e)
         {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            FolderBrowserDialog fbd = new FolderBrowserDialog(); //Folder Selector...
 
             // Show the FolderBrowserDialog.
             DialogResult result = fbd.ShowDialog();
