@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //UserControl Component that represents a Password in the Vault, it is composed of 6 buttons whose text is the data of the password (Url, Name, Username, SitePassword, Category, Notes)
     public partial class DataRowUC : UserControl
     {
         private String url { get; set; }
@@ -26,6 +27,7 @@ namespace PassGuard.GUI
         {
             InitializeComponent();
             Key = key;
+            //Set the encrypted values to the attributes
             url = values[0];
             name = values[1];
             username = values[2];
@@ -38,11 +40,11 @@ namespace PassGuard.GUI
         private void DataRowUC_Load(object sender, EventArgs e)
         {
             Core.Utils utils = new Core.Utils();
-
+            //Decrypt the values and set them as text of the buttons
             URLContent.Text = utils.DecryptText(key: Key, src: url);
             NameContent.Text = utils.DecryptText(key: Key, src: name);
             UsernameContent.Text = utils.DecryptText(key: Key, src: username);
-            PassContent.Text = String.Concat(Enumerable.Repeat("*", 15)); 
+            PassContent.Text = String.Concat(Enumerable.Repeat("*", 15)); //Hide the password
             CategoryContent.Text = utils.DecryptText(key: Key, src: category);
             NotesContent.Text = utils.DecryptText(key: Key, src: notes);
         }
@@ -51,19 +53,19 @@ namespace PassGuard.GUI
         {
             Core.Utils utils = new Core.Utils();
 
-            Clipboard.SetText(utils.DecryptText(key: Key, src: password));
+            Clipboard.SetText(utils.DecryptText(key: Key, src: password)); //If click on password button, copy in clipboard the decryption of the attribute, not the 15x"*"
             
         }
 
         private void URLContent_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(URLContent.Text)) Clipboard.SetText(" ");
+            if (String.IsNullOrWhiteSpace(URLContent.Text)) Clipboard.SetText(" "); //If empty, set clipboard as " "
             else Clipboard.SetText(URLContent.Text);
         }
 
         private void NameContent_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(NameContent.Text);
+            Clipboard.SetText(NameContent.Text); //Cannot be empty, so directly copy text to clipboard.
         }
 
         private void UsernameContent_Click(object sender, EventArgs e)

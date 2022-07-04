@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form to obtain new RGB values for the outline colours.
     public partial class AskRGBforSettings : Form
     {
         public AskRGBforSettings(int[] colours)
@@ -19,7 +20,8 @@ namespace PassGuard.GUI
             SetNUDs(colours);
         }
 
-        private void SetNUDs(int[] colours)
+
+        private void SetNUDs(int[] colours) //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
         {
             RedNUD.Value = colours[0]; //Modify data in the config file for future executions.
             GreenNUD.Value = colours[1]; //Modify data in the config file for future executions.
@@ -73,11 +75,11 @@ namespace PassGuard.GUI
 
         private void SendButton_Click(object sender, EventArgs e)
         {
-            if ((RedNUD.Value < 32) && (GreenNUD.Value < 32) && (BlueNUD.Value < 32))
+            if ((RedNUD.Value < 32) && (GreenNUD.Value < 32) && (BlueNUD.Value < 32)) //Too dark colours, text cannot be visible
             {
                 MessageBox.Show("All 3 RGB values are less than 32. This combination is not available. At least one of the RGB values must be greater than 32.");
             }
-            else
+            else //Set variables for then set them in Form1.
             {
                 RedRGBValue = (int)RedNUD.Value;
                 GreenRGBValue = (int)GreenNUD.Value;
@@ -98,13 +100,13 @@ namespace PassGuard.GUI
 
         private void LoadSavedConfigButton_Click(object sender, EventArgs e)
         {
-            try
+            try //Get data from config.
             {
-                RedNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("RedLogo")); //Modify data in the config file for future executions.
-                GreenNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("GreenLogo")); //Modify data in the config file for future executions.
-                BlueNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("BlueLogo")); //Modify data in the config file for future executions.
+                RedNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("RedLogo")); 
+                GreenNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("GreenLogo")); 
+                BlueNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("BlueLogo")); 
             }
-            catch (Exception)
+            catch (Exception) //If not possible, set NUDs (NumericUpDowns) to 0.
             {
                 RedNUD.Value = Convert.ToDecimal(0); 
                 GreenNUD.Value = Convert.ToDecimal(0);

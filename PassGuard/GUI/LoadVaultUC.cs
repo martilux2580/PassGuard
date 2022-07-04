@@ -14,6 +14,7 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //UC Component to obtain the credentials to login to a selected Vault.
     public partial class LoadVaultUC : UserControl
     {
         public LoadVaultUC()
@@ -34,7 +35,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                SecurityKeyTextbox.Text = ConfigurationManager.AppSettings.Get("SecurityKey"); //Modify data in the config file for future executions.
+                SecurityKeyTextbox.Text = ConfigurationManager.AppSettings.Get("SecurityKey"); //Get data in the config file for future executions.
             }
             catch (Exception)
             {
@@ -77,8 +78,8 @@ namespace PassGuard.GUI
                 //Deal with paths for files.
                 String pathforEncryptedVault = VaultPathTextbox.Text;
                 String[] saveEncryptedVaultPath = pathforEncryptedVault.Split('\\');
-                saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
-                String[] vaultPath = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.');
+                saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\"; //Path of the encrypted vault in a list.
+                String[] vaultPath = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.'); //Get the name [filename, fileextension]
 
                 try
                 {
@@ -88,7 +89,7 @@ namespace PassGuard.GUI
                     //Show all the contents of the vault (UserControl).
                     GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
                     var ContentPanel = this.Parent;
-                    this.Parent.Controls.Clear(); //this.Parent.Name; //contentpanel
+                    this.Parent.Controls.Clear(); //this.Parent.Name = ContentPanel
                     ContentPanel.Controls.Add(vc);
                     vc.Visible = true;
                 }
@@ -111,12 +112,8 @@ namespace PassGuard.GUI
                     }
                 }
 
-
             }
-
-
-
-            }
+        }
 
         private void SelectVaultPathButton_Click(object sender, EventArgs e)
         {
@@ -126,7 +123,7 @@ namespace PassGuard.GUI
             bool cancelPathSearch = false;
             while (ext != ".encrypted" && !cancelPathSearch)
             {
-                OpenFileDialog ofd = new OpenFileDialog();
+                OpenFileDialog ofd = new OpenFileDialog(); //File selector
                 ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
                 
                 var result = ofd.ShowDialog();
@@ -187,7 +184,7 @@ namespace PassGuard.GUI
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified, true);
-                ConfigurationManager.RefreshSection("appSettings");
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
             }
             catch (Exception)
             {
@@ -202,7 +199,7 @@ namespace PassGuard.GUI
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 config.AppSettings.Settings["SecurityKey"].Value = SecurityKeyTextbox.Text; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified, true);
-                ConfigurationManager.RefreshSection("appSettings");
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
             }
             catch (Exception)
             {

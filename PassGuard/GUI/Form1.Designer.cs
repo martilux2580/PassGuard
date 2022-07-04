@@ -45,7 +45,6 @@ namespace PassGuard
             this.ToolTipLoadPassVault = new System.Windows.Forms.ToolTip(this.components);
             this.ContentPanel = new System.Windows.Forms.Panel();
             this.homeContentUC1 = new PassGuard.GUI.HomeContentUC();
-            this.label1 = new System.Windows.Forms.Label();
             this.SettingsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SettingsCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TitleSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripTextBox();
@@ -248,7 +247,6 @@ namespace PassGuard
             // 
             this.ContentPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ContentPanel.Controls.Add(this.homeContentUC1);
-            this.ContentPanel.Controls.Add(this.label1);
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContentPanel.Location = new System.Drawing.Point(288, 133);
             this.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -266,16 +264,6 @@ namespace PassGuard
             this.homeContentUC1.Name = "homeContentUC1";
             this.homeContentUC1.Size = new System.Drawing.Size(905, 300);
             this.homeContentUC1.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(296, 67);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "label1";
             // 
             // SettingsToolTip
             // 
@@ -427,7 +415,6 @@ namespace PassGuard
         private System.Windows.Forms.ToolTip ToolTipLoadPassVault;
         private System.Windows.Forms.Label TitleLabel;
         private System.Windows.Forms.Panel ContentPanel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolTip SettingsToolTip;
         private System.Windows.Forms.Button SettingButton;
         private System.Windows.Forms.ContextMenuStrip SettingsCMS;

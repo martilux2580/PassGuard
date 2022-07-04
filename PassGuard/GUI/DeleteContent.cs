@@ -12,16 +12,17 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //Form to delete a password from the Vault, or all passwords from the Vault.
     public partial class DeleteContent : Form
     {
         private String name { get; set; }
         private List<String> namesInDB;
         private readonly byte[] Key;
         private readonly String decPath;
-        private bool deletedSuccess;
-        private bool deletedAllSuccess;
+        private bool deletedSuccess; //Signal for delete one password.
+        private bool deletedAllSuccess; //Signal for delete all passwords
         private String nameToBeDeleted;
-        private readonly Dictionary<String, String> map; //No duplicate keys, (enc, dec)
+        private readonly Dictionary<String, String> map; //No duplicate keys, (encryptedName, decryptedName)
 
         public bool getDeletedSuccess()
         {
@@ -45,13 +46,13 @@ namespace PassGuard.GUI
 
             namesInDB = names;
             map = new Dictionary<string, string>();
-            foreach (String enc in namesInDB)
+            foreach (String enc in namesInDB) //Decrypt names already in db and add them to Dictionary with its key correspondence.
             {
                 map.Add(enc, utils.DecryptText(key: Key, src: enc));
             }
 
             NameCombobox.Items.Add("");
-            foreach (String name in namesInDB)
+            foreach (String name in namesInDB) //Decrypt names in db.
             {
                 NameCombobox.Items.Add(utils.DecryptText(key: Key, src: name));
             }
@@ -82,7 +83,7 @@ namespace PassGuard.GUI
 
                 TitleLabel.Text = "If button is clicked, all Vault contents will be deleted.";
                 NameCombobox.Enabled = false;
-                NameCombobox.ResetText();
+                NameCombobox.ResetText(); //Set text back to null/unselected
 
                 //Enable elements
                 DeleteAllButton.Enabled = true;
@@ -110,7 +111,7 @@ namespace PassGuard.GUI
                 DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete the element with name '" + NameTextbox.Text + "' from your Vault?\n\nNote: This action cannot be undone.", caption: "Confirm the deletion of the element", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
-                    nameToBeDeleted = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
+                    nameToBeDeleted = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Get encrypted name to be deleted.
                     deletedSuccess = true;
                     this.Close();
 
@@ -134,7 +135,7 @@ namespace PassGuard.GUI
         {
             Core.Utils utils = new Core.Utils();
 
-            if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text)))
+            if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text))) //Fetch data of password given the name of the password.
             {
                 List<String[]> fullResults = new List<String[]>();
                 using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
@@ -170,6 +171,7 @@ namespace PassGuard.GUI
                     }
                 }
 
+                //Set data in textboxes
                 URLTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][0]);
                 NameTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][1]);
                 UsernameTextbox.Text = utils.DecryptText(key: Key, src: fullResults[0][2]);
