@@ -1,6 +1,7 @@
 <div id="PassGuardLogo" align="center">
     <br />
-    <img src="./PassGuard/Images/Logo.png" alt="PassGuardLogo" width="200"/>
+    <img src="./PassGuard/Images/Logo.png#gh-light-mode-only" alt="PassGuardLogo" width="200"/>
+    <img src="./PassGuard/Images/Logoblancblanc.png#gh-dark-mode-only" alt="PassGuardLogo" width="200"/>
     <h1><b>PassGuard</b></h1>
 </div>
 
