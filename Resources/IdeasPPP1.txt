@@ -1,0 +1,38 @@
+General Idea:
+    · App → Password Manager, a desktop application (could scale to web application...) that keeps track of all of your passwords securely, as well as generate a password with custom characteristics.
+    · Possible names → KeyPass, KeyVault, KeyGuard, KeyWarden, PassVault, ((PassGuard)), PassWarden, SecretVault, PassGen, Pass.io...
+    · Is the logo already designed (Photoshop preferred)? ✗✗✗✗✗✗✗✗✗✗✗
+    · Language by which my app will be presumably written? → C#
+    · Database my app will be using? → MySQL
+
+    · Have you learn/taken note about how you would protect the database you have chosen from attacks? Yes → Firewall + Prevent SQL Injection + Limit the amount of people that use the DB + lower their user permissions as much as you can.
+    
+    · What will my app be able to do?:
+        · My app will be able to generate passwords by combinating any letter (upper/lower case) with any number and any symbol and with whichever length the user request.
+        · My app will permit the safely login of an user to the app, protecting their accounts.
+        · 
+    · Have you done diagrams showing how the application internally works as well as a sketch of the GUI of the app? ✗✗✗✗✗✗✗✗✗✗✗
+    · How is my app supposed to work internally:
+        · 
+        · 
+    · 
+
+FastNotesPPP1:
+    Password Manager = List of passwords encrypted → Vault
+    Because you use Keepass locally (and totally offline) your master password is enough to derive to a key and to decrypt your data.
+    How to derive a key that isnt known but we can use?
+    Best way to store passwords → Not storing them (or hash+salt and hints apart)
+    Use HIBP Password API to check if the new password is already pwned? Check regurarly if passwords stored in PassGuard have been pwned?
+
+
+
+
+
+
+
+
+
+
+
+
+

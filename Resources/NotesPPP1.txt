@@ -1,0 +1,115 @@
+Some notes about storing passwords:
+    · Usually, in apps with logins the username and the attributes needed to store the password correctly and as safely as possible are stored in a database.
+        · For an attacker to know the passwords, (s)he would have to breach the database and then (s)he would arrive to the passwords, protected as much as the company wants.
+    · Dedicated Password Managers:
+        · 1Password
+        · LastPass
+        · Nordpass
+        · Dashlane
+        · Keepass
+        · Bitwarden
+
+    · General characteristics of the applications:
+        · Most applications can generate strong passwords
+        · Most applications support 2FA and inform about data breaches 
+        · You could store payments, credit cardsm passports and more stuff...
+    
+    · How can passwords be stored in the database:
+        1. PlainText: In a table of a database, store username + password
+            · Really bad idea: Data breach would leave passwords exposed
+        2. Encryption (DES, AES...): We would be storing a password encrypted with a key.
+            · Not a good idea → Encryption requires that the server uses a key to decode the encrypted password and verify the user login.
+            · Key could be vulnerable → if known by an attacker, he/she could decrypt all passwords easily
+            · Encryption is a two-way function → You use a key to encrypt a password, and you can use the key to decrypt the encrypted password.
+        3. Hashing (MD5, SHA family...): Is a cryptographic technique that takes a plaintext password and create a fixed length hash, which will be stored by the database.
+            · Hashing is a one-day function → You can take the hash out of the plaintext password, but you cannot take the password out of the hash.
+            · When a user logs in, program will compute the hash of the inputted password and compare it with the stored hash.
+            · Minimal change in the password and the output will be totally different.
+            · If 2 users have the same password, the hash output will be exactly the same.
+            · Most hashing algorithms are optimized for speed, the more hashes they can calculate per second, the better (SHA) → vulnerable against brute-force attacks.
+            · GTX980 can calculate 292000000 SHA3 hashes per second. 
+            · Rainbow Table: A precomputed table for reversing cryptographic hash functions, usually for cracking password hashes.
+            · Dictionary Attacks:
+                · An attacker can use known hash algorithms and precompute the hash outputs for a dictionary of billions of common passwords and compare them with the hashes in the breached database, lots of passwords could be broken.
+                · Attempting to find the original plaintext by hashing common passwords (a lot of them) and comparing them to the target hash.
+            · Brute-force Attacks → Trying every possible combination of characters against the hashed password, time taken increases exponentially as password length and keyspace increases.
+            · Salting:
+                · Salting is a method by which we add a fixed length random (for a salt to be effective, it needn´t be random, but could be) string to the plaintext password.
+                · With this we obtain that if 2 users have the same passwords, salting will make that their hash look totally different.
+                · We must store the salt in plaintext as well as the username and the hash of password + salt.
+                · When a user logs in, we will join the inputted password with the salt and compute the hash and compare it with the stored hash.
+                · Salt MUST be unique to each user.
+                · The only goal of the salt is to prevent dictionary attacks or rainbow table attacks → We do not need to encrypt or hash the salt, it will be kept in plaintext in the database → We do not prevent brute-force attacks with it → "That´s why" we do not encrypt them.
+                · It's computationally infeasible to generate rainbow tables for every possible salt.
+                · Salting reduces the efficacy of dictionary attacks. Hash of qwertyAGfg$&dga$&reg%$%& is pretty unlikely to be precomputed.
+                · Salting solves the problem of "users with same password produce same hash".
+                · Using short salt strings. The shorter the salt strings, the easier it is to construct a rainbow table.
+                · As storage permits, use a 32-byte or 64-byte salt with the actual size dependent on the protection function. 
+                · A longer salt effectively increases the computational complexity of attacking passwords which in turn increases the candidate set exponentially. A longer salt also increases the space required to store hash tables while decreasing the possibility that such a table exists in the wild.
+                · "An attacker has to crack hashes one at a time using the respective salt rather than calculating a hash once and comparing it against every stored hash. This makes cracking large numbers of hashes significantly harder, as the time required grows in direct proportion to the number of hashes."
+                · A salt is not a cryptographic secret. In symmetric key cryptography, the security of a good algorithm is directly dependent upon the secrecy of the key. If the key is leaked, the algorithm provides absolutely no security. Therefore, the key is a cryptographic secret. In password hashing, the security of the algorithm is not impacted by the publicity of the salt. The work of brute forcing the password hash must be still be redone for each and every password hash attempted. Therefore, there is no need to keep the salt secret, as it adds no security to the algorithm.
+            · Rather than implementing your own method to store password → use a well-tested library.
+            · Cryptographic Pepper:
+                · Pepper is a random not unique string of data that is cryptographically generated and added to the password to prevent password cracking. 
+                · The key difference between salt and pepper is, salt value is stored along with the hashed value of the password in the database whereas the pepper value is kept a secret. 
+                · Pepper should be at least 112 bits to be considered secure, the pepper is shared between stored passwords, rather than being unique like a salt..
+                · Peppering the passwords without salting is pointless when two users use the same password because a constant pepper value is applied to all passwords across the system.
+                · Pepper stored in a secure configuration file or hardcode? Windows system.
+                · Pepper is unknown that is used → Pepper is not stored → Cycle through all possible peppers.
+                · The purpose of the pepper is to prevent an attacker from being able to crack any of the hashes if they only have access to the database, for example, if they have exploited a SQL injection vulnerability or obtained a backup of the database.
+                · The additional benefit to a pepper (from a salt?) is that an attacker wouldn’t know it, and therefore have to guess what it could be, providing additional security. At that point, it’s important to note that the pepper becomes a cryptographic secret, as the security of adding the pepper is directly related to how private it is.
+                · Some flaws to Peppers:
+                    · There is actually no documentation that a pepper actually increases security that was written by security experts.
+                    · There are no publicly vetted hashing algorithms that accept a pepper as an argument. That means that in order to include a pepper, one must modify an algorithm to do so. And modifying a secure algorithm can have disastrous results.
+                    · There’s another type of algorithm in cryptography whose security depends upon a cryptographic secret: a block cipher. So, if you want to add a level of security on top of salted hashes, simply encrypt your passwords with a standard block cipher (such as AES) before storing them. At that point, you’re combining the best of both worlds, using approved and vetted algorithms while still boosting the security of your stored password hashes.
+                    · The entire concept of a pepper is based around a flawed premise. The premise is that your passwords will be more secure if your password database is leaked. The flaw in that premise is that it’s often not just your database that’s leaked. A common misconception is that SQL Injection can lead to leaked password hashes. While it’s possible, the vast majority of applications will not leak password hashes if injected into. The reason is how SQL Injection works. It modifies existing queries used by the application, sometimes adding new ones. But unless your application displays all columns returned from the database on queries, getting the password hashes out would be quite difficult.
+            · Some Hashing Functions which are deliberately slowed down exist:
+                · Ex: Bcrypt, Scrypt, Argon2 → Neutralise brute-force attacks.
+                · Ex2: bcrypt(password, salt, cost):
+                    · Number of rounds the algorithm goes through → Effectively slows it down
+                    · "Complexity is the enemy of Security"
+                    · Cost must be high enough so that it resists attacks, but low enough so that verifying login of the user is fast.
+                · The cost/work factor is essentially the number of iterations of the hashing algorithm that are performed for each password (usually, it's actually 2^work iterations). The purpose of the work factor is to make calculating the hash more computationally expensive, which in turn reduces the speed and/or increases the cost for which an attacker can attempt to crack the password hash.
+                · When choosing a work factor, a balance needs to be struck between security and performance. Higher work factors will make the hashes more difficult for an attacker to crack but will also make the process of verifying a login attempt slower. If the work factor is too high, this may degrade the performance of the application and could also be used by an attacker to carry out a denial of service attack by making a large number of login attempts to exhaust the server's CPU.
+                · One key advantage of having a work factor is that it can be increased over time as hardware becomes more powerful and cheaper.
+
+    · "You can´t be greedy enough when it comes to security."
+    · "Hashing and salting are complex methods to create hardy and resilient systems. It's best to leave their implementation to security experts. A misstep in a home-made security strategy may lead to damage to a business, its users, and reputation."
+    · Dropbox multi-layer protection → AES_Encryption(bcrypt(hash(password), salt, cost = 10)) → (Encryption key not stored in their database but kept separately).
+
+    · Bibliography:
+        · https://gizmodo.com/the-5-best-ways-to-store-passwords-safely-1782047318
+        · https://www.youtube.com/watch?v=z8tUW8Z96dI&ab_channel=DavidEvans
+        · https://www.linkedin.com/pulse/secure-user-passwords-adding-salt-pepper-sherlin-oneeta-bastin
+        · https://www.youtube.com/watch?v=cczlpiiu42M&ab_channel=SimplyExplained
+        · https://www.youtube.com/watch?v=--tnZMuoK3E&ab_channel=Seytonic
+        · https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
+        · https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-storage-cheat-sheet
+        · https://blog.ircmaxell.com/2012/04/properly-salting-passwords-case-against.html
+        · https://www.youtube.com/watch?v=eicDtA9Yu-A&ab_channel=DestinationCertification
+        · 
+        · 
+        · 
+
+Some notes about database security:
+    · In applications that require logins, users and passwords are stored in a database, so the security of the database from attacks is very important as it is the barrier between an attacker and passwords from a big amount of users.
+    · We should separate database servers from web servers or other machines running applications.
+    · We should protect our database with a firewall which denies access to traffic by default. Traffic allowed should only come from specific applications.
+    · We should use also a web application firewall, this would help us to prevent SQL Injection attacks.
+    · Aim for the least number of people to access the database. If this is not possible, manage the situation using an access management software (PAM) (different from a Identity and Access Management (IAM)) and promote strong passwords, account lock after multiple login attempts.
+    · Monitor database activity as much frequently as you can, as well as encrypt data and backups.
+    · Beware of database injection attacks → SQL Injection Attacks → This is a type of attack when a malicious code is embedded in frontend (web) applications and then passed to the backend database. As the result of SQL injections cybercriminals get unlimited access to any data being stored in a database. → CounterMeasures → Stored procedure shall be used instead of direct queries + MVC Architecture shall be implemented.
+    
+    · Bibliography:
+        · https://www.esecurityplanet.com/networks/database-security-best-practices/
+        · https://www.esecurityplanet.com/products/privileged-access-management-pam-software/
+        · https://www.shrm.org/resourcesandtools/hr-topics/risk-management/pages/top-database-security-threats.aspx
+        · https://docs.oracle.com/cd/B12037_01/network.101/b10777/protdata.htm
+        · https://www.dataversity.net/how-to-protect-a-database-all-about-data-security-today/
+        · https://www.datasunrise.com/blog/potential-db-threats/database-security-threats-and-countermeasures/
+        · https://www.w3schools.com/sql/sql_injection.asp
+        · https://owasp.org/www-community/attacks/SQL_Injection
+        · 
+        · 
+        · 
+
