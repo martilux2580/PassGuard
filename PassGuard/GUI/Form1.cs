@@ -27,6 +27,10 @@ namespace PassGuard
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Add content to ContentPanel.
+            var hc = new GUI.HomeContentUC();
+            ContentPanel.Controls.Add(hc);
+
             Core.Utils utils = new Core.Utils();
             try
             {
@@ -42,6 +46,7 @@ namespace PassGuard
 
             try
             {
+                AppVersionLabel.Text = ConfigurationManager.AppSettings.Get("AppVersion");
                 setConfigTheme(); //Set theme based on saved config.
                 setConfigColours(); //Set outline colours based on saved config.
 
