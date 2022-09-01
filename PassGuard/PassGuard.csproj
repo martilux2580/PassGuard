@@ -17,7 +17,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\PPPs\PPP1\PassGuard\WindowsInstaller64Bit\</PublishUrl>
+    <PublishUrl>C:\Users\Martín\Desktop\Release1.0\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -402,12 +402,12 @@
   <ItemGroup>
     <PublishFile Include="SQLite.Interop.dll">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
