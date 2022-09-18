@@ -40,28 +40,48 @@ namespace PassGuard.GUI
             this.WebHelpRGB = new System.Windows.Forms.Button();
             this.NoteRGBLabel = new System.Windows.Forms.Label();
             this.RGBWebToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.LoadSavedConfigButton = new System.Windows.Forms.Button();
             this.SendButton = new System.Windows.Forms.Button();
+            this.RedHeaderButton = new System.Windows.Forms.Button();
+            this.ContentFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.HeaderPanel = new System.Windows.Forms.Panel();
+            this.FavouriteButton = new System.Windows.Forms.Button();
+            this.ConfigNameButton = new System.Windows.Forms.Button();
+            this.RedButton = new System.Windows.Forms.Button();
+            this.GreenButton = new System.Windows.Forms.Button();
+            this.BlueButton = new System.Windows.Forms.Button();
+            this.ViewerButton = new System.Windows.Forms.Button();
+            this.ChosenConfigButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.EditButton = new System.Windows.Forms.Button();
+            this.DeleteButton = new System.Windows.Forms.Button();
+            this.AddButton = new System.Windows.Forms.Button();
+            this.NameCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.normalOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ascendingOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.descendingOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
+            this.HeaderPanel.SuspendLayout();
+            this.NameCMS.SuspendLayout();
             this.SuspendLayout();
             // 
             // RGBTitleLabel
             // 
             this.RGBTitleLabel.AutoSize = true;
-            this.RGBTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RGBTitleLabel.Location = new System.Drawing.Point(9, 19);
+            this.RGBTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RGBTitleLabel.Location = new System.Drawing.Point(9, 20);
             this.RGBTitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RGBTitleLabel.Name = "RGBTitleLabel";
-            this.RGBTitleLabel.Size = new System.Drawing.Size(287, 17);
+            this.RGBTitleLabel.Size = new System.Drawing.Size(351, 16);
             this.RGBTitleLabel.TabIndex = 0;
-            this.RGBTitleLabel.Text = "Enter the RGB values of the desired colour: ";
+            this.RGBTitleLabel.Text = "Select the one colour you prefer and click the Send Button.";
             // 
             // RLabel
             // 
             this.RLabel.AutoSize = true;
-            this.RLabel.Location = new System.Drawing.Point(30, 48);
+            this.RLabel.Enabled = false;
+            this.RLabel.Location = new System.Drawing.Point(214, 433);
             this.RLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RLabel.Name = "RLabel";
             this.RLabel.Size = new System.Drawing.Size(21, 13);
@@ -70,7 +90,8 @@ namespace PassGuard.GUI
             // 
             // RedNUD
             // 
-            this.RedNUD.Location = new System.Drawing.Point(74, 46);
+            this.RedNUD.Enabled = false;
+            this.RedNUD.Location = new System.Drawing.Point(258, 431);
             this.RedNUD.Margin = new System.Windows.Forms.Padding(2);
             this.RedNUD.Maximum = new decimal(new int[] {
             255,
@@ -83,7 +104,8 @@ namespace PassGuard.GUI
             // 
             // GreenNUD
             // 
-            this.GreenNUD.Location = new System.Drawing.Point(74, 74);
+            this.GreenNUD.Enabled = false;
+            this.GreenNUD.Location = new System.Drawing.Point(422, 431);
             this.GreenNUD.Margin = new System.Windows.Forms.Padding(2);
             this.GreenNUD.Maximum = new decimal(new int[] {
             255,
@@ -97,7 +119,8 @@ namespace PassGuard.GUI
             // GLabel
             // 
             this.GLabel.AutoSize = true;
-            this.GLabel.Location = new System.Drawing.Point(30, 76);
+            this.GLabel.Enabled = false;
+            this.GLabel.Location = new System.Drawing.Point(378, 433);
             this.GLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.GLabel.Name = "GLabel";
             this.GLabel.Size = new System.Drawing.Size(24, 13);
@@ -106,7 +129,8 @@ namespace PassGuard.GUI
             // 
             // BlueNUD
             // 
-            this.BlueNUD.Location = new System.Drawing.Point(74, 103);
+            this.BlueNUD.Enabled = false;
+            this.BlueNUD.Location = new System.Drawing.Point(587, 431);
             this.BlueNUD.Margin = new System.Windows.Forms.Padding(2);
             this.BlueNUD.Maximum = new decimal(new int[] {
             255,
@@ -120,7 +144,8 @@ namespace PassGuard.GUI
             // BLabel
             // 
             this.BLabel.AutoSize = true;
-            this.BLabel.Location = new System.Drawing.Point(30, 106);
+            this.BLabel.Enabled = false;
+            this.BLabel.Location = new System.Drawing.Point(543, 434);
             this.BLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BLabel.Name = "BLabel";
             this.BLabel.Size = new System.Drawing.Size(20, 13);
@@ -132,7 +157,7 @@ namespace PassGuard.GUI
             this.WebHelpRGB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.WebHelpRGB.FlatAppearance.BorderSize = 0;
             this.WebHelpRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.WebHelpRGB.Location = new System.Drawing.Point(357, 6);
+            this.WebHelpRGB.Location = new System.Drawing.Point(778, 7);
             this.WebHelpRGB.Margin = new System.Windows.Forms.Padding(2);
             this.WebHelpRGB.Name = "WebHelpRGB";
             this.WebHelpRGB.Size = new System.Drawing.Size(40, 44);
@@ -145,7 +170,7 @@ namespace PassGuard.GUI
             // 
             this.NoteRGBLabel.AutoSize = true;
             this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NoteRGBLabel.Location = new System.Drawing.Point(19, 139);
+            this.NoteRGBLabel.Location = new System.Drawing.Point(17, 470);
             this.NoteRGBLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.NoteRGBLabel.Name = "NoteRGBLabel";
             this.NoteRGBLabel.Size = new System.Drawing.Size(380, 13);
@@ -159,43 +184,238 @@ namespace PassGuard.GUI
             this.RGBWebToolTip.InitialDelay = 300;
             this.RGBWebToolTip.ReshowDelay = 60;
             // 
-            // LoadSavedConfigButton
-            // 
-            this.LoadSavedConfigButton.FlatAppearance.BorderSize = 0;
-            this.LoadSavedConfigButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoadSavedConfigButton.Location = new System.Drawing.Point(278, 70);
-            this.LoadSavedConfigButton.Margin = new System.Windows.Forms.Padding(2);
-            this.LoadSavedConfigButton.Name = "LoadSavedConfigButton";
-            this.LoadSavedConfigButton.Size = new System.Drawing.Size(119, 24);
-            this.LoadSavedConfigButton.TabIndex = 10;
-            this.LoadSavedConfigButton.Text = "Load Saved Colour";
-            this.LoadSavedConfigButton.UseVisualStyleBackColor = true;
-            this.LoadSavedConfigButton.Click += new System.EventHandler(this.LoadSavedConfigButton_Click);
-            this.LoadSavedConfigButton.MouseEnter += new System.EventHandler(this.LoadSavedConfigButton_MouseEnter);
-            this.LoadSavedConfigButton.MouseLeave += new System.EventHandler(this.LoadSavedConfigButton_MouseLeave);
-            // 
             // SendButton
             // 
             this.SendButton.FlatAppearance.BorderSize = 0;
             this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SendButton.Location = new System.Drawing.Point(278, 100);
+            this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SendButton.Location = new System.Drawing.Point(719, 460);
             this.SendButton.Margin = new System.Windows.Forms.Padding(2);
             this.SendButton.Name = "SendButton";
-            this.SendButton.Size = new System.Drawing.Size(119, 24);
+            this.SendButton.Size = new System.Drawing.Size(99, 32);
             this.SendButton.TabIndex = 11;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;
             this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
-            this.SendButton.MouseEnter += new System.EventHandler(this.SendButton_MouseEnter);
-            this.SendButton.MouseLeave += new System.EventHandler(this.SendButton_MouseLeave);
+            // 
+            // RedHeaderButton
+            // 
+            this.RedHeaderButton.FlatAppearance.BorderSize = 0;
+            this.RedHeaderButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.RedHeaderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RedHeaderButton.Location = new System.Drawing.Point(119, 4);
+            this.RedHeaderButton.Name = "RedHeaderButton";
+            this.RedHeaderButton.Size = new System.Drawing.Size(108, 33);
+            this.RedHeaderButton.TabIndex = 8;
+            this.RedHeaderButton.Text = "Red";
+            this.RedHeaderButton.UseVisualStyleBackColor = true;
+            // 
+            // ContentFlowLayoutPanel
+            // 
+            this.ContentFlowLayoutPanel.AutoScroll = true;
+            this.ContentFlowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ContentFlowLayoutPanel.Location = new System.Drawing.Point(16, 98);
+            this.ContentFlowLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.ContentFlowLayoutPanel.Name = "ContentFlowLayoutPanel";
+            this.ContentFlowLayoutPanel.Size = new System.Drawing.Size(687, 320);
+            this.ContentFlowLayoutPanel.TabIndex = 13;
+            // 
+            // HeaderPanel
+            // 
+            this.HeaderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.HeaderPanel.Controls.Add(this.FavouriteButton);
+            this.HeaderPanel.Controls.Add(this.ConfigNameButton);
+            this.HeaderPanel.Controls.Add(this.RedButton);
+            this.HeaderPanel.Controls.Add(this.GreenButton);
+            this.HeaderPanel.Controls.Add(this.BlueButton);
+            this.HeaderPanel.Controls.Add(this.ViewerButton);
+            this.HeaderPanel.Controls.Add(this.ChosenConfigButton);
+            this.HeaderPanel.Location = new System.Drawing.Point(16, 58);
+            this.HeaderPanel.Name = "HeaderPanel";
+            this.HeaderPanel.Size = new System.Drawing.Size(687, 41);
+            this.HeaderPanel.TabIndex = 14;
+            // 
+            // FavouriteButton
+            // 
+            this.FavouriteButton.FlatAppearance.BorderSize = 0;
+            this.FavouriteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.FavouriteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FavouriteButton.Location = new System.Drawing.Point(578, 3);
+            this.FavouriteButton.Name = "FavouriteButton";
+            this.FavouriteButton.Size = new System.Drawing.Size(90, 33);
+            this.FavouriteButton.TabIndex = 21;
+            this.FavouriteButton.Text = "Favourite";
+            this.FavouriteButton.UseVisualStyleBackColor = true;
+            // 
+            // ConfigNameButton
+            // 
+            this.ConfigNameButton.FlatAppearance.BorderSize = 0;
+            this.ConfigNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ConfigNameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigNameButton.Location = new System.Drawing.Point(3, 3);
+            this.ConfigNameButton.Name = "ConfigNameButton";
+            this.ConfigNameButton.Size = new System.Drawing.Size(90, 33);
+            this.ConfigNameButton.TabIndex = 20;
+            this.ConfigNameButton.Text = "ConfigName";
+            this.ConfigNameButton.UseVisualStyleBackColor = true;
+            this.ConfigNameButton.Click += new System.EventHandler(this.ConfigNameButton_Click);
+            // 
+            // RedButton
+            // 
+            this.RedButton.FlatAppearance.BorderSize = 0;
+            this.RedButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.RedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RedButton.Location = new System.Drawing.Point(96, 3);
+            this.RedButton.Name = "RedButton";
+            this.RedButton.Size = new System.Drawing.Size(90, 33);
+            this.RedButton.TabIndex = 19;
+            this.RedButton.Text = "Red";
+            this.RedButton.UseVisualStyleBackColor = true;
+            this.RedButton.Click += new System.EventHandler(this.RedButton_Click);
+            // 
+            // GreenButton
+            // 
+            this.GreenButton.FlatAppearance.BorderSize = 0;
+            this.GreenButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GreenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GreenButton.Location = new System.Drawing.Point(192, 3);
+            this.GreenButton.Name = "GreenButton";
+            this.GreenButton.Size = new System.Drawing.Size(90, 33);
+            this.GreenButton.TabIndex = 18;
+            this.GreenButton.Text = "Green";
+            this.GreenButton.UseVisualStyleBackColor = true;
+            // 
+            // BlueButton
+            // 
+            this.BlueButton.FlatAppearance.BorderSize = 0;
+            this.BlueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BlueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BlueButton.Location = new System.Drawing.Point(288, 3);
+            this.BlueButton.Name = "BlueButton";
+            this.BlueButton.Size = new System.Drawing.Size(90, 33);
+            this.BlueButton.TabIndex = 17;
+            this.BlueButton.Text = "Blue";
+            this.BlueButton.UseVisualStyleBackColor = true;
+            // 
+            // ViewerButton
+            // 
+            this.ViewerButton.FlatAppearance.BorderSize = 0;
+            this.ViewerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ViewerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ViewerButton.Location = new System.Drawing.Point(384, 3);
+            this.ViewerButton.Name = "ViewerButton";
+            this.ViewerButton.Size = new System.Drawing.Size(90, 33);
+            this.ViewerButton.TabIndex = 16;
+            this.ViewerButton.Text = "Viewer";
+            this.ViewerButton.UseVisualStyleBackColor = true;
+            // 
+            // ChosenConfigButton
+            // 
+            this.ChosenConfigButton.FlatAppearance.BorderSize = 0;
+            this.ChosenConfigButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ChosenConfigButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChosenConfigButton.Location = new System.Drawing.Point(480, 3);
+            this.ChosenConfigButton.Name = "ChosenConfigButton";
+            this.ChosenConfigButton.Size = new System.Drawing.Size(92, 33);
+            this.ChosenConfigButton.TabIndex = 15;
+            this.ChosenConfigButton.Text = "ChosenConfig";
+            this.ChosenConfigButton.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Enabled = false;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(42, 432);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(161, 16);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Final Selected Values --->";
+            // 
+            // EditButton
+            // 
+            this.EditButton.FlatAppearance.BorderSize = 0;
+            this.EditButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EditButton.Location = new System.Drawing.Point(721, 235);
+            this.EditButton.Name = "EditButton";
+            this.EditButton.Size = new System.Drawing.Size(98, 34);
+            this.EditButton.TabIndex = 16;
+            this.EditButton.Text = "Edit Config";
+            this.EditButton.UseVisualStyleBackColor = true;
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            // 
+            // DeleteButton
+            // 
+            this.DeleteButton.FlatAppearance.BorderSize = 0;
+            this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteButton.Location = new System.Drawing.Point(721, 384);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(98, 34);
+            this.DeleteButton.TabIndex = 17;
+            this.DeleteButton.Text = "Delete Config";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
+            // AddButton
+            // 
+            this.AddButton.FlatAppearance.BorderSize = 0;
+            this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddButton.Location = new System.Drawing.Point(722, 98);
+            this.AddButton.Name = "AddButton";
+            this.AddButton.Size = new System.Drawing.Size(98, 34);
+            this.AddButton.TabIndex = 18;
+            this.AddButton.Text = "Add Config";
+            this.AddButton.UseVisualStyleBackColor = true;
+            this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // NameCMS
+            // 
+            this.NameCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.normalOrderToolStripMenuItem,
+            this.ascendingOrderToolStripMenuItem,
+            this.descendingOrderToolStripMenuItem});
+            this.NameCMS.Name = "NameCMS";
+            this.NameCMS.Size = new System.Drawing.Size(170, 70);
+            // 
+            // normalOrderToolStripMenuItem
+            // 
+            this.normalOrderToolStripMenuItem.Checked = true;
+            this.normalOrderToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.normalOrderToolStripMenuItem.Name = "normalOrderToolStripMenuItem";
+            this.normalOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.normalOrderToolStripMenuItem.Text = "Normal Order";
+            this.normalOrderToolStripMenuItem.Click += new System.EventHandler(this.normalOrderToolStripMenuItem_Click);
+            // 
+            // ascendingOrderToolStripMenuItem
+            // 
+            this.ascendingOrderToolStripMenuItem.Name = "ascendingOrderToolStripMenuItem";
+            this.ascendingOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.ascendingOrderToolStripMenuItem.Text = "Ascending Order";
+            this.ascendingOrderToolStripMenuItem.Click += new System.EventHandler(this.ascendingOrderToolStripMenuItem_Click);
+            // 
+            // descendingOrderToolStripMenuItem
+            // 
+            this.descendingOrderToolStripMenuItem.Name = "descendingOrderToolStripMenuItem";
+            this.descendingOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.descendingOrderToolStripMenuItem.Text = "Descending Order";
+            this.descendingOrderToolStripMenuItem.Click += new System.EventHandler(this.descendingOrderToolStripMenuItem_Click);
             // 
             // AskRGBforSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(415, 161);
+            this.ClientSize = new System.Drawing.Size(830, 505);
+            this.Controls.Add(this.AddButton);
+            this.Controls.Add(this.DeleteButton);
+            this.Controls.Add(this.EditButton);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.HeaderPanel);
+            this.Controls.Add(this.ContentFlowLayoutPanel);
             this.Controls.Add(this.SendButton);
-            this.Controls.Add(this.LoadSavedConfigButton);
             this.Controls.Add(this.NoteRGBLabel);
             this.Controls.Add(this.WebHelpRGB);
             this.Controls.Add(this.BlueNUD);
@@ -215,6 +435,8 @@ namespace PassGuard.GUI
             ((System.ComponentModel.ISupportInitialize)(this.RedNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).EndInit();
+            this.HeaderPanel.ResumeLayout(false);
+            this.NameCMS.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,7 +454,24 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button WebHelpRGB;
         private System.Windows.Forms.Label NoteRGBLabel;
         private System.Windows.Forms.ToolTip RGBWebToolTip;
-        private System.Windows.Forms.Button LoadSavedConfigButton;
         private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Button RedHeaderButton;
+        private System.Windows.Forms.FlowLayoutPanel ContentFlowLayoutPanel;
+        private System.Windows.Forms.Panel HeaderPanel;
+        private System.Windows.Forms.Button BlueButton;
+        private System.Windows.Forms.Button ViewerButton;
+        private System.Windows.Forms.Button ChosenConfigButton;
+        private System.Windows.Forms.Button ConfigNameButton;
+        private System.Windows.Forms.Button RedButton;
+        private System.Windows.Forms.Button GreenButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button EditButton;
+        private System.Windows.Forms.Button DeleteButton;
+        private System.Windows.Forms.Button AddButton;
+        private System.Windows.Forms.ContextMenuStrip NameCMS;
+        private System.Windows.Forms.ToolStripMenuItem normalOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ascendingOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem descendingOrderToolStripMenuItem;
+        private System.Windows.Forms.Button FavouriteButton;
     }
 }

@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Web.Script.Serialization;
 
 
 namespace PassGuard.Core
@@ -375,6 +376,90 @@ namespace PassGuard.Core
                 doc.Close();
 
                 MessageBox.Show(text: "PDF with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+            }
+            else { MessageBox.Show(text: "There is already a file with the name of the PDF. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
+        }
+
+        //Create a PDF given the results of all the rows, name of Vault, Email and SK.
+        internal void CreateOutlinePDF()
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+            var names = values.Keys.ToList();
+            var rgb = values.Values.ToList();
+
+            var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ColoursTable-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".pdf"; //Name of file
+            if (!File.Exists(pdfLocation))
+            {
+                var file = File.Create(pdfLocation);
+                file.Close(); //Close so Create is not using the file.
+
+                PdfWriter writer = new PdfWriter(pdfLocation);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document doc = new Document(pdf);
+                doc.SetMargins(8, 8, 8, 8);
+
+                var title = new Paragraph("PassGuard: Outline Color Configuration").SetBold().SetFontSize(15); //Title
+                title.SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
+                doc.Add(title);
+
+                var intro = new Paragraph("Date: " + DateTime.Now.ToString("D", new CultureInfo("en-US")) + ", " + DateTime.Now.ToString("HH:mm:ss")).SetFontSize(12); //Date
+                intro.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+                intro.SetFixedLeading(14);
+                intro.SetMarginBottom(4f);
+                doc.Add(intro);
+
+                var intro2 = new Paragraph("Configs: ").SetFontSize(12); //Title2
+                intro.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+                intro.SetFixedLeading(14);
+                intro.SetMarginBottom(0f);
+                doc.Add(intro2);
+
+                //Table with headers
+                Table content = new Table(numColumns: 6).UseAllAvailableWidth();
+                content.SetWidth(UnitValue.CreatePercentValue(100));
+                content.SetFixedLayout();
+                content.SetBorderCollapse(iText.Layout.Properties.BorderCollapsePropertyValue.SEPARATE);
+                content.SetBorderBottom(null);
+                content.SetMarginBottom(0f);
+                content.SetPaddingBottom(0f);
+
+                content.AddCell("Name").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("R").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("G").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("B").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Viewer").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+                content.AddCell("Favourite").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+
+                doc.Add(content);
+
+                //Table with content
+                Table content2 = new Table(numColumns: 6).UseAllAvailableWidth();
+                content2.SetWidth(UnitValue.CreatePercentValue(100));
+                content2.SetFixedLayout();
+                content2.SetMarginBottom(0.1f);
+
+                for (int i = 0; i < values.Count; i++)
+                {
+                    content2.AddCell(names[i]).SetFontSize(9);
+                    content2.AddCell(rgb[i][0].ToString()).SetFontSize(9);
+                    content2.AddCell(rgb[i][1].ToString()).SetFontSize(9);
+                    content2.AddCell(rgb[i][2].ToString()).SetFontSize(9);
+
+                    var cell = new Cell();
+                    cell.SetBackgroundColor(WebColors.GetRGBColor("#" + rgb[i][0].ToString("X2") + rgb[i][1].ToString("X2") + rgb[i][2].ToString("X2")));
+                    content2.AddCell(cell);
+
+                    if (Convert.ToBoolean(rgb[i][3])) { content2.AddCell("Yes").SetFontSize(9); }
+                    else { content2.AddCell("No").SetFontSize(9); }
+                    
+                }
+
+                doc.Add(content2);
+
+                doc.Close();
+
+                MessageBox.Show(text: "PDF with your Outline Color Configurations was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
             }
             else { MessageBox.Show(text: "There is already a file with the name of the PDF. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
         }

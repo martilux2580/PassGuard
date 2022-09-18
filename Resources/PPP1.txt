@@ -264,3 +264,9 @@ https://stackoverflow.com/questions/502199/how-to-open-a-web-page-from-my-applic
 https://support.microsoft.com/es-es/office/quitar-el-fondo-de-una-imagen-c0819a62-6844-4190-8d67-6fb1713a12bf
 https://stackoverflow.com/questions/7929013/making-a-curl-call-in-c-sharp
 https://www.youtube.com/watch?v=3d96CVSoSxM&ab_channel=IanSchoenrock
+https://stackoverflow.com/questions/922047/store-dictionarystring-string-in-application-settings
+https://dejanstojanovic.net/aspnet/2018/february/simplest-way-to-store-lists-and-dictionaries-in-config-files/
+https://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
+https://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
+https://docs.microsoft.com/en-us/dotnet/api/system.web.script.serialization.javascriptserializer?view=netframework-4.8
+https://stackoverflow.com/questions/52689933/how-to-uncheck-other-checkboxes-or-uncheck-radio-button
