@@ -8,18 +8,68 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Web.Script.Serialization;
 
 namespace PassGuard.GUI
 {
     //Form to obtain new RGB values for the outline colours.
     public partial class AskRGBforSettings : Form
     {
-        public AskRGBforSettings(int[] colours)
+
+        private List<OutlineColorDataRowUC> ConfigUCList = new List<OutlineColorDataRowUC>(); //List of DataRows with the data of the passwords.
+        public List<CheckBox> checkboxes { get; internal set; } = new List<CheckBox>();
+        public bool changedSuccess { get; private set; }
+        public Configuration config { get; private set; }
+        private int RedRGBValue { get; set; }
+        private int GreenRGBValue { get; set; }
+        private int BlueRGBValue { get; set; }
+        public int OrderMode { get; set; }
+     
+
+    public AskRGBforSettings(int[] colours, Configuration configg)
         {
             InitializeComponent();
             SetNUDs(colours);
+            LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            changedSuccess = false;
+            config = configg;
+
         }
 
+        internal bool CheckFav(OutlineColorDataRowUC row)
+        {
+            return row.favourite;
+        }
+
+        internal void LoadContent(String configs)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(configs);
+
+            ContentFlowLayoutPanel.Controls.Clear();
+            ConfigUCList.Clear();
+            checkboxes.Clear();
+            
+            foreach(KeyValuePair<String, List<int>> configColor in values)
+            {
+                var row = new OutlineColorDataRowUC(configColor.Key, configColor.Value, this);
+
+                checkboxes.Add((CheckBox)row.Controls[1]); //Add the checkbox.
+
+                ConfigUCList.Add(row);
+                //ContentFlowLayoutPanel.Controls.Add(row);
+            }
+
+            var xd = ConfigUCList.FindAll(CheckFav);
+            foreach (OutlineColorDataRowUC row in xd)
+            {
+                ContentFlowLayoutPanel.Controls.Add(row);
+            }
+            foreach(OutlineColorDataRowUC row in ConfigUCList)
+            {
+                if (!xd.Contains(row)) { ContentFlowLayoutPanel.Controls.Add(row); }
+            }
+        }
 
         private void SetNUDs(int[] colours) //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
         {
@@ -43,10 +93,20 @@ namespace PassGuard.GUI
             return (int)BlueNUD.Value;
         }
 
-        private int RedRGBValue { get; set; }
-        private int GreenRGBValue { get; set; }
-        private int BlueRGBValue { get; set; }
+        public void setRedNUDValue(int value)
+        {
+            RedNUD.Value = value;
+        }
 
+        public void setGreenNUDValue(int value)
+        {
+            GreenNUD.Value = value;
+        }
+
+        public void setBlueNUDValue(int value)
+        {
+            BlueNUD.Value = value;
+        }
 
         private void AskRGBforSettings_Load(object sender, EventArgs e)
         {
@@ -84,45 +144,174 @@ namespace PassGuard.GUI
                 RedRGBValue = (int)RedNUD.Value;
                 GreenRGBValue = (int)GreenNUD.Value;
                 BlueRGBValue = (int)BlueNUD.Value;
+                changedSuccess = true;
                 this.Close();
             }
         }
 
-        private void SendButton_MouseEnter(object sender, EventArgs e)
+        private void ConfigNameButton_Click(object sender, EventArgs e)
         {
-            SendButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline); //Underline the text when mouse is in the button
+            NameCMS.Show(ConfigNameButton, new Point(ConfigNameButton.Width - ConfigNameButton.Width, ConfigNameButton.Height)); //Sets where to display the ContextMenuStrip...
         }
 
-        private void SendButton_MouseLeave(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
-            SendButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular); //Underline the text when mouse is in the button
-        }
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
 
-        private void LoadSavedConfigButton_Click(object sender, EventArgs e)
-        {
-            try //Get data from config.
+            GUI.AddColorConfig add = new GUI.AddColorConfig(values);
+            add.BackColor = this.BackColor;
+            add.ShowDialog();
+
+            if (add.addedSuccess)
             {
-                RedNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("RedLogo")); 
-                GreenNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("GreenLogo")); 
-                BlueNUD.Value = Convert.ToDecimal(ConfigurationManager.AppSettings.Get("BlueLogo")); 
+                String newName = add.name;
+                int newRed = add.red;
+                int newGreen = add.green;
+                int newBlue = add.blue;
+                int newFav = add.favourite;
+
+                var data = ConfigurationManager.AppSettings.Get("OutlineSavedColours");
+                var newData = data.Insert(data.Length - 1, ",\"" + newName  + "\":[" + newRed.ToString() + ", " + newGreen.ToString() + ", " + newBlue.ToString() + "," + newFav.ToString() + "]");
+
+                config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+                ContentFlowLayoutPanel.Controls.Clear();
+                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+                ContentFlowLayoutPanel.Refresh();
+
             }
-            catch (Exception) //If not possible, set NUDs (NumericUpDowns) to 0.
+
+        }
+
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+            var namesList = new List<String>(values.Keys);
+
+            GUI.EditColorConfig edit = new GUI.EditColorConfig(namesList);
+            edit.BackColor = this.BackColor;
+            edit.ShowDialog();
+
+            if(edit.editedSuccess)
             {
-                RedNUD.Value = Convert.ToDecimal(0); 
-                GreenNUD.Value = Convert.ToDecimal(0);
-                BlueNUD.Value = Convert.ToDecimal(0);
-                MessageBox.Show(text: "PassGuard could not access config file, colour could not be loaded.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                String oldName = edit.oldname;
+                String newName = edit.name;
+                int red = edit.red;
+                int green = edit.green;
+                int blue = edit.blue;
+                int important = edit.important;
+
+                values.Remove(oldName);
+                values.Add(newName, new List<int> { red, green, blue , important});
+
+                String newData = js.Serialize(values);
+
+                config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+                ContentFlowLayoutPanel.Controls.Clear();
+                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+                ContentFlowLayoutPanel.Refresh();
             }
+
         }
 
-        private void LoadSavedConfigButton_MouseEnter(object sender, EventArgs e)
+        private void DeleteButton_Click(object sender, EventArgs e)
         {
-            LoadSavedConfigButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline); //Underline the text when mouse is in the button
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+            var namesList = new List<String>(values.Keys);
+
+            GUI.DeleteColorConfig del = new GUI.DeleteColorConfig(namesList);
+            del.BackColor = this.BackColor;
+            del.Enabled = true;
+            del.ShowDialog();
+
+            if (del.deletedSuccess)
+            {
+                values.Remove(del.name);
+                if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144 }); }
+
+                String newData = js.Serialize(values);
+
+                config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+                ContentFlowLayoutPanel.Controls.Clear();
+                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+                ContentFlowLayoutPanel.Refresh();
+            }
+            else if (del.deletedAllSuccess)
+            {
+                values.Clear();
+                values.Add("Default", new List<int> { 0, 191, 144 });
+
+                String newData = js.Serialize(values);
+
+                config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+                ContentFlowLayoutPanel.Controls.Clear();
+                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+            }
+
+
         }
 
-        private void LoadSavedConfigButton_MouseLeave(object sender, EventArgs e)
+        private void normalOrderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadSavedConfigButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular); //Underline the text when mouse is in the button
+            normalOrderToolStripMenuItem.Checked = true;
+            ascendingOrderToolStripMenuItem.Checked = false;
+            descendingOrderToolStripMenuItem.Checked = false;
+
+            LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+
+        }
+
+        private void ascendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            normalOrderToolStripMenuItem.Checked = false;
+            ascendingOrderToolStripMenuItem.Checked = true;
+            descendingOrderToolStripMenuItem.Checked = false;
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+
+            LoadContent(js.Serialize(values));
+            
+        }
+
+        private void descendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            normalOrderToolStripMenuItem.Checked = false;
+            ascendingOrderToolStripMenuItem.Checked = false;
+            descendingOrderToolStripMenuItem.Checked = true;
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+            var reversed = values.Reverse();
+            var newValues = reversed.ToDictionary(x => x.Key, x => x.Value);
+
+            LoadContent(js.Serialize(newValues));
+
+        }
+
+        private void RedButton_Click(object sender, EventArgs e)
+        {
+            ContentFlowLayoutPanel.Controls.Add(new GUI.OutlineColorDataRowUC("xd", new List<int> { 1, 2, 3, 4 }, this));
         }
     }
 }

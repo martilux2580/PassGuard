@@ -174,6 +174,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Utils.cs" />
+    <Compile Include="GUI\AddColorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\AddColorConfig.Designer.cs">
+      <DependentUpon>AddColorConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\AddContent.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,11 +222,23 @@
     <Compile Include="GUI\DataRowUC.Designer.cs">
       <DependentUpon>DataRowUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DeleteColorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DeleteColorConfig.Designer.cs">
+      <DependentUpon>DeleteColorConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\DeleteContent.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\DeleteContent.Designer.cs">
       <DependentUpon>DeleteContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EditColorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EditColorConfig.Designer.cs">
+      <DependentUpon>EditColorConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\EditContent.cs">
       <SubType>Form</SubType>
@@ -247,6 +265,12 @@
     <Compile Include="GUI\LoadVaultUC.Designer.cs">
       <DependentUpon>LoadVaultUC.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\OutlineColorDataRowUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\OutlineColorDataRowUC.Designer.cs">
+      <DependentUpon>OutlineColorDataRowUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\VaultContentUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -254,6 +278,9 @@
       <DependentUpon>VaultContentUC.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\AddColorConfig.resx">
+      <DependentUpon>AddColorConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\AddContent.resx">
       <DependentUpon>AddContent.cs</DependentUpon>
     </EmbeddedResource>
@@ -275,8 +302,14 @@
     <EmbeddedResource Include="GUI\DataRowUC.resx">
       <DependentUpon>DataRowUC.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DeleteColorConfig.resx">
+      <DependentUpon>DeleteColorConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\DeleteContent.resx">
       <DependentUpon>DeleteContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EditColorConfig.resx">
+      <DependentUpon>EditColorConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\EditContent.resx">
       <DependentUpon>EditContent.cs</DependentUpon>
@@ -289,6 +322,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\LoadVaultUC.resx">
       <DependentUpon>LoadVaultUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\OutlineColorDataRowUC.resx">
+      <DependentUpon>OutlineColorDataRowUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\VaultContentUC.resx">
       <DependentUpon>VaultContentUC.cs</DependentUpon>
@@ -402,12 +438,12 @@
   <ItemGroup>
     <PublishFile Include="SQLite.Interop.dll">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
