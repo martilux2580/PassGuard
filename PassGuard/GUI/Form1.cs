@@ -128,7 +128,7 @@ namespace PassGuard
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
-            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(); //Set new UC for the action.
+            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(false); //Set new UC for the action.
             ContentPanel.Controls.Clear(); 
             ContentPanel.Controls.Add(lv);
         }
@@ -520,6 +520,10 @@ namespace PassGuard
 
         private void exportAVaultsContentAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            TitleLabel.Text = "EXPORTING A VAULT AS PDF"; //Change Title
+            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(true); //Set new UC for the action.
+            ContentPanel.Controls.Clear();
+            ContentPanel.Controls.Add(lv);
 
         }
     }
