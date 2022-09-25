@@ -57,10 +57,10 @@ namespace PassGuard
             this.createABackupOfYourVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAnAutoBackupOfAVaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportAVaultsContentAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportOutlineColoursAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportAVaultsContentAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPanel.SuspendLayout();
             this.LogoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
@@ -295,7 +295,7 @@ namespace PassGuard
             this.SettingsCMS.Name = "SettingsCMS";
             this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.SettingsCMS.ShowImageMargin = false;
-            this.SettingsCMS.Size = new System.Drawing.Size(246, 225);
+            this.SettingsCMS.Size = new System.Drawing.Size(246, 203);
             // 
             // TitleSettingsToolStripMenuItem
             // 
@@ -371,6 +371,13 @@ namespace PassGuard
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(242, 6);
             // 
+            // exportAVaultsContentAsPDFToolStripMenuItem
+            // 
+            this.exportAVaultsContentAsPDFToolStripMenuItem.Name = "exportAVaultsContentAsPDFToolStripMenuItem";
+            this.exportAVaultsContentAsPDFToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.exportAVaultsContentAsPDFToolStripMenuItem.Text = "Export a Vault´s Content as PDF";
+            this.exportAVaultsContentAsPDFToolStripMenuItem.Click += new System.EventHandler(this.exportAVaultsContentAsPDFToolStripMenuItem_Click);
+            // 
             // exportOutlineColoursAsPDFToolStripMenuItem
             // 
             this.exportOutlineColoursAsPDFToolStripMenuItem.Name = "exportOutlineColoursAsPDFToolStripMenuItem";
@@ -389,13 +396,6 @@ namespace PassGuard
             this.saveChangesClosePassGuardToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
             this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
-            // 
-            // exportAVaultsContentAsPDFToolStripMenuItem
-            // 
-            this.exportAVaultsContentAsPDFToolStripMenuItem.Name = "exportAVaultsContentAsPDFToolStripMenuItem";
-            this.exportAVaultsContentAsPDFToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.exportAVaultsContentAsPDFToolStripMenuItem.Text = "Export a Vault´s Content as PDF";
-            this.exportAVaultsContentAsPDFToolStripMenuItem.Click += new System.EventHandler(this.exportAVaultsContentAsPDFToolStripMenuItem_Click);
             // 
             // mainWindow
             // 
