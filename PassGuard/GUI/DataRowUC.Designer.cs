@@ -35,6 +35,7 @@ namespace PassGuard.GUI
             this.UsernameContent = new System.Windows.Forms.Button();
             this.NotesContent = new System.Windows.Forms.Button();
             this.CategoryContent = new System.Windows.Forms.Button();
+            this.ImportantContent = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // URLContent
@@ -44,7 +45,7 @@ namespace PassGuard.GUI
             this.URLContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.URLContent.Location = new System.Drawing.Point(0, 0);
             this.URLContent.Name = "URLContent";
-            this.URLContent.Size = new System.Drawing.Size(138, 33);
+            this.URLContent.Size = new System.Drawing.Size(117, 33);
             this.URLContent.TabIndex = 0;
             this.URLContent.Text = "button1";
             this.URLContent.UseVisualStyleBackColor = true;
@@ -55,9 +56,9 @@ namespace PassGuard.GUI
             this.NameContent.FlatAppearance.BorderSize = 0;
             this.NameContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NameContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NameContent.Location = new System.Drawing.Point(145, 0);
+            this.NameContent.Location = new System.Drawing.Point(124, 0);
             this.NameContent.Name = "NameContent";
-            this.NameContent.Size = new System.Drawing.Size(138, 33);
+            this.NameContent.Size = new System.Drawing.Size(117, 33);
             this.NameContent.TabIndex = 1;
             this.NameContent.Text = "button2";
             this.NameContent.UseVisualStyleBackColor = true;
@@ -68,9 +69,9 @@ namespace PassGuard.GUI
             this.PassContent.FlatAppearance.BorderSize = 0;
             this.PassContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PassContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PassContent.Location = new System.Drawing.Point(435, 0);
+            this.PassContent.Location = new System.Drawing.Point(372, 0);
             this.PassContent.Name = "PassContent";
-            this.PassContent.Size = new System.Drawing.Size(138, 33);
+            this.PassContent.Size = new System.Drawing.Size(117, 33);
             this.PassContent.TabIndex = 3;
             this.PassContent.Text = "button3";
             this.PassContent.UseVisualStyleBackColor = true;
@@ -81,9 +82,9 @@ namespace PassGuard.GUI
             this.UsernameContent.FlatAppearance.BorderSize = 0;
             this.UsernameContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UsernameContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UsernameContent.Location = new System.Drawing.Point(290, 0);
+            this.UsernameContent.Location = new System.Drawing.Point(248, 0);
             this.UsernameContent.Name = "UsernameContent";
-            this.UsernameContent.Size = new System.Drawing.Size(138, 33);
+            this.UsernameContent.Size = new System.Drawing.Size(117, 33);
             this.UsernameContent.TabIndex = 2;
             this.UsernameContent.Text = "button4";
             this.UsernameContent.UseVisualStyleBackColor = true;
@@ -94,9 +95,9 @@ namespace PassGuard.GUI
             this.NotesContent.FlatAppearance.BorderSize = 0;
             this.NotesContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NotesContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NotesContent.Location = new System.Drawing.Point(725, 0);
+            this.NotesContent.Location = new System.Drawing.Point(620, 0);
             this.NotesContent.Name = "NotesContent";
-            this.NotesContent.Size = new System.Drawing.Size(138, 33);
+            this.NotesContent.Size = new System.Drawing.Size(117, 33);
             this.NotesContent.TabIndex = 5;
             this.NotesContent.Text = "button5";
             this.NotesContent.UseVisualStyleBackColor = true;
@@ -107,18 +108,31 @@ namespace PassGuard.GUI
             this.CategoryContent.FlatAppearance.BorderSize = 0;
             this.CategoryContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CategoryContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CategoryContent.Location = new System.Drawing.Point(580, 0);
+            this.CategoryContent.Location = new System.Drawing.Point(496, 0);
             this.CategoryContent.Name = "CategoryContent";
-            this.CategoryContent.Size = new System.Drawing.Size(138, 33);
+            this.CategoryContent.Size = new System.Drawing.Size(117, 33);
             this.CategoryContent.TabIndex = 4;
             this.CategoryContent.Text = "button6";
             this.CategoryContent.UseVisualStyleBackColor = true;
             this.CategoryContent.Click += new System.EventHandler(this.CategoryContent_Click);
             // 
+            // ImportantContent
+            // 
+            this.ImportantContent.FlatAppearance.BorderSize = 0;
+            this.ImportantContent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ImportantContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportantContent.Location = new System.Drawing.Point(744, 0);
+            this.ImportantContent.Name = "ImportantContent";
+            this.ImportantContent.Size = new System.Drawing.Size(117, 33);
+            this.ImportantContent.TabIndex = 6;
+            this.ImportantContent.UseVisualStyleBackColor = true;
+            this.ImportantContent.Click += new System.EventHandler(this.ImportantContent_Click);
+            // 
             // DataRowUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.ImportantContent);
             this.Controls.Add(this.NotesContent);
             this.Controls.Add(this.CategoryContent);
             this.Controls.Add(this.PassContent);
@@ -141,5 +155,6 @@ namespace PassGuard.GUI
         internal System.Windows.Forms.Button UsernameContent;
         internal System.Windows.Forms.Button NotesContent;
         internal System.Windows.Forms.Button CategoryContent;
+        internal System.Windows.Forms.Button ImportantContent;
     }
 }

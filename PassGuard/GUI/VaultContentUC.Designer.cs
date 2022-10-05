@@ -68,6 +68,7 @@ namespace PassGuard.GUI
             this.CategoryButton = new System.Windows.Forms.Button();
             this.NotesButton = new System.Windows.Forms.Button();
             this.HeaderTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.ImportantButton = new System.Windows.Forms.Button();
             this.URLCMS.SuspendLayout();
             this.NameCMS.SuspendLayout();
             this.UsernameCMS.SuspendLayout();
@@ -339,7 +340,7 @@ namespace PassGuard.GUI
             this.URLButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.URLButton.Location = new System.Drawing.Point(4, 4);
             this.URLButton.Name = "URLButton";
-            this.URLButton.Size = new System.Drawing.Size(138, 33);
+            this.URLButton.Size = new System.Drawing.Size(117, 33);
             this.URLButton.TabIndex = 0;
             this.URLButton.Text = "URL";
             this.URLButton.UseVisualStyleBackColor = true;
@@ -347,13 +348,12 @@ namespace PassGuard.GUI
             // 
             // NameButton
             // 
-            this.NameButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NameButton.FlatAppearance.BorderSize = 0;
             this.NameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NameButton.Location = new System.Drawing.Point(149, 4);
+            this.NameButton.Location = new System.Drawing.Point(128, 4);
             this.NameButton.Name = "NameButton";
-            this.NameButton.Size = new System.Drawing.Size(138, 33);
+            this.NameButton.Size = new System.Drawing.Size(117, 33);
             this.NameButton.TabIndex = 1;
             this.NameButton.Text = "Name";
             this.NameButton.UseVisualStyleBackColor = true;
@@ -361,13 +361,12 @@ namespace PassGuard.GUI
             // 
             // UsernameButton
             // 
-            this.UsernameButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UsernameButton.FlatAppearance.BorderSize = 0;
             this.UsernameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UsernameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UsernameButton.Location = new System.Drawing.Point(294, 4);
+            this.UsernameButton.Location = new System.Drawing.Point(252, 4);
             this.UsernameButton.Name = "UsernameButton";
-            this.UsernameButton.Size = new System.Drawing.Size(138, 33);
+            this.UsernameButton.Size = new System.Drawing.Size(117, 33);
             this.UsernameButton.TabIndex = 2;
             this.UsernameButton.Text = "Site Username";
             this.UsernameButton.UseVisualStyleBackColor = true;
@@ -375,26 +374,24 @@ namespace PassGuard.GUI
             // 
             // PassButton
             // 
-            this.PassButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PassButton.FlatAppearance.BorderSize = 0;
             this.PassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PassButton.Location = new System.Drawing.Point(439, 4);
+            this.PassButton.Location = new System.Drawing.Point(376, 4);
             this.PassButton.Name = "PassButton";
-            this.PassButton.Size = new System.Drawing.Size(138, 33);
+            this.PassButton.Size = new System.Drawing.Size(117, 33);
             this.PassButton.TabIndex = 3;
             this.PassButton.Text = "Site Password";
             this.PassButton.UseVisualStyleBackColor = true;
             // 
             // CategoryButton
             // 
-            this.CategoryButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CategoryButton.FlatAppearance.BorderSize = 0;
             this.CategoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CategoryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CategoryButton.Location = new System.Drawing.Point(584, 4);
+            this.CategoryButton.Location = new System.Drawing.Point(500, 4);
             this.CategoryButton.Name = "CategoryButton";
-            this.CategoryButton.Size = new System.Drawing.Size(138, 33);
+            this.CategoryButton.Size = new System.Drawing.Size(117, 33);
             this.CategoryButton.TabIndex = 4;
             this.CategoryButton.Text = "Category";
             this.CategoryButton.UseVisualStyleBackColor = true;
@@ -402,13 +399,12 @@ namespace PassGuard.GUI
             // 
             // NotesButton
             // 
-            this.NotesButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NotesButton.FlatAppearance.BorderSize = 0;
             this.NotesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NotesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NotesButton.Location = new System.Drawing.Point(729, 4);
+            this.NotesButton.Location = new System.Drawing.Point(624, 4);
             this.NotesButton.Name = "NotesButton";
-            this.NotesButton.Size = new System.Drawing.Size(138, 33);
+            this.NotesButton.Size = new System.Drawing.Size(117, 33);
             this.NotesButton.TabIndex = 5;
             this.NotesButton.Text = "Notes";
             this.NotesButton.UseVisualStyleBackColor = true;
@@ -417,14 +413,16 @@ namespace PassGuard.GUI
             // HeaderTableLayoutPanel
             // 
             this.HeaderTableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.HeaderTableLayoutPanel.ColumnCount = 7;
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
-            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.38F));
+            this.HeaderTableLayoutPanel.ColumnCount = 8;
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
+            this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.04F));
             this.HeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1.72F));
+            this.HeaderTableLayoutPanel.Controls.Add(this.ImportantButton, 6, 0);
             this.HeaderTableLayoutPanel.Controls.Add(this.NotesButton, 5, 0);
             this.HeaderTableLayoutPanel.Controls.Add(this.CategoryButton, 4, 0);
             this.HeaderTableLayoutPanel.Controls.Add(this.PassButton, 3, 0);
@@ -437,6 +435,19 @@ namespace PassGuard.GUI
             this.HeaderTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.HeaderTableLayoutPanel.Size = new System.Drawing.Size(889, 41);
             this.HeaderTableLayoutPanel.TabIndex = 1;
+            // 
+            // ImportantButton
+            // 
+            this.ImportantButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ImportantButton.FlatAppearance.BorderSize = 0;
+            this.ImportantButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ImportantButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportantButton.Location = new System.Drawing.Point(748, 4);
+            this.ImportantButton.Name = "ImportantButton";
+            this.ImportantButton.Size = new System.Drawing.Size(117, 33);
+            this.ImportantButton.TabIndex = 6;
+            this.ImportantButton.Text = "Important";
+            this.ImportantButton.UseVisualStyleBackColor = true;
             // 
             // VaultContentUC
             // 
@@ -501,5 +512,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button CategoryButton;
         private System.Windows.Forms.Button NotesButton;
         private System.Windows.Forms.TableLayoutPanel HeaderTableLayoutPanel;
+        private System.Windows.Forms.Button ImportantButton;
     }
 }
