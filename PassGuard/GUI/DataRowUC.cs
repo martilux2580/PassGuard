@@ -20,6 +20,7 @@ namespace PassGuard.GUI
         private String password { get; set; }
         private String category { get; set; }
         private String notes { get; set; }
+        private bool important { get; set; }
 
         private readonly byte[] Key;
 
@@ -83,6 +84,20 @@ namespace PassGuard.GUI
         {
             if (String.IsNullOrWhiteSpace(NotesContent.Text)) Clipboard.SetText(" ");
             else Clipboard.SetText(NotesContent.Text);
+        }
+
+        private void ImportantContent_Click(object sender, EventArgs e)
+        {
+            if (ImportantContent.Image == null)
+            {
+                ImportantContent.Image = Image.FromFile(@"..\..\..\Images\CheckIconBig.png");
+                important = true;
+            }
+            else
+            {
+                ImportantContent.Image = null;
+                important = false;
+            }
         }
     }
 }

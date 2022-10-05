@@ -14,6 +14,8 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+    //ScrollBar is 61px
+
     //UC Component that shows the table with the content of your Vault and more components to manage the data of it.
     public partial class VaultContentUC : UserControl
     {
@@ -289,6 +291,7 @@ namespace PassGuard.GUI
         {
             NotesCMS.Show(NotesButton, new Point(NotesButton.Width - NotesCMS.Width, NotesButton.Height)); //Sets where to display the ContextMenuStrip...
         }
+        
 
         private void AddButton_Click(object sender, EventArgs e)
         {
