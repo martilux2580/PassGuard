@@ -1,21 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{756B63EC-23C2-4C1E-8507-456E49C0016E}</ProjectGuid>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>PassGuard</RootNamespace>
-    <AssemblyName>PassGuard</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Users\Martín\Desktop\Release1.0\</PublishUrl>
     <Install>true</Install>
@@ -33,65 +19,24 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>LogoIcon64123.ico</ApplicationIcon>
@@ -106,327 +51,47 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <HintPath>packages\Portable.BouncyCastle.1.8.9\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.barcodes, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.barcodes.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.forms, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.forms.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.io, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.io.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.kernel, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.kernel.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.layout, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.layout.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.pdfa, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.pdfa.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.sign, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.sign.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.styledxmlparser, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.styledxmlparser.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.svg, Version=7.1.17.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext7.7.1.17\lib\net45\itext.svg.dll</HintPath>
-    </Reference>
-    <Reference Include="System">
+    <Reference Update="System">
       <HintPath>..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\lib\net46\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Utils.cs" />
-    <Compile Include="GUI\AddColorConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\AddColorConfig.Designer.cs">
-      <DependentUpon>AddColorConfig.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\AddContent.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\AddContent.Designer.cs">
-      <DependentUpon>AddContent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\AskRGBforSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\AskRGBforSettings.Designer.cs">
-      <DependentUpon>AskRGBforSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\AutoBackup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\AutoBackup.Designer.cs">
-      <DependentUpon>AutoBackup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\CreateBackup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\CreateBackup.Designer.cs">
-      <DependentUpon>CreateBackup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\CreateNewVaultUC.cs">
+    <Compile Update="GUI\CreateNewVaultUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\CreateNewVaultUC.Designer.cs">
-      <DependentUpon>CreateNewVaultUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\CreateQuickPassUC.cs">
+    <Compile Update="GUI\CreateQuickPassUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\CreateQuickPassUC.Designer.cs">
-      <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\DataRowUC.cs">
+    <Compile Update="GUI\DataRowUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\DataRowUC.Designer.cs">
-      <DependentUpon>DataRowUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\DeleteColorConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\DeleteColorConfig.Designer.cs">
-      <DependentUpon>DeleteColorConfig.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\DeleteContent.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\DeleteContent.Designer.cs">
-      <DependentUpon>DeleteContent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\EditColorConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\EditColorConfig.Designer.cs">
-      <DependentUpon>EditColorConfig.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\EditContent.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\EditContent.Designer.cs">
-      <DependentUpon>EditContent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Core\Program.cs" />
-    <Compile Include="GUI\HomeContentUC.cs">
+    <Compile Update="GUI\HomeContentUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\HomeContentUC.Designer.cs">
-      <DependentUpon>HomeContentUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\LoadVaultUC.cs">
+    <Compile Update="GUI\LoadVaultUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\LoadVaultUC.Designer.cs">
-      <DependentUpon>LoadVaultUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\OutlineColorDataRowUC.cs">
+    <Compile Update="GUI\OutlineColorDataRowUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\OutlineColorDataRowUC.Designer.cs">
-      <DependentUpon>OutlineColorDataRowUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\VaultContentUC.cs">
+    <Compile Update="GUI\VaultContentUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\VaultContentUC.Designer.cs">
-      <DependentUpon>VaultContentUC.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GUI\AddColorConfig.resx">
-      <DependentUpon>AddColorConfig.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\AddContent.resx">
-      <DependentUpon>AddContent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\AskRGBforSettings.resx">
-      <DependentUpon>AskRGBforSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\AutoBackup.resx">
-      <DependentUpon>AutoBackup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\CreateBackup.resx">
-      <DependentUpon>CreateBackup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\CreateNewVaultUC.resx">
-      <DependentUpon>CreateNewVaultUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\CreateQuickPassUC.resx">
-      <DependentUpon>CreateQuickPassUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DataRowUC.resx">
-      <DependentUpon>DataRowUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DeleteColorConfig.resx">
-      <DependentUpon>DeleteColorConfig.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DeleteContent.resx">
-      <DependentUpon>DeleteContent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\EditColorConfig.resx">
-      <DependentUpon>EditColorConfig.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\EditContent.resx">
-      <DependentUpon>EditContent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\HomeContentUC.resx">
-      <DependentUpon>HomeContentUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\LoadVaultUC.resx">
-      <DependentUpon>LoadVaultUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\OutlineColorDataRowUC.resx">
-      <DependentUpon>OutlineColorDataRowUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\VaultContentUC.resx">
-      <DependentUpon>VaultContentUC.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="packages.config" />
-    <None Include="PassGuard_TemporaryKey.pfx" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\Clipboard.png" />
-    <Content Include="Images\Clipboard32.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Clipboard64.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Folder.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\FolderIcon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\help.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Help32.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Info.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Info24.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Info241.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Info243.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Logo100px.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Logo123.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Logo250px.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Logoblancblanc.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\LogoIcon64.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\LogoIcon64123.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ProvLogo.png" />
-    <Content Include="Images\Setting.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Setting.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Settings.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="LogoIcon64.ico" />
-    <Content Include="LogoIcon64123.ico" />
-    <Content Include="SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="PassGuard_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6 %28x86 y x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -436,26 +101,23 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="SQLite.Interop.dll">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="itext7" Version="7.1.17" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.410601">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
-  </Target>
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 </Project>

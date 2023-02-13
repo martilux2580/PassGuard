@@ -83,7 +83,7 @@ namespace PassGuard.GUI
         //Loads the values saved from previous configurations of AutoBackup
         private void SetupInitialValues()
         {
-            if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "false")
+            if (ConfigurationManager.AppSettings["AutoBackupState"] == "false")
             {
                 ActivateBackupCheckbox.Checked = false;
                 NoteLabel.Enabled = false;
@@ -111,9 +111,9 @@ namespace PassGuard.GUI
 
             }
 
-            VaultPathTextbox.Text = ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"); //Modify data in the config file for future executions.
-            BackupPathFilesTextbox.Text = ConfigurationManager.AppSettings.Get("dstBackupPathForSave"); //Modify data in the config file for future executions.
-            FrequencyCombobox.Text = frequencies[Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))];
+            VaultPathTextbox.Text = ConfigurationManager.AppSettings["PathVaultForAutoBackup"]; //Modify data in the config file for future executions.
+            BackupPathFilesTextbox.Text = ConfigurationManager.AppSettings["dstBackupPathForSave"]; //Modify data in the config file for future executions.
+            FrequencyCombobox.Text = frequencies[Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])];
 
         }
 

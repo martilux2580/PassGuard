@@ -22,8 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
-using System.Web.Script.Serialization;
-
+using System.Text.Json;
 
 namespace PassGuard.Core
 {
@@ -383,8 +382,7 @@ namespace PassGuard.Core
         //Create a PDF given the results of all the rows, name of Vault, Email and SK.
         internal void CreateOutlinePDF()
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+            var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
             var names = values.Keys.ToList();
             var rgb = values.Values.ToList();
 
@@ -497,11 +495,11 @@ namespace PassGuard.Core
 
             while (true)
             {
-                var mode = ConfigurationManager.AppSettings.Get("FrequencyAutoBackup");
-                var pathVault = ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup");
-                var dstPath = ConfigurationManager.AppSettings.Get("dstBackupPathForSave");
-                var lastDate = ConfigurationManager.AppSettings.Get("LastDateAutoBackup");
-                var active = ConfigurationManager.AppSettings.Get("AutoBackupState");
+                var mode = ConfigurationManager.AppSettings["FrequencyAutoBackup"];
+                var pathVault = ConfigurationManager.AppSettings["PathVaultForAutoBackup"];
+                var dstPath = ConfigurationManager.AppSettings["dstBackupPathForSave"];
+                var lastDate = ConfigurationManager.AppSettings["LastDateAutoBackup"];
+                var active = ConfigurationManager.AppSettings["AutoBackupState"];
                 if (active == "true")
                 {
                     switch (Int32.Parse(mode))
@@ -513,7 +511,7 @@ namespace PassGuard.Core
                                 {
                                     if (utils.CreateBackup(pathVault, dstPath: dstPath))
                                     {
-                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                                         config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
                                         config.Save(ConfigurationSaveMode.Modified, true);
                                         ConfigurationManager.RefreshSection("appSettings");
@@ -539,7 +537,7 @@ namespace PassGuard.Core
                                 {
                                     if (utils.CreateBackup(pathVault, dstPath: dstPath))
                                     {
-                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                                         config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
                                         config.Save(ConfigurationSaveMode.Modified, true);
                                         ConfigurationManager.RefreshSection("appSettings");
@@ -547,7 +545,7 @@ namespace PassGuard.Core
                                     }
                                     else
                                     {
-                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                                         config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
                                         config.Save(ConfigurationSaveMode.Modified, true);
                                         ConfigurationManager.RefreshSection("appSettings");
@@ -569,7 +567,7 @@ namespace PassGuard.Core
                                 {
                                     if (utils.CreateBackup(pathVault, dstPath: dstPath))
                                     {
-                                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                                        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                                         config.AppSettings.Settings["LastDateAutoBackup"].Value = DateTime.Now.ToString(); //Modify data in the config file for future executions.
                                         config.Save(ConfigurationSaveMode.Modified, true);
                                         ConfigurationManager.RefreshSection("appSettings");

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
-using System.Web.Script.Serialization;
 
 namespace PassGuard
 {
@@ -34,10 +33,10 @@ namespace PassGuard
             Core.Utils utils = new Core.Utils();
             try
             {
-                LogoPictureBox.Image = Image.FromFile(@".\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder. //@"..\..\Images\Logo123.png"
+                LogoPictureBox.Image = Image.FromFile(@".\..\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder. //@"..\..\Images\Logo123.png"
                 LogoPictureBox.SizeMode = PictureBoxSizeMode.Zoom; //PictureBoxSizeMode.Zoom
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
-                SettingButton.Image = Image.FromFile(@".\Images\Setting.ico"); //Loads Image for the Settings Icon
+                this.Icon = new Icon(@".\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
+                SettingButton.Image = Image.FromFile(@".\..\Images\Setting.ico"); //Loads Image for the Settings Icon
             }
             catch(FileNotFoundException)
             {
@@ -46,14 +45,14 @@ namespace PassGuard
 
             try
             {
-                AppVersionLabel.Text = ConfigurationManager.AppSettings.Get("AppVersion");
+                AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
                 setConfigTheme(); //Set theme based on saved config.
                 setConfigColours(); //Set outline colours based on saved config.
 
                 //Code for regulating AutoBackup when it is enabled and has a time frequency (every day, week or month).
                 int[] timeCodes = new int[] { 3, 4, 5 }; //Modes for everyday, week or month.
                 //If Autobackup is activated and has time frequency, start a task with the function to check every time if a backup has to be made.
-                if ((ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") && timeCodes.Contains(Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))))
+                if ((ConfigurationManager.AppSettings["AutoBackupState"] == "true") && timeCodes.Contains(Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])))
                 {
                     autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start a task with a method
                 }
@@ -69,8 +68,8 @@ namespace PassGuard
         //Obtain data from previous executions, and set theme from saved config.
         private void setConfigTheme()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            String sAttr = ConfigurationManager.AppSettings.Get("Theme");
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            String sAttr = ConfigurationManager.AppSettings["Theme"];
             if (sAttr == "Dark") //Change theme color depending on the backcolor of the app.
             {
                 darkToolStripMenuItem.Checked = true;
@@ -89,17 +88,17 @@ namespace PassGuard
         //Obtain data from previous executions, and set theme from saved config.
         private void setConfigColours()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            int getRedMenu = Int32.Parse(ConfigurationManager.AppSettings.Get("RedMenu"));
-            int getGreenMenu = Int32.Parse(ConfigurationManager.AppSettings.Get("GreenMenu"));
-            int getBlueMenu = Int32.Parse(ConfigurationManager.AppSettings.Get("BlueMenu"));
-            int getRedLogo = Int32.Parse(ConfigurationManager.AppSettings.Get("RedLogo"));
-            int getGreenLogo = Int32.Parse(ConfigurationManager.AppSettings.Get("GreenLogo"));
-            int getBlueLogo = Int32.Parse(ConfigurationManager.AppSettings.Get("BlueLogo"));
-            int getRedOptions = Int32.Parse(ConfigurationManager.AppSettings.Get("RedOptions"));
-            int getGreenOptions = Int32.Parse(ConfigurationManager.AppSettings.Get("GreenOptions"));
-            int getBlueOptions = Int32.Parse(ConfigurationManager.AppSettings.Get("BlueOptions"));
+            int getRedMenu = Int32.Parse(ConfigurationManager.AppSettings["RedMenu"]);
+            int getGreenMenu = Int32.Parse(ConfigurationManager.AppSettings["GreenMenu"]);
+            int getBlueMenu = Int32.Parse(ConfigurationManager.AppSettings["BlueMenu"]);
+            int getRedLogo = Int32.Parse(ConfigurationManager.AppSettings["RedLogo"]);
+            int getGreenLogo = Int32.Parse(ConfigurationManager.AppSettings["GreenLogo"]);
+            int getBlueLogo = Int32.Parse(ConfigurationManager.AppSettings["BlueLogo"]);
+            int getRedOptions = Int32.Parse(ConfigurationManager.AppSettings["RedOptions"]);
+            int getGreenOptions = Int32.Parse(ConfigurationManager.AppSettings["GreenOptions"]);
+            int getBlueOptions = Int32.Parse(ConfigurationManager.AppSettings["BlueOptions"]);
 
             MenuPanel.BackColor = Color.FromArgb(getRedMenu, getGreenMenu, getBlueMenu);
             LogoPanel.BackColor = Color.FromArgb(getRedLogo, getGreenLogo, getBlueLogo);
@@ -186,7 +185,7 @@ namespace PassGuard
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B }; //Create array with actual colours to send it to the form.
                 GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(actualColours, config); //Dialog to insert rgb values
@@ -296,7 +295,7 @@ namespace PassGuard
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
@@ -321,7 +320,7 @@ namespace PassGuard
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 DialogResult dialog = MessageBox.Show(text: "Would you like to save this theme configuration for next executions?", caption: "Save theme configuration", buttons: MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
@@ -383,8 +382,8 @@ namespace PassGuard
             try
             {
                 Core.Utils utils = new Core.Utils();
-                var previousState = ConfigurationManager.AppSettings.Get("AutoBackupState");
-                var previousFrequency = ConfigurationManager.AppSettings.Get("FrequencyAutoBackup");
+                var previousState = ConfigurationManager.AppSettings["AutoBackupState"];
+                var previousFrequency = ConfigurationManager.AppSettings["FrequencyAutoBackup"];
                 int[] timeCodes = new int[] { 3, 4, 5 }; //Codes for time modes (everyday, everyweek, everymonth)
 
                 GUI.AutoBackup ab = new GUI.AutoBackup(this);
@@ -401,7 +400,7 @@ namespace PassGuard
 
                     if (newState == "false") //Your new state is AutoBackup deactivated
                     {
-                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                         config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
                         config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
                         config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
@@ -433,7 +432,7 @@ namespace PassGuard
                     {
                         if (previousState == "false") //Before, AutoBackup was deactivated, so task isnt running.
                         {
-                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                             config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
@@ -450,7 +449,7 @@ namespace PassGuard
                         }
                         else if (previousState == "true")
                         {
-                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                             config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["PathVaultForAutoBackup"].Value = newVaultPath; //Modify data in the config file for future executions.
                             config.AppSettings.Settings["dstBackupPathForSave"].Value = newBackupsPath; //Modify data in the config file for future executions.
@@ -488,11 +487,11 @@ namespace PassGuard
 
             try
             {
-                if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+                if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
                 {
-                    if (2 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup"))) //If app is closing and the mode is 2 (after each close of app), make backup.
+                    if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
                     {
-                        if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
+                        if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                         {
                             MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                         }
