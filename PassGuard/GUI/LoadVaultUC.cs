@@ -39,7 +39,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                SecurityKeyTextbox.Text = ConfigurationManager.AppSettings.Get("SecurityKey"); //Get data in the config file for future executions.
+                SecurityKeyTextbox.Text = ConfigurationManager.AppSettings["SecurityKey"]; //Get data in the config file for future executions.
             }
             catch (Exception)
             {
@@ -256,7 +256,7 @@ namespace PassGuard.GUI
 
         private void LoadSavedEmailButton_Click(object sender, EventArgs e)
         {
-            VaultEmailTextbox.Text = ConfigurationManager.AppSettings.Get("Email"); //Modify data in the config file for future executions.
+            VaultEmailTextbox.Text = ConfigurationManager.AppSettings["Email"]; //Modify data in the config file for future executions.
         }
 
         private void LoadSavedEmailButton_MouseEnter(object sender, EventArgs e)
@@ -273,7 +273,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 config.AppSettings.Settings["Email"].Value = VaultEmailTextbox.Text; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified, true);
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
@@ -288,7 +288,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 config.AppSettings.Settings["SecurityKey"].Value = SecurityKeyTextbox.Text; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified, true);
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.

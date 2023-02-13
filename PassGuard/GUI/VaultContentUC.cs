@@ -411,14 +411,14 @@ namespace PassGuard.GUI
             
                 if (add.getAddedSuccess()) //If autobackup is enabled after each change in the Vault, create backup
                 {
-                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true")
+                    if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
                     {
                         //Check the change in current vault is the vault autobackup has configured to be backed up.
-                        if (String.Equals(a:Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
+                        if (String.Equals(a:Path.GetFullPath(ConfigurationManager.AppSettings["PathVaultForAutoBackup"]), b: Path.GetFullPath(encryptedVaultPath)))
                         {
-                            if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
+                            if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
+                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -619,14 +619,14 @@ namespace PassGuard.GUI
 
                 if (del.getDeletedSuccess() || del.getDeletedAllSuccess()) 
                 {
-                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") //If autobackup was set for every change in the Vault
+                    if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set for every change in the Vault
                     {
                         //If the Vault we are making changes is the same vault set to autobackup, and the mode is 1, do autobackup.
-                        if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
+                        if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings["PathVaultForAutoBackup"]), b: Path.GetFullPath(encryptedVaultPath)))
                         {
-                            if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
+                            if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
+                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -785,14 +785,14 @@ namespace PassGuard.GUI
 
                 if (edit.getEditedSuccess())
                 {
-                    if (ConfigurationManager.AppSettings.Get("AutoBackupState") == "true") //If autobackup was set to every change in the Vault....
+                    if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set to every change in the Vault....
                     {
                         //If the Vault we are making changes is the same vault set to autobackup, and the mode is 1, do autobackup.
-                        if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup")), b: Path.GetFullPath(encryptedVaultPath)))
+                        if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings["PathVaultForAutoBackup"]), b: Path.GetFullPath(encryptedVaultPath)))
                         {
-                            if (1 == Int32.Parse(ConfigurationManager.AppSettings.Get("FrequencyAutoBackup")))
+                            if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings.Get("PathVaultForAutoBackup"), dstPath: ConfigurationManager.AppSettings.Get("dstBackupPathForSave")))
+                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -1463,7 +1463,7 @@ namespace PassGuard.GUI
                     row[5] = utils.DecryptText(key: cKey, src: row[5]);
                 }
 
-                utils.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
+                utils.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings["Email"], ConfigurationManager.AppSettings["SecurityKey"]);
 
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); 
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));

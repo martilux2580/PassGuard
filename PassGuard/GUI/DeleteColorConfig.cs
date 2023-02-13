@@ -6,8 +6,8 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace PassGuard.GUI
@@ -62,8 +62,7 @@ namespace PassGuard.GUI
         {
             if (!String.IsNullOrWhiteSpace(NameCombobox.Text))
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+                Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
                 NameTextbox.Text = NameCombobox.Text;
                 RedNUD.Value = values[NameCombobox.Text][0];

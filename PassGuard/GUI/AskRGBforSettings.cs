@@ -5,10 +5,9 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Web.Script.Serialization;
 
 namespace PassGuard.GUI
 {
@@ -30,7 +29,7 @@ namespace PassGuard.GUI
         {
             InitializeComponent();
             SetNUDs(colours);
-            LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
             changedSuccess = false;
             config = configg;
 
@@ -43,8 +42,7 @@ namespace PassGuard.GUI
 
         internal void LoadContent(String configs)
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(configs);
+            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(configs);
 
             ContentFlowLayoutPanel.Controls.Clear();
             ConfigUCList.Clear();
@@ -156,8 +154,7 @@ namespace PassGuard.GUI
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
             GUI.AddColorConfig add = new GUI.AddColorConfig(values);
             add.BackColor = this.BackColor;
@@ -171,7 +168,7 @@ namespace PassGuard.GUI
                 int newBlue = add.blue;
                 int newFav = add.favourite;
 
-                var data = ConfigurationManager.AppSettings.Get("OutlineSavedColours");
+                var data = ConfigurationManager.AppSettings["OutlineSavedColours"];
                 var newData = data.Insert(data.Length - 1, ",\"" + newName  + "\":[" + newRed.ToString() + ", " + newGreen.ToString() + ", " + newBlue.ToString() + "," + newFav.ToString() + "]");
 
                 config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
@@ -179,7 +176,7 @@ namespace PassGuard.GUI
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
                 ContentFlowLayoutPanel.Controls.Clear();
-                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+                LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
                 ContentFlowLayoutPanel.Refresh();
 
@@ -189,8 +186,7 @@ namespace PassGuard.GUI
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
             var namesList = new List<String>(values.Keys);
 
@@ -210,14 +206,14 @@ namespace PassGuard.GUI
                 values.Remove(oldName);
                 values.Add(newName, new List<int> { red, green, blue , important});
 
-                String newData = js.Serialize(values);
+                String newData = JsonSerializer.Serialize(values);
 
                 config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
                 ContentFlowLayoutPanel.Controls.Clear();
-                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+                LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
                 ContentFlowLayoutPanel.Refresh();
             }
@@ -226,8 +222,7 @@ namespace PassGuard.GUI
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
             var namesList = new List<String>(values.Keys);
 
@@ -241,14 +236,14 @@ namespace PassGuard.GUI
                 values.Remove(del.name);
                 if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144 }); }
 
-                String newData = js.Serialize(values);
+                String newData = JsonSerializer.Serialize(values);
 
                 config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
                 ContentFlowLayoutPanel.Controls.Clear();
-                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+                LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
                 ContentFlowLayoutPanel.Refresh();
             }
@@ -257,14 +252,14 @@ namespace PassGuard.GUI
                 values.Clear();
                 values.Add("Default", new List<int> { 0, 191, 144 });
 
-                String newData = js.Serialize(values);
+                String newData = JsonSerializer.Serialize(values);
 
                 config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
                 ContentFlowLayoutPanel.Controls.Clear();
-                LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+                LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
             }
 
@@ -277,7 +272,7 @@ namespace PassGuard.GUI
             ascendingOrderToolStripMenuItem.Checked = false;
             descendingOrderToolStripMenuItem.Checked = false;
 
-            LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
         }
 
@@ -287,10 +282,9 @@ namespace PassGuard.GUI
             ascendingOrderToolStripMenuItem.Checked = true;
             descendingOrderToolStripMenuItem.Checked = false;
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+            var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
 
-            LoadContent(js.Serialize(values));
+            LoadContent(JsonSerializer.Serialize(values));
             
         }
 
@@ -300,18 +294,12 @@ namespace PassGuard.GUI
             ascendingOrderToolStripMenuItem.Checked = false;
             descendingOrderToolStripMenuItem.Checked = true;
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            var values = new SortedDictionary<String, List<int>>(js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours")));
+            var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
             var reversed = values.Reverse();
             var newValues = reversed.ToDictionary(x => x.Key, x => x.Value);
 
-            LoadContent(js.Serialize(newValues));
+            LoadContent(JsonSerializer.Serialize(newValues));
 
-        }
-
-        private void RedButton_Click(object sender, EventArgs e)
-        {
-            ContentFlowLayoutPanel.Controls.Add(new GUI.OutlineColorDataRowUC("xd", new List<int> { 1, 2, 3, 4 }, this));
         }
     }
 }

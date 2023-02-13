@@ -271,7 +271,6 @@ namespace PassGuard.GUI
             this.RedButton.TabIndex = 19;
             this.RedButton.Text = "Red";
             this.RedButton.UseVisualStyleBackColor = true;
-            this.RedButton.Click += new System.EventHandler(this.RedButton_Click);
             // 
             // GreenButton
             // 

@@ -143,7 +143,7 @@ namespace PassGuard.GUI
                 //Save salt and maybe email.
                 try
                 {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                     config.AppSettings.Settings["SecurityKey"].Value = rndsalt; //Modify data in the config file for future executions.
                     if (SaveEmailCheckbox.Checked)
                     {

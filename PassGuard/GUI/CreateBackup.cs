@@ -98,7 +98,7 @@ namespace PassGuard.GUI
 
         private void LoadSavedBackupPathButton_Click(object sender, EventArgs e)
         {
-            VaultBackupPathTextbox.Text = ConfigurationManager.AppSettings.Get("dstBackupPathForSave"); //Modify data in the config file for future executions.
+            VaultBackupPathTextbox.Text = ConfigurationManager.AppSettings["dstBackupPathForSave"]; //Modify data in the config file for future executions.
         }
 
         private void SelectVaultPathButton_Click(object sender, EventArgs e)

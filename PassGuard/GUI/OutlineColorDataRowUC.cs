@@ -7,8 +7,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace PassGuard.GUI
@@ -30,9 +30,9 @@ namespace PassGuard.GUI
             GreenNUD.Value = rgb[1];
             BlueNUD.Value = rgb[2];
 
-            var redlogo = ConfigurationManager.AppSettings.Get("RedLogo");
-            var greenlogo = ConfigurationManager.AppSettings.Get("GreenLogo");
-            var bluelogo = ConfigurationManager.AppSettings.Get("BlueLogo");
+            var redlogo = ConfigurationManager.AppSettings["RedLogo"];
+            var greenlogo = ConfigurationManager.AppSettings["GreenLogo"];
+            var bluelogo = ConfigurationManager.AppSettings["BlueLogo"];
 
             ViewerPanel.BackColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
 
@@ -84,8 +84,7 @@ namespace PassGuard.GUI
                 favourite = false;
             }
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Dictionary<String, List<int>> values = js.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
             var rgbconf = values[NameTextbox.Text];
             if(favourite) { rgbconf[rgbconf.Count - 1] = 1; }
@@ -93,11 +92,11 @@ namespace PassGuard.GUI
             
             values[NameTextbox.Text] = rgbconf;
 
-            callingForm.config.AppSettings.Settings["OutlineSavedColours"].Value = js.Serialize(values); //Modify data in the config file for future executions.
+            callingForm.config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(values); //Modify data in the config file for future executions.
             callingForm.config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-            callingForm.LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+            callingForm.LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
         }
     }
 }
