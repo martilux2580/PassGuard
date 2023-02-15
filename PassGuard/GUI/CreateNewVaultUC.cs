@@ -137,7 +137,7 @@ namespace PassGuard.GUI
                 rnd.NextBytes(salt);
                 string rndsalt = Convert.ToBase64String(salt);
                 //Encrypt and delete previous file.
-                utils.Encrypt(key: utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
+                utils.Encrypt(key: utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
                 //Save salt and maybe email.

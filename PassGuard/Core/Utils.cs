@@ -38,12 +38,11 @@ namespace PassGuard.Core
             }
             else
             {
-                SHA1 sha1 = new SHA1CryptoServiceProvider();
                 byte[] passByte = Encoding.UTF8.GetBytes(password);//Encode Pass
-                byte[] passHash = sha1.ComputeHash(passByte);//Compute SHA1
+                byte[] passHash = SHA1.HashData(passByte);//Compute SHA1
 
                 //Convert Hash into readable string
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 foreach (byte b in passHash)
                 {
                     sb.Append(b.ToString("x2"));
@@ -52,15 +51,15 @@ namespace PassGuard.Core
 
                 return hash;
             }
-            
+
         }
 
         //Obtain all the hashes that start with headHash from an API of pwned passwords.
-        internal async Task<string> getHashes(string headHash)
+        internal async Task<string> GetHashes(string headHash)
         {
             string instruction = "https://api.pwnedpasswords.com/range/";
             string url = instruction + headHash.ToUpper();
-            HttpClient client = new HttpClient();
+            HttpClient client = new();
             try
             {
                 //HTTP request to the API and await for the list of hashes and their appearances in the API....
@@ -79,9 +78,9 @@ namespace PassGuard.Core
         {
             string hash = ComputeSHA1(password); //Compute SHA1
             string headhash = hash.Substring(0, 5); //Compute first part of hash in order to check hashes.
-            string PwnedHashes = await getHashes(headhash);
+            string PwnedHashes = await GetHashes(headhash);
 
-            StringReader reader = new StringReader(PwnedHashes);
+            StringReader reader = new(PwnedHashes);
             string line, tailHash;
             while ((line = reader.ReadLine()) != null)//Read all pwned hashes
             {
@@ -98,8 +97,9 @@ namespace PassGuard.Core
         //https://stackoverflow.com/questions/32932679/using-rngcryptoserviceprovider-to-generate-random-string/32932789#32932789
         internal string GenerateSecurePassword(int length, string validCharacters) //StackOverflow xD
         {
-            StringBuilder res = new StringBuilder();
-            using (RNGCryptoServiceProvider cryptoProvider = new RNGCryptoServiceProvider())
+            StringBuilder res = new();
+            
+            using (var cryptoProvider = RandomNumberGenerator.Create())
             {
                 while (res.Length != length) //Compound passwords byte-a-byte
                 {
@@ -157,7 +157,7 @@ namespace PassGuard.Core
             // Encrypt the source file and write it to the destination file.
             using (var sourceStream = File.OpenRead(src))
             using (var destinationStream = File.Create(dst))
-            using (var provider = new AesCryptoServiceProvider())
+            using (var provider = Aes.Create())
             {
                 if (key != null)
                 {
@@ -174,9 +174,9 @@ namespace PassGuard.Core
         }
 
         //Function to derive a 256bit key (with PBKDF2) given a password and a salt.
-        internal byte[] getVaultKey(String password, byte[] salt)
+        internal byte[] GetVaultKey(String password, byte[] salt)
         {
-            Rfc2898DeriveBytes d1 = new Rfc2898DeriveBytes(password, salt, iterations: 100100);
+            Rfc2898DeriveBytes d1 = new(password, salt, iterations: 100100, HashAlgorithmName.SHA256);
             return d1.GetBytes(32); //256bit key.
         }
 
@@ -186,7 +186,7 @@ namespace PassGuard.Core
             // Decrypt the source file and write it to the destination file.
             using (var sourceStream = File.OpenRead(src))
             using (var destinationStream = File.Create(dst))
-            using (var provider = new AesCryptoServiceProvider())
+            using (var provider = Aes.Create())
             {
                 var IV = new byte[provider.IV.Length];
                 sourceStream.Read(IV, 0, IV.Length);
@@ -211,7 +211,7 @@ namespace PassGuard.Core
                 byte[] encrypted;
                 byte[] IV;
 
-                using (var provider = new AesCryptoServiceProvider())
+                using (var provider = Aes.Create())
                 {
                     provider.Key = key;
 
@@ -258,7 +258,7 @@ namespace PassGuard.Core
                 byte[] cipherTextCombined = Convert.FromBase64String(src);
 
                 //Create an Aes object with the specified key and IV. 
-                using (var provider = new AesCryptoServiceProvider())
+                using (var provider = Aes.Create())
                 {
                     provider.Key = key;
 
@@ -309,9 +309,9 @@ namespace PassGuard.Core
                 var file = File.Create(pdfLocation);
                 file.Close(); //Close so Create is not using the file.
 
-                PdfWriter writer = new PdfWriter(pdfLocation);
-                PdfDocument pdf = new PdfDocument(writer);
-                Document doc = new Document(pdf);
+                PdfWriter writer = new(pdfLocation);
+                PdfDocument pdf = new(writer);
+                Document doc = new(pdf);
                 doc.SetMargins(8, 8, 8, 8);
 
                 var title = new Paragraph("PassGuard: Vault Content").SetBold().SetFontSize(15); //Title
@@ -392,9 +392,9 @@ namespace PassGuard.Core
                 var file = File.Create(pdfLocation);
                 file.Close(); //Close so Create is not using the file.
 
-                PdfWriter writer = new PdfWriter(pdfLocation);
-                PdfDocument pdf = new PdfDocument(writer);
-                Document doc = new Document(pdf);
+                PdfWriter writer = new(pdfLocation);
+                PdfDocument pdf = new(writer);
+                Document doc = new(pdf);
                 doc.SetMargins(8, 8, 8, 8);
 
                 var title = new Paragraph("PassGuard: Outline Color Configuration").SetBold().SetFontSize(15); //Title
@@ -491,8 +491,7 @@ namespace PassGuard.Core
         //If enough time have passed since lastDate of backup, create a backup. Keep checking everytime if it is time to create a backup.
         internal void AutoBackupTime()
         {
-            Core.Utils utils = new Core.Utils();
-
+            Core.Utils utils = new();
             while (true)
             {
                 var mode = ConfigurationManager.AppSettings["FrequencyAutoBackup"];

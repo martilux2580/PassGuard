@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,11 +22,12 @@ namespace PassGuard.GUI
         private Dictionary<String, List<int>> storedConfigs;
         public bool addedSuccess { get; private set; }
 
+        [SupportedOSPlatform("windows")]
         public AddColorConfig(Dictionary<String, List<int>> configs)
         {
             InitializeComponent();
 
-            this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+            this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
 
             storedConfigs = configs;
             addedSuccess = false;
@@ -43,7 +45,7 @@ namespace PassGuard.GUI
             {
                 errorMessages += "\nAll three RGB values cannot be less than 32.";
             }
-            if (storedConfigs.Keys.Contains(NameTextbox.Text))
+            if (storedConfigs.ContainsKey(NameTextbox.Text))
             {
                 errorMessages += "\nThere is already a saved config with that name.";
             }

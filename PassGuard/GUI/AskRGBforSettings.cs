@@ -15,8 +15,8 @@ namespace PassGuard.GUI
     public partial class AskRGBforSettings : Form
     {
 
-        private List<OutlineColorDataRowUC> ConfigUCList = new List<OutlineColorDataRowUC>(); //List of DataRows with the data of the passwords.
-        public List<CheckBox> checkboxes { get; internal set; } = new List<CheckBox>();
+        private List<OutlineColorDataRowUC> ConfigUCList = new(); //List of DataRows with the data of the passwords.
+        public List<CheckBox> checkboxes { get; internal set; } = new();
         public bool changedSuccess { get; private set; }
         public Configuration config { get; private set; }
         private int RedRGBValue { get; set; }

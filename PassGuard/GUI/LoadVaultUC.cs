@@ -94,10 +94,10 @@ namespace PassGuard.GUI
                     try
                     {
                         //Calculate keys to decrypt vault.
-                        var vKey = utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
+                        var vKey = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
                         var keyVStr = utils.Base64ToString(Convert.ToBase64String(vKey));
                         var skStr = utils.Base64ToString(SecurityKeyTextbox.Text);
-                        var cKey = utils.getVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
+                        var cKey = utils.GetVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
 
                         //Obtain all its decrypted elements.
                         utils.Decrypt(key: vKey, src: encVault, dst: decVault);
@@ -175,7 +175,7 @@ namespace PassGuard.GUI
                     try
                     {
                         //Calculate key to decrypt vault
-                        var key = utils.getVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
+                        var key = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
 
                         //Show all the contents of the vault (UserControl).
                         GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.

@@ -25,37 +25,37 @@ namespace PassGuard.GUI
         private bool addedSuccess; //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
         private readonly byte[] Key; //Key 
 
-        public bool getAddedSuccess()
+        public bool GetAddedSuccess()
         {
             return addedSuccess;
         }
 
-        public String getUrl()
+        public String GetUrl()
         {
             return url;
         }
 
-        public String getName()
+        public String GetName()
         {
             return name;
         }
 
-        public String getUsername()
+        public String GetUsername()
         {
             return username;
         }
 
-        public String getPassword()
+        public String GetPassword()
         {
             return password;
         }
 
-        public String getCategory()
+        public String GetCategory()
         {
             return category;
         }
 
-        public String getNotes()
+        public String GetNotes()
         {
             return notes;
         }
@@ -64,7 +64,7 @@ namespace PassGuard.GUI
         {
             InitializeComponent();
 
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             Key = key;
             namesInDB = names;
@@ -75,7 +75,7 @@ namespace PassGuard.GUI
             addedSuccess = false;
             try
             {
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = new(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -95,7 +95,7 @@ namespace PassGuard.GUI
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             String errorMessages = "";
 
             if (String.IsNullOrWhiteSpace(NameTextbox.Text) || String.IsNullOrWhiteSpace(UsernameTextbox.Text) || String.IsNullOrWhiteSpace(PasswordTextbox.Text))
