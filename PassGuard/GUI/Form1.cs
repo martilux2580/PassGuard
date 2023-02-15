@@ -33,9 +33,7 @@ namespace PassGuard
             Core.Utils utils = new Core.Utils();
             try
             {
-                LogoPictureBox.Image = Image.FromFile(@".\..\Images\Logo123.png"); //Working Directory inside Release Folder. Loads Image from Image folder. //@"..\..\Images\Logo123.png"
-                LogoPictureBox.SizeMode = PictureBoxSizeMode.Zoom; //PictureBoxSizeMode.Zoom
-                this.Icon = new Icon(@".\..\Images\LogoIcon64123.ico"); //Loads Icon from Image folder. //LogoIcon64.ico
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder. //LogoIcon64.ico
                 SettingButton.Image = Image.FromFile(@".\..\Images\Setting.ico"); //Loads Image for the Settings Icon
             }
             catch(FileNotFoundException)
