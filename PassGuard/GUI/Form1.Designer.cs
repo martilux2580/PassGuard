@@ -79,19 +79,18 @@ namespace PassGuard
             this.MenuPanel.Location = new System.Drawing.Point(0, 0);
             this.MenuPanel.Margin = new System.Windows.Forms.Padding(2);
             this.MenuPanel.Name = "MenuPanel";
-            this.MenuPanel.Size = new System.Drawing.Size(288, 574);
+            this.MenuPanel.Size = new System.Drawing.Size(336, 662);
             this.MenuPanel.TabIndex = 2;
             // 
             // AppVersionLabel
             // 
             this.AppVersionLabel.AutoSize = true;
-            this.AppVersionLabel.Cursor = System.Windows.Forms.Cursors.Default;
-            this.AppVersionLabel.Font = new System.Drawing.Font("Mongolian Baiti", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AppVersionLabel.Font = new System.Drawing.Font("Mongolian Baiti", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.AppVersionLabel.ForeColor = System.Drawing.Color.Black;
-            this.AppVersionLabel.Location = new System.Drawing.Point(9, 550);
+            this.AppVersionLabel.Location = new System.Drawing.Point(10, 635);
             this.AppVersionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.AppVersionLabel.Name = "AppVersionLabel";
-            this.AppVersionLabel.Size = new System.Drawing.Size(58, 16);
+            this.AppVersionLabel.Size = new System.Drawing.Size(57, 16);
             this.AppVersionLabel.TabIndex = 4;
             this.AppVersionLabel.Text = "          ";
             // 
@@ -101,12 +100,12 @@ namespace PassGuard
             this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
             this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
-            this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 295);
+            this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 339);
             this.CreateQuickPassButton.Margin = new System.Windows.Forms.Padding(2);
             this.CreateQuickPassButton.Name = "CreateQuickPassButton";
-            this.CreateQuickPassButton.Size = new System.Drawing.Size(288, 81);
+            this.CreateQuickPassButton.Size = new System.Drawing.Size(336, 93);
             this.CreateQuickPassButton.TabIndex = 6;
             this.CreateQuickPassButton.Text = "Create Quick Password";
             this.ToolTipNewPassVault.SetToolTip(this.CreateQuickPassButton, "Create a quick + safe password.");
@@ -121,12 +120,12 @@ namespace PassGuard
             this.LoadVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.LoadVaultButton.FlatAppearance.BorderSize = 0;
             this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LoadVaultButton.ForeColor = System.Drawing.Color.Black;
-            this.LoadVaultButton.Location = new System.Drawing.Point(0, 214);
+            this.LoadVaultButton.Location = new System.Drawing.Point(0, 246);
             this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(2);
             this.LoadVaultButton.Name = "LoadVaultButton";
-            this.LoadVaultButton.Size = new System.Drawing.Size(288, 81);
+            this.LoadVaultButton.Size = new System.Drawing.Size(336, 93);
             this.LoadVaultButton.TabIndex = 5;
             this.LoadVaultButton.Text = "Load Password Vault";
             this.ToolTipNewPassVault.SetToolTip(this.LoadVaultButton, "Load passwords from a Password Vault.");
@@ -141,12 +140,12 @@ namespace PassGuard
             this.CreateVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.CreateVaultButton.FlatAppearance.BorderSize = 0;
             this.CreateVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CreateVaultButton.ForeColor = System.Drawing.Color.Black;
-            this.CreateVaultButton.Location = new System.Drawing.Point(0, 133);
+            this.CreateVaultButton.Location = new System.Drawing.Point(0, 153);
             this.CreateVaultButton.Margin = new System.Windows.Forms.Padding(2);
             this.CreateVaultButton.Name = "CreateVaultButton";
-            this.CreateVaultButton.Size = new System.Drawing.Size(288, 81);
+            this.CreateVaultButton.Size = new System.Drawing.Size(336, 93);
             this.CreateVaultButton.TabIndex = 4;
             this.CreateVaultButton.Text = "New Password Vault";
             this.ToolTipNewPassVault.SetToolTip(this.CreateVaultButton, "Create a Safe Vault to Store your Passwords");
@@ -164,16 +163,18 @@ namespace PassGuard
             this.LogoPanel.Location = new System.Drawing.Point(0, 0);
             this.LogoPanel.Margin = new System.Windows.Forms.Padding(2);
             this.LogoPanel.Name = "LogoPanel";
-            this.LogoPanel.Size = new System.Drawing.Size(288, 133);
+            this.LogoPanel.Size = new System.Drawing.Size(336, 153);
             this.LogoPanel.TabIndex = 3;
             // 
             // LogoPictureBox
             // 
             this.LogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.LogoPictureBox.Location = new System.Drawing.Point(96, 2);
+            this.LogoPictureBox.Image = global::PassGuard.Properties.Resources.Logo123;
+            this.LogoPictureBox.Location = new System.Drawing.Point(112, 2);
             this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.LogoPictureBox.Name = "LogoPictureBox";
-            this.LogoPictureBox.Size = new System.Drawing.Size(94, 84);
+            this.LogoPictureBox.Size = new System.Drawing.Size(110, 97);
+            this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.LogoPictureBox.TabIndex = 3;
             this.LogoPictureBox.TabStop = false;
             this.LogoPictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LogoPictureBox_MouseClick);
@@ -182,9 +183,9 @@ namespace PassGuard
             // 
             this.DesignerLabel.AutoSize = true;
             this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.DesignerLabel.Font = new System.Drawing.Font("Mongolian Baiti", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DesignerLabel.Font = new System.Drawing.Font("Mongolian Baiti", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
-            this.DesignerLabel.Location = new System.Drawing.Point(68, 112);
+            this.DesignerLabel.Location = new System.Drawing.Point(79, 129);
             this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DesignerLabel.Name = "DesignerLabel";
             this.DesignerLabel.Size = new System.Drawing.Size(157, 15);
@@ -197,9 +198,9 @@ namespace PassGuard
             // LogoLabel
             // 
             this.LogoLabel.AutoSize = true;
-            this.LogoLabel.Font = new System.Drawing.Font("Modern No. 20", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LogoLabel.Font = new System.Drawing.Font("Modern No. 20", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LogoLabel.ForeColor = System.Drawing.Color.Black;
-            this.LogoLabel.Location = new System.Drawing.Point(83, 84);
+            this.LogoLabel.Location = new System.Drawing.Point(97, 97);
             this.LogoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.LogoLabel.Name = "LogoLabel";
             this.LogoLabel.Size = new System.Drawing.Size(130, 29);
@@ -211,10 +212,10 @@ namespace PassGuard
             this.OptionsPanel.Controls.Add(this.SettingButton);
             this.OptionsPanel.Controls.Add(this.TitleLabel);
             this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.OptionsPanel.Location = new System.Drawing.Point(288, 0);
+            this.OptionsPanel.Location = new System.Drawing.Point(336, 0);
             this.OptionsPanel.Margin = new System.Windows.Forms.Padding(2);
             this.OptionsPanel.Name = "OptionsPanel";
-            this.OptionsPanel.Size = new System.Drawing.Size(898, 133);
+            this.OptionsPanel.Size = new System.Drawing.Size(1048, 153);
             this.OptionsPanel.TabIndex = 3;
             // 
             // SettingButton
@@ -222,10 +223,10 @@ namespace PassGuard
             this.SettingButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.SettingButton.FlatAppearance.BorderSize = 0;
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SettingButton.Location = new System.Drawing.Point(792, 32);
+            this.SettingButton.Location = new System.Drawing.Point(924, 37);
             this.SettingButton.Margin = new System.Windows.Forms.Padding(2);
             this.SettingButton.Name = "SettingButton";
-            this.SettingButton.Size = new System.Drawing.Size(63, 68);
+            this.SettingButton.Size = new System.Drawing.Size(74, 78);
             this.SettingButton.TabIndex = 2;
             this.SettingButton.UseVisualStyleBackColor = true;
             this.SettingButton.Click += new System.EventHandler(this.SettingButton_Click);
@@ -233,12 +234,12 @@ namespace PassGuard
             // TitleLabel
             // 
             this.TitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TitleLabel.Font = new System.Drawing.Font("Open Sans", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TitleLabel.ForeColor = System.Drawing.SystemColors.Desktop;
             this.TitleLabel.Location = new System.Drawing.Point(0, 0);
             this.TitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TitleLabel.Name = "TitleLabel";
-            this.TitleLabel.Size = new System.Drawing.Size(898, 133);
+            this.TitleLabel.Size = new System.Drawing.Size(1048, 153);
             this.TitleLabel.TabIndex = 0;
             this.TitleLabel.Text = "HOME";
             this.TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -263,10 +264,10 @@ namespace PassGuard
             // 
             this.ContentPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ContentPanel.Location = new System.Drawing.Point(288, 133);
+            this.ContentPanel.Location = new System.Drawing.Point(336, 153);
             this.ContentPanel.Margin = new System.Windows.Forms.Padding(2);
             this.ContentPanel.Name = "ContentPanel";
-            this.ContentPanel.Size = new System.Drawing.Size(898, 441);
+            this.ContentPanel.Size = new System.Drawing.Size(1048, 509);
             this.ContentPanel.TabIndex = 4;
             // 
             // SettingsToolTip
@@ -302,7 +303,7 @@ namespace PassGuard
             this.TitleSettingsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.TitleSettingsToolStripMenuItem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TitleSettingsToolStripMenuItem.Enabled = false;
-            this.TitleSettingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleSettingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.TitleSettingsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.MenuText;
             this.TitleSettingsToolStripMenuItem.Name = "TitleSettingsToolStripMenuItem";
             this.TitleSettingsToolStripMenuItem.ReadOnly = true;
@@ -399,17 +400,17 @@ namespace PassGuard
             // 
             // mainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1186, 574);
+            this.ClientSize = new System.Drawing.Size(1384, 662);
             this.Controls.Add(this.ContentPanel);
             this.Controls.Add(this.OptionsPanel);
             this.Controls.Add(this.MenuPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1202, 613);
+            this.MinimumSize = new System.Drawing.Size(1400, 701);
             this.Name = "mainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PassGuard™";
