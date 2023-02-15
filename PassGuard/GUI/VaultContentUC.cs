@@ -55,7 +55,7 @@ namespace PassGuard.GUI
             //Calculate cKey
             var keyVStr = utils.Base64ToString(Convert.ToBase64String(vKey));
             var skStr = utils.Base64ToString(SK);
-            cKey = utils.getVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
+            cKey = utils.GetVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
 
             //Load the content of the Vault without any column order, and set the CMS for the orders.
             LoadContent(Order.Normal, DBColumns.NULLVALUESS);
@@ -335,14 +335,14 @@ namespace PassGuard.GUI
                 add.BackColor = this.Parent.BackColor;
                 add.ShowDialog();
 
-                if (add.getAddedSuccess()) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
+                if (add.GetAddedSuccess()) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
                 {
-                    String newUrl = add.getUrl();
-                    String newName = add.getName();
-                    String newUsername = add.getUsername();
-                    String newPassword = add.getPassword();
-                    String newCategory = add.getCategory();
-                    String newNotes = add.getNotes();
+                    String newUrl = add.GetUrl();
+                    String newName = add.GetName();
+                    String newUsername = add.GetUsername();
+                    String newPassword = add.GetPassword();
+                    String newCategory = add.GetCategory();
+                    String newNotes = add.GetNotes();
 
                     List<String[]> fullResults = new List<String[]>();
                     using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
@@ -409,7 +409,7 @@ namespace PassGuard.GUI
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete decryption
             
-                if (add.getAddedSuccess()) //If autobackup is enabled after each change in the Vault, create backup
+                if (add.GetAddedSuccess()) //If autobackup is enabled after each change in the Vault, create backup
                 {
                     if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
                     {
@@ -1478,7 +1478,7 @@ namespace PassGuard.GUI
                 {
                     MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
                 }
-                else if (ex is iText.IO.IOException || ex is iText.Kernel.PdfException || ex is iText.Kernel.LicenseVersionException || ex is iText.Signatures.VerificationException)
+                else if (ex is iText.IO.Exceptions.IOException || ex is iText.Kernel.Exceptions.PdfException || ex is iText.Signatures.VerificationException)
                 {
                     MessageBox.Show(text: "PassGuard could not create the PDF.", caption: "Error while creating the PDF", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
                 }
