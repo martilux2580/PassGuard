@@ -69,11 +69,11 @@ namespace PassGuard.GUI
             // RGBTitleLabel
             // 
             this.RGBTitleLabel.AutoSize = true;
-            this.RGBTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RGBTitleLabel.Location = new System.Drawing.Point(9, 20);
+            this.RGBTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.RGBTitleLabel.Location = new System.Drawing.Point(10, 23);
             this.RGBTitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RGBTitleLabel.Name = "RGBTitleLabel";
-            this.RGBTitleLabel.Size = new System.Drawing.Size(351, 16);
+            this.RGBTitleLabel.Size = new System.Drawing.Size(350, 16);
             this.RGBTitleLabel.TabIndex = 0;
             this.RGBTitleLabel.Text = "Select the one colour you prefer and click the Send Button.";
             // 
@@ -81,17 +81,17 @@ namespace PassGuard.GUI
             // 
             this.RLabel.AutoSize = true;
             this.RLabel.Enabled = false;
-            this.RLabel.Location = new System.Drawing.Point(214, 433);
+            this.RLabel.Location = new System.Drawing.Point(250, 500);
             this.RLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RLabel.Name = "RLabel";
-            this.RLabel.Size = new System.Drawing.Size(21, 13);
+            this.RLabel.Size = new System.Drawing.Size(20, 15);
             this.RLabel.TabIndex = 1;
             this.RLabel.Text = "R: ";
             // 
             // RedNUD
             // 
             this.RedNUD.Enabled = false;
-            this.RedNUD.Location = new System.Drawing.Point(258, 431);
+            this.RedNUD.Location = new System.Drawing.Point(301, 497);
             this.RedNUD.Margin = new System.Windows.Forms.Padding(2);
             this.RedNUD.Maximum = new decimal(new int[] {
             255,
@@ -99,13 +99,13 @@ namespace PassGuard.GUI
             0,
             0});
             this.RedNUD.Name = "RedNUD";
-            this.RedNUD.Size = new System.Drawing.Size(90, 20);
+            this.RedNUD.Size = new System.Drawing.Size(105, 23);
             this.RedNUD.TabIndex = 2;
             // 
             // GreenNUD
             // 
             this.GreenNUD.Enabled = false;
-            this.GreenNUD.Location = new System.Drawing.Point(422, 431);
+            this.GreenNUD.Location = new System.Drawing.Point(492, 497);
             this.GreenNUD.Margin = new System.Windows.Forms.Padding(2);
             this.GreenNUD.Maximum = new decimal(new int[] {
             255,
@@ -113,24 +113,24 @@ namespace PassGuard.GUI
             0,
             0});
             this.GreenNUD.Name = "GreenNUD";
-            this.GreenNUD.Size = new System.Drawing.Size(90, 20);
+            this.GreenNUD.Size = new System.Drawing.Size(105, 23);
             this.GreenNUD.TabIndex = 4;
             // 
             // GLabel
             // 
             this.GLabel.AutoSize = true;
             this.GLabel.Enabled = false;
-            this.GLabel.Location = new System.Drawing.Point(378, 433);
+            this.GLabel.Location = new System.Drawing.Point(441, 500);
             this.GLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.GLabel.Name = "GLabel";
-            this.GLabel.Size = new System.Drawing.Size(24, 13);
+            this.GLabel.Size = new System.Drawing.Size(24, 15);
             this.GLabel.TabIndex = 3;
             this.GLabel.Text = "G:  ";
             // 
             // BlueNUD
             // 
             this.BlueNUD.Enabled = false;
-            this.BlueNUD.Location = new System.Drawing.Point(587, 431);
+            this.BlueNUD.Location = new System.Drawing.Point(685, 497);
             this.BlueNUD.Margin = new System.Windows.Forms.Padding(2);
             this.BlueNUD.Maximum = new decimal(new int[] {
             255,
@@ -138,17 +138,17 @@ namespace PassGuard.GUI
             0,
             0});
             this.BlueNUD.Name = "BlueNUD";
-            this.BlueNUD.Size = new System.Drawing.Size(90, 20);
+            this.BlueNUD.Size = new System.Drawing.Size(105, 23);
             this.BlueNUD.TabIndex = 6;
             // 
             // BLabel
             // 
             this.BLabel.AutoSize = true;
             this.BLabel.Enabled = false;
-            this.BLabel.Location = new System.Drawing.Point(543, 434);
+            this.BLabel.Location = new System.Drawing.Point(634, 501);
             this.BLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BLabel.Name = "BLabel";
-            this.BLabel.Size = new System.Drawing.Size(20, 13);
+            this.BLabel.Size = new System.Drawing.Size(20, 15);
             this.BLabel.TabIndex = 5;
             this.BLabel.Text = "B: ";
             // 
@@ -157,10 +157,11 @@ namespace PassGuard.GUI
             this.WebHelpRGB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.WebHelpRGB.FlatAppearance.BorderSize = 0;
             this.WebHelpRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.WebHelpRGB.Location = new System.Drawing.Point(778, 7);
+            this.WebHelpRGB.Image = global::PassGuard.Properties.Resources.Help32;
+            this.WebHelpRGB.Location = new System.Drawing.Point(908, 8);
             this.WebHelpRGB.Margin = new System.Windows.Forms.Padding(2);
             this.WebHelpRGB.Name = "WebHelpRGB";
-            this.WebHelpRGB.Size = new System.Drawing.Size(40, 44);
+            this.WebHelpRGB.Size = new System.Drawing.Size(47, 51);
             this.WebHelpRGB.TabIndex = 7;
             this.RGBWebToolTip.SetToolTip(this.WebHelpRGB, "Choose a colour from this webpage, take its RGB values and copy them here :)");
             this.WebHelpRGB.UseVisualStyleBackColor = true;
@@ -169,8 +170,8 @@ namespace PassGuard.GUI
             // NoteRGBLabel
             // 
             this.NoteRGBLabel.AutoSize = true;
-            this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NoteRGBLabel.Location = new System.Drawing.Point(17, 470);
+            this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.NoteRGBLabel.Location = new System.Drawing.Point(20, 542);
             this.NoteRGBLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.NoteRGBLabel.Name = "NoteRGBLabel";
             this.NoteRGBLabel.Size = new System.Drawing.Size(380, 13);
@@ -188,11 +189,11 @@ namespace PassGuard.GUI
             // 
             this.SendButton.FlatAppearance.BorderSize = 0;
             this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SendButton.Location = new System.Drawing.Point(719, 460);
+            this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.SendButton.Location = new System.Drawing.Point(839, 531);
             this.SendButton.Margin = new System.Windows.Forms.Padding(2);
             this.SendButton.Name = "SendButton";
-            this.SendButton.Size = new System.Drawing.Size(99, 32);
+            this.SendButton.Size = new System.Drawing.Size(115, 37);
             this.SendButton.TabIndex = 11;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;
@@ -202,7 +203,7 @@ namespace PassGuard.GUI
             // 
             this.RedHeaderButton.FlatAppearance.BorderSize = 0;
             this.RedHeaderButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RedHeaderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RedHeaderButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.RedHeaderButton.Location = new System.Drawing.Point(119, 4);
             this.RedHeaderButton.Name = "RedHeaderButton";
             this.RedHeaderButton.Size = new System.Drawing.Size(108, 33);
@@ -214,10 +215,10 @@ namespace PassGuard.GUI
             // 
             this.ContentFlowLayoutPanel.AutoScroll = true;
             this.ContentFlowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ContentFlowLayoutPanel.Location = new System.Drawing.Point(16, 98);
-            this.ContentFlowLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.ContentFlowLayoutPanel.Location = new System.Drawing.Point(19, 113);
+            this.ContentFlowLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
             this.ContentFlowLayoutPanel.Name = "ContentFlowLayoutPanel";
-            this.ContentFlowLayoutPanel.Size = new System.Drawing.Size(687, 320);
+            this.ContentFlowLayoutPanel.Size = new System.Drawing.Size(801, 369);
             this.ContentFlowLayoutPanel.TabIndex = 13;
             // 
             // HeaderPanel
@@ -230,19 +231,21 @@ namespace PassGuard.GUI
             this.HeaderPanel.Controls.Add(this.BlueButton);
             this.HeaderPanel.Controls.Add(this.ViewerButton);
             this.HeaderPanel.Controls.Add(this.ChosenConfigButton);
-            this.HeaderPanel.Location = new System.Drawing.Point(16, 58);
+            this.HeaderPanel.Location = new System.Drawing.Point(19, 67);
+            this.HeaderPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.HeaderPanel.Name = "HeaderPanel";
-            this.HeaderPanel.Size = new System.Drawing.Size(687, 41);
+            this.HeaderPanel.Size = new System.Drawing.Size(801, 47);
             this.HeaderPanel.TabIndex = 14;
             // 
             // FavouriteButton
             // 
             this.FavouriteButton.FlatAppearance.BorderSize = 0;
             this.FavouriteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FavouriteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FavouriteButton.Location = new System.Drawing.Point(578, 3);
+            this.FavouriteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FavouriteButton.Location = new System.Drawing.Point(674, 3);
+            this.FavouriteButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.FavouriteButton.Name = "FavouriteButton";
-            this.FavouriteButton.Size = new System.Drawing.Size(90, 33);
+            this.FavouriteButton.Size = new System.Drawing.Size(105, 38);
             this.FavouriteButton.TabIndex = 21;
             this.FavouriteButton.Text = "Favourite";
             this.FavouriteButton.UseVisualStyleBackColor = true;
@@ -251,10 +254,11 @@ namespace PassGuard.GUI
             // 
             this.ConfigNameButton.FlatAppearance.BorderSize = 0;
             this.ConfigNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ConfigNameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigNameButton.Location = new System.Drawing.Point(3, 3);
+            this.ConfigNameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ConfigNameButton.Location = new System.Drawing.Point(4, 3);
+            this.ConfigNameButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ConfigNameButton.Name = "ConfigNameButton";
-            this.ConfigNameButton.Size = new System.Drawing.Size(90, 33);
+            this.ConfigNameButton.Size = new System.Drawing.Size(105, 38);
             this.ConfigNameButton.TabIndex = 20;
             this.ConfigNameButton.Text = "ConfigName";
             this.ConfigNameButton.UseVisualStyleBackColor = true;
@@ -264,10 +268,11 @@ namespace PassGuard.GUI
             // 
             this.RedButton.FlatAppearance.BorderSize = 0;
             this.RedButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RedButton.Location = new System.Drawing.Point(96, 3);
+            this.RedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.RedButton.Location = new System.Drawing.Point(112, 3);
+            this.RedButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.RedButton.Name = "RedButton";
-            this.RedButton.Size = new System.Drawing.Size(90, 33);
+            this.RedButton.Size = new System.Drawing.Size(105, 38);
             this.RedButton.TabIndex = 19;
             this.RedButton.Text = "Red";
             this.RedButton.UseVisualStyleBackColor = true;
@@ -276,10 +281,11 @@ namespace PassGuard.GUI
             // 
             this.GreenButton.FlatAppearance.BorderSize = 0;
             this.GreenButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GreenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GreenButton.Location = new System.Drawing.Point(192, 3);
+            this.GreenButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.GreenButton.Location = new System.Drawing.Point(224, 3);
+            this.GreenButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.GreenButton.Name = "GreenButton";
-            this.GreenButton.Size = new System.Drawing.Size(90, 33);
+            this.GreenButton.Size = new System.Drawing.Size(105, 38);
             this.GreenButton.TabIndex = 18;
             this.GreenButton.Text = "Green";
             this.GreenButton.UseVisualStyleBackColor = true;
@@ -288,10 +294,11 @@ namespace PassGuard.GUI
             // 
             this.BlueButton.FlatAppearance.BorderSize = 0;
             this.BlueButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BlueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BlueButton.Location = new System.Drawing.Point(288, 3);
+            this.BlueButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BlueButton.Location = new System.Drawing.Point(336, 3);
+            this.BlueButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.BlueButton.Name = "BlueButton";
-            this.BlueButton.Size = new System.Drawing.Size(90, 33);
+            this.BlueButton.Size = new System.Drawing.Size(105, 38);
             this.BlueButton.TabIndex = 17;
             this.BlueButton.Text = "Blue";
             this.BlueButton.UseVisualStyleBackColor = true;
@@ -300,10 +307,11 @@ namespace PassGuard.GUI
             // 
             this.ViewerButton.FlatAppearance.BorderSize = 0;
             this.ViewerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ViewerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ViewerButton.Location = new System.Drawing.Point(384, 3);
+            this.ViewerButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ViewerButton.Location = new System.Drawing.Point(448, 3);
+            this.ViewerButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ViewerButton.Name = "ViewerButton";
-            this.ViewerButton.Size = new System.Drawing.Size(90, 33);
+            this.ViewerButton.Size = new System.Drawing.Size(105, 38);
             this.ViewerButton.TabIndex = 16;
             this.ViewerButton.Text = "Viewer";
             this.ViewerButton.UseVisualStyleBackColor = true;
@@ -312,10 +320,11 @@ namespace PassGuard.GUI
             // 
             this.ChosenConfigButton.FlatAppearance.BorderSize = 0;
             this.ChosenConfigButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ChosenConfigButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ChosenConfigButton.Location = new System.Drawing.Point(480, 3);
+            this.ChosenConfigButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ChosenConfigButton.Location = new System.Drawing.Point(560, 3);
+            this.ChosenConfigButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.ChosenConfigButton.Name = "ChosenConfigButton";
-            this.ChosenConfigButton.Size = new System.Drawing.Size(92, 33);
+            this.ChosenConfigButton.Size = new System.Drawing.Size(107, 38);
             this.ChosenConfigButton.TabIndex = 15;
             this.ChosenConfigButton.Text = "ChosenConfig";
             this.ChosenConfigButton.UseVisualStyleBackColor = true;
@@ -324,11 +333,11 @@ namespace PassGuard.GUI
             // 
             this.label1.AutoSize = true;
             this.label1.Enabled = false;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(42, 432);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(49, 498);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(161, 16);
+            this.label1.Size = new System.Drawing.Size(160, 16);
             this.label1.TabIndex = 15;
             this.label1.Text = "Final Selected Values --->";
             // 
@@ -336,10 +345,11 @@ namespace PassGuard.GUI
             // 
             this.EditButton.FlatAppearance.BorderSize = 0;
             this.EditButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EditButton.Location = new System.Drawing.Point(721, 235);
+            this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.EditButton.Location = new System.Drawing.Point(841, 271);
+            this.EditButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(98, 34);
+            this.EditButton.Size = new System.Drawing.Size(114, 39);
             this.EditButton.TabIndex = 16;
             this.EditButton.Text = "Edit Config";
             this.EditButton.UseVisualStyleBackColor = true;
@@ -349,10 +359,11 @@ namespace PassGuard.GUI
             // 
             this.DeleteButton.FlatAppearance.BorderSize = 0;
             this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DeleteButton.Location = new System.Drawing.Point(721, 384);
+            this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DeleteButton.Location = new System.Drawing.Point(841, 443);
+            this.DeleteButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(98, 34);
+            this.DeleteButton.Size = new System.Drawing.Size(114, 39);
             this.DeleteButton.TabIndex = 17;
             this.DeleteButton.Text = "Delete Config";
             this.DeleteButton.UseVisualStyleBackColor = true;
@@ -362,10 +373,11 @@ namespace PassGuard.GUI
             // 
             this.AddButton.FlatAppearance.BorderSize = 0;
             this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddButton.Location = new System.Drawing.Point(722, 98);
+            this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.AddButton.Location = new System.Drawing.Point(842, 113);
+            this.AddButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.AddButton.Name = "AddButton";
-            this.AddButton.Size = new System.Drawing.Size(98, 34);
+            this.AddButton.Size = new System.Drawing.Size(114, 39);
             this.AddButton.TabIndex = 18;
             this.AddButton.Text = "Add Config";
             this.AddButton.UseVisualStyleBackColor = true;
@@ -405,9 +417,9 @@ namespace PassGuard.GUI
             // 
             // AskRGBforSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(830, 505);
+            this.ClientSize = new System.Drawing.Size(968, 583);
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.EditButton);

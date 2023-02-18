@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,50 +16,15 @@ namespace PassGuard.GUI
     public partial class AddContent : Form
     {
         //Attributes to save the new data.
-        private String url {get; set;} 
-        private String name { get; set; }
-        private String username { get; set; }
-        private String password { get; set; }
-        private String category { get; set; }
-        private String notes { get; set; }
+        public String url {get; private set;}
+        public String name { get; private set; }
+        public String username { get; private set; }
+        public String password { get; private set; }
+        public String category { get; private set; }
+        public String notes { get; private set; }
         private List<String> namesInDB; //List of names already in Vault.
-        private bool addedSuccess; //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
+        public bool addedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
         private readonly byte[] Key; //Key 
-
-        public bool GetAddedSuccess()
-        {
-            return addedSuccess;
-        }
-
-        public String GetUrl()
-        {
-            return url;
-        }
-
-        public String GetName()
-        {
-            return name;
-        }
-
-        public String GetUsername()
-        {
-            return username;
-        }
-
-        public String GetPassword()
-        {
-            return password;
-        }
-
-        public String GetCategory()
-        {
-            return category;
-        }
-
-        public String GetNotes()
-        {
-            return notes;
-        }
 
         public AddContent(List<String> names, byte[] key)
         {
@@ -75,7 +41,7 @@ namespace PassGuard.GUI
             addedSuccess = false;
             try
             {
-                this.Icon = new(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -83,11 +49,13 @@ namespace PassGuard.GUI
             }
         }
 
+        [SupportedOSPlatform("windows")]
         private void AddButton_MouseEnter(object sender, EventArgs e)
         {
             AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void AddButton_MouseLeave(object sender, EventArgs e)
         {
             AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Underline the text when mouse is in the button

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
+using System.Runtime.Versioning;
 
 namespace PassGuard
 {
@@ -30,11 +31,10 @@ namespace PassGuard
             var hc = new GUI.HomeContentUC();
             ContentPanel.Controls.Add(hc);
 
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             try
             {
                 this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder. //LogoIcon64.ico
-                SettingButton.Image = Image.FromFile(@".\..\Images\Setting.ico"); //Loads Image for the Settings Icon
             }
             catch(FileNotFoundException)
             {
@@ -44,8 +44,8 @@ namespace PassGuard
             try
             {
                 AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
-                setConfigTheme(); //Set theme based on saved config.
-                setConfigColours(); //Set outline colours based on saved config.
+                SetConfigTheme(); //Set theme based on saved config.
+                SetConfigColours(); //Set outline colours based on saved config.
 
                 //Code for regulating AutoBackup when it is enabled and has a time frequency (every day, week or month).
                 int[] timeCodes = new int[] { 3, 4, 5 }; //Modes for everyday, week or month.
@@ -64,9 +64,8 @@ namespace PassGuard
         }
 
         //Obtain data from previous executions, and set theme from saved config.
-        private void setConfigTheme()
+        private void SetConfigTheme()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             String sAttr = ConfigurationManager.AppSettings["Theme"];
             if (sAttr == "Dark") //Change theme color depending on the backcolor of the app.
             {
@@ -84,10 +83,8 @@ namespace PassGuard
         }
 
         //Obtain data from previous executions, and set theme from saved config.
-        private void setConfigColours()
+        private void SetConfigColours()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
             int getRedMenu = Int32.Parse(ConfigurationManager.AppSettings["RedMenu"]);
             int getGreenMenu = Int32.Parse(ConfigurationManager.AppSettings["GreenMenu"]);
             int getBlueMenu = Int32.Parse(ConfigurationManager.AppSettings["BlueMenu"]);
@@ -107,16 +104,18 @@ namespace PassGuard
         private void CreateVaultButton_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
-            GUI.CreateNewVaultUC cnv = new GUI.CreateNewVaultUC(); //Set new UC for the action.
+            GUI.CreateNewVaultUC cnv = new(); //Set new UC for the action.
             ContentPanel.Controls.Clear(); //Clear everything inside the Content Panel
             ContentPanel.Controls.Add(cnv); //Add the UC to the panel
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
         {
             CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateVaultButton_MouseLeave(object sender, EventArgs e)
         {
             CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
@@ -125,26 +124,30 @@ namespace PassGuard
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
-            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(false); //Set new UC for the action.
+            GUI.LoadVaultUC lv = new(false); //Set new UC for the action.
             ContentPanel.Controls.Clear(); 
             ContentPanel.Controls.Add(lv);
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
         {
             LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
         {
             LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void DesignerLabel_MouseEnter(object sender, EventArgs e)
         {
             DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void DesignerLabel_MouseLeave(object sender, EventArgs e)
         {
             DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Regular); //Regularise the text when mouse is not in the button
@@ -164,8 +167,10 @@ namespace PassGuard
 
         private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            GUI.HomeContentUC hc = new GUI.HomeContentUC(); //Put the main panel visible.
-            hc.Visible = false;
+            GUI.HomeContentUC hc = new()
+            {
+                Visible = false
+            }; //Put the main panel visible.
             TitleLabel.Text = "HOME";
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(hc);
@@ -186,7 +191,7 @@ namespace PassGuard
                 Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B }; //Create array with actual colours to send it to the form.
-                GUI.AskRGBforSettings rgb = new GUI.AskRGBforSettings(actualColours, config); //Dialog to insert rgb values
+                GUI.AskRGBforSettings rgb = new(actualColours, config); //Dialog to insert rgb values
                 if (darkToolStripMenuItem.Checked == true) //Change theme color depending on the backcolor of the app.
                 {
                     rgb.BackColor = Color.FromArgb(116, 118, 117); //Set Color for the RGB selection popup window.
@@ -197,90 +202,90 @@ namespace PassGuard
                 }
                 rgb.ShowDialog();  //Show dialog
 
-                if (rgb.changedSuccess)
+
+                //CHANGE VALUES AND SET COLOURS
+                int redValue = rgb.GetRedNUDValue(); //Get rgb values
+                int greenValue = rgb.GetGreenNUDValue();
+                int blueValue = rgb.GetBlueNUDValue();
+                int newRedMenu, newGreenMenu, newBlueMenu = 0; //Organise them for config file.
+                int newRedLogo, newGreenLogo, newBlueLogo = 0;
+                int newRedOptions, newGreenOptions, newBlueOptions = 0;
+
+                //Correction of rgb values if higher than 235 and lower than 32, and then set the colors of the panels
+                if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
                 {
-                    int redValue = rgb.getRedNUDValue(); //Get rgb values
-                    int greenValue = rgb.getGreenNUDValue();
-                    int blueValue = rgb.getBlueNUDValue();
-                    int newRedMenu, newGreenMenu, newBlueMenu = 0; //Organise them for config file.
-                    int newRedLogo, newGreenLogo, newBlueLogo = 0;
-                    int newRedOptions, newGreenOptions, newBlueOptions = 0;
+                    newRedMenu = newGreenMenu = newBlueMenu = 245;
+                    newRedLogo = newGreenLogo = newBlueLogo = 255;
+                    newRedOptions = newGreenOptions = newBlueOptions = 250;
 
-                    //Correction of rgb values if higher than 235 and lower than 32, and then set the colors of the panels
-                    if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
+                    DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.Yes) //Change config file and save values.
                     {
-                        newRedMenu = newGreenMenu = newBlueMenu = 245;
-                        newRedLogo = newGreenLogo = newBlueLogo = 255;
-                        newRedOptions = newGreenOptions = newBlueOptions = 250;
-
-                        DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-                        if (dialog == DialogResult.Yes) //Change config file and save values.
-                        {
-                            config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                            config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                            config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                            config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                            config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                            config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                            config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                            config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                            config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
-                            config.Save(ConfigurationSaveMode.Modified);
-                            ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
-                        }
-
-                        MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
-                        LogoPanel.BackColor = Color.FromArgb(255, 255, 255);
-                        OptionsPanel.BackColor = Color.FromArgb(250, 250, 250);
+                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
+                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
+                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
+                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
+                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
+                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
+                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
+                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
+                        config.Save(ConfigurationSaveMode.Modified);
+                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                     }
-                    else //Correction of rgb values if they are too dark, so I can add 20 to diff between each panel and stil below 255.
-                    {
-                        if ((redValue > 235) || (greenValue > 235) || (blueValue > 235))
-                        {
-                            if (redValue > 235)
-                            {
-                                redValue = 235;
-                            }
-                            if (greenValue > 235)
-                            {
-                                greenValue = 235;
-                            }
-                            if (blueValue > 235)
-                            {
-                                blueValue = 235;
-                            }
-                        }
-                        newRedMenu = redValue + 20;
-                        newGreenMenu = greenValue + 20;
-                        newBlueMenu = blueValue + 20;
-                        newRedLogo = redValue; //Input in RGB Form will be for the logo, Menu and Options will be modified.
-                        newGreenLogo = greenValue;
-                        newBlueLogo = blueValue;
-                        newRedOptions = redValue + 10;
-                        newGreenOptions = greenValue + 10;
-                        newBlueOptions = blueValue + 10;
 
-                        DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-                        if (dialog == DialogResult.Yes)
-                        {
-                            config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                            config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                            config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                            config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                            config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                            config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                            config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                            config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                            config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
-                            config.Save(ConfigurationSaveMode.Modified);
-                            ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
-                        }
-
-                        MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu);
-                        LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo);
-                        OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo);
-                    }
+                    MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
+                    LogoPanel.BackColor = Color.FromArgb(255, 255, 255);
+                    OptionsPanel.BackColor = Color.FromArgb(250, 250, 250);
                 }
+                else //Correction of rgb values if they are too dark, so I can add 20 to diff between each panel and stil below 255.
+                {
+                    if ((redValue > 235) || (greenValue > 235) || (blueValue > 235))
+                    {
+                        if (redValue > 235)
+                        {
+                            redValue = 235;
+                        }
+                        if (greenValue > 235)
+                        {
+                            greenValue = 235;
+                        }
+                        if (blueValue > 235)
+                        {
+                            blueValue = 235;
+                        }
+                    }
+                    newRedMenu = redValue + 20;
+                    newGreenMenu = greenValue + 20;
+                    newBlueMenu = blueValue + 20;
+                    newRedLogo = redValue; //Input in RGB Form will be for the logo, Menu and Options will be modified.
+                    newGreenLogo = greenValue;
+                    newBlueLogo = blueValue;
+                    newRedOptions = redValue + 10;
+                    newGreenOptions = greenValue + 10;
+                    newBlueOptions = blueValue + 10;
+
+                    DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.Yes)
+                    {
+                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
+                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
+                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
+                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
+                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
+                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
+                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
+                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
+                        config.Save(ConfigurationSaveMode.Modified);
+                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+                    }
+
+                    MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu);
+                    LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo);
+                    OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo);
+                }
+                
                 
             }
             catch (Exception)
@@ -343,11 +348,13 @@ namespace PassGuard
             Application.Exit(); //Close Application
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateQuickPassButton_MouseEnter(object sender, EventArgs e)
         {
             CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateQuickPassButton_MouseLeave(object sender, EventArgs e)
         {
             CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
@@ -356,18 +363,20 @@ namespace PassGuard
         private void CreateQuickPassButton_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
-            GUI.CreateQuickPassUC cqr = new GUI.CreateQuickPassUC(); //Set new UC for the action.
+            GUI.CreateQuickPassUC cqr = new(); //Set new UC for the action.
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(cqr);
         }
 
         private void createABackupOfYourVaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GUI.CreateBackup cb = new GUI.CreateBackup();
-            cb.BackColor = this.ContentPanel.BackColor;
+            GUI.CreateBackup cb = new()
+            {
+                BackColor = this.ContentPanel.BackColor
+            };
             cb.ShowDialog();
 
-            if (cb.getSuccess())
+            if (cb.success)
             {
                 MessageBox.Show(text: "Backup of the selected Vault was created successfully :)", caption: "Success", buttons: MessageBoxButtons.OK); 
                 
@@ -379,22 +388,24 @@ namespace PassGuard
         {
             try
             {
-                Core.Utils utils = new Core.Utils();
+                Core.Utils utils = new();
                 var previousState = ConfigurationManager.AppSettings["AutoBackupState"];
                 var previousFrequency = ConfigurationManager.AppSettings["FrequencyAutoBackup"];
                 int[] timeCodes = new int[] { 3, 4, 5 }; //Codes for time modes (everyday, everyweek, everymonth)
 
-                GUI.AutoBackup ab = new GUI.AutoBackup(this);
-                ab.BackColor = this.ContentPanel.BackColor;
+                GUI.AutoBackup ab = new()
+                {
+                    BackColor = this.ContentPanel.BackColor
+                };
                 ab.ShowDialog();
 
-                if (ab.GetSetupSuccess()) //If we exited autobackup form from the bottom, then everything was set up correctly.
+                if (ab.setupSuccess) //If we exited autobackup form from the bottom, then everything was set up correctly.
                 {
-                    var newState = ab.GetAutoBackupState();
-                    var newVaultPath = ab.GetPathOfVaultBackedUp();
-                    var newBackupsPath = ab.GetPathForBackups();
-                    var newFrequencyAutoBackup = ab.GetFrequencyBackup();
-                    var newLastDateBackup = ab.GetLastDateBackup();
+                    var newState = ab.AutoBackupState;
+                    var newVaultPath = ab.pathOfVaultBackedUp;
+                    var newBackupsPath = ab.pathForBackups;
+                    var newFrequencyAutoBackup = ab.frequencyBackup;
+                    var newLastDateBackup = ab.lastDateBackup;
 
                     if (newState == "false") //Your new state is AutoBackup deactivated
                     {
@@ -481,7 +492,7 @@ namespace PassGuard
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             try
             {
@@ -510,7 +521,7 @@ namespace PassGuard
 
         private void exportOutlineColoursAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             utils.CreateOutlinePDF();
 
         }
@@ -518,7 +529,7 @@ namespace PassGuard
         private void exportAVaultsContentAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TitleLabel.Text = "EXPORTING A VAULT AS PDF"; //Change Title
-            GUI.LoadVaultUC lv = new GUI.LoadVaultUC(true); //Set new UC for the action.
+            GUI.LoadVaultUC lv = new(true); //Set new UC for the action.
             ContentPanel.Controls.Clear();
             ContentPanel.Controls.Add(lv);
 

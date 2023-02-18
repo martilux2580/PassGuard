@@ -14,13 +14,13 @@ namespace PassGuard.GUI
     //UserControl Component that represents a Password in the Vault, it is composed of 6 buttons whose text is the data of the password (Url, Name, Username, SitePassword, Category, Notes)
     public partial class DataRowUC : UserControl
     {
-        private String url { get; set; }
-        private String name { get; set; }
-        private String username { get; set; }
-        private String password { get; set; }
-        private String category { get; set; }
-        private String notes { get; set; }
-        private bool important { get; set; }
+        private String url;
+        private String name;
+        private String username;
+        private String password;
+        private String category;
+        private String notes;
+        private bool important;
 
         private readonly byte[] Key;
 
@@ -40,7 +40,7 @@ namespace PassGuard.GUI
 
         private void DataRowUC_Load(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             //Decrypt the values and set them as text of the buttons
             URLContent.Text = utils.DecryptText(key: Key, src: url);
             NameContent.Text = utils.DecryptText(key: Key, src: name);
@@ -52,7 +52,7 @@ namespace PassGuard.GUI
 
         private void PassContent_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             Clipboard.SetText(utils.DecryptText(key: Key, src: password)); //If click on password button, copy in clipboard the decryption of the attribute, not the 15x"*"
             
@@ -90,7 +90,7 @@ namespace PassGuard.GUI
         {
             if (ImportantContent.Image == null)
             {
-                ImportantContent.Image = Image.FromFile(@"..\..\..\Images\CheckIconBig.png");
+                ImportantContent.Image = Properties.Resources.CheckIconBig;
                 important = true;
             }
             else

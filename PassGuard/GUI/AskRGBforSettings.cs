@@ -16,13 +16,8 @@ namespace PassGuard.GUI
     {
 
         private List<OutlineColorDataRowUC> ConfigUCList = new(); //List of DataRows with the data of the passwords.
-        public List<CheckBox> checkboxes { get; internal set; } = new();
-        public bool changedSuccess { get; private set; }
+        public List<CheckBox> checkboxes { get; private set; } = new();
         public Configuration config { get; private set; }
-        private int RedRGBValue { get; set; }
-        private int GreenRGBValue { get; set; }
-        private int BlueRGBValue { get; set; }
-        public int OrderMode { get; set; }
      
 
     public AskRGBforSettings(int[] colours, Configuration configg)
@@ -30,7 +25,6 @@ namespace PassGuard.GUI
             InitializeComponent();
             SetNUDs(colours);
             LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-            changedSuccess = false;
             config = configg;
 
         }
@@ -76,32 +70,32 @@ namespace PassGuard.GUI
             BlueNUD.Value = colours[2]; //Modify data in the config file for future executions.
         }
 
-        public int getRedNUDValue()
+        public int GetRedNUDValue()
         {
             return (int)RedNUD.Value;
         }
 
-        public int getGreenNUDValue()
+        public int GetGreenNUDValue()
         {
             return (int)GreenNUD.Value;
         }
 
-        public int getBlueNUDValue()
+        public int GetBlueNUDValue()
         {
             return (int)BlueNUD.Value;
         }
 
-        public void setRedNUDValue(int value)
+        public void SetRedNUDValue(int value)
         {
             RedNUD.Value = value;
         }
 
-        public void setGreenNUDValue(int value)
+        public void SetGreenNUDValue(int value)
         {
             GreenNUD.Value = value;
         }
 
-        public void setBlueNUDValue(int value)
+        public void SetBlueNUDValue(int value)
         {
             BlueNUD.Value = value;
         }
@@ -110,8 +104,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
-                WebHelpRGB.Image = System.Drawing.Image.FromFile(@".\Images\Help32.ico");
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -133,18 +126,7 @@ namespace PassGuard.GUI
 
         private void SendButton_Click(object sender, EventArgs e)
         {
-            if ((RedNUD.Value < 32) && (GreenNUD.Value < 32) && (BlueNUD.Value < 32)) //Too dark colours, text cannot be visible
-            {
-                MessageBox.Show("All 3 RGB values are less than 32. This combination is not available. At least one of the RGB values must be greater than 32.");
-            }
-            else //Set variables for then set them in Form1.
-            {
-                RedRGBValue = (int)RedNUD.Value;
-                GreenRGBValue = (int)GreenNUD.Value;
-                BlueRGBValue = (int)BlueNUD.Value;
-                changedSuccess = true;
-                this.Close();
-            }
+            this.Close();
         }
 
         private void ConfigNameButton_Click(object sender, EventArgs e)
@@ -156,8 +138,10 @@ namespace PassGuard.GUI
         {
             Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-            GUI.AddColorConfig add = new GUI.AddColorConfig(values);
-            add.BackColor = this.BackColor;
+            GUI.AddColorConfig add = new(values)
+            {
+                BackColor = this.BackColor
+            };
             add.ShowDialog();
 
             if (add.addedSuccess)
@@ -190,8 +174,10 @@ namespace PassGuard.GUI
 
             var namesList = new List<String>(values.Keys);
 
-            GUI.EditColorConfig edit = new GUI.EditColorConfig(namesList);
-            edit.BackColor = this.BackColor;
+            GUI.EditColorConfig edit = new(namesList)
+            {
+                BackColor = this.BackColor
+            };
             edit.ShowDialog();
 
             if(edit.editedSuccess)
@@ -226,9 +212,11 @@ namespace PassGuard.GUI
 
             var namesList = new List<String>(values.Keys);
 
-            GUI.DeleteColorConfig del = new GUI.DeleteColorConfig(namesList);
-            del.BackColor = this.BackColor;
-            del.Enabled = true;
+            GUI.DeleteColorConfig del = new(namesList)
+            {
+                BackColor = this.BackColor,
+                Enabled = true
+            };
             del.ShowDialog();
 
             if (del.deletedSuccess)

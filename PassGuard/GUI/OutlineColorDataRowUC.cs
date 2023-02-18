@@ -16,7 +16,7 @@ namespace PassGuard.GUI
     public partial class OutlineColorDataRowUC : UserControl
     {
 
-        private AskRGBforSettings callingForm;
+        private readonly AskRGBforSettings callingForm;
         public bool favourite { get; private set; }
 
         public OutlineColorDataRowUC(String name, List<int> rgb, AskRGBforSettings cf)
@@ -44,7 +44,7 @@ namespace PassGuard.GUI
 
             if(Convert.ToBoolean(rgb[3]))
             {
-                FavouriteButton.Image = Image.FromFile(@"..\..\..\Images\CheckIcon.png");
+                FavouriteButton.Image = Properties.Resources.CheckIcon;
                 favourite = true;
             }
 
@@ -66,16 +66,16 @@ namespace PassGuard.GUI
             ChosenConfigCheckbox.Text = "Enabled";
             ChosenConfigCheckbox.Checked = true;
 
-            callingForm.setRedNUDValue((int)RedNUD.Value);
-            callingForm.setGreenNUDValue((int)GreenNUD.Value);
-            callingForm.setBlueNUDValue((int)BlueNUD.Value);
+            callingForm.SetRedNUDValue((int)RedNUD.Value);
+            callingForm.SetGreenNUDValue((int)GreenNUD.Value);
+            callingForm.SetBlueNUDValue((int)BlueNUD.Value);
         }
 
         private void FavouriteButton_Click(object sender, EventArgs e)
         {
             if (FavouriteButton.Image == null)
             {
-                FavouriteButton.Image = Image.FromFile(@"..\..\..\Images\CheckIcon.png");
+                FavouriteButton.Image = Properties.Resources.CheckIcon;
                 favourite = true;
             }
             else

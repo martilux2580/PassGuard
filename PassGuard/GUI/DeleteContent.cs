@@ -15,32 +15,18 @@ namespace PassGuard.GUI
     //Form to delete a password from the Vault, or all passwords from the Vault.
     public partial class DeleteContent : Form
     {
-        private String name { get; set; }
-        private List<String> namesInDB;
+        private readonly List<String> namesInDB;
         private readonly byte[] Key;
         private readonly String decPath;
-        private bool deletedSuccess; //Signal for delete one password.
-        private bool deletedAllSuccess; //Signal for delete all passwords
-        private String nameToBeDeleted;
+        public bool deletedSuccess { get; private set; } //Signal for delete one password.
+        public bool deletedAllSuccess { get; private set; } //Signal for delete all passwords
+        public String nameToBeDeleted { get; private set; }
         private readonly Dictionary<String, String> map; //No duplicate keys, (encryptedName, decryptedName)
-
-        public bool getDeletedSuccess()
-        {
-            return deletedSuccess;
-        }
-        public bool getDeletedAllSuccess()
-        {
-            return deletedAllSuccess;
-        }
-        public String getNameToBeDeleted()
-        {
-            return nameToBeDeleted;
-        }
 
         public DeleteContent(List<String> names, byte[] key, String decpath)
         {
             InitializeComponent();
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             decPath = decpath;
             Key = key;
 
@@ -61,7 +47,7 @@ namespace PassGuard.GUI
 
             try
             {
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -133,17 +119,17 @@ namespace PassGuard.GUI
 
         private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text))) //Fetch data of password given the name of the password.
             {
-                List<String[]> fullResults = new List<String[]>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decPath))
+                List<String[]> fullResults = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decPath))
                 {
                     var keyToSearch = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
                     var sql = "SELECT * FROM Vault WHERE Name = @name1;";
-                    using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                    using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                     {
                         m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                         commandExec.Prepare();
