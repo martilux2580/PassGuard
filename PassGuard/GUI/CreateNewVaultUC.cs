@@ -12,6 +12,7 @@ using System.Transactions;
 using System.Security.Cryptography;
 using System.IO;
 using System.Configuration;
+using System.Runtime.Versioning;
 
 namespace PassGuard.GUI
 {
@@ -21,23 +22,17 @@ namespace PassGuard.GUI
         public CreateNewVaultUC()
         {
             InitializeComponent();
-            try
-            {
-                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-            }
             VaultPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
             SaveEmailTooltip.SetToolTip(SaveEmailCheckbox, "If this option is checked and the new vault is created successfully, this email \nwill be saved so that the process of loading the password vault is faster. \nNote: If another vault is created and this option is checked, previously saved email \nwill be deleted and the new email will be saved.");
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateNewVaultButton_MouseEnter(object sender, EventArgs e)
         {
             CreateNewVaultButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void CreateNewVaultButton_MouseLeave(object sender, EventArgs e)
         {
             CreateNewVaultButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Regularise the text when mouse is not in the button
@@ -45,7 +40,7 @@ namespace PassGuard.GUI
 
         private void CreateNewVaultButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             String errorMessages = ""; //All the error messages due to input, later print it to user in just one messagebox.
 
             //If any field is blank.
@@ -96,17 +91,17 @@ namespace PassGuard.GUI
             }
             else //No error in params, create vault.
             {
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
                 {
                     String path = VaultPathTextbox.Text + "\\" + VaultNameTextbox.Text + ".db3"; //Path for the vault.
                     SQLiteConnection.CreateFile(path); //Create 0-byte file that will be modeled when it is opened, if it already exists then it is substituted.
                     
-                    SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + path);
+                    SQLiteConnection m_dbConnection = new("Data Source = " + path);
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     
                     //Create space for data.
                     string query = "CREATE TABLE Vault (Url TEXT, Name TEXT PRIMARY KEY NOT NULL UNIQUE, Username TEXT NOT NULL, SitePassword TEXT NOT NULL, Category TEXT, Notes TEXT);";
-                    SQLiteCommand command = new SQLiteCommand(query, m_dbConnection); //Associate request with connection to vault.
+                    SQLiteCommand command = new(query, m_dbConnection); //Associate request with connection to vault.
                     command.ExecuteNonQuery(); //Execute request.
                     command.Dispose(); //Delete object so it is no longer using the file.
 
@@ -132,7 +127,7 @@ namespace PassGuard.GUI
 
                 //Encrypt New Vault
                 //Generate random salt.
-                Random rnd = new Random();
+                Random rnd = new();
                 byte[] salt = new byte[16];
                 rnd.NextBytes(salt);
                 string rndsalt = Convert.ToBase64String(salt);
@@ -177,15 +172,13 @@ namespace PassGuard.GUI
 
         private void SelectVaultPathButton_Click(object sender, EventArgs e)
         {
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FolderBrowserDialog fbd = new FolderBrowserDialog(); //Folder Selector...
+            FolderBrowserDialog fbd = new(); //Folder Selector...
 
             // Show the FolderBrowserDialog.
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK)
             {
-                path = fbd.SelectedPath;
-                VaultPathTextbox.Text = path;
+                VaultPathTextbox.Text = fbd.SelectedPath;
             }
         }
 

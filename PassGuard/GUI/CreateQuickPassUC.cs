@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,16 +89,6 @@ namespace PassGuard.GUI
 
         private void CreateQuickPassUC_Load(object sender, EventArgs e)
         {
-            //Load Images
-            try
-            {
-                CopyClipboardButton.Image = Image.FromFile(@".\Images\Clipboard32.ico");//Load Clipboard Icon
-                InfoPwnageButton.Image = Image.FromFile(@".\Images\Info243.ico");//Load Info Icon
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-            }
             //Load Dictionaries with their corresponding values.
             characters = fillCharDict(characters);
             symbols = fillSymbolsDict(symbols);
@@ -160,7 +151,7 @@ namespace PassGuard.GUI
         {
             try
             {
-                Core.Utils utils = new Core.Utils();
+                Core.Utils utils = new();
                 SetEnabled(false); //Unset every checkbox, so that meanwhile passwords are being generated there arent any errors for clicking other buttons/checkboxes.
 
                 //Clear previous content + Add Progress in label and textbox.
@@ -170,7 +161,7 @@ namespace PassGuard.GUI
                 PasswordTextBox.Clear();
 
                 //Create a string with the valid characters
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
                 {
@@ -372,11 +363,13 @@ namespace PassGuard.GUI
                 "the whole content of this dialog.", caption: "Notes about pwned passwords");
         }
 
+        [SupportedOSPlatform("windows")]
         private void SelectAllSymbolsButton_MouseEnter(object sender, EventArgs e)
         {
             SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline);//If mouse over button, underline text
         }
 
+        [SupportedOSPlatform("windows")]
         private void SelectAllSymbolsButton_MouseLeave(object sender, EventArgs e)
         {
             SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //If mouse leaves button, regular text
@@ -428,21 +421,25 @@ namespace PassGuard.GUI
             MessageBox.Show(text: "If one or more symbols are checked, only one or more of these symbols (at least one, it is unlikely that all symbols will be displayed) will be displayed in the password.", caption: "Information about symbols in passwords");
         }
 
+        [SupportedOSPlatform("windows")]
         private void NoteSymbolsButton_MouseEnter(object sender, EventArgs e)
         {
             NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);//If mouse over button, underline text
         }
 
+        [SupportedOSPlatform("windows")]
         private void NoteSymbolsButton_MouseLeave(object sender, EventArgs e)
         {
             NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular); //If mouse leaves button, regular text
         }
 
+        [SupportedOSPlatform("windows")]
         private void GenPassButton_MouseEnter(object sender, EventArgs e)
         {
             GenPassButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);//If mouse over button, underline text
         }
 
+        [SupportedOSPlatform("windows")]
         private void GenPassButton_MouseLeave(object sender, EventArgs e)
         {
             GenPassButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //If mouse leaves button, regular text

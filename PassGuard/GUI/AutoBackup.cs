@@ -16,52 +16,20 @@ namespace PassGuard.GUI
     //Form to configure an AutoBackup of a selected Vault in a selected pathForBackups and with selected frequency.
     public partial class AutoBackup : Form
     {
-        private Dictionary<int, String> frequencies = new Dictionary<int, String>();
-        private String AutoBackupState; //AutoBackup true (activated) or false
-        private String pathOfVaultBackedUp; //Path of the Vault to be backed up.
-        private String pathForBackups; //Path where the Backups will be saved.
-        private String lastDateBackup; //Date when the last backup was made (more oriented to modes 3, 4, 5).
-        private String frequencyBackup; //Mode for the frequency
-        private bool setupSuccess;
+        private Dictionary<int, String> frequencies = new();
+        public String AutoBackupState { get; private set; } //AutoBackup true (activated) or false
+        public String pathOfVaultBackedUp { get; private set; } //Path of the Vault to be backed up.
+        public String pathForBackups { get; private set; } //Path where the Backups will be saved.
+        public String lastDateBackup { get; private set; } //Date when the last backup was made (more oriented to modes 3, 4, 5).
+        public String frequencyBackup { get; private set; } //Mode for the frequency
+        public bool setupSuccess { get; private set; }
 
-        public bool GetSetupSuccess()
-        {
-            return setupSuccess;
-        }
-
-        public String GetAutoBackupState()
-        {
-            return AutoBackupState;
-        }
-
-        public String GetPathOfVaultBackedUp()
-        {
-            return pathOfVaultBackedUp;
-        }
-
-        public String GetPathForBackups()
-        {
-            return pathForBackups;
-        }
-
-        public String GetLastDateBackup()
-        {
-            return lastDateBackup;
-        }
-
-        public String GetFrequencyBackup()
-        {
-            return frequencyBackup;
-        }
-
-        public AutoBackup(Form MainWindow)
+        public AutoBackup()
         {
             InitializeComponent();
             try
             {
-                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-                SelectVaultBackupFilesPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -138,7 +106,7 @@ namespace PassGuard.GUI
 
         private void SetupAutoBackupButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             if (ActivateBackupCheckbox.Checked == false) //It it was deactivated...
             {
                 AutoBackupState = "false";
@@ -222,8 +190,10 @@ namespace PassGuard.GUI
             bool cancelPathSearch = false;
             while (ext != ".encrypted" && !cancelPathSearch)
             {
-                OpenFileDialog ofd = new OpenFileDialog(); //File Selector
-                ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
+                OpenFileDialog ofd = new()
+                {
+                    Filter = "PassGuard Vaults|*.encrypted" //Type of file we are looking for...
+                }; //File Selector
 
                 var result = ofd.ShowDialog();
                 filepath = ofd.FileName;
@@ -243,15 +213,13 @@ namespace PassGuard.GUI
 
         private void SelectVaultBackupFilesPathButton_Click(object sender, EventArgs e)
         {
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            FolderBrowserDialog fbd = new FolderBrowserDialog(); //Folder selector
+            FolderBrowserDialog fbd = new(); //Folder selector
 
             // Show the FolderBrowserDialog.
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK)
             {
-                path = fbd.SelectedPath;
-                BackupPathFilesTextbox.Text = path;
+                BackupPathFilesTextbox.Text = fbd.SelectedPath;
             }
         }
     }

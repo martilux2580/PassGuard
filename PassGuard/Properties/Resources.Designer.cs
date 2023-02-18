@@ -63,6 +63,66 @@ namespace PassGuard.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap CheckIcon {
+            get {
+                object obj = ResourceManager.GetObject("CheckIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CheckIconBig {
+            get {
+                object obj = ResourceManager.GetObject("CheckIconBig", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Clipboard32 {
+            get {
+                object obj = ResourceManager.GetObject("Clipboard32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap FolderIcon {
+            get {
+                object obj = ResourceManager.GetObject("FolderIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Help32 {
+            get {
+                object obj = ResourceManager.GetObject("Help32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Info243 {
+            get {
+                object obj = ResourceManager.GetObject("Info243", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Logo123 {
             get {
                 object obj = ResourceManager.GetObject("Logo123", resourceCulture);
@@ -77,6 +137,16 @@ namespace PassGuard.Properties {
             get {
                 object obj = ResourceManager.GetObject("LogoIcon64123", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Setting {
+            get {
+                object obj = ResourceManager.GetObject("Setting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

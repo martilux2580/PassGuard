@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -17,21 +18,14 @@ namespace PassGuard.GUI
     //UC Component to obtain the credentials to login to a selected Vault.
     public partial class LoadVaultUC : UserControl
     {
-        private bool settings;
+        private readonly bool settings;
 
         public LoadVaultUC(bool setts)
         {
             InitializeComponent();
             settings = setts;
-            try
-            {
-                SelectVaultPathButton.Image = Image.FromFile(@".\Images\FolderIcon.ico"); //Loads Image for the Settings Icon
-                if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-            }
+            if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
+           
 
         }
 
@@ -49,7 +43,7 @@ namespace PassGuard.GUI
 
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             String errorMessages = ""; //Store all error messages...
 
             //If any field is blank.
@@ -102,10 +96,10 @@ namespace PassGuard.GUI
                         //Obtain all its decrypted elements.
                         utils.Decrypt(key: vKey, src: encVault, dst: decVault);
 
-                        List<String[]> fullResults = new List<String[]>();
-                        using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                        using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                        using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                        List<String[]> fullResults = new();
+                        using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                        using (SQLiteConnection m_dbConnection = new("Data Source = " + decVault))
+                        using (SQLiteCommand commandExec = new("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                             commandExec.ExecuteNonQuery(); //Execute request.
@@ -178,7 +172,7 @@ namespace PassGuard.GUI
                         var key = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
 
                         //Show all the contents of the vault (UserControl).
-                        GUI.VaultContentUC vc = new GUI.VaultContentUC(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
+                        GUI.VaultContentUC vc = new(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
                         var ContentPanel = this.Parent;
                         this.Parent.Controls.Clear(); //this.Parent.Name = ContentPanel
                         ContentPanel.Controls.Add(vc);
@@ -215,9 +209,11 @@ namespace PassGuard.GUI
             bool cancelPathSearch = false;
             while (ext != ".encrypted" && !cancelPathSearch)
             {
-                OpenFileDialog ofd = new OpenFileDialog(); //File selector
-                ofd.Filter = "PassGuard Vaults|*.encrypted"; //Type of file we are looking for...
-                
+                OpenFileDialog ofd = new()
+                {
+                    Filter = "PassGuard Vaults|*.encrypted" //Type of file we are looking for...
+                }; //File selector
+
                 var result = ofd.ShowDialog();
                 filepath = ofd.FileName;
                 ext = Path.GetExtension(filepath).ToLower();
@@ -234,36 +230,43 @@ namespace PassGuard.GUI
             VaultPathTextbox.Text = filepath;
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
         {
             LoadVaultButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
         {
             LoadVaultButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadSavedSKButton_MouseEnter(object sender, EventArgs e)
         {
             LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadSavedSKButton_MouseLeave(object sender, EventArgs e)
         {
             LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadSavedEmailButton_Click(object sender, EventArgs e)
         {
             VaultEmailTextbox.Text = ConfigurationManager.AppSettings["Email"]; //Modify data in the config file for future executions.
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadSavedEmailButton_MouseEnter(object sender, EventArgs e)
         {
             LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadSavedEmailButton_MouseLeave(object sender, EventArgs e)
         {
             LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button

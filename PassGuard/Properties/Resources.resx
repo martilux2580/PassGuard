@@ -118,10 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CheckIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\CheckIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CheckIconBig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\CheckIconBig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Clipboard32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Clipboard32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FolderIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\FolderIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Help32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Help32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Info243" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Info243.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Logo123" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Logo123.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LogoIcon64123" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\LogoIcon64123.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Setting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Setting.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

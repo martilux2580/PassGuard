@@ -38,7 +38,7 @@ namespace PassGuard.GUI
 
             try
             {
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {

@@ -223,6 +223,7 @@ namespace PassGuard
             this.SettingButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.SettingButton.FlatAppearance.BorderSize = 0;
             this.SettingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SettingButton.Image = global::PassGuard.Properties.Resources.Setting;
             this.SettingButton.Location = new System.Drawing.Point(924, 37);
             this.SettingButton.Margin = new System.Windows.Forms.Padding(2);
             this.SettingButton.Name = "SettingButton";

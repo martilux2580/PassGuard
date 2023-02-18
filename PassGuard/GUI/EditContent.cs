@@ -15,68 +15,29 @@ namespace PassGuard.GUI
     //Form to edit the data of a Password in the Vault (Similar to other UC...)
     public partial class EditContent : Form
     {
-        private String url { get; set; }
-        private String name { get; set; }
-        private String username { get; set; }
-        private String password { get; set; }
-        private String category { get; set; }
-        private String notes { get; set; }
+        public String url { get; private set; }
+        public String name { get; private set; }
+        public String username { get; private set; }
+        public String password { get; private set; }
+        public String category { get; private set; }
+        public String notes { get; private set; }
 
         private List<String> namesInDB; //Names already in the Vault
         private readonly byte[] Key;
         private readonly String decPath;
-        private bool editedSuccess;
-        private String nameToBeEdited;
+        public bool editedSuccess { get; private set; }
+        public String nameToBeEdited { get; private set; }
         private readonly Dictionary<String, String> map; //No duplicate keys, EncryptedName/DecryptedName
 
         internal String getHashofName(String name)
         {
-            return map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Return the key, given the value.
-        }
-        
-        public bool getEditedSuccess()
-        {
-            return editedSuccess;
-        }
-        internal String getNameToBeEdited()
-        {
-            return nameToBeEdited;
-        }
-
-        public String getUrl()
-        {
-            return url;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public String getUsername()
-        {
-            return username;
-        }
-
-        public String getPassword()
-        {
-            return password;
-        }
-
-        public String getCategory()
-        {
-            return category;
-        }
-
-        public String getNotes()
-        {
-            return notes;
-        }
+            return map.FirstOrDefault(x => x.Value == name).Key; //Return the key, given the value.
+        }        
 
         public EditContent(List<String> names, byte[] key, String decpath)
         {
             InitializeComponent();
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             decPath = decpath;
             Key = key;
 
@@ -96,7 +57,7 @@ namespace PassGuard.GUI
 
             try
             {
-                this.Icon = new Icon(@".\Images\LogoIcon64123.ico"); //Loads Icon from Image folder.
+                this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
             }
             catch (Exception)
             {
@@ -106,7 +67,7 @@ namespace PassGuard.GUI
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             String errorMessages = "";
 
             if (String.IsNullOrWhiteSpace(NameTextbox.Text) || String.IsNullOrWhiteSpace(UsernameTextbox.Text) || String.IsNullOrWhiteSpace(PasswordTextbox.Text))
@@ -127,7 +88,7 @@ namespace PassGuard.GUI
             }
             else //No error in params, create vault.
             {
-                nameToBeEdited = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Get encrypted name of the values to be edited.
+                nameToBeEdited = NameCombobox.Text; //Get encrypted name of the values to be edited.
 
                 url = utils.EncryptText(key: Key, src: URLTextbox.Text);
                 name = utils.EncryptText(key: Key, src: NameTextbox.Text);
@@ -147,17 +108,17 @@ namespace PassGuard.GUI
 
         private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             if ((!String.IsNullOrWhiteSpace(NameCombobox.Text)) && (!String.IsNullOrEmpty(NameCombobox.Text))) //Fetch the data of the name selected.
             {
-                List<String[]> fullResults = new List<String[]>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decPath))
+                List<String[]> fullResults = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decPath))
                 {
                     var keyToSearch = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key;
                     var sql = "SELECT * FROM Vault WHERE Name = @name1;";
-                    using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                    using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                     {
                         m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                         commandExec.Prepare();

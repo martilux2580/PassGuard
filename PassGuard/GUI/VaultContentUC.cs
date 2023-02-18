@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -35,17 +36,18 @@ namespace PassGuard.GUI
             Category,
             Notes
         }
-        private List<DataRowUC> DataRowUCList = new List<DataRowUC>(); //List of DataRows with the data of the passwords.
-        private String encryptedVaultPath;
+        private readonly List<DataRowUC> DataRowUCList = new(); //List of DataRows with the data of the passwords.
+        private readonly String encryptedVaultPath;
         private readonly String vaultEmail;
         private readonly String vaultPass;
         private readonly byte[] vKey; //Vault
         private readonly byte[] cKey; //Content
 
+        [SupportedOSPlatform("windows")]
         public VaultContentUC(String path, String email, String pass, byte[] key, String SK)
         {
             InitializeComponent();
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             encryptedVaultPath = path;
             vaultEmail = email;
@@ -64,44 +66,55 @@ namespace PassGuard.GUI
 
         }
 
+        [SupportedOSPlatform("windows")]
         //Sets the contents for the CMS of each header button (except SitePassword)
         private void SetCMS()
         {
-            var titleURL = new ToolStripLabel("ORDER BY URL");
-            titleURL.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            titleURL.TextAlign = ContentAlignment.MiddleCenter;
-            titleURL.ForeColor = Color.FromArgb(109, 109, 109);
+            var titleURL = new ToolStripLabel("ORDER BY URL")
+            {
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.FromArgb(109, 109, 109)
+            };
             URLCMS.Items.Insert(0, titleURL);
 
-            var titleName = new ToolStripLabel("ORDER BY NAME");
-            titleName.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            titleName.TextAlign = ContentAlignment.MiddleCenter;
-            titleName.ForeColor = Color.FromArgb(109, 109, 109);
+            var titleName = new ToolStripLabel("ORDER BY NAME")
+            {
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.FromArgb(109, 109, 109)
+            };
             NameCMS.Items.Insert(0, titleName);
 
-            var titleUsername = new ToolStripLabel("ORDER BY USERNAME");
-            titleUsername.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            titleUsername.TextAlign = ContentAlignment.MiddleCenter;
-            titleUsername.ForeColor = Color.FromArgb(109, 109, 109);
+            var titleUsername = new ToolStripLabel("ORDER BY USERNAME")
+            {
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.FromArgb(109, 109, 109)
+            };
             UsernameCMS.Width += 20;
             UsernameCMS.Items.Insert(0, titleUsername);
 
-            var titleCategory = new ToolStripLabel("ORDER BY CATEGORY");
-            titleCategory.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            titleCategory.TextAlign = ContentAlignment.MiddleCenter;
-            titleCategory.ForeColor = Color.FromArgb(109, 109, 109);
+            var titleCategory = new ToolStripLabel("ORDER BY CATEGORY")
+            {
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.FromArgb(109, 109, 109)
+            };
             CategoryCMS.Items.Insert(0, titleCategory);
 
-            var titleNotes = new ToolStripLabel("ORDER BY NOTES");
-            titleNotes.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            titleNotes.TextAlign = ContentAlignment.MiddleCenter;
-            titleNotes.ForeColor = Color.FromArgb(109, 109, 109);
+            var titleNotes = new ToolStripLabel("ORDER BY NOTES")
+            {
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.FromArgb(109, 109, 109)
+            };
             NotesCMS.Items.Insert(0, titleNotes);
         }
 
         private void LoadContent(Order order, DBColumns col)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             //Set Path for encrypted Vault (for the Path.Combine())
             String[] saveEncryptedVaultPath = encryptedVaultPath.Split('\\');
@@ -117,10 +130,10 @@ namespace PassGuard.GUI
             //Obtain all the contents of the vault.
             if ((order != Order.Normal) && (col!= DBColumns.NULLVALUESS)) //If order diff from normal, we have to order. If col diff from NULLVALUESS we have to order.
             {
-                List<String> fullResults = new List<String>(); //Get all the values from the column the user wants to order
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT " + col.ToString() + " FROM Vault;", m_dbConnection)) //Associate request with connection to vault.
+                List<String> fullResults = new(); //Get all the values from the column the user wants to order
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decVault))
+                using (SQLiteCommand commandExec = new("SELECT " + col.ToString() + " FROM Vault;", m_dbConnection)) //Associate request with connection to vault.
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -144,14 +157,14 @@ namespace PassGuard.GUI
 
 
                 }
-                Dictionary<String, String> map = new Dictionary<string, string>();
+                Dictionary<String, String> map = new();
                 foreach(String allColumnData in fullResults) //Map the values of the column the user wants to order with its decrypted text.
                 {
                     map.Add(allColumnData, utils.DecryptText(key: cKey, src: allColumnData));
                 }
                 //Sort the values of that dictionary (decrypted values of the column) as the user wants. Nullvalues will go first in ascending order, last in descending order.
                 var ColList = map.Values.ToList<String>();
-                List<String> sortedList = new List<string>();
+                List<String> sortedList = new();
                 if(order == Order.Asc) 
                 { 
                     sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>(); 
@@ -164,15 +177,15 @@ namespace PassGuard.GUI
 
                 String[] orderedRow = new String[6];
                 DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decVault))
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
                     {
                         var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
                         var sql = "SELECT * FROM Vault WHERE " + col.ToString() + " = @col1;";
-                        using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                        using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             commandExec.Prepare();
                             commandExec.Parameters.Add("@col1", DbType.String).Value = keyToSearch;
@@ -193,7 +206,7 @@ namespace PassGuard.GUI
 
                             commandExec.Dispose(); //Delete object so it is no longer using the file.
 
-                            DataRowUC data = new DataRowUC(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
+                            DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
 
                             DataRowUCList.Add(data); //Add it to the list.
                             map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
@@ -218,10 +231,10 @@ namespace PassGuard.GUI
             }
             else if (order == Order.Normal) //Order is normal, or it is first time loading content in the table...
             {
-                List<String[]> fullResults = new List<String[]>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                List<String[]> fullResults = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decVault))
+                using (SQLiteCommand commandExec = new("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -248,10 +261,10 @@ namespace PassGuard.GUI
 
                 ContentFlowLayoutPanel.Controls.Clear();
                 DataRowUCList.Clear(); //Clear previous content in the list and in the table.
-                Random rnd = new Random();
+                Random rnd = new();
                 foreach (String[] row in fullResults)
                 {
-                    DataRowUC data = new DataRowUC(row.ToList<String>(), cKey); //Create row and add it to list.
+                    DataRowUC data = new(row.ToList<String>(), cKey); //Create row and add it to list.
 
                     DataRowUCList.Add(data);
                 }
@@ -295,7 +308,7 @@ namespace PassGuard.GUI
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             String[] lastvalue = encryptedVaultPath.Split('\\');
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.'); //Path for decryption
@@ -303,10 +316,10 @@ namespace PassGuard.GUI
             {
                 utils.Decrypt(vKey, encryptedVaultPath, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")));
 
-                List<String> names = new List<String>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Fetch names already in Vault
+                List<String> names = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                using (SQLiteCommand commandExec = new("SELECT Name FROM Vault;", m_dbConnection)) //Fetch names already in Vault
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -331,25 +344,27 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.AddContent add = new GUI.AddContent(names, cKey); //Invoke Form and retrieve new data
-                add.BackColor = this.Parent.BackColor;
+                GUI.AddContent add = new(names, cKey)
+                {
+                    BackColor = this.Parent.BackColor
+                }; //Invoke Form and retrieve new data
                 add.ShowDialog();
 
-                if (add.GetAddedSuccess()) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
+                if (add.addedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
                 {
-                    String newUrl = add.GetUrl();
-                    String newName = add.GetName();
-                    String newUsername = add.GetUsername();
-                    String newPassword = add.GetPassword();
-                    String newCategory = add.GetCategory();
-                    String newNotes = add.GetNotes();
+                    String newUrl = add.url;
+                    String newName = add.name;
+                    String newUsername = add.username;
+                    String newPassword = add.password;
+                    String newCategory = add.category;
+                    String newNotes = add.notes;
 
-                    List<String[]> fullResults = new List<String[]>();
-                    using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                    using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                    List<String[]> fullResults = new();
+                    using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                    using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
                         var sql = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@url1, @name2, @username3, @sitepassword4, @category5, @notes6);"; //Insert value
-                        using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                        using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
 
@@ -363,7 +378,7 @@ namespace PassGuard.GUI
 
                             commandExec.ExecuteNonQuery(); //Execute request.
 
-                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Get everything from Vault in order to display it.
+                            using (SQLiteCommand commandRetrieveAll = new("SELECT * FROM Vault;", m_dbConnection)) //Get everything from Vault in order to display it.
                             {
                                 commandRetrieveAll.ExecuteNonQuery(); //Execute request.
 
@@ -395,7 +410,7 @@ namespace PassGuard.GUI
                     DataRowUCList.Clear();
                     foreach (String[] row in fullResults)
                     {
-                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey); //Add data rows to list
+                        DataRowUC data = new(row.ToList<String>(), cKey); //Add data rows to list
 
                         DataRowUCList.Add(data);
                     }
@@ -409,7 +424,7 @@ namespace PassGuard.GUI
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete decryption
             
-                if (add.GetAddedSuccess()) //If autobackup is enabled after each change in the Vault, create backup
+                if (add.addedSuccess) //If autobackup is enabled after each change in the Vault, create backup
                 {
                     if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
                     {
@@ -458,7 +473,7 @@ namespace PassGuard.GUI
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             String[] lastvalue = encryptedVaultPath.Split('\\');
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
@@ -467,10 +482,10 @@ namespace PassGuard.GUI
             {
                 utils.Decrypt(vKey, encryptedVaultPath, decVault);
 
-                List<String> names = new List<String>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Get names already in DB-
+                List<String> names = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                using (SQLiteCommand commandExec = new("SELECT Name FROM Vault;", m_dbConnection)) //Get names already in DB-
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -495,27 +510,29 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.DeleteContent del = new GUI.DeleteContent(names, cKey, decVault); //Invoke delete form and get data for deletion of one row or all database.
-                del.BackColor = this.Parent.BackColor;
+                GUI.DeleteContent del = new(names, cKey, decVault)
+                {
+                    BackColor = this.Parent.BackColor
+                }; //Invoke delete form and get data for deletion of one row or all database.
                 del.ShowDialog();
 
-                if (del.getDeletedSuccess()) //If valid data is for deleting one row.
+                if (del.deletedSuccess) //If valid data is for deleting one row.
                 {
-                    List<String[]> fullResults = new List<String[]>();
-                    using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                    using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                    List<String[]> fullResults = new();
+                    using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                    using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
                         var sql = "DELETE FROM Vault WHERE Name = @name1;"; //Delete the row
-                        using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                        using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
 
                             commandExec.Prepare();
-                            commandExec.Parameters.Add("@name1", DbType.String).Value = del.getNameToBeDeleted();
+                            commandExec.Parameters.Add("@name1", DbType.String).Value = del.nameToBeDeleted;
 
                             commandExec.ExecuteNonQuery(); //Execute request.
 
-                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                            using (SQLiteCommand commandRetrieveAll = new("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
                             {
                                 commandRetrieveAll.ExecuteNonQuery(); //Execute request.
 
@@ -549,7 +566,7 @@ namespace PassGuard.GUI
                     //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
-                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
+                        DataRowUC data = new(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
@@ -559,18 +576,18 @@ namespace PassGuard.GUI
                         ContentFlowLayoutPanel.Controls.Add(row);
                     }
                 }
-                else if (del.getDeletedAllSuccess()) //If valid data is for deleting all contents in the Vault.
+                else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
                 {
-                    List<String[]> fullResults = new List<String[]>();
-                    using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                    using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                    List<String[]> fullResults = new();
+                    using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                    using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
-                        using (SQLiteCommand commandExec = new SQLiteCommand("DELETE FROM Vault", m_dbConnection)) //Delete everything from Vault.
+                        using (SQLiteCommand commandExec = new("DELETE FROM Vault", m_dbConnection)) //Delete everything from Vault.
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                             commandExec.ExecuteNonQuery(); //Execute request.
 
-                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                            using (SQLiteCommand commandRetrieveAll = new("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
                             {
                                 commandRetrieveAll.ExecuteNonQuery(); //Execute request.
 
@@ -603,7 +620,7 @@ namespace PassGuard.GUI
                     //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
-                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
+                        DataRowUC data = new(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
@@ -617,7 +634,7 @@ namespace PassGuard.GUI
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-                if (del.getDeletedSuccess() || del.getDeletedAllSuccess()) 
+                if (del.deletedSuccess || del.deletedAllSuccess) 
                 {
                     if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set for every change in the Vault
                     {
@@ -666,7 +683,7 @@ namespace PassGuard.GUI
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
             String[] lastvalue = encryptedVaultPath.Split('\\');
             var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
             var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Decrypt vault path
@@ -675,10 +692,10 @@ namespace PassGuard.GUI
             {
                 utils.Decrypt(vKey, encryptedVaultPath, decVault);
 
-                List<String> names = new List<String>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT Name FROM Vault;", m_dbConnection)) //Fetch all names already in Vault
+                List<String> names = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                using (SQLiteCommand commandExec = new("SELECT Name FROM Vault;", m_dbConnection)) //Fetch all names already in Vault
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.
@@ -703,25 +720,27 @@ namespace PassGuard.GUI
 
                 }
 
-                GUI.EditContent edit = new GUI.EditContent(names, cKey, decVault); //Invoke edit form and retrieve data
-                edit.BackColor = this.Parent.BackColor;
+                GUI.EditContent edit = new(names, cKey, decVault)
+                {
+                    BackColor = this.Parent.BackColor
+                }; //Invoke edit form and retrieve data
                 edit.ShowDialog();
 
-                if (edit.getEditedSuccess()) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
+                if (edit.editedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
                 {
-                    String newUrl = edit.getUrl();
-                    String newName = edit.getName();
-                    String newUsername = edit.getUsername();
-                    String newPassword = edit.getPassword();
-                    String newCategory = edit.getCategory();
-                    String newNotes = edit.getNotes();
+                    String newUrl = edit.url;
+                    String newName = edit.name;
+                    String newUsername = edit.username;
+                    String newPassword = edit.password;
+                    String newCategory = edit.category;
+                    String newNotes = edit.notes;
 
-                    List<String[]> fullResults = new List<String[]>();
-                    using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                    using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
+                    List<String[]> fullResults = new();
+                    using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                    using (SQLiteConnection m_dbConnection = new("Data Source = " + (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))))
                     {
                         var sql = "UPDATE Vault SET Url = @url1, Name = @name2, Username = @username3, SitePassword = @sitepassword4, Category = @category5, Notes = @notes6 WHERE Name = @nameedit7;"; //Update row
-                        using (SQLiteCommand commandExec = new SQLiteCommand(sql, m_dbConnection)) //Associate request with connection to vault.)
+                        using (SQLiteCommand commandExec = new(sql, m_dbConnection)) //Associate request with connection to vault.)
                         {
                             m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
 
@@ -732,11 +751,11 @@ namespace PassGuard.GUI
                             commandExec.Parameters.Add("@sitepassword4", DbType.String).Value = newPassword;
                             commandExec.Parameters.Add("@category5", DbType.String).Value = newCategory;
                             commandExec.Parameters.Add("@notes6", DbType.String).Value = newNotes;
-                            commandExec.Parameters.Add("@nameedit7", DbType.String).Value = edit.getHashofName(name: edit.getNameToBeEdited());
+                            commandExec.Parameters.Add("@nameedit7", DbType.String).Value = edit.getHashofName(name: edit.nameToBeEdited);
 
                             commandExec.ExecuteNonQuery(); //Execute request.
 
-                            using (SQLiteCommand commandRetrieveAll = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
+                            using (SQLiteCommand commandRetrieveAll = new("SELECT * FROM Vault;", m_dbConnection)) //Associate request with connection to vault.)
                             {
                                 commandRetrieveAll.ExecuteNonQuery(); //Execute request.
 
@@ -769,7 +788,7 @@ namespace PassGuard.GUI
                     //Add data to datarows
                     foreach (String[] row in fullResults)
                     {
-                        DataRowUC data = new DataRowUC(row.ToList<String>(), cKey);
+                        DataRowUC data = new(row.ToList<String>(), cKey);
 
                         DataRowUCList.Add(data);
                     }
@@ -783,7 +802,7 @@ namespace PassGuard.GUI
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-                if (edit.getEditedSuccess())
+                if (edit.editedSuccess) 
                 {
                     if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set to every change in the Vault....
                     {
@@ -1409,7 +1428,7 @@ namespace PassGuard.GUI
 
         private void ExportAsPdfButton_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new Core.Utils();
+            Core.Utils utils = new();
 
             String[] saveEncryptedVaultPath = encryptedVaultPath.Split('\\');
             saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
@@ -1424,10 +1443,10 @@ namespace PassGuard.GUI
             {
                 utils.Decrypt(key: vKey, src: encVault, dst: decVault);
 
-                List<String[]> fullResults = new List<String[]>();
-                using (TransactionScope tran = new TransactionScope()) //Just in case, atomic procedure....
-                using (SQLiteConnection m_dbConnection = new SQLiteConnection("Data Source = " + decVault))
-                using (SQLiteCommand commandExec = new SQLiteCommand("SELECT * FROM Vault;", m_dbConnection)) //Get everything in order to write it in PDF.
+                List<String[]> fullResults = new();
+                using (TransactionScope tran = new()) //Just in case, atomic procedure....
+                using (SQLiteConnection m_dbConnection = new("Data Source = " + decVault))
+                using (SQLiteCommand commandExec = new("SELECT * FROM Vault;", m_dbConnection)) //Get everything in order to write it in PDF.
                 {
                     m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
                     commandExec.ExecuteNonQuery(); //Execute request.

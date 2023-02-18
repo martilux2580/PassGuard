@@ -22,7 +22,6 @@ namespace PassGuard.GUI
         private Dictionary<String, List<int>> storedConfigs;
         public bool addedSuccess { get; private set; }
 
-        [SupportedOSPlatform("windows")]
         public AddColorConfig(Dictionary<String, List<int>> configs)
         {
             InitializeComponent();
