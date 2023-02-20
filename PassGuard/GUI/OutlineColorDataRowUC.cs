@@ -30,13 +30,13 @@ namespace PassGuard.GUI
             GreenNUD.Value = rgb[1];
             BlueNUD.Value = rgb[2];
 
-            var redlogo = ConfigurationManager.AppSettings["RedLogo"];
-            var greenlogo = ConfigurationManager.AppSettings["GreenLogo"];
-            var bluelogo = ConfigurationManager.AppSettings["BlueLogo"];
+            var redlogo = cf.finalRed;
+            var greenlogo = cf.finalGreen;
+            var bluelogo = cf.finalBlue;
 
             ViewerPanel.BackColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
 
-            if ((rgb[0] == Int32.Parse(redlogo)) && (rgb[1] == Int32.Parse(greenlogo)) && (rgb[2] == Int32.Parse(bluelogo)))
+            if ((rgb[0] == redlogo) && (rgb[1] == greenlogo) && (rgb[2] == bluelogo))
             {
                 ChosenConfigCheckbox.Checked = true;
                 ChosenConfigCheckbox.Text = "Enabled";
@@ -66,9 +66,10 @@ namespace PassGuard.GUI
             ChosenConfigCheckbox.Text = "Enabled";
             ChosenConfigCheckbox.Checked = true;
 
-            callingForm.SetRedNUDValue((int)RedNUD.Value);
-            callingForm.SetGreenNUDValue((int)GreenNUD.Value);
-            callingForm.SetBlueNUDValue((int)BlueNUD.Value);
+            callingForm.RedNUD.Value = (int)RedNUD.Value;
+            callingForm.GreenNUD.Value = (int)GreenNUD.Value;
+            callingForm.BlueNUD.Value = (int)BlueNUD.Value;
+
         }
 
         private void FavouriteButton_Click(object sender, EventArgs e)
