@@ -457,10 +457,7 @@ namespace PassGuard.GUI
 
         private System.Windows.Forms.Label RGBTitleLabel;
         private System.Windows.Forms.Label RLabel;
-        private System.Windows.Forms.NumericUpDown RedNUD;
-        private System.Windows.Forms.NumericUpDown GreenNUD;
         private System.Windows.Forms.Label GLabel;
-        private System.Windows.Forms.NumericUpDown BlueNUD;
         private System.Windows.Forms.Label BLabel;
         private System.Windows.Forms.Button WebHelpRGB;
         private System.Windows.Forms.Label NoteRGBLabel;
@@ -484,5 +481,8 @@ namespace PassGuard.GUI
         private System.Windows.Forms.ToolStripMenuItem ascendingOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem descendingOrderToolStripMenuItem;
         private System.Windows.Forms.Button FavouriteButton;
+        internal System.Windows.Forms.NumericUpDown RedNUD;
+        internal System.Windows.Forms.NumericUpDown GreenNUD;
+        internal System.Windows.Forms.NumericUpDown BlueNUD;
     }
 }

@@ -18,13 +18,20 @@ namespace PassGuard.GUI
         private List<OutlineColorDataRowUC> ConfigUCList = new(); //List of DataRows with the data of the passwords.
         public List<CheckBox> checkboxes { get; private set; } = new();
         public Configuration config { get; private set; }
-     
+        public int finalRed { get; private set; }
+        public int finalGreen { get; private set; }
+        public int finalBlue { get; private set; }
 
-    public AskRGBforSettings(int[] colours, Configuration configg)
+        public AskRGBforSettings(int[] colours, Configuration configg)
         {
             InitializeComponent();
             SetNUDs(colours);
-            LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+            finalRed = (int)RedNUD.Value;
+            finalGreen = (int)GreenNUD.Value;
+            finalBlue = (int)BlueNUD.Value;
+
+            LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
             config = configg;
 
         }
@@ -70,36 +77,6 @@ namespace PassGuard.GUI
             BlueNUD.Value = colours[2]; //Modify data in the config file for future executions.
         }
 
-        public int GetRedNUDValue()
-        {
-            return (int)RedNUD.Value;
-        }
-
-        public int GetGreenNUDValue()
-        {
-            return (int)GreenNUD.Value;
-        }
-
-        public int GetBlueNUDValue()
-        {
-            return (int)BlueNUD.Value;
-        }
-
-        public void SetRedNUDValue(int value)
-        {
-            RedNUD.Value = value;
-        }
-
-        public void SetGreenNUDValue(int value)
-        {
-            GreenNUD.Value = value;
-        }
-
-        public void SetBlueNUDValue(int value)
-        {
-            BlueNUD.Value = value;
-        }
-
         private void AskRGBforSettings_Load(object sender, EventArgs e)
         {
             try
@@ -114,18 +91,25 @@ namespace PassGuard.GUI
 
         private void WebHelpRGB_Click(object sender, EventArgs e)
         {
+            string url = "https://htmlcolorcodes.com/es";
             try
             {
-                System.Diagnostics.Process.Start("https://htmlcolorcodes.com/es");
+                System.Diagnostics.Process.Start(url); //Open browser with webpage.
             }
             catch (Exception)
             {
-                MessageBox.Show(text: "PassGuard could not open help webpage.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                Clipboard.SetText(url);
+                MessageBox.Show(text: "ERROR: The following webpage: \n\n" + url + "\n\ncould not be opened. However, the link has been copied to your clipboard. You can paste it in your favourite web browser :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
             }
         }
 
         private void SendButton_Click(object sender, EventArgs e)
         {
+            //Set these variables, because we cannot get the NUD values if he have this.Close() the form.
+            finalRed = (int)RedNUD.Value;
+            finalGreen = (int)GreenNUD.Value;
+            finalBlue = (int)BlueNUD.Value;
+
             this.Close();
         }
 
@@ -222,7 +206,7 @@ namespace PassGuard.GUI
             if (del.deletedSuccess)
             {
                 values.Remove(del.name);
-                if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144 }); }
+                if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144, 1 }); }
 
                 String newData = JsonSerializer.Serialize(values);
 
@@ -238,7 +222,7 @@ namespace PassGuard.GUI
             else if (del.deletedAllSuccess)
             {
                 values.Clear();
-                values.Add("Default", new List<int> { 0, 191, 144 });
+                values.Add("Default", new List<int> { 0, 191, 144, 1 });
 
                 String newData = JsonSerializer.Serialize(values);
 

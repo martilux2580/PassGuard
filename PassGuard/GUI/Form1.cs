@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Runtime.Versioning;
+using iText.Layout.Splitting;
 
 namespace PassGuard
 {
@@ -155,13 +156,15 @@ namespace PassGuard
 
         private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
         {
+            string url = "https://github.com/martilux2580?tab=repositories";
             try
             {
-                System.Diagnostics.Process.Start("https://github.com/martilux2580?tab=repositories"); //Open browser with webpage.
+                System.Diagnostics.Process.Start(url); //Open browser with webpage.
             }
             catch (Exception)
             {
-                MessageBox.Show(text: "Webpage could not be opened.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+                Clipboard.SetText(url);
+                MessageBox.Show(text: "ERROR: The following webpage: \n\n" + url + "\n\ncould not be opened. However, the link has been copied to your clipboard. You can paste it in your favourite web browser :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
             }
         }
 
@@ -188,6 +191,7 @@ namespace PassGuard
         {
             try
             {
+                //Open the window with the correspondent theme.
                 Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 int[] actualColours = new int[3] { (int)LogoPanel.BackColor.R, (int)LogoPanel.BackColor.G, (int)LogoPanel.BackColor.B }; //Create array with actual colours to send it to the form.
@@ -203,90 +207,40 @@ namespace PassGuard
                 rgb.ShowDialog();  //Show dialog
 
 
-                //CHANGE VALUES AND SET COLOURS
-                int redValue = rgb.GetRedNUDValue(); //Get rgb values
-                int greenValue = rgb.GetGreenNUDValue();
-                int blueValue = rgb.GetBlueNUDValue();
-                int newRedMenu, newGreenMenu, newBlueMenu = 0; //Organise them for config file.
-                int newRedLogo, newGreenLogo, newBlueLogo = 0;
-                int newRedOptions, newGreenOptions, newBlueOptions = 0;
-
-                //Correction of rgb values if higher than 235 and lower than 32, and then set the colors of the panels
-                if ((redValue > 235) && (greenValue > 235) && (blueValue > 235))
+                //Get values
+                //If no changes were made, exit.
+                int[] newRGB = new int[3] { rgb.finalRed, rgb.finalGreen, rgb.finalBlue };
+                if (newRGB.SequenceEqual(actualColours))
                 {
-                    newRedMenu = newGreenMenu = newBlueMenu = 245;
-                    newRedLogo = newGreenLogo = newBlueLogo = 255;
-                    newRedOptions = newGreenOptions = newBlueOptions = 250;
-
-                    DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-                    if (dialog == DialogResult.Yes) //Change config file and save values.
-                    {
-                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
-                        config.Save(ConfigurationSaveMode.Modified);
-                        ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
-                    }
-
-                    MenuPanel.BackColor = Color.FromArgb(245, 245, 245); //Set colours.
-                    LogoPanel.BackColor = Color.FromArgb(255, 255, 255);
-                    OptionsPanel.BackColor = Color.FromArgb(250, 250, 250);
+                    return;
                 }
-                else //Correction of rgb values if they are too dark, so I can add 20 to diff between each panel and stil below 255.
+                else
                 {
-                    if ((redValue > 235) || (greenValue > 235) || (blueValue > 235))
-                    {
-                        if (redValue > 235)
-                        {
-                            redValue = 235;
-                        }
-                        if (greenValue > 235)
-                        {
-                            greenValue = 235;
-                        }
-                        if (blueValue > 235)
-                        {
-                            blueValue = 235;
-                        }
-                    }
-                    newRedMenu = redValue + 20;
-                    newGreenMenu = greenValue + 20;
-                    newBlueMenu = blueValue + 20;
-                    newRedLogo = redValue; //Input in RGB Form will be for the logo, Menu and Options will be modified.
-                    newGreenLogo = greenValue;
-                    newBlueLogo = blueValue;
-                    newRedOptions = redValue + 10;
-                    newGreenOptions = greenValue + 10;
-                    newBlueOptions = blueValue + 10;
+                    int[] newValues = Utils.IntUtils.calibrateColours(newRGB[0], newRGB[1], newRGB[2]); //Calibrate values and obtain them.
 
+                    //Save values for future executions, or not.
                     DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
                     if (dialog == DialogResult.Yes)
                     {
-                        config.AppSettings.Settings["RedMenu"].Value = newRedMenu.ToString(); //Modify data in the config file for future executions.
-                        config.AppSettings.Settings["GreenMenu"].Value = newGreenMenu.ToString();
-                        config.AppSettings.Settings["BlueMenu"].Value = newBlueMenu.ToString();
-                        config.AppSettings.Settings["RedLogo"].Value = newRedLogo.ToString();
-                        config.AppSettings.Settings["GreenLogo"].Value = newGreenLogo.ToString();
-                        config.AppSettings.Settings["BlueLogo"].Value = newBlueLogo.ToString();
-                        config.AppSettings.Settings["RedOptions"].Value = newRedOptions.ToString();
-                        config.AppSettings.Settings["GreenOptions"].Value = newGreenOptions.ToString();
-                        config.AppSettings.Settings["BlueOptions"].Value = newBlueOptions.ToString();
+                        config.AppSettings.Settings["RedMenu"].Value = newValues[0].ToString(); //Modify data in the config file for future executions.
+                        config.AppSettings.Settings["GreenMenu"].Value = newValues[1].ToString();
+                        config.AppSettings.Settings["BlueMenu"].Value = newValues[2].ToString();
+                        config.AppSettings.Settings["RedLogo"].Value = newValues[3].ToString();
+                        config.AppSettings.Settings["GreenLogo"].Value = newValues[4].ToString();
+                        config.AppSettings.Settings["BlueLogo"].Value = newValues[5].ToString();
+                        config.AppSettings.Settings["RedOptions"].Value = newValues[6].ToString();
+                        config.AppSettings.Settings["GreenOptions"].Value = newValues[7].ToString();
+                        config.AppSettings.Settings["BlueOptions"].Value = newValues[8].ToString();
                         config.Save(ConfigurationSaveMode.Modified);
                         ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
                     }
 
-                    MenuPanel.BackColor = Color.FromArgb(newRedMenu, newGreenMenu, newBlueMenu);
-                    LogoPanel.BackColor = Color.FromArgb(newRedLogo, newGreenLogo, newBlueLogo);
-                    OptionsPanel.BackColor = Color.FromArgb(newRedOptions, newGreenLogo, newBlueLogo);
+                    MenuPanel.BackColor = Color.FromArgb(newValues[0], newValues[1], newValues[2]);
+                    LogoPanel.BackColor = Color.FromArgb(newValues[3], newValues[4], newValues[5]);
+                    OptionsPanel.BackColor = Color.FromArgb(newValues[6], newValues[7], newValues[8]);
+
                 }
-                
-                
+
             }
             catch (Exception)
             {
