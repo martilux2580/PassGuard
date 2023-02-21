@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PassGuard.PDF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -44,6 +45,7 @@ namespace PassGuard.GUI
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             Core.Utils utils = new();
+            IPDF pdf = new PDFCreator();
             String errorMessages = ""; //Store all error messages...
 
             //If any field is blank.
@@ -61,7 +63,7 @@ namespace PassGuard.GUI
                 errorMessages += "    - Invalid Email Format.\n";
             }
 
-            bool validPass = utils.Check(VaultPassTextbox.Text, "Lower") && utils.Check(VaultPassTextbox.Text, "Upper") && utils.Check(VaultPassTextbox.Text, "Number") && utils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
+            bool validPass = Utils.StringUtils.Check(VaultPassTextbox.Text, "Lower") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Upper") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Number") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
             if (!validPass) //Valid password
             {
                 errorMessages += "    - The password must have upper and lower case letters, numbers, symbols and must have a minimum length of 12 characters.\n";
@@ -89,8 +91,8 @@ namespace PassGuard.GUI
                     {
                         //Calculate keys to decrypt vault.
                         var vKey = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
-                        var keyVStr = utils.Base64ToString(Convert.ToBase64String(vKey));
-                        var skStr = utils.Base64ToString(SecurityKeyTextbox.Text);
+                        var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
+                        var skStr = Utils.StringUtils.Base64ToString(SecurityKeyTextbox.Text);
                         var cKey = utils.GetVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
 
                         //Obtain all its decrypted elements.
@@ -134,7 +136,7 @@ namespace PassGuard.GUI
                             row[5] = utils.DecryptText(key: cKey, src: row[5]);
                         }
 
-                        utils.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
+                        pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
 
                         utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
                         File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));

@@ -202,7 +202,7 @@ namespace PassGuard.GUI
                             while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords
                             {
                                 //Save generated pass temporarily
-                                string genPass = utils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
+                                string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
 
                                 //Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
                                 missingChar = false; //If chars are missing, we won´t enter the block of code of generating not pwned passwords.
@@ -281,7 +281,7 @@ namespace PassGuard.GUI
                         while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords requested
                         {
 
-                            string genPass = utils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
+                            string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
                             missingChar = false;
 
                             //Equal Part as above

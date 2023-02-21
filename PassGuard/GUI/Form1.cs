@@ -11,6 +11,7 @@ using System.IO;
 using System.Configuration;
 using System.Runtime.Versioning;
 using iText.Layout.Splitting;
+using PassGuard.PDF;
 
 namespace PassGuard
 {
@@ -53,7 +54,7 @@ namespace PassGuard
                 //If Autobackup is activated and has time frequency, start a task with the function to check every time if a backup has to be made.
                 if ((ConfigurationManager.AppSettings["AutoBackupState"] == "true") && timeCodes.Contains(Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])))
                 {
-                    autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start a task with a method
+                    autobackup = Task.Factory.StartNew(() => Backup.Backup.AutoBackupTime()); //Start a task with a method
                 }
             }
             catch (ConfigurationErrorsException)
@@ -406,7 +407,7 @@ namespace PassGuard
 
                             if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup))) //Autobackup before wasnt set, so start a task.
                             {
-                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start task with autobackup.
+                                autobackup = Task.Factory.StartNew(() => Backup.Backup.AutoBackupTime()); //Start task with autobackup.
                             }
 
                         }
@@ -427,7 +428,7 @@ namespace PassGuard
                             }
                             else //Previous state was activated but with mode 1 or 2, so task is not active -> we have to run it..
                             {
-                                autobackup = Task.Factory.StartNew(() => utils.AutoBackupTime()); //Start task with autobackup.
+                                autobackup = Task.Factory.StartNew(() => Backup.Backup.AutoBackupTime()); //Start task with autobackup.
 
                             }
 
@@ -454,7 +455,7 @@ namespace PassGuard
                 {
                     if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
                     {
-                        if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+                        if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                         {
                             MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                         }
@@ -475,8 +476,8 @@ namespace PassGuard
 
         private void exportOutlineColoursAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Core.Utils utils = new();
-            utils.CreateOutlinePDF();
+            IPDF pdf = new PDFCreator();
+            pdf.CreateOutlinePDF();
 
         }
 

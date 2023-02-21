@@ -59,13 +59,13 @@ namespace PassGuard.GUI
                 errorMessages += "    - Invalid Email Format.\n";
             }
 
-            bool validName = utils.Check(VaultNameTextbox.Text, "Lower") || utils.Check(VaultNameTextbox.Text, "Upper") || utils.Check(VaultNameTextbox.Text, "Number"); //Name not composed of symbols.
+            bool validName = Utils.StringUtils.Check(VaultNameTextbox.Text, "Lower") || Utils.StringUtils.Check(VaultNameTextbox.Text, "Upper") || Utils.StringUtils.Check(VaultNameTextbox.Text, "Number"); //Name not composed of symbols.
             if (!validName) //Validate name of vault.
             {
                 errorMessages += "    - The new vault´s name should be composed of letters or numbers.\n";
             }
 
-            bool validPass = utils.Check(VaultPassTextbox.Text, "Lower") && utils.Check(VaultPassTextbox.Text, "Upper") && utils.Check(VaultPassTextbox.Text, "Number") && utils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
+            bool validPass = Utils.StringUtils.Check(VaultPassTextbox.Text, "Lower") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Upper") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Number") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
             if (!validPass) //Valid password
             {
                 errorMessages += "    - The password must have upper and lower case letters, numbers, symbols and must have a minimum length of 12 characters.\n";
