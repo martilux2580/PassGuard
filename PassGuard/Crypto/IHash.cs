@@ -8,5 +8,6 @@ namespace PassGuard.Crypto
 {
     internal interface IHash
     {
+        public string Compute(string password, int bits);
     }
 }

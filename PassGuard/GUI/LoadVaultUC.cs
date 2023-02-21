@@ -1,4 +1,5 @@
-﻿using PassGuard.PDF;
+﻿using PassGuard.Crypto;
+using PassGuard.PDF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,10 +43,12 @@ namespace PassGuard.GUI
             }
         }
 
+        [SupportedOSPlatform("windows")]
         private void LoadVaultButton_Click(object sender, EventArgs e)
         {
             Core.Utils utils = new();
             IPDF pdf = new PDFCreator();
+            IKDF kdf = new PBKDF2Function();
             String errorMessages = ""; //Store all error messages...
 
             //If any field is blank.
@@ -90,10 +93,10 @@ namespace PassGuard.GUI
                     try
                     {
                         //Calculate keys to decrypt vault.
-                        var vKey = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
+                        var vKey = kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(SecurityKeyTextbox.Text), bytes: 32);
                         var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
                         var skStr = Utils.StringUtils.Base64ToString(SecurityKeyTextbox.Text);
-                        var cKey = utils.GetVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
+                        var cKey = kdf.GetVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr), bytes: 32);
 
                         //Obtain all its decrypted elements.
                         utils.Decrypt(key: vKey, src: encVault, dst: decVault);
@@ -171,7 +174,7 @@ namespace PassGuard.GUI
                     try
                     {
                         //Calculate key to decrypt vault
-                        var key = utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), Convert.FromBase64String(SecurityKeyTextbox.Text));
+                        var key = kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(SecurityKeyTextbox.Text), bytes: 32);
 
                         //Show all the contents of the vault (UserControl).
                         GUI.VaultContentUC vc = new(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
