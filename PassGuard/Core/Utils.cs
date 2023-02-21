@@ -23,78 +23,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text.Json;
+using PassGuard.Crypto;
 
 namespace PassGuard.Core
 {
     //Class with many not UI-related methods.
     class Utils
     {
-        //Returns the SHA1 equivalent of a String password
-        internal string ComputeSHA1(string password)
-        {
-            if (String.IsNullOrEmpty(password)) //This if for controlling errors...
-            {
-                return null;
-            }
-            else
-            {
-                byte[] passByte = Encoding.UTF8.GetBytes(password);//Encode Pass
-                byte[] passHash = SHA1.HashData(passByte);//Compute SHA1
-
-                //Convert Hash into readable string
-                StringBuilder sb = new();
-                foreach (byte b in passHash)
-                {
-                    sb.Append(b.ToString("x2"));
-                }
-                string hash = sb.ToString();//Compose bytes to string
-
-                return hash;
-            }
-
-        }
-
-        //Obtain all the hashes that start with headHash from an API of pwned passwords.
-        internal async Task<string> GetHashes(string headHash)
-        {
-            string instruction = "https://api.pwnedpasswords.com/range/";
-            string url = instruction + headHash.ToUpper();
-            HttpClient client = new();
-            try
-            {
-                //HTTP request to the API and await for the list of hashes and their appearances in the API....
-                string response = await client.GetStringAsync(url); 
-                return response;
-            }
-            catch (HttpRequestException) //Error control
-            {
-                return "";
-            }
-            
-        }
-
-        //Compound the SHA1 of password, get all the hashes with a headhash, and if the compound is in the hashes returns true as password has been pwned, if not returns false
-        internal async Task<bool> CheckPwnage(string password)
-        {
-            string hash = ComputeSHA1(password); //Compute SHA1
-            string headhash = hash.Substring(0, 5); //Compute first part of hash in order to check hashes.
-            string PwnedHashes = await GetHashes(headhash);
-
-            StringReader reader = new(PwnedHashes);
-            string line, tailHash;
-            while ((line = reader.ReadLine()) != null)//Read all pwned hashes
-            {
-                tailHash = line.Substring(0, 35);
-                if (headhash.ToUpper() + tailHash.ToUpper() == hash.ToUpper()) //If match, pass has been pwned before.
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        
-
         //Function to encrypt a src file into a dst file given a key with AES.
         internal void Encrypt(byte[] key, String src, String dst)
         {
@@ -115,13 +50,6 @@ namespace PassGuard.Core
                     sourceStream.CopyTo(cryptoStream);
                 }
             }
-        }
-
-        //Function to derive a 256bit key (with PBKDF2) given a password and a salt.
-        internal byte[] GetVaultKey(String password, byte[] salt)
-        {
-            Rfc2898DeriveBytes d1 = new(password, salt, iterations: 100100, HashAlgorithmName.SHA256);
-            return d1.GetBytes(32); //256bit key.
         }
 
         //Function to decrypt a src file into a dst file given a key with AES.
@@ -236,10 +164,6 @@ namespace PassGuard.Core
             }
 
         }
-
-        
-
-        
 
     }
 }

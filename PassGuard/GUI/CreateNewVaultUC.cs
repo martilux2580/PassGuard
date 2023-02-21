@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Configuration;
 using System.Runtime.Versioning;
+using PassGuard.Crypto;
 
 namespace PassGuard.GUI
 {
@@ -41,6 +42,7 @@ namespace PassGuard.GUI
         private void CreateNewVaultButton_Click(object sender, EventArgs e)
         {
             Core.Utils utils = new();
+            IKDF kdf = new PBKDF2Function();
             String errorMessages = ""; //All the error messages due to input, later print it to user in just one messagebox.
 
             //If any field is blank.
@@ -132,7 +134,7 @@ namespace PassGuard.GUI
                 rnd.NextBytes(salt);
                 string rndsalt = Convert.ToBase64String(salt);
                 //Encrypt and delete previous file.
-                utils.Encrypt(key: utils.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt)), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
+                utils.Encrypt(key: kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(rndsalt), bytes: 32), Path.Combine(saveVaultPath.ToArray()), Path.Combine(saveEncryptedVaultPath.ToArray()));
                 File.Delete(Path.Combine(saveVaultPath.ToArray()));
 
                 //Save salt and maybe email.

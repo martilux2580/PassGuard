@@ -253,7 +253,7 @@ namespace PassGuard.GUI
                                 }
                                 if (!missingChar) //If genPass has ALL characters requested 
                                 {
-                                    bool check = await utils.CheckPwnage(genPass);
+                                    bool check = await Pwned.Pwned.CheckPwnage(genPass);
                                     if (check == false) //No pwnage found for genPass
                                     {
                                         validCount += 1; //A valid pass has been created, so we increment it

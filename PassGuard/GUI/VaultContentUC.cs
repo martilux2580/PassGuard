@@ -1,4 +1,5 @@
-﻿using PassGuard.PDF;
+﻿using PassGuard.Crypto;
+using PassGuard.PDF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,6 +50,7 @@ namespace PassGuard.GUI
         {
             InitializeComponent();
             Core.Utils utils = new();
+            IKDF kdf = new PBKDF2Function();
 
             encryptedVaultPath = path;
             vaultEmail = email;
@@ -58,7 +60,7 @@ namespace PassGuard.GUI
             //Calculate cKey
             var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
             var skStr = Utils.StringUtils.Base64ToString(SK);
-            cKey = utils.GetVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
+            cKey = kdf.GetVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr), bytes: 32);
 
             //Load the content of the Vault without any column order, and set the CMS for the orders.
             LoadContent(Order.Normal, DBColumns.NULLVALUESS);

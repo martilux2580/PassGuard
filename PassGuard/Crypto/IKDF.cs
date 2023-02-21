@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Crypto
 {
-    internal interface IHash
+    internal interface IKDF
     {
-        public string Compute(string password, int bits);
+        public byte[] GetVaultKey(String password, byte[] salt, int bytes);
     }
 }
