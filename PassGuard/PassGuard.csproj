@@ -60,7 +60,6 @@
     <Reference Update="System">
       <HintPath>..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
-    <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="GUI\CreateNewVaultUC.cs">

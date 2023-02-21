@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PassGuard.PDF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -55,8 +56,8 @@ namespace PassGuard.GUI
             vKey = key;
 
             //Calculate cKey
-            var keyVStr = utils.Base64ToString(Convert.ToBase64String(vKey));
-            var skStr = utils.Base64ToString(SK);
+            var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
+            var skStr = Utils.StringUtils.Base64ToString(SK);
             cKey = utils.GetVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr));
 
             //Load the content of the Vault without any column order, and set the CMS for the orders.
@@ -433,7 +434,7 @@ namespace PassGuard.GUI
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+                                if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -643,7 +644,7 @@ namespace PassGuard.GUI
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+                                if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -811,7 +812,7 @@ namespace PassGuard.GUI
                         {
                             if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
                             {
-                                if (utils.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+                                if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
                                 {
                                     MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                                 }
@@ -1429,6 +1430,7 @@ namespace PassGuard.GUI
         private void ExportAsPdfButton_Click(object sender, EventArgs e)
         {
             Core.Utils utils = new();
+            IPDF pdf = new PDFCreator();
 
             String[] saveEncryptedVaultPath = encryptedVaultPath.Split('\\');
             saveEncryptedVaultPath[0] = saveEncryptedVaultPath[0] + "\\";
@@ -1482,7 +1484,7 @@ namespace PassGuard.GUI
                     row[5] = utils.DecryptText(key: cKey, src: row[5]);
                 }
 
-                utils.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings["Email"], ConfigurationManager.AppSettings["SecurityKey"]);
+                pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings["Email"], ConfigurationManager.AppSettings["SecurityKey"]);
 
                 utils.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); 
                 File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
