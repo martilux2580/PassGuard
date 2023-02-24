@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PassGuard.PDF
 {
-    internal interface IPDF
-    {
-        public void CreatePDF(List<String[]> results, String Vault, String Email, String sk);
-        public void CreateOutlinePDF();
-    }
+	internal interface IPDF
+	{
+		public void CreatePDF(List<String[]> results, String Vault, String Email, String sk);
+		public void CreateOutlinePDF();
+	}
 }
