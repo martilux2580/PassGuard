@@ -13,91 +13,91 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-    public partial class OutlineColorDataRowUC : UserControl
-    {
+	public partial class OutlineColorDataRowUC : UserControl
+	{
 
-        private readonly AskRGBforSettings callingForm;
-        public bool favourite { get; private set; }
+		private readonly AskRGBforSettings callingForm;
+		public bool favourite { get; private set; }
 
-        public OutlineColorDataRowUC(String name, List<int> rgb, AskRGBforSettings cf)
-        {
-            InitializeComponent();
+		public OutlineColorDataRowUC(String name, List<int> rgb, AskRGBforSettings cf)
+		{
+			InitializeComponent();
 
-            callingForm = cf;
+			callingForm = cf;
 
-            NameTextbox.Text = name;
-            RedNUD.Value = rgb[0];
-            GreenNUD.Value = rgb[1];
-            BlueNUD.Value = rgb[2];
+			NameTextbox.Text = name;
+			RedNUD.Value = rgb[0];
+			GreenNUD.Value = rgb[1];
+			BlueNUD.Value = rgb[2];
 
-            var redlogo = cf.finalRed;
-            var greenlogo = cf.finalGreen;
-            var bluelogo = cf.finalBlue;
+			var redlogo = cf.finalRed;
+			var greenlogo = cf.finalGreen;
+			var bluelogo = cf.finalBlue;
 
-            ViewerPanel.BackColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+			ViewerPanel.BackColor = Color.FromArgb(rgb[0], rgb[1], rgb[2]);
 
-            if ((rgb[0] == redlogo) && (rgb[1] == greenlogo) && (rgb[2] == bluelogo))
-            {
-                ChosenConfigCheckbox.Checked = true;
-                ChosenConfigCheckbox.Text = "Enabled";
-            }
+			if ((rgb[0] == redlogo) && (rgb[1] == greenlogo) && (rgb[2] == bluelogo))
+			{
+				ChosenConfigCheckbox.Checked = true;
+				ChosenConfigCheckbox.Text = "Enabled";
+			}
 
-            if(Convert.ToBoolean(rgb[3]))
-            {
-                FavouriteButton.Image = Properties.Resources.CheckIcon;
-                favourite = true;
-            }
+			if(Convert.ToBoolean(rgb[3]))
+			{
+				FavouriteButton.Image = Properties.Resources.CheckIcon;
+				favourite = true;
+			}
 
-        }
+		}
 
-        private void UncheckEverything()
-        {
-            foreach (CheckBox check in callingForm.checkboxes)
-            {
-                check.Text = "Disabled";
-                check.Checked = false;
-            }
-        }
+		private void UncheckEverything()
+		{
+			foreach (CheckBox check in callingForm.checkboxes)
+			{
+				check.Text = "Disabled";
+				check.Checked = false;
+			}
+		}
 
-        private void ChosenConfigCheckbox_MouseClick(object sender, MouseEventArgs e)
-        {
-            UncheckEverything();
+		private void ChosenConfigCheckbox_MouseClick(object sender, MouseEventArgs e)
+		{
+			UncheckEverything();
 
-            ChosenConfigCheckbox.Text = "Enabled";
-            ChosenConfigCheckbox.Checked = true;
+			ChosenConfigCheckbox.Text = "Enabled";
+			ChosenConfigCheckbox.Checked = true;
 
-            callingForm.RedNUD.Value = (int)RedNUD.Value;
-            callingForm.GreenNUD.Value = (int)GreenNUD.Value;
-            callingForm.BlueNUD.Value = (int)BlueNUD.Value;
+			callingForm.RedNUD.Value = (int)RedNUD.Value;
+			callingForm.GreenNUD.Value = (int)GreenNUD.Value;
+			callingForm.BlueNUD.Value = (int)BlueNUD.Value;
 
-        }
+		}
 
-        private void FavouriteButton_Click(object sender, EventArgs e)
-        {
-            if (FavouriteButton.Image == null)
-            {
-                FavouriteButton.Image = Properties.Resources.CheckIcon;
-                favourite = true;
-            }
-            else
-            {
-                FavouriteButton.Image = null;
-                favourite = false;
-            }
+		private void FavouriteButton_Click(object sender, EventArgs e)
+		{
+			if (FavouriteButton.Image == null)
+			{
+				FavouriteButton.Image = Properties.Resources.CheckIcon;
+				favourite = true;
+			}
+			else
+			{
+				FavouriteButton.Image = null;
+				favourite = false;
+			}
 
-            Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-            var rgbconf = values[NameTextbox.Text];
-            if(favourite) { rgbconf[rgbconf.Count - 1] = 1; }
-            else { rgbconf[rgbconf.Count - 1] = 0; }
-            
-            values[NameTextbox.Text] = rgbconf;
+			var rgbconf = values[NameTextbox.Text];
+			if(favourite) { rgbconf[rgbconf.Count - 1] = 1; }
+			else { rgbconf[rgbconf.Count - 1] = 0; }
+			
+			values[NameTextbox.Text] = rgbconf;
 
-            callingForm.config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(values); //Modify data in the config file for future executions.
-            callingForm.config.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+			callingForm.config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(values); //Modify data in the config file for future executions.
+			callingForm.config.Save(ConfigurationSaveMode.Modified);
+			ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-            callingForm.LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-        }
-    }
+			callingForm.LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+		}
+	}
 }
