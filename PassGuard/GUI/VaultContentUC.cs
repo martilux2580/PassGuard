@@ -234,7 +234,7 @@ namespace PassGuard.GUI
 				crypt.Decrypt(vKey, encryptedVaultPath, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")));
 
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
-				List<String> names = query.GetColumn("Name");
+				List<String> names = query.GetColumn(DBColumns.Name.ToString());
 
 				GUI.AddContent add = new(names, cKey)
 				{
@@ -331,7 +331,7 @@ namespace PassGuard.GUI
 				crypt.Decrypt(vKey, encryptedVaultPath, decVault);
 
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
-				List<String> names = query.GetColumn("Name");
+				List<String> names = query.GetColumn(DBColumns.Name.ToString());
 
 				GUI.DeleteContent del = new(names, cKey, decVault)
 				{
@@ -443,7 +443,7 @@ namespace PassGuard.GUI
 				crypt.Decrypt(vKey, encryptedVaultPath, decVault);
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 
-				List<String> names = query.GetColumn("Name");
+				List<String> names = query.GetColumn(DBColumns.Name.ToString());
 				
 				GUI.EditContent edit = new(names, cKey, decVault)
 				{
