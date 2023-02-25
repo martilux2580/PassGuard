@@ -1,5 +1,4 @@
-﻿using iText.StyledXmlParser.Jsoup.Nodes;
-using PassGuard.Crypto;
+﻿using PassGuard.Crypto;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,8 +9,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using static iText.IO.Image.Jpeg2000ImageData;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace PassGuard.VaultQueries
 {
@@ -40,7 +37,7 @@ namespace PassGuard.VaultQueries
 					command.Prepare();
 					for(int i = 0; i< parameters.Count; i++)
 					{
-						command.Parameters.Add("@var"+i.ToString(), DbType.String).Value = parameters[i];
+						command.Parameters.Add("@param"+i.ToString(), DbType.String).Value = parameters[i];
 					}
 					
 				}
@@ -59,47 +56,47 @@ namespace PassGuard.VaultQueries
 			}
 		}
 			
-		private List<String[]> Retrieve(string query, List<String> parameters) //Retrieve rows from a query.
+		private List<object[]> Retrieve(string query, List<String> parameters) //Retrieve rows from a query.
 		{
-			List<String[]> result = new();
+			List<object[]> result = new();
 			using (TransactionScope tran = new()) //Just in case, atomic procedure....
 			using (SQLiteConnection m_dbConnection = new("Data Source = " + FullDecVaultPath))
 			{
-				using (SQLiteCommand commandExec = new(query, m_dbConnection)) //Associate request with connection to vault.)
+				m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
+				SQLiteCommand commandExec = new(query, m_dbConnection); //Associate request with connection to vault.)
+				
+				if (parameters != null && parameters.Count > 0)
 				{
-					m_dbConnection.Open(); //If first time, this models file as a vault, also opens a connection to it.
-
-					if (parameters != null && parameters.Count > 0)
+					commandExec.Prepare();
+					for (int i = 0; i < parameters.Count; i++)
 					{
-						commandExec.Prepare();
-						for (int i = 0; i < parameters.Count; i++)
-						{
-							commandExec.Parameters.Add("@var" + i.ToString(), DbType.String).Value = parameters[i];
-						}
-
+						commandExec.Parameters.Add("@param" + i.ToString(), DbType.String).Value = parameters[i];
 					}
-
-					commandExec.ExecuteNonQuery(); //Execute request.
-					using (SQLiteDataReader reader = commandExec.ExecuteReader())//Object Reader.
-					{
-						if (reader.Read())
-						{
-							result.Add(new string[6] { reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
-						}
-					}
-
-					commandExec.Dispose(); //Delete object so it is no longer using the file.
-
-					//Indicates that creating the SQLiteDatabase went succesfully, so the database can be committed.
-					tran.Complete(); //Close and commit transaction.
-					tran.Dispose(); //Dispose transaction so it is no longer using the file.
-
-					m_dbConnection.Close(); //Close connection to vault.
-					m_dbConnection.Dispose();
 
 				}
-			}
 
+				commandExec.ExecuteNonQuery();
+				using (SQLiteDataReader reader = commandExec.ExecuteReader())//Object Reader.
+				{
+					while (reader.Read())
+					{
+						var values = new object[reader.FieldCount];
+						reader.GetValues(values);
+						result.Add(values);
+					}
+				}
+
+				commandExec.ExecuteNonQuery(); //Execute request.
+				commandExec.Dispose(); //Delete object so it is no longer using the file.
+
+				//Indicates that creating the SQLiteDatabase went succesfully, so the database can be committed.
+				tran.Complete(); //Close and commit transaction.
+				tran.Dispose(); //Dispose transaction so it is no longer using the file.
+
+				m_dbConnection.Close(); //Close connection to vault.
+				m_dbConnection.Dispose();
+
+			}
 			return result;
 		}
 
@@ -112,12 +109,12 @@ namespace PassGuard.VaultQueries
 
 		public String[] GetPassword(string name) //Get all data given a Name
 		{
-			string query = "SELECT * FROM Vault WHERE Name = @var0;";
+			string query = "SELECT * FROM Vault WHERE Name = @param0;";
 
 			var partialResult = Retrieve(query, new List<string> { name });
 			if (partialResult.Count > 0)
 			{
-				return partialResult[0];
+				return Array.ConvertAll(partialResult[0], x => x.ToString());
 			}
 			else
 			{ 
@@ -129,19 +126,26 @@ namespace PassGuard.VaultQueries
 		{
 			string query = "SELECT * FROM Vault;";
 
-			return Retrieve(query, null);
+			var partialResult = Retrieve(query, null);
+			var result = new List<String[]>();
+			foreach(var item in partialResult)
+			{
+				result.Add(Array.ConvertAll(item, x => x.ToString()));
+			}
+
+			return result;
 		}
 
 		public List<String> GetColumn(String column)
 		{
-			string query = "SELECT @var0 FROM Vault;";
+			string query = $"SELECT {column} FROM Vault;"; //Prevent SQLINjections, control where is this method being called (as column)...
 
-			List<String[]> partialResult = Retrieve(query, new List<string> { column });
+			var partialResult = Retrieve(query, new List<string> {column});
 			List<String> result = new();
 
 			for(int i = 0; i<partialResult.Count; i++)
 			{
-				result.Append(partialResult[i][0]);
+				result.Add(partialResult[i][0].ToString());
 			}
 
 			return result;
@@ -149,12 +153,12 @@ namespace PassGuard.VaultQueries
 
 		public String[] GetDataGivenColumn(String column, String columnData)
 		{
-			string query = "SELECT * FROM Vault WHERE @var0 = @var1;";
+			string query = $"SELECT * FROM Vault WHERE {column} = @param0;";
 
-			var partialResult = Retrieve(query, new List<string> { column, columnData });
+			var partialResult = Retrieve(query, new List<string> { columnData });
 			if (partialResult.Count > 0)
 			{
-				return partialResult[0];
+				return Array.ConvertAll(partialResult[0], x => x.ToString());
 			}
 			else
 			{
@@ -164,14 +168,14 @@ namespace PassGuard.VaultQueries
 
 		public void InsertData(string url, string name, string username, string password, string category, string notes)
 		{
-			string query = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@var0, @var1, @var2, @var3, @var4, @var5);";
+			string query = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@param0, @param1, @param2, @param3, @param4, @param5);";
 
 			Execute(query, parameters: new List<string> { url, name, username, password, category, notes });
 		}
 
 		public void DeletePassword(string name)
 		{
-			string query = "DELETE FROM Vault WHERE Name = @var0;"; ;
+			string query = "DELETE FROM Vault WHERE Name = @param0;"; ;
 
 			Execute(query, parameters: new List<string> { name });
 		}
@@ -185,7 +189,7 @@ namespace PassGuard.VaultQueries
 
 		public void UpdateData(string newUrl, string newName, string newUsername, string newPassword, string newCategory, string newNotes, string nameToBeEdited)
 		{
-			string query = "UPDATE Vault SET Url = @var0, Name = @var1, Username = @var2, SitePassword = @var3, Category = @var4, Notes = @var5 WHERE Name = var6;";
+			string query = "UPDATE Vault SET Url = @param0, Name = @param1, Username = @param2, SitePassword = @param3, Category = @param4, Notes = @param5 WHERE Name = @param6;";
 
 			Execute(query, parameters: new List<string> { newUrl,newName, newUsername, newPassword, newCategory, newNotes, nameToBeEdited });
 		}
