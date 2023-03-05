@@ -167,6 +167,19 @@ namespace PassGuard.GUI
 			}
 		}
 
+		private void PassVisibilityButton_Click(object sender, EventArgs e)
+		{
+			if (VaultPassTextbox.UseSystemPasswordChar)
+			{
+				VaultPassTextbox.UseSystemPasswordChar = false;
+				PassVisibilityButton.Image = Properties.Resources.VisibilityOff24;
+			}
+			else
+			{
+				VaultPassTextbox.UseSystemPasswordChar = true;
+				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
 	}
 
  }
