@@ -43,6 +43,8 @@ namespace PassGuard.GUI
 			this.LoadSavedEmailButton = new System.Windows.Forms.Button();
 			this.SaveEmailButton = new System.Windows.Forms.Button();
 			this.SaveSKButton = new System.Windows.Forms.Button();
+			this.PassVisibilityButton = new System.Windows.Forms.Button();
+			this.SKVisibilityButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// VaultEmailLabel
@@ -83,9 +85,9 @@ namespace PassGuard.GUI
 			this.VaultPassTextbox.Location = new System.Drawing.Point(284, 175);
 			this.VaultPassTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.VaultPassTextbox.Name = "VaultPassTextbox";
-			this.VaultPassTextbox.PasswordChar = '*';
-			this.VaultPassTextbox.Size = new System.Drawing.Size(657, 24);
+			this.VaultPassTextbox.Size = new System.Drawing.Size(621, 24);
 			this.VaultPassTextbox.TabIndex = 13;
+			this.VaultPassTextbox.UseSystemPasswordChar = true;
 			// 
 			// SecurityKeyLabel
 			// 
@@ -104,9 +106,9 @@ namespace PassGuard.GUI
 			this.SecurityKeyTextbox.Location = new System.Drawing.Point(284, 263);
 			this.SecurityKeyTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SecurityKeyTextbox.Name = "SecurityKeyTextbox";
-			this.SecurityKeyTextbox.PasswordChar = '*';
 			this.SecurityKeyTextbox.Size = new System.Drawing.Size(336, 24);
 			this.SecurityKeyTextbox.TabIndex = 11;
+			this.SecurityKeyTextbox.UseSystemPasswordChar = true;
 			// 
 			// SelectVaultPathButton
 			// 
@@ -148,10 +150,10 @@ namespace PassGuard.GUI
 			this.LoadSavedSKButton.FlatAppearance.BorderSize = 0;
 			this.LoadSavedSKButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.LoadSavedSKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.LoadSavedSKButton.Location = new System.Drawing.Point(628, 262);
+			this.LoadSavedSKButton.Location = new System.Drawing.Point(661, 262);
 			this.LoadSavedSKButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.LoadSavedSKButton.Name = "LoadSavedSKButton";
-			this.LoadSavedSKButton.Size = new System.Drawing.Size(155, 29);
+			this.LoadSavedSKButton.Size = new System.Drawing.Size(136, 29);
 			this.LoadSavedSKButton.TabIndex = 22;
 			this.LoadSavedSKButton.Text = "Load Saved SK";
 			this.LoadSavedSKButton.UseVisualStyleBackColor = true;
@@ -210,19 +212,49 @@ namespace PassGuard.GUI
 			this.SaveSKButton.FlatAppearance.BorderSize = 0;
 			this.SaveSKButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SaveSKButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SaveSKButton.Location = new System.Drawing.Point(786, 262);
+			this.SaveSKButton.Location = new System.Drawing.Point(805, 262);
 			this.SaveSKButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SaveSKButton.Name = "SaveSKButton";
-			this.SaveSKButton.Size = new System.Drawing.Size(155, 29);
+			this.SaveSKButton.Size = new System.Drawing.Size(136, 29);
 			this.SaveSKButton.TabIndex = 25;
 			this.SaveSKButton.Text = "Save SK";
 			this.SaveSKButton.UseVisualStyleBackColor = true;
 			this.SaveSKButton.Click += new System.EventHandler(this.SaveSKButton_Click);
 			// 
+			// PassVisibilityButton
+			// 
+			this.PassVisibilityButton.FlatAppearance.BorderSize = 0;
+			this.PassVisibilityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.PassVisibilityButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.PassVisibilityButton.Image = global::PassGuard.Properties.Resources.VisibilityOn24;
+			this.PassVisibilityButton.Location = new System.Drawing.Point(912, 174);
+			this.PassVisibilityButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.PassVisibilityButton.Name = "PassVisibilityButton";
+			this.PassVisibilityButton.Size = new System.Drawing.Size(29, 29);
+			this.PassVisibilityButton.TabIndex = 27;
+			this.PassVisibilityButton.UseVisualStyleBackColor = true;
+			this.PassVisibilityButton.Click += new System.EventHandler(this.PassVisibilityButton_Click);
+			// 
+			// SKVisibilityButton
+			// 
+			this.SKVisibilityButton.FlatAppearance.BorderSize = 0;
+			this.SKVisibilityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.SKVisibilityButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SKVisibilityButton.Image = global::PassGuard.Properties.Resources.VisibilityOn24;
+			this.SKVisibilityButton.Location = new System.Drawing.Point(628, 262);
+			this.SKVisibilityButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.SKVisibilityButton.Name = "SKVisibilityButton";
+			this.SKVisibilityButton.Size = new System.Drawing.Size(29, 29);
+			this.SKVisibilityButton.TabIndex = 28;
+			this.SKVisibilityButton.UseVisualStyleBackColor = true;
+			this.SKVisibilityButton.Click += new System.EventHandler(this.SKVisibilityButton_Click);
+			// 
 			// LoadVaultUC
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.SKVisibilityButton);
+			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.SaveEmailButton);
 			this.Controls.Add(this.SaveSKButton);
 			this.Controls.Add(this.LoadSavedEmailButton);
@@ -261,5 +293,7 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button LoadSavedEmailButton;
         private System.Windows.Forms.Button SaveEmailButton;
         private System.Windows.Forms.Button SaveSKButton;
-    }
+		private System.Windows.Forms.Button PassVisibilityButton;
+		private System.Windows.Forms.Button SKVisibilityButton;
+	}
 }

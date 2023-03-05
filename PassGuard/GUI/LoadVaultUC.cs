@@ -284,5 +284,33 @@ namespace PassGuard.GUI
 				MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 		}
+
+		private void PassVisibilityButton_Click(object sender, EventArgs e)
+		{
+			if (VaultPassTextbox.UseSystemPasswordChar)
+			{
+				VaultPassTextbox.UseSystemPasswordChar = false;
+				PassVisibilityButton.Image = Properties.Resources.VisibilityOff24;
+			}
+			else
+			{
+				VaultPassTextbox.UseSystemPasswordChar = true;
+				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
+
+		private void SKVisibilityButton_Click(object sender, EventArgs e)
+		{
+			if (SecurityKeyTextbox.UseSystemPasswordChar)
+			{
+				SecurityKeyTextbox.UseSystemPasswordChar = false;
+				SKVisibilityButton.Image = Properties.Resources.VisibilityOff24;
+			}
+			else
+			{
+				SecurityKeyTextbox.UseSystemPasswordChar = true;
+				SKVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
 	}
 }
