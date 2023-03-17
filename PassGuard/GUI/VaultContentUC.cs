@@ -282,7 +282,7 @@ namespace PassGuard.GUI
 						{
 							if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
 							{
-								if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+								if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
 								{
 									MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
 								}
@@ -394,7 +394,7 @@ namespace PassGuard.GUI
 						{
 							if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
 							{
-								if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+								if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
 								{
 									MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
 								}
@@ -492,7 +492,7 @@ namespace PassGuard.GUI
 						{
 							if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
 							{
-								if (Backup.Backup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+								if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
 								{
 									MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
 								}
