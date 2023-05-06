@@ -23,6 +23,7 @@ namespace PassGuard.GUI
 		public String password { get; private set; }
 		public String category { get; private set; }
 		public String notes { get; private set; }
+		public String important { get; private set; }
 		private List<String> namesInDB; //List of names already in Vault.
 		public bool addedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
 		private readonly byte[] Key; //Key 
@@ -87,6 +88,8 @@ namespace PassGuard.GUI
 				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
 				category = crypt.EncryptText(key: Key, src: CategoryTextbox.Text);
 				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
+				if(ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
+				else { important = crypt.EncryptText(key: Key, src: "0"); }
 
 				addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 

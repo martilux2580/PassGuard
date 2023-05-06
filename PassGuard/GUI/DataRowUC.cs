@@ -21,7 +21,7 @@ namespace PassGuard.GUI
 		private String password;
 		private String category;
 		private String notes;
-		private bool important;
+		private String important;
 		private ICrypt crypt = new AESAlgorithm();
 
 		private readonly byte[] Key;
@@ -37,6 +37,7 @@ namespace PassGuard.GUI
 			password = values[3];
 			category = values[4];
 			notes = values[5];
+			important = values[6];
 
 		}
 
@@ -49,6 +50,14 @@ namespace PassGuard.GUI
 			PassContent.Text = String.Concat(Enumerable.Repeat("*", 15)); //Hide the password
 			CategoryContent.Text = crypt.DecryptText(key: Key, src: category);
 			NotesContent.Text = crypt.DecryptText(key: Key, src: notes);
+			if(Convert.ToBoolean(important)) 
+			{
+				ImportantContent.Image = Properties.Resources.CheckIconBig;
+			}
+			else
+			{
+				ImportantContent.Image = null;
+			}
 		}
 
 		private void PassContent_Click(object sender, EventArgs e)
@@ -90,12 +99,10 @@ namespace PassGuard.GUI
 			if (ImportantContent.Image == null)
 			{
 				ImportantContent.Image = Properties.Resources.CheckIconBig;
-				important = true;
 			}
 			else
 			{
 				ImportantContent.Image = null;
-				important = false;
 			}
 		}
 	}

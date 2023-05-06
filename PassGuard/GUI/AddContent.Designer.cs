@@ -44,6 +44,7 @@ namespace PassGuard.GUI
 			this.NotesTextbox = new System.Windows.Forms.TextBox();
 			this.TitleLabel = new System.Windows.Forms.Label();
 			this.PassVisibilityButton = new System.Windows.Forms.Button();
+			this.ImportantCheckbox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// AddButton
@@ -51,7 +52,7 @@ namespace PassGuard.GUI
 			this.AddButton.FlatAppearance.BorderSize = 0;
 			this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.AddButton.Location = new System.Drawing.Point(321, 372);
+			this.AddButton.Location = new System.Drawing.Point(564, 365);
 			this.AddButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.AddButton.Name = "AddButton";
 			this.AddButton.Size = new System.Drawing.Size(159, 42);
@@ -210,11 +211,23 @@ namespace PassGuard.GUI
 			this.PassVisibilityButton.UseVisualStyleBackColor = true;
 			this.PassVisibilityButton.Click += new System.EventHandler(this.PassVisibilityButton_Click);
 			// 
+			// ImportantCheckbox
+			// 
+			this.ImportantCheckbox.AutoSize = true;
+			this.ImportantCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ImportantCheckbox.Location = new System.Drawing.Point(75, 376);
+			this.ImportantCheckbox.Name = "ImportantCheckbox";
+			this.ImportantCheckbox.Size = new System.Drawing.Size(225, 22);
+			this.ImportantCheckbox.TabIndex = 43;
+			this.ImportantCheckbox.Text = "Save as Important Password?";
+			this.ImportantCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// AddContent
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 434);
+			this.Controls.Add(this.ImportantCheckbox);
 			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.TitleLabel);
 			this.Controls.Add(this.NotesTextbox);
@@ -258,5 +271,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.TextBox NotesTextbox;
         private System.Windows.Forms.Label TitleLabel;
 		private System.Windows.Forms.Button PassVisibilityButton;
+		private System.Windows.Forms.CheckBox ImportantCheckbox;
 	}
 }

@@ -38,7 +38,8 @@ namespace PassGuard.GUI
 			Username,
 			SitePassword,
 			Category,
-			Notes
+			Notes,
+			Important
 		}
 		private readonly List<DataRowUC> DataRowUCList = new(); //List of DataRows with the data of the passwords.
 		private readonly String encryptedVaultPath;
@@ -116,6 +117,14 @@ namespace PassGuard.GUI
 				ForeColor = Color.FromArgb(109, 109, 109)
 			};
 			NotesCMS.Items.Insert(0, titleNotes);
+
+			var titleImportant = new ToolStripLabel("ORDER BY IMPORTANT")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			ImportantCMS.Items.Insert(0, titleImportant);
 		}
 
 		private void LoadContent(Order order, DBColumns col)
@@ -145,15 +154,8 @@ namespace PassGuard.GUI
 				//Sort the values of that dictionary (decrypted values of the column) as the user wants. Nullvalues will go first in ascending order, last in descending order.
 				var ColList = map.Values.ToList<String>();
 				List<String> sortedList = new();
-				if(order == Order.Asc) 
-				{ 
-					sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>(); 
-				}
-				else if(order == Order.Desc)
-				{
-					sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
-					sortedList.Reverse();
-				}
+				sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
+				if(order == Order.Desc) { sortedList.Reverse(); }
 
 				DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
 				foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
@@ -223,7 +225,12 @@ namespace PassGuard.GUI
 		{
 			NotesCMS.Show(NotesButton, new Point(NotesButton.Width - NotesCMS.Width, NotesButton.Height)); //Sets where to display the ContextMenuStrip...
 		}
-		
+
+		private void ImportantButton_Click(object sender, EventArgs e)
+		{
+			ImportantCMS.Show(NotesButton, new Point(ImportantButton.Width - ImportantButton.Width, ImportantButton.Height)); //Sets where to display the ContextMenuStrip...
+		}
+
 
 		private void AddButton_Click(object sender, EventArgs e)
 		{
@@ -250,8 +257,9 @@ namespace PassGuard.GUI
 					String newPassword = add.password;
 					String newCategory = add.category;
 					String newNotes = add.notes;
+					String newImportant = add.important;
 
-					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes);
+					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant);
 
 					List<String[]> fullResults = query.GetAllData();
 
@@ -1107,6 +1115,114 @@ namespace PassGuard.GUI
 
 		}
 
+		private void ImportantNormalCMS_Click(object sender, EventArgs e)
+		{
+			String[] lastvalue = encryptedVaultPath.Split('\\');
+			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+			try
+			{
+				LoadContent(Order.Desc, DBColumns.Important);
+
+				ImportantNormalCMS.Checked = true;
+				ImportantAscendingCMS.Checked = false;
+				ImportantDescendingCMS.Checked = false;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else if (ex is FormatException)
+				{
+					MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+			}
+			finally
+			{
+				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+				{
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+				}
+			}
+		}
+
+		private void ImportantAscendingCMS_Click(object sender, EventArgs e)
+		{
+			String[] lastvalue = encryptedVaultPath.Split('\\');
+			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+			try
+			{
+				LoadContent(Order.Desc, DBColumns.Important);
+
+				ImportantNormalCMS.Checked = false;
+				ImportantAscendingCMS.Checked = true;
+				ImportantDescendingCMS.Checked = false;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else if (ex is FormatException)
+				{
+					MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+			}
+			finally
+			{
+				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+				{
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+				}
+			}
+		}
+
+		private void ImportantDescendingCMS_Click(object sender, EventArgs e)
+		{
+			String[] lastvalue = encryptedVaultPath.Split('\\');
+			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+			try
+			{
+				LoadContent(Order.Desc, DBColumns.Important);
+
+				ImportantNormalCMS.Checked = false;
+				ImportantAscendingCMS.Checked = false;
+				ImportantDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else if (ex is FormatException)
+				{
+					MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+			}
+			finally
+			{
+				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
+				{
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+				}
+			}
+		}
+
 		private void ExportAsPdfButton_Click(object sender, EventArgs e)
 		{
 			IPDF pdf = new PDFCreator();
@@ -1172,5 +1288,6 @@ namespace PassGuard.GUI
 			
 		}
 
+		
 	}
 }
