@@ -102,7 +102,7 @@ namespace PassGuard.VaultQueries
 
 		public void CreateNewVault()
 		{
-			string query = "CREATE TABLE Vault (Url TEXT, Name TEXT PRIMARY KEY NOT NULL UNIQUE, Username TEXT NOT NULL, SitePassword TEXT NOT NULL, Category TEXT, Notes TEXT);";
+			string query = "CREATE TABLE Vault (Url TEXT, Name TEXT PRIMARY KEY NOT NULL UNIQUE, Username TEXT NOT NULL, SitePassword TEXT NOT NULL, Category TEXT, Notes TEXT, Important TEXT);";
 			
 			Execute(query, parameters: null);
 		}
@@ -166,11 +166,11 @@ namespace PassGuard.VaultQueries
 			}
 		}
 
-		public void InsertData(string url, string name, string username, string password, string category, string notes)
+		public void InsertData(string url, string name, string username, string password, string category, string notes, string important)
 		{
-			string query = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes) values (@param0, @param1, @param2, @param3, @param4, @param5);";
+			string query = "INSERT INTO Vault (Url, Name, Username, SitePassword, Category, Notes, Important) values (@param0, @param1, @param2, @param3, @param4, @param5, @param6);";
 
-			Execute(query, parameters: new List<string> { url, name, username, password, category, notes });
+			Execute(query, parameters: new List<string> { url, name, username, password, category, notes, important });
 		}
 
 		public void DeletePassword(string name)
