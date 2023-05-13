@@ -47,6 +47,7 @@ namespace PassGuard.GUI
 			this.URLTextbox = new System.Windows.Forms.TextBox();
 			this.URLLabel = new System.Windows.Forms.Label();
 			this.PassVisibilityButton = new System.Windows.Forms.Button();
+			this.ImportantCheckbox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// DeleteButton
@@ -54,7 +55,7 @@ namespace PassGuard.GUI
 			this.DeleteButton.FlatAppearance.BorderSize = 0;
 			this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.DeleteButton.Location = new System.Drawing.Point(522, 372);
+			this.DeleteButton.Location = new System.Drawing.Point(521, 370);
 			this.DeleteButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DeleteButton.Name = "DeleteButton";
 			this.DeleteButton.Size = new System.Drawing.Size(217, 42);
@@ -69,7 +70,7 @@ namespace PassGuard.GUI
 			this.DeleteAllButton.FlatAppearance.BorderSize = 0;
 			this.DeleteAllButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteAllButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.DeleteAllButton.Location = new System.Drawing.Point(266, 372);
+			this.DeleteAllButton.Location = new System.Drawing.Point(266, 370);
 			this.DeleteAllButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DeleteAllButton.Name = "DeleteAllButton";
 			this.DeleteAllButton.Size = new System.Drawing.Size(181, 42);
@@ -123,7 +124,7 @@ namespace PassGuard.GUI
 			this.NotesTextbox.Multiline = true;
 			this.NotesTextbox.Name = "NotesTextbox";
 			this.NotesTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.NotesTextbox.Size = new System.Drawing.Size(472, 93);
+			this.NotesTextbox.Size = new System.Drawing.Size(472, 36);
 			this.NotesTextbox.TabIndex = 38;
 			// 
 			// NotesLabel
@@ -263,11 +264,24 @@ namespace PassGuard.GUI
 			this.PassVisibilityButton.UseVisualStyleBackColor = true;
 			this.PassVisibilityButton.Click += new System.EventHandler(this.PassVisibilityButton_Click);
 			// 
+			// ImportantCheckbox
+			// 
+			this.ImportantCheckbox.AutoSize = true;
+			this.ImportantCheckbox.Enabled = false;
+			this.ImportantCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ImportantCheckbox.Location = new System.Drawing.Point(289, 320);
+			this.ImportantCheckbox.Name = "ImportantCheckbox";
+			this.ImportantCheckbox.Size = new System.Drawing.Size(225, 22);
+			this.ImportantCheckbox.TabIndex = 45;
+			this.ImportantCheckbox.Text = "Save as Important Password?";
+			this.ImportantCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// DeleteContent
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 434);
+			this.Controls.Add(this.ImportantCheckbox);
 			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.NameCombobox);
 			this.Controls.Add(this.TitleLabel);
@@ -317,5 +331,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.TextBox URLTextbox;
         private System.Windows.Forms.Label URLLabel;
 		private System.Windows.Forms.Button PassVisibilityButton;
+		private System.Windows.Forms.CheckBox ImportantCheckbox;
 	}
 }

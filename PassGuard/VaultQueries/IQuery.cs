@@ -16,6 +16,7 @@ namespace PassGuard.VaultQueries
 		public void InsertData(string url, string name, string username, string password, string category, string notes, string important);
 		public void DeletePassword(string name);
 		public void DeleteAllData();
-		public void UpdateData(string newUrl, string newName, string newUsername, string newPassword, string newCategory, string newNotes, string nameToBeEdited);
+		public void UpdateData(string newUrl, string newName, string newUsername, string newPassword, string newCategory, string newNotes, string newImportant, string nameToBeEdited);
+		public List<String[]> GetNameAndImportance();
 	}
 }

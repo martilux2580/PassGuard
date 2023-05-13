@@ -187,11 +187,25 @@ namespace PassGuard.VaultQueries
 			Execute(query, parameters: null);
 		}
 
-		public void UpdateData(string newUrl, string newName, string newUsername, string newPassword, string newCategory, string newNotes, string nameToBeEdited)
+		public void UpdateData(string newUrl, string newName, string newUsername, string newPassword, string newCategory, string newNotes, string newImportant, string nameToBeEdited)
 		{
-			string query = "UPDATE Vault SET Url = @param0, Name = @param1, Username = @param2, SitePassword = @param3, Category = @param4, Notes = @param5 WHERE Name = @param6;";
+			string query = "UPDATE Vault SET Url = @param0, Name = @param1, Username = @param2, SitePassword = @param3, Category = @param4, Notes = @param5, Important = @param6 WHERE Name = @param7;";
 
-			Execute(query, parameters: new List<string> { newUrl,newName, newUsername, newPassword, newCategory, newNotes, nameToBeEdited });
+			Execute(query, parameters: new List<string> { newUrl,newName, newUsername, newPassword, newCategory, newNotes, newImportant, nameToBeEdited });
+		}
+
+		public List<String[]> GetNameAndImportance()
+		{
+			string query = "SELECT Name, Important FROM Vault;";
+
+			var partialResult = Retrieve(query, null);
+			var result = new List<String[]>();
+			foreach (var item in partialResult)
+			{
+				result.Add(Array.ConvertAll(item, x => x.ToString()));
+			}
+
+			return result;
 		}
 	}
 }

@@ -51,14 +51,15 @@ namespace PassGuard.PDF
 				doc.Add(intro2);
 
 				//Note
-				var note = new Paragraph("Note: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored the day the backup was done.").SetFontSize(8);
+				var note = new Paragraph("Note: Saved Email and SK may not correspond to the Vault. Those values are the ones PassGuard had stored the day the backup was done." +
+					"\nNote2: If the column Important has value 1, it means it was saved as an important password. If it has value 0, it was not saved as an important password.").SetFontSize(8);
 				note.SetMarginTop(0f);
 				note.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
 				note.SetMarginBottom(16f);
 				doc.Add(note);
 
 				//Table with headers
-				Table content = new Table(numColumns: 6).UseAllAvailableWidth();
+				Table content = new Table(numColumns: 7).UseAllAvailableWidth();
 				content.SetWidth(UnitValue.CreatePercentValue(100));
 				content.SetFixedLayout();
 				content.SetBorderCollapse(iText.Layout.Properties.BorderCollapsePropertyValue.SEPARATE);
@@ -72,18 +73,19 @@ namespace PassGuard.PDF
 				content.AddCell("Site Password").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
 				content.AddCell("Category").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
 				content.AddCell("Notes").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
+				content.AddCell("Important").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetBold().SetBorderTop(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderLeft(new SolidBorder(ColorConstants.BLACK, 0.5f)).SetBorderRight(new SolidBorder(ColorConstants.BLACK, 0.5f));
 
 				doc.Add(content);
 
 				//Table with content
-				Table content2 = new Table(numColumns: 6).UseAllAvailableWidth();
+				Table content2 = new Table(numColumns: 7).UseAllAvailableWidth();
 				content2.SetWidth(UnitValue.CreatePercentValue(100));
 				content2.SetFixedLayout();
 				content2.SetMarginBottom(0.1f);
 
 				for (int i = 0; i < results.Count; i++)
 				{
-					for (int j = 0; j < 6; j++)
+					for (int j = 0; j < 7; j++)
 					{
 						content2.AddCell(results[i][j]).SetFontSize(9);
 					}

@@ -23,6 +23,7 @@ namespace PassGuard.GUI
 		public String password { get; private set; }
 		public String category { get; private set; }
 		public String notes { get; private set; }
+		public String important { get; private set; }
 
 		private List<String> namesInDB; //Names already in the Vault
 		private readonly byte[] Key;
@@ -98,6 +99,8 @@ namespace PassGuard.GUI
 				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
 				category = crypt.EncryptText(key: Key, src: CategoryTextbox.Text);
 				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
+				if (ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
+				else { important = crypt.EncryptText(key: Key, src: "0"); }
 
 				editedSuccess = true;
 
@@ -125,6 +128,8 @@ namespace PassGuard.GUI
 				PasswordTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[3]);
 				CategoryTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[4]);
 				NotesTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[5]);
+				if(Convert.ToBoolean(Int32.Parse(crypt.DecryptText(key: Key, src: fullResults[6])))){ ImportantCheckbox.Checked = true; }
+				else { ImportantCheckbox.Checked = false; }
 
 				//Enable elements
 				URLLabel.Enabled = true;
@@ -140,6 +145,7 @@ namespace PassGuard.GUI
 				NotesLabel.Enabled = true;
 				NotesTextbox.Enabled = true;
 				EditButton.Enabled = true;
+				ImportantCheckbox.Enabled = true;
 
 			}
 			else
@@ -151,6 +157,7 @@ namespace PassGuard.GUI
 				PasswordTextbox.Text = null;
 				CategoryTextbox.Text = null;
 				NotesTextbox.Text = null;
+				ImportantCheckbox.Checked = false;
 
 				//Unable elements
 				URLLabel.Enabled = false;
@@ -166,6 +173,7 @@ namespace PassGuard.GUI
 				NotesLabel.Enabled = false;
 				NotesTextbox.Enabled = false;
 				EditButton.Enabled = false;
+				ImportantCheckbox.Enabled = false;
 
 			}
 		}
