@@ -50,7 +50,8 @@ namespace PassGuard.GUI
 			PassContent.Text = String.Concat(Enumerable.Repeat("*", 15)); //Hide the password
 			CategoryContent.Text = crypt.DecryptText(key: Key, src: category);
 			NotesContent.Text = crypt.DecryptText(key: Key, src: notes);
-			if(Convert.ToBoolean(important)) 
+
+			if(Convert.ToBoolean(Int32.Parse(crypt.DecryptText(key: Key, src: important))))
 			{
 				ImportantContent.Image = Properties.Resources.CheckIconBig;
 			}
@@ -98,11 +99,11 @@ namespace PassGuard.GUI
 		{
 			if (ImportantContent.Image == null)
 			{
-				ImportantContent.Image = Properties.Resources.CheckIconBig;
+				Clipboard.SetText("Not Important");
 			}
 			else
 			{
-				ImportantContent.Image = null;
+				Clipboard.SetText("Important");
 			}
 		}
 	}

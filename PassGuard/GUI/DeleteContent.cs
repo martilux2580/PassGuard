@@ -68,6 +68,7 @@ namespace PassGuard.GUI
 				PasswordTextbox.Text = null;
 				CategoryTextbox.Text = null;
 				NotesTextbox.Text = null;
+				ImportantCheckbox.Checked= false;
 
 				TitleLabel.Text = "If button is clicked, all Vault contents will be deleted.";
 				NameCombobox.Enabled = false;
@@ -136,6 +137,8 @@ namespace PassGuard.GUI
 				PasswordTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[3]);
 				CategoryTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[4]);
 				NotesTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[5]);
+				if (Convert.ToBoolean(Int32.Parse(crypt.DecryptText(key: Key, src: fullResults[6])))) { ImportantCheckbox.Checked = true; }
+				else { ImportantCheckbox.Checked = false; }
 
 			}
 			else
@@ -147,6 +150,7 @@ namespace PassGuard.GUI
 				PasswordTextbox.Text = null;
 				CategoryTextbox.Text = null;
 				NotesTextbox.Text = null;
+				ImportantCheckbox.Checked = false;
 
 			}
 		}

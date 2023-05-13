@@ -1,7 +1,9 @@
-﻿using PassGuard.Crypto;
+﻿using iText.Layout.Element;
+using PassGuard.Crypto;
 using PassGuard.PDF;
 using PassGuard.VaultQueries;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -124,6 +126,7 @@ namespace PassGuard.GUI
 				TextAlign = ContentAlignment.MiddleCenter,
 				ForeColor = Color.FromArgb(109, 109, 109)
 			};
+			ImportantCMS.Width += 15;
 			ImportantCMS.Items.Insert(0, titleImportant);
 		}
 
@@ -141,40 +144,89 @@ namespace PassGuard.GUI
 			crypt.Decrypt(key: vKey, src: encVault, dst: decVault); //Decrypt Vault
 
 			query = new Query(decVault);
-			//Obtain all the contents of the vault.
+			
 			if ((order != Order.Normal) && (col!= DBColumns.NULLVALUESS)) //If order diff from normal, we have to order. If col diff from NULLVALUESS we have to order.
 			{
-				List<String> fullResults = query.GetColumn(col.ToString()); //Get all the values from the column the user wants to order
-				
-				Dictionary<String, String> map = new();
-				foreach(String allColumnData in fullResults) //Map the values of the column the user wants to order with its decrypted text.
+				if (col == DBColumns.Important) //We will order by the Importance and then by Name.
 				{
-					map.Add(allColumnData, crypt.DecryptText(key: cKey, src: allColumnData));
+					//Obtain all the contents of the vault.
+					List<String[]> nameAndImportance = new();
+					nameAndImportance = query.GetNameAndImportance(); //List with name and importance (later in this if) decrypted.
+
+					Dictionary<String, String> map = new();
+					foreach (String[] nameImpPair in nameAndImportance) 
+					{
+						//Map the values of the names with its decrypted text.
+						map.Add(nameImpPair[0], crypt.DecryptText(key: cKey, src: nameImpPair[0]));
+
+						//Decrypt names and importance for later order them.
+						nameImpPair[0] = crypt.DecryptText(key: cKey, src: nameImpPair[0]);
+						nameImpPair[1] = crypt.DecryptText(key: cKey, src: nameImpPair[1]);
+					}
+
+					//Order the struct by importance, and then by name ascending or descending (Decrypted step).
+					if(order == Order.Asc)
+					{
+						nameAndImportance = nameAndImportance.OrderByDescending(x => x[1]).ThenBy(x => x[0]).ToList();
+					}
+					else if (order == Order.Desc)
+					{
+						nameAndImportance = nameAndImportance.OrderByDescending(x => x[1]).ThenByDescending(x => x[0]).ToList();
+					}
+
+					DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
+					foreach (String[] columnPair in nameAndImportance) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
+					{
+						var keyToSearch = map.FirstOrDefault(x => (x.Value == columnPair[0])).Key; //Get the encrypted key of the row
+						String[] orderedRow = query.GetDataGivenColumn(DBColumns.Name.ToString(), keyToSearch); //We look here for Name, although col = Important.
+
+						DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
+
+						DataRowUCList.Add(data); //Add it to the list.
+						map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
+
+					}
+
+					ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
+					foreach (DataRowUC row in DataRowUCList)
+					{
+						ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
+					}
 				}
-				//Sort the values of that dictionary (decrypted values of the column) as the user wants. Nullvalues will go first in ascending order, last in descending order.
-				var ColList = map.Values.ToList<String>();
-				List<String> sortedList = new();
-				sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
-				if(order == Order.Desc) { sortedList.Reverse(); }
+				else //Other column than Important, we can order them easily.
+				{ 
+					List<String> fullResults = query.GetColumn(col.ToString());
 
-				DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
-				foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
-				{
-					var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
-					String[] orderedRow = query.GetDataGivenColumn(col.ToString(), keyToSearch);
+					Dictionary<String, String> map = new();
+					foreach (String allColumnData in fullResults) //Map the values of the column the user wants to order with its decrypted text.
+					{
+						map.Add(allColumnData, crypt.DecryptText(key: cKey, src: allColumnData));
+					}
+					//Sort the values of that dictionary (decrypted values of the column) as the user wants. Nullvalues will go first in ascending order, last in descending order.
+					var ColList = map.Values.ToList<String>();
+					List<String> sortedList = new();
+					sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
+					if (order == Order.Desc) { sortedList.Reverse(); }
+					
+					DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
+					foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
+					{
+						var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
+						String[] orderedRow = query.GetDataGivenColumn(col.ToString(), keyToSearch);
 
-					DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
-					DataRowUCList.Add(data); //Add it to the list.
-					map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
+						DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
 
+						DataRowUCList.Add(data); //Add it to the list.
+						map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
+
+					}
+
+					ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
+					foreach (DataRowUC row in DataRowUCList)
+					{
+						ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
+					}
 				}
-
-				ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
-				foreach (DataRowUC row in DataRowUCList) 
-				{
-					ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
-				}
-
 			}
 			else if (order == Order.Normal) //Order is normal, or it is first time loading content in the table...
 			{
@@ -467,8 +519,9 @@ namespace PassGuard.GUI
 					String newPassword = edit.password;
 					String newCategory = edit.category;
 					String newNotes = edit.notes;
+					String newImportant = edit.important;
 
-					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, edit.getHashofName(name: edit.nameToBeEdited));
+					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant, edit.getHashofName(name: edit.nameToBeEdited));
 					List<String[]> fullResults = query.GetAllData();
 					
 					//Clear table and lists
@@ -540,7 +593,7 @@ namespace PassGuard.GUI
 
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
-			var data = "In this panel the contents of the Vault you have logged in will be shown. This panel is composed of a table with six columns (buttons) that show the saved data of each of your passwords, a space where all the passwords in your Vault will be displayed, and four buttons at the bottom where you can Add, Edit, Delete or get Help on how PassGuard works."
+			var data = "In this panel the contents of the Vault you have logged in will be shown. This panel is composed of a table with seven columns (buttons) that show the saved data of each of your passwords, a space where all the passwords in your Vault will be displayed, and four buttons at the bottom where you can Add, Edit, Delete or get Help on how PassGuard works."
 				+ "\nIf you click in any of the column buttons, you can select to order your passwords by that column you´ve clicked in Normal Order (just as they where added), Ascending Order (from A-Z) or Descending Order (from Z-A). Initially everything is ordered in Normal Order. The Vault cannot be ordered by two or more columns simultaneosly."
 				+ "\nRows composed of buttons with your password data will be shown in the table. In case of the password itself, a text composed of '***************' will be displayed. If any of those buttons is clicked, the whole text data will be copied to your clipboard. All data is stored, but because of space issues it may not be shown completely, this could be the case of the Notes column."
 				+ "\nFour buttons at the bottom of the form will be displayed: "
@@ -1121,7 +1174,7 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
-				LoadContent(Order.Desc, DBColumns.Important);
+				LoadContent(Order.Normal, DBColumns.Important);
 
 				ImportantNormalCMS.Checked = true;
 				ImportantAscendingCMS.Checked = false;
@@ -1157,7 +1210,7 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
-				LoadContent(Order.Desc, DBColumns.Important);
+				LoadContent(Order.Asc, DBColumns.Important);
 
 				ImportantNormalCMS.Checked = false;
 				ImportantAscendingCMS.Checked = true;
@@ -1252,6 +1305,7 @@ namespace PassGuard.GUI
 					row[3] = crypt.DecryptText(key: cKey, src: row[3]);
 					row[4] = crypt.DecryptText(key: cKey, src: row[4]);
 					row[5] = crypt.DecryptText(key: cKey, src: row[5]);
+					row[6] = crypt.DecryptText(key: cKey, src: row[6]);
 				}
 
 				pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings["Email"], ConfigurationManager.AppSettings["SecurityKey"]);

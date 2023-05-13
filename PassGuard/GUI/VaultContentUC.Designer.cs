@@ -471,39 +471,43 @@ namespace PassGuard.GUI
 			// 
 			// ImportantCMS
 			// 
+			this.ImportantCMS.AutoSize = false;
 			this.ImportantCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ImportantCMSSeparator,
             this.ImportantNormalCMS,
             this.ImportantAscendingCMS,
             this.ImportantDescendingCMS});
 			this.ImportantCMS.Name = "contextMenuStrip1";
-			this.ImportantCMS.Size = new System.Drawing.Size(181, 98);
+			this.ImportantCMS.Size = new System.Drawing.Size(191, 98);
 			// 
 			// ImportantCMSSeparator
 			// 
 			this.ImportantCMSSeparator.Name = "ImportantCMSSeparator";
-			this.ImportantCMSSeparator.Size = new System.Drawing.Size(177, 6);
+			this.ImportantCMSSeparator.Size = new System.Drawing.Size(187, 6);
 			// 
 			// ImportantNormalCMS
 			// 
+			this.ImportantNormalCMS.AutoSize = false;
 			this.ImportantNormalCMS.Checked = true;
 			this.ImportantNormalCMS.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.ImportantNormalCMS.Name = "ImportantNormalCMS";
-			this.ImportantNormalCMS.Size = new System.Drawing.Size(180, 22);
+			this.ImportantNormalCMS.Size = new System.Drawing.Size(205, 22);
 			this.ImportantNormalCMS.Text = "Normal Order";
 			this.ImportantNormalCMS.Click += new System.EventHandler(this.ImportantNormalCMS_Click);
 			// 
 			// ImportantAscendingCMS
 			// 
+			this.ImportantAscendingCMS.AutoSize = false;
 			this.ImportantAscendingCMS.Name = "ImportantAscendingCMS";
-			this.ImportantAscendingCMS.Size = new System.Drawing.Size(180, 22);
+			this.ImportantAscendingCMS.Size = new System.Drawing.Size(205, 22);
 			this.ImportantAscendingCMS.Text = "Ascending Order";
 			this.ImportantAscendingCMS.Click += new System.EventHandler(this.ImportantAscendingCMS_Click);
 			// 
 			// ImportantDescendingCMS
 			// 
+			this.ImportantDescendingCMS.AutoSize = false;
 			this.ImportantDescendingCMS.Name = "ImportantDescendingCMS";
-			this.ImportantDescendingCMS.Size = new System.Drawing.Size(180, 22);
+			this.ImportantDescendingCMS.Size = new System.Drawing.Size(205, 22);
 			this.ImportantDescendingCMS.Text = "Descending Order";
 			this.ImportantDescendingCMS.Click += new System.EventHandler(this.ImportantDescendingCMS_Click);
 			// 
