@@ -1,4 +1,5 @@
-﻿using iText.Layout.Element;
+﻿using iText.Kernel.Colors.Gradients;
+using iText.Layout.Element;
 using PassGuard.Crypto;
 using PassGuard.PDF;
 using PassGuard.VaultQueries;
@@ -12,6 +13,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
@@ -71,7 +73,6 @@ namespace PassGuard.GUI
 			//Load the content of the Vault without any column order, and set the CMS for the orders.
 			LoadContent(Order.Normal, DBColumns.NULLVALUESS);
 			SetCMS();
-			
 
 		}
 
@@ -237,6 +238,11 @@ namespace PassGuard.GUI
 				Random rnd = new();
 				foreach (String[] row in fullResults)
 				{
+					dataGridView1.Rows.Add(new String[]{ "alberto", "alberto",
+						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit lacus non mi posuere, ac efficitur neque sagittis. Fusce convallis lectus quis sapien porttitor elementum. Aenean dapibus velit a turpis tempor venenatis. Nullam eget neque id enim volutpat accumsan vitae vel elit. Suspendisse bibendum accumsan purus, non consectetur leo posuere vitae. Nam eu tortor tellus. Curabitur lobortis est nec commodo commodo. Duis pretium ac libero in pretium. Donec a sagittis mauris. Nam tincidunt ligula quis ultrices fringilla. Vivamus consectetur bibendum congue. Donec iaculis dolor nec odio lobortis, quis posuere ipsum tempor. Aliquam quis dui vitae velit bibendum iaculis. Sed non lorem in velit interdum convallis."
+						, "alberto", "alberto", "alberto",
+						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit lacus non mi posuere, ac efficitur neque sagittis. Fusce convallis lectus quis sapien porttitor elementum. Aenean dapibus velit a turpis tempor venenatis. Nullam eget neque id enim volutpat accumsan vitae vel elit. Suspendisse bibendum accumsan purus, non consectetur leo posuere vitae. Nam eu tortor tellus. Curabitur lobortis est nec commodo commodo. Duis pretium ac libero in pretium. Donec a sagittis mauris. Nam tincidunt ligula quis ultrices fringilla. Vivamus consectetur bibendum congue. Donec iaculis dolor nec odio lobortis, quis posuere ipsum tempor. Aliquam quis dui vitae velit bibendum iaculis. Sed non lorem in velit interdum convallis." });
+					dataGridView1.Rows.Add(row);
 					DataRowUC data = new(row.ToList<String>(), cKey); //Create row and add it to list.
 
 					DataRowUCList.Add(data);
@@ -1342,6 +1348,106 @@ namespace PassGuard.GUI
 			
 		}
 
-		
+		private void VaultContentUC_BackColorChanged(object sender, EventArgs e)
+		{
+			// Set the back color of the DataGridView
+			dataGridView1.BackgroundColor = this.BackColor;
+
+			// Set the back color of the column headers
+			dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = this.BackColor;
+
+			// Set the back color of the rows
+			dataGridView1.RowsDefaultCellStyle.BackColor = this.BackColor;
+
+			// Set the back color of the selection
+			dataGridView1.DefaultCellStyle.SelectionBackColor = this.BackColor;
+
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void AddButton_MouseEnter(object sender, EventArgs e)
+		{
+			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void AddButton_MouseLeave(object sender, EventArgs e)
+		{
+			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseEnter(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseLeave(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseEnter(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseLeave(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ExportAsPdfButton_MouseEnter(object sender, EventArgs e)
+		{
+			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ExportAsPdfButton_MouseLeave(object sender, EventArgs e)
+		{
+			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void HelpButton_MouseEnter(object sender, EventArgs e)
+		{
+			HelpButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void HelpButton_MouseLeave(object sender, EventArgs e)
+		{
+			HelpButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				DataGridViewColumn clickedColumn = dataGridView1.Columns[e.ColumnIndex];
+				string columnName = clickedColumn.HeaderText;
+
+				//TODO
+				// Show the context menu strip at the mouse location 
+				switch (columnName)
+				{
+					case "U":
+						URLCMS.Show(Cursor.Position);
+						break;
+					case "N":
+						NameCMS.Show(Cursor.Position);
+						break;
+					default:
+						UsernameCMS.Show(Cursor.Position);
+						break;
+				}
+
+				
+			}
+		}
 	}
 }

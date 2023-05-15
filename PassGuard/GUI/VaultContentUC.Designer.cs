@@ -30,7 +30,23 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.ContentFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.U = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.N = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.SU = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.P = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.C = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.I = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.Rowelim = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.AddButton = new System.Windows.Forms.Button();
 			this.EditButton = new System.Windows.Forms.Button();
 			this.HelpButton = new System.Windows.Forms.Button();
@@ -74,6 +90,7 @@ namespace PassGuard.GUI
 			this.ImportantNormalCMS = new System.Windows.Forms.ToolStripMenuItem();
 			this.ImportantAscendingCMS = new System.Windows.Forms.ToolStripMenuItem();
 			this.ImportantDescendingCMS = new System.Windows.Forms.ToolStripMenuItem();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.URLCMS.SuspendLayout();
 			this.NameCMS.SuspendLayout();
 			this.UsernameCMS.SuspendLayout();
@@ -87,14 +104,135 @@ namespace PassGuard.GUI
 			// 
 			this.ContentFlowLayoutPanel.AutoScroll = true;
 			this.ContentFlowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.ContentFlowLayoutPanel.Location = new System.Drawing.Point(4, 48);
+			this.ContentFlowLayoutPanel.Location = new System.Drawing.Point(353, 48);
 			this.ContentFlowLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
 			this.ContentFlowLayoutPanel.Name = "ContentFlowLayoutPanel";
-			this.ContentFlowLayoutPanel.Size = new System.Drawing.Size(1037, 410);
+			this.ContentFlowLayoutPanel.Size = new System.Drawing.Size(688, 410);
 			this.ContentFlowLayoutPanel.TabIndex = 0;
+			// 
+			// dataGridView1
+			// 
+			this.dataGridView1.AllowUserToResizeColumns = false;
+			this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+			this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+			this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			this.dataGridView1.ColumnHeadersHeight = 47;
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.U,
+            this.N,
+            this.SU,
+            this.P,
+            this.C,
+            this.dataGridViewTextBoxColumn1,
+            this.I,
+            this.Rowelim});
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Red;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle6;
+			this.dataGridView1.EnableHeadersVisualStyles = false;
+			this.dataGridView1.GridColor = System.Drawing.SystemColors.InfoText;
+			this.dataGridView1.Location = new System.Drawing.Point(50, 249);
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.RowHeadersVisible = false;
+			this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+			this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle7;
+			this.dataGridView1.RowTemplate.Height = 38;
+			this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+			this.dataGridView1.Size = new System.Drawing.Size(965, 150);
+			this.dataGridView1.TabIndex = 0;
+			this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseClick);
+			// 
+			// U
+			// 
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.U.DefaultCellStyle = dataGridViewCellStyle2;
+			this.U.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.U.HeaderText = "U";
+			this.U.Name = "U";
+			this.U.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.U.Text = "U";
+			// 
+			// N
+			// 
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			this.N.DefaultCellStyle = dataGridViewCellStyle3;
+			this.N.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.N.HeaderText = "N";
+			this.N.Name = "N";
+			this.N.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.N.Text = "U";
+			// 
+			// SU
+			// 
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.SU.DefaultCellStyle = dataGridViewCellStyle4;
+			this.SU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.SU.HeaderText = "SU";
+			this.SU.Name = "SU";
+			this.SU.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// P
+			// 
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.P.DefaultCellStyle = dataGridViewCellStyle5;
+			this.P.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.P.HeaderText = "P";
+			this.P.Name = "P";
+			this.P.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// C
+			// 
+			this.C.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.C.HeaderText = "C";
+			this.C.Name = "C";
+			this.C.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// dataGridViewTextBoxColumn1
+			// 
+			this.dataGridViewTextBoxColumn1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.dataGridViewTextBoxColumn1.HeaderText = "N";
+			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+			this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// I
+			// 
+			this.I.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.I.HeaderText = "I";
+			this.I.Name = "I";
+			this.I.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// Rowelim
+			// 
+			this.Rowelim.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.Rowelim.HeaderText = "D";
+			this.Rowelim.Name = "Rowelim";
+			this.Rowelim.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.Rowelim.Text = "Delete Row";
 			// 
 			// AddButton
 			// 
+			this.AddButton.FlatAppearance.BorderSize = 0;
+			this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.AddButton.Location = new System.Drawing.Point(4, 466);
 			this.AddButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -104,9 +242,13 @@ namespace PassGuard.GUI
 			this.AddButton.Text = "Add";
 			this.AddButton.UseVisualStyleBackColor = true;
 			this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+			this.AddButton.MouseEnter += new System.EventHandler(this.AddButton_MouseEnter);
+			this.AddButton.MouseLeave += new System.EventHandler(this.AddButton_MouseLeave);
 			// 
 			// EditButton
 			// 
+			this.EditButton.FlatAppearance.BorderSize = 0;
+			this.EditButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.EditButton.Location = new System.Drawing.Point(223, 466);
 			this.EditButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -116,9 +258,13 @@ namespace PassGuard.GUI
 			this.EditButton.Text = "Edit";
 			this.EditButton.UseVisualStyleBackColor = true;
 			this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+			this.EditButton.MouseEnter += new System.EventHandler(this.EditButton_MouseEnter);
+			this.EditButton.MouseLeave += new System.EventHandler(this.EditButton_MouseLeave);
 			// 
 			// HelpButton
 			// 
+			this.HelpButton.FlatAppearance.BorderSize = 0;
+			this.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.HelpButton.Location = new System.Drawing.Point(883, 466);
 			this.HelpButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -128,9 +274,13 @@ namespace PassGuard.GUI
 			this.HelpButton.Text = "Help";
 			this.HelpButton.UseVisualStyleBackColor = true;
 			this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+			this.HelpButton.MouseEnter += new System.EventHandler(this.HelpButton_MouseEnter);
+			this.HelpButton.MouseLeave += new System.EventHandler(this.HelpButton_MouseLeave);
 			// 
 			// DeleteButton
 			// 
+			this.DeleteButton.FlatAppearance.BorderSize = 0;
+			this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DeleteButton.Location = new System.Drawing.Point(443, 466);
 			this.DeleteButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -140,6 +290,8 @@ namespace PassGuard.GUI
 			this.DeleteButton.Text = "Delete";
 			this.DeleteButton.UseVisualStyleBackColor = true;
 			this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+			this.DeleteButton.MouseEnter += new System.EventHandler(this.DeleteButton_MouseEnter);
+			this.DeleteButton.MouseLeave += new System.EventHandler(this.DeleteButton_MouseLeave);
 			// 
 			// URLCMS
 			// 
@@ -333,6 +485,8 @@ namespace PassGuard.GUI
 			// 
 			// ExportAsPdfButton
 			// 
+			this.ExportAsPdfButton.FlatAppearance.BorderSize = 0;
+			this.ExportAsPdfButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ExportAsPdfButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.ExportAsPdfButton.Location = new System.Drawing.Point(660, 466);
 			this.ExportAsPdfButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -342,6 +496,8 @@ namespace PassGuard.GUI
 			this.ExportAsPdfButton.Text = "Export as PDF";
 			this.ExportAsPdfButton.UseVisualStyleBackColor = true;
 			this.ExportAsPdfButton.Click += new System.EventHandler(this.ExportAsPdfButton_Click);
+			this.ExportAsPdfButton.MouseEnter += new System.EventHandler(this.ExportAsPdfButton_MouseEnter);
+			this.ExportAsPdfButton.MouseLeave += new System.EventHandler(this.ExportAsPdfButton_MouseLeave);
 			// 
 			// URLButton
 			// 
@@ -515,6 +671,7 @@ namespace PassGuard.GUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.ExportAsPdfButton);
 			this.Controls.Add(this.HelpButton);
 			this.Controls.Add(this.DeleteButton);
@@ -525,6 +682,8 @@ namespace PassGuard.GUI
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "VaultContentUC";
 			this.Size = new System.Drawing.Size(1044, 508);
+			this.BackColorChanged += new System.EventHandler(this.VaultContentUC_BackColorChanged);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.URLCMS.ResumeLayout(false);
 			this.NameCMS.ResumeLayout(false);
 			this.UsernameCMS.ResumeLayout(false);
@@ -582,5 +741,14 @@ namespace PassGuard.GUI
 		private System.Windows.Forms.ToolStripMenuItem ImportantNormalCMS;
 		private System.Windows.Forms.ToolStripMenuItem ImportantAscendingCMS;
 		private System.Windows.Forms.ToolStripMenuItem ImportantDescendingCMS;
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridViewButtonColumn U;
+		private System.Windows.Forms.DataGridViewButtonColumn N;
+		private System.Windows.Forms.DataGridViewButtonColumn SU;
+		private System.Windows.Forms.DataGridViewButtonColumn P;
+		private System.Windows.Forms.DataGridViewButtonColumn C;
+		private System.Windows.Forms.DataGridViewButtonColumn dataGridViewTextBoxColumn1;
+		private System.Windows.Forms.DataGridViewButtonColumn I;
+		private System.Windows.Forms.DataGridViewButtonColumn Rowelim;
 	}
 }
