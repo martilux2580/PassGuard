@@ -68,9 +68,6 @@
     <Compile Update="GUI\CreateQuickPassUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="GUI\DataRowUC.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="GUI\HomeContentUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
