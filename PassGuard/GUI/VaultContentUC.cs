@@ -1,5 +1,7 @@
 ﻿using iText.Kernel.Colors.Gradients;
 using iText.Layout.Element;
+using iText.StyledXmlParser.Jsoup.Nodes;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using PassGuard.Crypto;
 using PassGuard.PDF;
 using PassGuard.VaultQueries;
@@ -15,11 +17,13 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Versioning;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace PassGuard.GUI
 {
@@ -45,7 +49,6 @@ namespace PassGuard.GUI
 			Notes,
 			Important
 		}
-		private readonly List<DataRowUC> DataRowUCList = new(); //List of DataRows with the data of the passwords.
 		private readonly String encryptedVaultPath;
 		private readonly String vaultEmail;
 		private readonly String vaultPass;
@@ -145,7 +148,7 @@ namespace PassGuard.GUI
 			crypt.Decrypt(key: vKey, src: encVault, dst: decVault); //Decrypt Vault
 
 			query = new Query(decVault);
-			
+
 			if ((order != Order.Normal) && (col!= DBColumns.NULLVALUESS)) //If order diff from normal, we have to order. If col diff from NULLVALUESS we have to order.
 			{
 				if (col == DBColumns.Important) //We will order by the Importance and then by Name.
@@ -175,31 +178,40 @@ namespace PassGuard.GUI
 						nameAndImportance = nameAndImportance.OrderByDescending(x => x[1]).ThenByDescending(x => x[0]).ToList();
 					}
 
-					DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
+					List<String[]> fullResults = new();
 					foreach (String[] columnPair in nameAndImportance) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
 					{
 						var keyToSearch = map.FirstOrDefault(x => (x.Value == columnPair[0])).Key; //Get the encrypted key of the row
-						String[] orderedRow = query.GetDataGivenColumn(DBColumns.Name.ToString(), keyToSearch); //We look here for Name, although col = Important.
 
-						DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
+						fullResults.Add(query.GetDataGivenColumn(DBColumns.Name.ToString(), keyToSearch)); //We look here for Name, although col = Important.
 
-						DataRowUCList.Add(data); //Add it to the list.
 						map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
 
 					}
 
-					ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
-					foreach (DataRowUC row in DataRowUCList)
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					foreach (String[] row in fullResults)
 					{
-						ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
 				}
 				else //Other column than Important, we can order them easily.
-				{ 
-					List<String> fullResults = query.GetColumn(col.ToString());
+				{
+					List<String> columnData = query.GetColumn(col.ToString());
+					List<String[]> fullResults = new();
 
 					Dictionary<String, String> map = new();
-					foreach (String allColumnData in fullResults) //Map the values of the column the user wants to order with its decrypted text.
+					foreach (String allColumnData in columnData) //Map the values of the column the user wants to order with its decrypted text.
 					{
 						map.Add(allColumnData, crypt.DecryptText(key: cKey, src: allColumnData));
 					}
@@ -208,49 +220,53 @@ namespace PassGuard.GUI
 					List<String> sortedList = new();
 					sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
 					if (order == Order.Desc) { sortedList.Reverse(); }
-					
-					DataRowUCList.Clear(); //Clear previous list so we can load data correctly, not duplicated
+
 					foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
 					{
 						var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
-						String[] orderedRow = query.GetDataGivenColumn(col.ToString(), keyToSearch);
+						
+						fullResults.Add(query.GetDataGivenColumn(col.ToString(), keyToSearch));
 
-						DataRowUC data = new(orderedRow.ToList<String>(), cKey); //Create a new datarow with the data
-
-						DataRowUCList.Add(data); //Add it to the list.
 						map.Remove(keyToSearch); //Remove it from the map, so we keep retrieving data, not the same element everytime (FirstOrDefault)
 
 					}
 
-					ContentFlowLayoutPanel.Controls.Clear(); //Clear previous things
-					foreach (DataRowUC row in DataRowUCList)
+					VaultContentDGV.Rows.Clear();
+					foreach (String[] row in fullResults)
 					{
-						ContentFlowLayoutPanel.Controls.Add(row); //Add rows to table.
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
+
 				}
 			}
 			else if (order == Order.Normal) //Order is normal, or it is first time loading content in the table...
 			{
 				List<String[]> fullResults = query.GetAllData();
 
-				ContentFlowLayoutPanel.Controls.Clear();
-				DataRowUCList.Clear(); //Clear previous content in the list and in the table.
-				Random rnd = new();
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 				foreach (String[] row in fullResults)
 				{
-					dataGridView1.Rows.Add(new String[]{ "alberto", "alberto",
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit lacus non mi posuere, ac efficitur neque sagittis. Fusce convallis lectus quis sapien porttitor elementum. Aenean dapibus velit a turpis tempor venenatis. Nullam eget neque id enim volutpat accumsan vitae vel elit. Suspendisse bibendum accumsan purus, non consectetur leo posuere vitae. Nam eu tortor tellus. Curabitur lobortis est nec commodo commodo. Duis pretium ac libero in pretium. Donec a sagittis mauris. Nam tincidunt ligula quis ultrices fringilla. Vivamus consectetur bibendum congue. Donec iaculis dolor nec odio lobortis, quis posuere ipsum tempor. Aliquam quis dui vitae velit bibendum iaculis. Sed non lorem in velit interdum convallis."
-						, "alberto", "alberto", "alberto",
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit lacus non mi posuere, ac efficitur neque sagittis. Fusce convallis lectus quis sapien porttitor elementum. Aenean dapibus velit a turpis tempor venenatis. Nullam eget neque id enim volutpat accumsan vitae vel elit. Suspendisse bibendum accumsan purus, non consectetur leo posuere vitae. Nam eu tortor tellus. Curabitur lobortis est nec commodo commodo. Duis pretium ac libero in pretium. Donec a sagittis mauris. Nam tincidunt ligula quis ultrices fringilla. Vivamus consectetur bibendum congue. Donec iaculis dolor nec odio lobortis, quis posuere ipsum tempor. Aliquam quis dui vitae velit bibendum iaculis. Sed non lorem in velit interdum convallis." });
-					dataGridView1.Rows.Add(row);
-					DataRowUC data = new(row.ToList<String>(), cKey); //Create row and add it to list.
-
-					DataRowUCList.Add(data);
-				}
-
-				foreach (DataRowUC row in DataRowUCList)
-				{
-					ContentFlowLayoutPanel.Controls.Add(row); //Add datarows to table.
+					var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+					VaultContentDGV.Rows.Add(new String[]
+					{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+					});
 				}
 			}
 
@@ -258,37 +274,6 @@ namespace PassGuard.GUI
 			File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])); //Delete decrypted vault
 
 		}
-
-		private void URLButton_Click(object sender, EventArgs e)
-		{
-			URLCMS.Show(URLButton, new Point(URLButton.Width - URLButton.Width, URLButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
-		private void NameButton_Click(object sender, EventArgs e)
-		{
-			NameCMS.Show(NameButton, new Point(NameButton.Width - NameButton.Width, NameButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
-		private void UsernameButton_Click(object sender, EventArgs e)
-		{
-			UsernameCMS.Show(UsernameButton, new Point(UsernameButton.Width - UsernameButton.Width, UsernameButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
-		private void CategoryButton_Click(object sender, EventArgs e)
-		{
-			CategoryCMS.Show(CategoryButton, new Point(CategoryButton.Width - CategoryCMS.Width, CategoryButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
-		private void NotesButton_Click(object sender, EventArgs e)
-		{
-			NotesCMS.Show(NotesButton, new Point(NotesButton.Width - NotesCMS.Width, NotesButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
-		private void ImportantButton_Click(object sender, EventArgs e)
-		{
-			ImportantCMS.Show(NotesButton, new Point(ImportantButton.Width - ImportantButton.Width, ImportantButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
 
 		private void AddButton_Click(object sender, EventArgs e)
 		{
@@ -321,18 +306,20 @@ namespace PassGuard.GUI
 
 					List<String[]> fullResults = query.GetAllData();
 
-					ContentFlowLayoutPanel.Controls.Clear(); //Clear contents from table and list of datarows
-					DataRowUCList.Clear();
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 					foreach (String[] row in fullResults)
 					{
-						DataRowUC data = new(row.ToList<String>(), cKey); //Add data rows to list
-
-						DataRowUCList.Add(data);
-					}
-
-					foreach (DataRowUC row in DataRowUCList)
-					{
-						ContentFlowLayoutPanel.Controls.Add(row); //Add new values to the table.
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
 				}
 
@@ -409,42 +396,42 @@ namespace PassGuard.GUI
 				{
 					query.DeletePassword(del.nameToBeDeleted);
 					List<String[]> fullResults = query.GetAllData();
-					
-					//Clear table and lists
-					ContentFlowLayoutPanel.Controls.Clear();
-					DataRowUCList.Clear();
-					//Add data to datarows
+
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 					foreach (String[] row in fullResults)
 					{
-						DataRowUC data = new(row.ToList<String>(), cKey);
-
-						DataRowUCList.Add(data);
-					}
-					//Add datarows to table.
-					foreach (DataRowUC row in DataRowUCList)
-					{
-						ContentFlowLayoutPanel.Controls.Add(row);
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
 				}
 				else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
 				{
 					query.DeleteAllData();
 					List<String[]> fullResults = query.GetAllData();
-					
-					//Clear data from table and lists
-					ContentFlowLayoutPanel.Controls.Clear();
-					DataRowUCList.Clear();
-					//Add data to datarows
+
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 					foreach (String[] row in fullResults)
 					{
-						DataRowUC data = new(row.ToList<String>(), cKey);
-
-						DataRowUCList.Add(data);
-					}
-					//Add datarows to table.
-					foreach (DataRowUC row in DataRowUCList)
-					{
-						ContentFlowLayoutPanel.Controls.Add(row);
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
 				}
 
@@ -529,21 +516,21 @@ namespace PassGuard.GUI
 
 					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant, edit.getHashofName(name: edit.nameToBeEdited));
 					List<String[]> fullResults = query.GetAllData();
-					
-					//Clear table and lists
-					ContentFlowLayoutPanel.Controls.Clear();
-					DataRowUCList.Clear();
-					//Add data to datarows
+
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 					foreach (String[] row in fullResults)
 					{
-						DataRowUC data = new(row.ToList<String>(), cKey);
-
-						DataRowUCList.Add(data);
-					}
-					//Add datarows to table.
-					foreach (DataRowUC row in DataRowUCList)
-					{
-						ContentFlowLayoutPanel.Controls.Add(row);
+						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+						VaultContentDGV.Rows.Add(new String[]
+						{
+							crypt.DecryptText(key: cKey, src: row[0]),
+							crypt.DecryptText(key: cKey, src: row[1]),
+							crypt.DecryptText(key: cKey, src: row[2]),
+							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+							crypt.DecryptText(key: cKey, src: row[4]),
+							crypt.DecryptText(key: cKey, src: row[5]),
+							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+						});
 					}
 				}
 
@@ -1351,16 +1338,16 @@ namespace PassGuard.GUI
 		private void VaultContentUC_BackColorChanged(object sender, EventArgs e)
 		{
 			// Set the back color of the DataGridView
-			dataGridView1.BackgroundColor = this.BackColor;
+			VaultContentDGV.BackgroundColor = this.BackColor;
 
 			// Set the back color of the column headers
-			dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = this.BackColor;
+			VaultContentDGV.ColumnHeadersDefaultCellStyle.BackColor = this.BackColor;
 
 			// Set the back color of the rows
-			dataGridView1.RowsDefaultCellStyle.BackColor = this.BackColor;
+			VaultContentDGV.RowsDefaultCellStyle.BackColor = this.BackColor;
 
 			// Set the back color of the selection
-			dataGridView1.DefaultCellStyle.SelectionBackColor = this.BackColor;
+			VaultContentDGV.DefaultCellStyle.SelectionBackColor = this.BackColor;
 
 		}
 
@@ -1424,29 +1411,38 @@ namespace PassGuard.GUI
 			HelpButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
-		private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		private void VaultContentDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				DataGridViewColumn clickedColumn = dataGridView1.Columns[e.ColumnIndex];
+				DataGridViewColumn clickedColumn = VaultContentDGV.Columns[e.ColumnIndex];
 				string columnName = clickedColumn.HeaderText;
 
-				//TODO
 				// Show the context menu strip at the mouse location 
 				switch (columnName)
 				{
-					case "U":
+					case "URL":
 						URLCMS.Show(Cursor.Position);
 						break;
-					case "N":
+					case "Name":
 						NameCMS.Show(Cursor.Position);
 						break;
-					default:
+					case "Site Username":
 						UsernameCMS.Show(Cursor.Position);
+						break;
+					case "Category":
+						CategoryCMS.Show(Cursor.Position);
+						break;
+					case "Notes":
+						NotesCMS.Show(Cursor.Position);
+						break;
+					case "Important":
+						ImportantCMS.Show(Cursor.Position);
+						break;
+					default:
 						break;
 				}
 
-				
 			}
 		}
 	}
