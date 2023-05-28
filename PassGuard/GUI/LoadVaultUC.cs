@@ -51,34 +51,13 @@ namespace PassGuard.GUI
 			IPDF pdf = new PDFCreator();
 			IKDF kdf = new PBKDF2Function();
 			IQuery query;
-			String errorMessages = ""; //Store all error messages...
 
 			//If any field is blank.
 			if ((String.IsNullOrWhiteSpace(VaultEmailTextbox.Text)) || (String.IsNullOrWhiteSpace(VaultPassTextbox.Text)) || (String.IsNullOrWhiteSpace(SecurityKeyTextbox.Text)) || (String.IsNullOrWhiteSpace(VaultPathTextbox.Text)))
 			{
-				errorMessages += "    - There cannot be fields left in blank.\n";
+				MessageBox.Show(text: "There cannot be fields left in blank.\n", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 			}
-			//Validate the format of email.
-			try
-			{
-				var test = new System.Net.Mail.MailAddress(VaultEmailTextbox.Text);
-			}
-			catch (Exception)
-			{
-				errorMessages += "    - Invalid Email Format.\n";
-			}
-
-			bool validPass = Utils.StringUtils.Check(VaultPassTextbox.Text, "Lower") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Upper") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Number") && Utils.StringUtils.Check(VaultPassTextbox.Text, "Symbol") && (VaultPassTextbox.Text.Length >= 12);
-			if (!validPass) //Valid password
-			{
-				errorMessages += "    - The password must have upper and lower case letters, numbers, symbols and must have a minimum length of 12 characters.\n";
-			}
-
-			if (!String.IsNullOrEmpty(errorMessages)) //If any error...
-			{
-				MessageBox.Show(text: "The following errors have been found:\n\n" + errorMessages, caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
-			}
-			else //No error in params, create vault.
+			else //No error in params, load vault.
 			{
 				//Deal with paths for files.
 				String pathforEncryptedVault = VaultPathTextbox.Text;
@@ -237,10 +216,16 @@ namespace PassGuard.GUI
 			LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
 		}
 
-		[SupportedOSPlatform("windows")]
 		private void LoadSavedEmailButton_Click(object sender, EventArgs e)
 		{
-			VaultEmailTextbox.Text = ConfigurationManager.AppSettings["Email"]; //Modify data in the config file for future executions.
+			try
+			{
+				VaultEmailTextbox.Text = ConfigurationManager.AppSettings["Email"]; //Modify data in the config file for future executions.
+			}
+			catch (Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not access config file, this feature can´t be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
 		}
 
 		[SupportedOSPlatform("windows")]

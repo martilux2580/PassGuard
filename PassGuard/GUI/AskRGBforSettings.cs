@@ -45,7 +45,7 @@ namespace PassGuard.GUI
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(configs);
 
-			ContentFlowLayoutPanel.Controls.Clear();
+			ColourContentDGV.Controls.Clear();
 			ConfigUCList.Clear();
 			checkboxes.Clear();
 			
@@ -53,7 +53,7 @@ namespace PassGuard.GUI
 			{
 				var row = new OutlineColorDataRowUC(configColor.Key, configColor.Value, this);
 
-				checkboxes.Add((CheckBox)row.Controls[1]); //Add the checkbox.
+				checkboxes.Add((CheckBox)row.Controls[1]); //Add the button of ChosenConfig as a checkbox of whether it is clicked or not...(I think so...)
 
 				ConfigUCList.Add(row);
 				//ContentFlowLayoutPanel.Controls.Add(row);
