@@ -1445,5 +1445,147 @@ namespace PassGuard.GUI
 
 			}
 		}
+
+		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex >= 0)
+			{
+				String[] lastvalue = encryptedVaultPath.Split('\\');
+				var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+				var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Path of decrypted Vault
+
+				DataGridViewCell clickedCell = VaultContentDGV.Rows[e.RowIndex].Cells[e.ColumnIndex];
+				switch (VaultContentDGV.Columns[e.ColumnIndex].Name)
+				{
+					case "DeleteRowColumn":
+						var decNameToDelete = VaultContentDGV.Rows[e.RowIndex].Cells[1].Value.ToString();
+						DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete the password with name '" + decNameToDelete + "' from your Vault? \n\nNote: " +
+							"This action cannot be undone.", caption: "Delete password from Vault", buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question);
+						if (dialog == DialogResult.Yes)
+						{
+							try
+							{
+								crypt.Decrypt(vKey, encryptedVaultPath, decVault);
+								query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+
+								var encNameToDelete = "";
+								foreach (String namesInDb in query.GetColumn(DBColumns.Name.ToString())) //Decrypt names in db.
+								{
+									var temp = crypt.DecryptText(key: cKey, src: namesInDb);
+									if (temp == decNameToDelete)
+									{
+										encNameToDelete = namesInDb;
+										break;
+									}
+								}
+
+								query.DeletePassword(encNameToDelete);
+
+								List<String[]> fullResults = query.GetAllData();
+
+								VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+								foreach (String[] row in fullResults)
+								{
+									var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
+									VaultContentDGV.Rows.Add(new String[]
+									{
+										crypt.DecryptText(key: cKey, src: row[0]),
+										crypt.DecryptText(key: cKey, src: row[1]),
+										crypt.DecryptText(key: cKey, src: row[2]),
+										String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
+										crypt.DecryptText(key: cKey, src: row[4]),
+										crypt.DecryptText(key: cKey, src: row[5]),
+										tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
+									});
+								}
+
+								crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
+
+								//VaultContentDGV.Rows.RemoveAt(e.RowIndex);
+							}
+							catch(Exception ex)
+							{
+								if (ex is ConfigurationErrorsException)
+								{
+									MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+								}
+								else if (ex is FormatException)
+								{
+									MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+								}
+								else
+								{
+									MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+								}
+							}
+							finally
+							{
+								if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old files in case of errors
+								{
+									File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+								}
+							}
+						}
+
+						break;
+					case "PasswordColumn":
+						//Get the Name(PK) of that row, to retrieve the data....
+						var decNameOfPassword = VaultContentDGV.Rows[e.RowIndex].Cells[1].Value.ToString();
+
+						try
+						{
+							crypt.Decrypt(vKey, encryptedVaultPath, decVault);
+							query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+
+							var encNameToCopy = "";
+							foreach (String namesInDb in query.GetColumn(DBColumns.Name.ToString())) //Decrypt names in db.
+							{
+								var temp = crypt.DecryptText(key: cKey, src: namesInDb);
+								if (temp == decNameOfPassword)
+								{
+									encNameToCopy = namesInDb;
+									break;
+								}
+							}
+							Clipboard.SetText(crypt.DecryptText(key: cKey, src: query.GetPassword(name: encNameToCopy)[3]));
+						}
+						catch (Exception ex)
+						{
+							if (ex is ConfigurationErrorsException)
+							{
+								MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+							else if (ex is FormatException)
+							{
+								MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+							else
+							{
+								MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+						}
+						finally
+						{
+							if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old files in case of errors
+							{
+								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+							}
+						}
+						break;
+					case "URLColumn":
+					case "NameColumn":
+					case "SiteUsernameColumn":
+					case "CategoryColumn":
+					case "NotesColumn":
+					case "ImportantColumn":
+						// Copy the button text to clipboard
+						Clipboard.SetText(clickedCell.Value.ToString());
+						break;
+					default:
+						break;
+				}
+			}
+		}
 	}
 }
