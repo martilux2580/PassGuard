@@ -480,9 +480,9 @@ namespace PassGuard
 		private void exportAVaultsContentAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "EXPORTING A VAULT AS PDF"; //Change Title
-			GUI.LoadVaultUC lv = new(true); //Set new UC for the action.
+			GUI.ExportPdfFromSettings export = new(); //Set new UC for the action.
 			ContentPanel.Controls.Clear();
-			ContentPanel.Controls.Add(lv);
+			ContentPanel.Controls.Add(export);
 
 		}
 	}
