@@ -14,9 +14,6 @@ namespace PassGuard.GUI
 	//Form to obtain new RGB values for the outline colours.
 	public partial class AskRGBforSettings : Form
 	{
-
-		private List<OutlineColorDataRowUC> ConfigUCList = new(); //List of DataRows with the data of the passwords.
-		public List<CheckBox> checkboxes { get; private set; } = new();
 		public Configuration config { get; private set; }
 		public int finalRed { get; private set; }
 		public int finalGreen { get; private set; }
@@ -36,9 +33,46 @@ namespace PassGuard.GUI
 
 		}
 
-		internal bool CheckFav(OutlineColorDataRowUC row)
+		private DataGridViewRow GenerateNewRow(KeyValuePair<String, List<int>> configPair)
 		{
-			return row.favourite;
+			DataGridViewRow row = new();
+			DataGridViewCell nameCell = new DataGridViewTextBoxCell
+			{
+				Value = configPair.Key
+			};
+			nameCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+			DataGridViewCell redCell = new DataGridViewTextBoxCell
+			{
+				Value = configPair.Value[0].ToString()
+			};
+			redCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+			DataGridViewCell greenCell = new DataGridViewTextBoxCell
+			{
+				Value = configPair.Value[1].ToString()
+			};
+			greenCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+			DataGridViewCell blueCell = new DataGridViewTextBoxCell
+			{
+				Value = configPair.Value[2].ToString()
+			};
+			blueCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+			DataGridViewCell viewerCell = new DataGridViewTextBoxCell
+			{
+				Value = ""
+			};
+			viewerCell.Style.BackColor = Color.FromArgb(red: configPair.Value[0], green: configPair.Value[1], blue: configPair.Value[2]);
+
+			//Chosen
+
+			//Favourite
+
+			//Pensar en añadir datos al appconfig...
+
+			return row;
 		}
 
 		internal void LoadContent(String configs)
@@ -46,27 +80,9 @@ namespace PassGuard.GUI
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(configs);
 
 			ColourContentDGV.Controls.Clear();
-			ConfigUCList.Clear();
-			checkboxes.Clear();
-			
-			foreach(KeyValuePair<String, List<int>> configColor in values)
+			foreach (KeyValuePair<String, List<int>> configColor in values)
 			{
-				var row = new OutlineColorDataRowUC(configColor.Key, configColor.Value, this);
-
-				checkboxes.Add((CheckBox)row.Controls[1]); //Add the button of ChosenConfig as a checkbox of whether it is clicked or not...(I think so...)
-
-				ConfigUCList.Add(row);
-				//ContentFlowLayoutPanel.Controls.Add(row);
-			}
-
-			var xd = ConfigUCList.FindAll(CheckFav);
-			foreach (OutlineColorDataRowUC row in xd)
-			{
-				ContentFlowLayoutPanel.Controls.Add(row);
-			}
-			foreach(OutlineColorDataRowUC row in ConfigUCList)
-			{
-				if (!xd.Contains(row)) { ContentFlowLayoutPanel.Controls.Add(row); }
+				ColourContentDGV.Rows.Add(GenerateNewRow(configColor));
 			}
 		}
 
@@ -115,7 +131,7 @@ namespace PassGuard.GUI
 
 		private void ConfigNameButton_Click(object sender, EventArgs e)
 		{
-			NameCMS.Show(ConfigNameButton, new Point(ConfigNameButton.Width - ConfigNameButton.Width, ConfigNameButton.Height)); //Sets where to display the ContextMenuStrip...
+			//NameCMS.Show(ConfigNameButton, new Point(ConfigNameButton.Width - ConfigNameButton.Width, ConfigNameButton.Height)); //Sets where to display the ContextMenuStrip...
 		}
 
 		private void AddButton_Click(object sender, EventArgs e)
@@ -143,10 +159,10 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ContentFlowLayoutPanel.Controls.Clear();
+				//ContentFlowLayoutPanel.Controls.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				ContentFlowLayoutPanel.Refresh();
+				//ContentFlowLayoutPanel.Refresh();
 
 			}
 
@@ -182,10 +198,10 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ContentFlowLayoutPanel.Controls.Clear();
+				//ContentFlowLayoutPanel.Controls.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				ContentFlowLayoutPanel.Refresh();
+				//ContentFlowLayoutPanel.Refresh();
 			}
 
 		}
@@ -214,10 +230,10 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ContentFlowLayoutPanel.Controls.Clear();
+				//ContentFlowLayoutPanel.Controls.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				ContentFlowLayoutPanel.Refresh();
+				//ContentFlowLayoutPanel.Refresh();
 			}
 			else if (del.deletedAllSuccess)
 			{
@@ -230,7 +246,7 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ContentFlowLayoutPanel.Controls.Clear();
+				//ContentFlowLayoutPanel.Controls.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 			}
