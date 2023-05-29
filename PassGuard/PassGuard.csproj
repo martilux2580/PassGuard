@@ -74,9 +74,6 @@
     <Compile Update="GUI\LoadVaultUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="GUI\OutlineColorDataRowUC.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="GUI\VaultContentUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
