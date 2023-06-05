@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,18 +17,20 @@ namespace PassGuard.GUI
 	public partial class AskRGBforSettings : Form
 	{
 		public Configuration config { get; private set; }
-		public int finalRed { get; private set; }
-		public int finalGreen { get; private set; }
-		public int finalBlue { get; private set; }
+		public int[] finalCalibratedColours { get; private set; }
 
 		public AskRGBforSettings(int[] colours, Configuration configg)
 		{
 			InitializeComponent();
 			SetNUDs(colours);
 
-			finalRed = (int)RedNUD.Value;
-			finalGreen = (int)GreenNUD.Value;
-			finalBlue = (int)BlueNUD.Value;
+			//Have the actualColours values in the NUDs. Could happen that none of saved configs are the one actually used...
+			colours[0] = (int)RedNUD.Value;
+			colours[1] = (int)GreenNUD.Value;
+			colours[2] = (int)BlueNUD.Value;
+
+			//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
+			finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
 
 			LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
 			config = configg;
@@ -36,41 +40,65 @@ namespace PassGuard.GUI
 		private DataGridViewRow GenerateNewRow(KeyValuePair<String, List<int>> configPair)
 		{
 			DataGridViewRow row = new();
-			DataGridViewCell nameCell = new DataGridViewTextBoxCell
+			DataGridViewCell chosenNameCell = new DataGridViewButtonCell
 			{
-				Value = configPair.Key
+				Value = configPair.Key,
+				FlatStyle = FlatStyle.Flat
 			};
-			nameCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+			chosenNameCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell redCell = new DataGridViewTextBoxCell
+			DataGridViewCell redCell = new DataGridViewButtonCell
 			{
-				Value = configPair.Value[0].ToString()
+				Value = configPair.Value[0].ToString(),
+				FlatStyle = FlatStyle.Flat
 			};
 			redCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell greenCell = new DataGridViewTextBoxCell
+			DataGridViewCell greenCell = new DataGridViewButtonCell
 			{
-				Value = configPair.Value[1].ToString()
+				Value = configPair.Value[1].ToString(),
+				FlatStyle = FlatStyle.Flat
 			};
 			greenCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell blueCell = new DataGridViewTextBoxCell
+			DataGridViewCell blueCell = new DataGridViewButtonCell
 			{
-				Value = configPair.Value[2].ToString()
+				Value = configPair.Value[2].ToString(),
+				FlatStyle = FlatStyle.Flat
 			};
 			blueCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell viewerCell = new DataGridViewTextBoxCell
+			DataGridViewCell viewerCell = new DataGridViewButtonCell
 			{
-				Value = ""
+				Value = "    ",
+				FlatStyle = FlatStyle.Flat
 			};
 			viewerCell.Style.BackColor = Color.FromArgb(red: configPair.Value[0], green: configPair.Value[1], blue: configPair.Value[2]);
+			viewerCell.Style.SelectionBackColor = Color.FromArgb(red: configPair.Value[0], green: configPair.Value[1], blue: configPair.Value[2]);
 
-			//Chosen
+			//ChosenConfig
+			DataGridViewCell chosenConfigCell = new DataGridViewCheckBoxCell
+			{
+				Selected = false
+			};
+			if (Convert.ToBoolean(configPair.Value[3])) { chosenConfigCell.Value = 1; }
+			else { chosenConfigCell.Value = 0; } //If decrypts to "1" it is chosen and used actually, else is not.
 
 			//Favourite
+			DataGridViewCell favouriteCell = new DataGridViewCheckBoxCell
+			{
+				Selected = false
+			};
+			if (Convert.ToBoolean(configPair.Value[4])) { favouriteCell.Value = 1; }
+			else { favouriteCell.Value = 0; } //If decrypts to "1" it is important, else is not.
 
-			//Pensar en añadir datos al appconfig...
+			row.Cells.Add(chosenNameCell);
+			row.Cells.Add(redCell);
+			row.Cells.Add(greenCell);
+			row.Cells.Add(blueCell);
+			row.Cells.Add(viewerCell);
+			row.Cells.Add(chosenConfigCell);
+			row.Cells.Add(favouriteCell);
 
 			return row;
 		}
@@ -83,6 +111,7 @@ namespace PassGuard.GUI
 			foreach (KeyValuePair<String, List<int>> configColor in values)
 			{
 				ColourContentDGV.Rows.Add(GenerateNewRow(configColor));
+				
 			}
 		}
 
@@ -121,17 +150,33 @@ namespace PassGuard.GUI
 
 		private void SendButton_Click(object sender, EventArgs e)
 		{
-			//Set these variables, because we cannot get the NUD values if he have this.Close() the form.
-			finalRed = (int)RedNUD.Value;
-			finalGreen = (int)GreenNUD.Value;
-			finalBlue = (int)BlueNUD.Value;
+			if (Utils.BooleanUtils.IsValidColour((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value)) //Check lightness of colour to check if it is valid.
+			{
+				//Calibrate colours and set the result variable, because we cannot get the NUD values if he have this.Close() the form.
+				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
+				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value);
 
-			this.Close();
+				this.Close();
+			}
+			else
+			{
+				MessageBox.Show(text: "ERROR: We have detected that the colour you want to use is too dark. \n\nThis might lead to inaccuracies while reading the content, please select a lighter colour to continue :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
 		}
 
 		private void ConfigNameButton_Click(object sender, EventArgs e)
 		{
 			//NameCMS.Show(ConfigNameButton, new Point(ConfigNameButton.Width - ConfigNameButton.Width, ConfigNameButton.Height)); //Sets where to display the ContextMenuStrip...
+		}
+
+		private Dictionary<String, List<int>> UncheckChosenConfigs(Dictionary<String, List<int>> values)
+		{
+			var configs = values;
+			foreach(List<int> data in configs.Values)
+			{
+				data[3] = 0; //Uncheck the value of chosen in the data....
+			}
+			return configs;
 		}
 
 		private void AddButton_Click(object sender, EventArgs e)
@@ -146,23 +191,24 @@ namespace PassGuard.GUI
 
 			if (add.addedSuccess)
 			{
-				String newName = add.name;
-				int newRed = add.red;
-				int newGreen = add.green;
-				int newBlue = add.blue;
-				int newFav = add.favourite;
+				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+				if (add.chosen == 1)
+				{
+					data = UncheckChosenConfigs(data);
+					RedNUD.Value = add.red;
+					GreenNUD.Value = add.green;
+					BlueNUD.Value = add.blue;
+				}
 
-				var data = ConfigurationManager.AppSettings["OutlineSavedColours"];
-				var newData = data.Insert(data.Length - 1, ",\"" + newName  + "\":[" + newRed.ToString() + ", " + newGreen.ToString() + ", " + newBlue.ToString() + "," + newFav.ToString() + "]");
+				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.chosen, add.favourite });
+				string newData = JsonSerializer.Serialize(data);
 
 				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				//ContentFlowLayoutPanel.Controls.Clear();
+				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-
-				//ContentFlowLayoutPanel.Refresh();
 
 			}
 
@@ -172,9 +218,7 @@ namespace PassGuard.GUI
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-			var namesList = new List<String>(values.Keys);
-
-			GUI.EditColorConfig edit = new(namesList)
+			GUI.EditColorConfig edit = new(values)
 			{
 				BackColor = this.BackColor
 			};
@@ -187,21 +231,25 @@ namespace PassGuard.GUI
 				int red = edit.red;
 				int green = edit.green;
 				int blue = edit.blue;
+				int chosen = edit.chosen;
 				int important = edit.important;
 
 				values.Remove(oldName);
-				values.Add(newName, new List<int> { red, green, blue , important});
-
+				if(chosen == 1) //If chosen, then set values and unset others...
+				foreach(List<int> data in values.Values)
+				{
+					datita = UncheckChosenConfigs(data);
+				}
+				values.Add(newName, new List<int> { red, green, blue , chosen, important});
 				String newData = JsonSerializer.Serialize(values);
 
 				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				//ContentFlowLayoutPanel.Controls.Clear();
+				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				//ContentFlowLayoutPanel.Refresh();
 			}
 
 		}
@@ -230,10 +278,9 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				//ContentFlowLayoutPanel.Controls.Clear();
+				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				//ContentFlowLayoutPanel.Refresh();
 			}
 			else if (del.deletedAllSuccess)
 			{
@@ -246,7 +293,7 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				//ContentFlowLayoutPanel.Controls.Clear();
+				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 			}
@@ -289,5 +336,48 @@ namespace PassGuard.GUI
 			LoadContent(JsonSerializer.Serialize(newValues));
 
 		}
+
+		private void AskRGBforSettings_BackColorChanged(object sender, EventArgs e)
+		{
+			// Set the back color of the DataGridView
+			ColourContentDGV.BackgroundColor = this.BackColor;
+
+			// Set the back color of the column headers
+			ColourContentDGV.ColumnHeadersDefaultCellStyle.BackColor = this.BackColor;
+
+			// Set the back color of the rows
+			ColourContentDGV.RowsDefaultCellStyle.BackColor = this.BackColor;
+
+			// Set the back color of the selection
+			ColourContentDGV.DefaultCellStyle.SelectionBackColor = this.BackColor;
+		}
+
+		private void ColourContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
+			DataGridViewColumn clickedColumn = ColourContentDGV.Columns[e.ColumnIndex];
+			string columnName = clickedColumn.HeaderText;
+
+			// Show the context menu strip at the mouse location 
+			switch (columnName)
+			{
+				case "ConfigName":
+				case "Red":
+				case "Green":
+				case "Blue":
+				case "ChosenConfig":
+				case "Favourite":
+					Clipboard.SetText(ColourContentDGV.CurrentCell.Value.ToString());
+					break;
+				case "Delete Row":
+					//todo logic para borrar data
+					break;
+				default:
+					break;
+			}
+
+
+		}
+
 	}
 }

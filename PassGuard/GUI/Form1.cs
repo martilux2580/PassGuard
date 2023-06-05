@@ -46,7 +46,7 @@ namespace PassGuard
 			{
 				AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
 				SetConfigTheme(); //Set theme based on saved config.
-				SetConfigColours(); //Set outline colours based on saved config.
+				SetConfigColours(); //Set outline colours based on saved config.				
 
 				//Code for regulating AutoBackup when it is enabled and has a time frequency (every day, week or month).
 				int[] timeCodes = new int[] { 3, 4, 5 }; //Modes for everyday, week or month.
@@ -59,7 +59,7 @@ namespace PassGuard
 			catch (ConfigurationErrorsException)
 			{
 				MessageBox.Show(text: "PassGuard could not access config file, some features like colours setups or AutoBackup could not be set up.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-				//Not controlling In32.Parse exceptions, if config works the data will always be a number in string format, it will parse it correctly.
+				//Not controlling Int32.Parse exceptions, if config works the data will always be a number in string format, it will parse it correctly.
 			}
 
 		}
@@ -208,16 +208,14 @@ namespace PassGuard
 
 
 				//Get values
-				//If no changes were made, exit.
-				int[] newRGB = new int[3] { rgb.finalRed, rgb.finalGreen, rgb.finalBlue };
-				if (newRGB.SequenceEqual(actualColours))
+				//If no changes were made, exit. TODO
+				int[] newValues = rgb.finalCalibratedColours;
+				if ((newValues[3] == actualColours[0]) && (newValues[4] == actualColours[1]) && (newValues[5] == actualColours[2])) //Same colours in Logo, we do nothing....
 				{
 					return;
 				}
 				else
 				{
-					int[] newValues = Utils.IntUtils.calibrateColours(newRGB[0], newRGB[1], newRGB[2]); //Calibrate values and obtain them.
-
 					//Save values for future executions, or not.
 					DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
 					if (dialog == DialogResult.Yes)
