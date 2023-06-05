@@ -21,17 +21,18 @@ namespace PassGuard.GUI
 		public int red { get; private set; }
 		public int green { get; private set; }
 		public int blue { get; private set; }
+		public int chosen { get; private set; }
 		public int important { get; private set; }
-		private List<String> namesStored;
+		private Dictionary<String, List<int>> storedConfigs;
 
-		public EditColorConfig(List<String> names)
+		public EditColorConfig(Dictionary<String, List<int>> configs)
 		{
 			InitializeComponent();
 
-			namesStored = names;
 			editedSuccess = false;
+			storedConfigs = configs;
 			NameCombobox.Items.Add("");
-			foreach(String name in namesStored)
+			foreach(String name in storedConfigs.Keys)
 			{
 				NameCombobox.Items.Add(name);
 			}
@@ -54,14 +55,15 @@ namespace PassGuard.GUI
 			{
 				errorMessages += "\nName cannot be left blank.";
 			}
-			if (namesStored.Contains(NameTextbox.Text) && (NameTextbox.Text != NameCombobox.Text))
+			if (storedConfigs.Keys.Contains(NameTextbox.Text) && (NameTextbox.Text != NameCombobox.Text))
 			{
 				errorMessages += "\nThere is already a saved config with that name.";
 			}
-			if ((RedNUD.Value < 32) && (GreenNUD.Value < 32) && (BlueNUD.Value < 32))
+			if (!Utils.BooleanUtils.IsValidColour((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value))
 			{
-				errorMessages += "\nAll three RGB values cannot be less than 32.";
+				errorMessages += "\nSelected RGB configuration is too dark or bright, texts or images might not be visible with this config.";
 			}
+			//No comprobamos que ya haya otra config rgb igual, ya que imagina que quieres cambiar solo el nombre...no te dejaría...
 
 			if (!String.IsNullOrEmpty(errorMessages)) //If any error...
 			{
@@ -74,7 +76,9 @@ namespace PassGuard.GUI
 				red = (int)RedNUD.Value;
 				green = (int)GreenNUD.Value;
 				blue = (int)BlueNUD.Value;
-				if(FavouriteCheckbox.Checked) { important = 1; }
+				if (ChosenConfigCheckbox.Checked) { chosen = 1; }
+				else { chosen = 0; }
+				if (FavouriteCheckbox.Checked) { important = 1; }
 				else { important = 0; }
 
 				editedSuccess = true;
@@ -97,6 +101,7 @@ namespace PassGuard.GUI
 				BlueNUD.Enabled = true;
 				EditButton.Enabled = true;
 				FavouriteCheckbox.Enabled = true;
+				ChosenConfigCheckbox.Enabled = true;
 			}
 			else
 			{
@@ -110,6 +115,7 @@ namespace PassGuard.GUI
 				BlueNUD.Enabled = false;
 				EditButton.Enabled = false;
 				FavouriteCheckbox.Enabled = false;
+				ChosenConfigCheckbox.Enabled = false;
 			}
 		}
 
@@ -117,13 +123,12 @@ namespace PassGuard.GUI
 		{
 			if(!String.IsNullOrWhiteSpace(NameCombobox.Text))
 			{
-				Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-
 				NameTextbox.Text = NameCombobox.Text;
-				RedNUD.Value = values[NameCombobox.Text][0];
-				GreenNUD.Value = values[NameCombobox.Text][1];
-				BlueNUD.Value = values[NameCombobox.Text][2];
-				FavouriteCheckbox.Checked = Convert.ToBoolean(values[NameCombobox.Text][3]);
+				RedNUD.Value = storedConfigs[NameCombobox.Text][0];
+				GreenNUD.Value = storedConfigs[NameCombobox.Text][1];
+				BlueNUD.Value = storedConfigs[NameCombobox.Text][2];
+				ChosenConfigCheckbox.Checked = Convert.ToBoolean(storedConfigs[NameCombobox.Text][3]);
+				FavouriteCheckbox.Checked = Convert.ToBoolean(storedConfigs[NameCombobox.Text][4]);
 
 				Check(true);
 
@@ -135,6 +140,7 @@ namespace PassGuard.GUI
 				GreenNUD.Value = 0;
 				BlueNUD.Value = 0;
 				FavouriteCheckbox.Checked = false;
+				ChosenConfigCheckbox.Checked = false;
 
 				Check(false);
 			}
