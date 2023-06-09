@@ -10,6 +10,7 @@ using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static iText.Svg.SvgConstants;
 
 namespace PassGuard.GUI
 {
@@ -107,7 +108,7 @@ namespace PassGuard.GUI
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(configs);
 
-			ColourContentDGV.Controls.Clear();
+			ColourContentDGV.Rows.Clear();
 			foreach (KeyValuePair<String, List<int>> configColor in values)
 			{
 				ColourContentDGV.Rows.Add(GenerateNewRow(configColor));
@@ -150,7 +151,7 @@ namespace PassGuard.GUI
 
 		private void SendButton_Click(object sender, EventArgs e)
 		{
-			if (Utils.BooleanUtils.IsValidColour((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value)) //Check lightness of colour to check if it is valid.
+			if (Utils.BooleanUtils.IsValidColour((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value)) //Check lightness of colour to check if it is valid. Double Check.
 			{
 				//Calibrate colours and set the result variable, because we cannot get the NUD values if he have this.Close() the form.
 				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
@@ -192,6 +193,7 @@ namespace PassGuard.GUI
 			if (add.addedSuccess)
 			{
 				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
 				if (add.chosen == 1)
 				{
 					data = UncheckChosenConfigs(data);
@@ -224,7 +226,7 @@ namespace PassGuard.GUI
 			};
 			edit.ShowDialog();
 
-			if(edit.editedSuccess)
+			if (edit.editedSuccess)
 			{
 				String oldName = edit.oldname;
 				String newName = edit.name;
@@ -235,10 +237,13 @@ namespace PassGuard.GUI
 				int important = edit.important;
 
 				values.Remove(oldName);
-				if(chosen == 1) //If chosen, then set values and unset others...
-				foreach(List<int> data in values.Values)
+
+				if (chosen == 1) //If chosen, then set values and unset others...
 				{
-					datita = UncheckChosenConfigs(data);
+					values = UncheckChosenConfigs(values);
+					RedNUD.Value = edit.red;
+					GreenNUD.Value = edit.green;
+					BlueNUD.Value = edit.blue;
 				}
 				values.Add(newName, new List<int> { red, green, blue , chosen, important});
 				String newData = JsonSerializer.Serialize(values);
@@ -365,12 +370,46 @@ namespace PassGuard.GUI
 				case "Red":
 				case "Green":
 				case "Blue":
-				case "ChosenConfig":
-				case "Favourite":
+					//Todos los de arriba solo copias los valores al clipboard.
 					Clipboard.SetText(ColourContentDGV.CurrentCell.Value.ToString());
 					break;
+				case "ChosenConfig":
+					//Deseleccionar todos los chosen y poner esto con mgbox, ademas de guardar en array...
+					if((ColourContentDGV.CurrentCell != null) && (!Convert.ToBoolean(ColourContentDGV.CurrentCell.Value))) //If checkbox is not checked then we do something...
+					{
+						var row = ColourContentDGV.Rows[e.RowIndex];
+						var dialog = MessageBox.Show(text: "Do you want to select and use the config with name '" + row.Cells[0].Value.ToString() + "'?", caption: "Select and Use Config", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+						if (dialog == DialogResult.Yes)
+						{
+							Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+							data = UncheckChosenConfigs(data);
+
+							//Set NUDs and chosen to 1...
+							RedNUD.Value = data[row.Cells[0].Value.ToString()][0];
+							GreenNUD.Value = data[row.Cells[0].Value.ToString()][1];
+							BlueNUD.Value = data[row.Cells[0].Value.ToString()][2];
+							data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
+
+							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+							config.Save(ConfigurationSaveMode.Modified);
+							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+							ColourContentDGV.Rows.Clear();
+							LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+						}
+						else
+						{
+							ColourContentDGV.CurrentCell.Value = false; //Uncheck checkbox, just in case...
+						}
+					}
+
+					break;
+				case "Favourite":
+					//Seleccionar esto como favourite y poner esto con mgbox, ademas de guardar en array....
+					break;
 				case "Delete Row":
-					//todo logic para borrar data
+					//Borrar este dato y la fila y poner esto con mgbox, ademas de guardar en array....
 					break;
 				default:
 					break;

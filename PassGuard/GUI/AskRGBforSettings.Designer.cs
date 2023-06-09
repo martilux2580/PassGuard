@@ -409,6 +409,7 @@ namespace PassGuard.GUI
 			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle6;
 			this.ChosenConfigColumn.HeaderText = "ChosenConfig";
 			this.ChosenConfigColumn.Name = "ChosenConfigColumn";
+			this.ChosenConfigColumn.ReadOnly = true;
 			this.ChosenConfigColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			// 
 			// FavouriteColumn
@@ -419,6 +420,7 @@ namespace PassGuard.GUI
 			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle7;
 			this.FavouriteColumn.HeaderText = "Favourite";
 			this.FavouriteColumn.Name = "FavouriteColumn";
+			this.FavouriteColumn.ReadOnly = true;
 			this.FavouriteColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			// 
 			// DeleteRowColumn
