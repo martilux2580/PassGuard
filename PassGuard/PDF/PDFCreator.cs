@@ -169,7 +169,7 @@ namespace PassGuard.PDF
 					cell.SetBackgroundColor(WebColors.GetRGBColor("#" + rgb[i][0].ToString("X2") + rgb[i][1].ToString("X2") + rgb[i][2].ToString("X2")));
 					content2.AddCell(cell);
 
-					if (Convert.ToBoolean(rgb[i][3])) { content2.AddCell("Yes").SetFontSize(9); }
+					if (Convert.ToBoolean(rgb[i][4])) { content2.AddCell("Yes").SetFontSize(9); }
 					else { content2.AddCell("No").SetFontSize(9); }
 
 				}

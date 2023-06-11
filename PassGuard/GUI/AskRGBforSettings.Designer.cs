@@ -30,15 +30,15 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle73 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle81 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle74 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle75 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle76 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle77 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle78 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle79 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle80 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.RGBTitleLabel = new System.Windows.Forms.Label();
 			this.RLabel = new System.Windows.Forms.Label();
 			this.RedNUD = new System.Windows.Forms.NumericUpDown();
@@ -55,9 +55,10 @@ namespace PassGuard.GUI
 			this.DeleteButton = new System.Windows.Forms.Button();
 			this.AddButton = new System.Windows.Forms.Button();
 			this.NameCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.normalOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.ascendingOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.descendingOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.NameToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.NameNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.NameAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.NameDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ColourContentDGV = new System.Windows.Forms.DataGridView();
 			this.ConfigNameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.RedColumn = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -67,11 +68,35 @@ namespace PassGuard.GUI
 			this.ChosenConfigColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.FavouriteColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.DeleteRowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.RedCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.RedToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.RedNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.RedAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.RedDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.GreenCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.GreenToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.GreenNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.GreenAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.GreenDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.BlueCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.BlueToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.BlueNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.BlueAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.BlueDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.FavouriteCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.FavouriteToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+			this.FavouriteNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.FavouriteAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.FavouriteDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
 			this.NameCMS.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ColourContentDGV)).BeginInit();
+			this.RedCMS.SuspendLayout();
+			this.GreenCMS.SuspendLayout();
+			this.BlueCMS.SuspendLayout();
+			this.FavouriteCMS.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// RGBTitleLabel
@@ -270,34 +295,40 @@ namespace PassGuard.GUI
 			// NameCMS
 			// 
 			this.NameCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.normalOrderToolStripMenuItem,
-            this.ascendingOrderToolStripMenuItem,
-            this.descendingOrderToolStripMenuItem});
+            this.NameToolStripSeparator,
+            this.NameNormalToolStripMenuItem,
+            this.NameAscendingToolStripMenuItem,
+            this.NameDescendingToolStripMenuItem});
 			this.NameCMS.Name = "NameCMS";
-			this.NameCMS.Size = new System.Drawing.Size(170, 70);
+			this.NameCMS.Size = new System.Drawing.Size(170, 76);
 			// 
-			// normalOrderToolStripMenuItem
+			// NameToolStripSeparator
 			// 
-			this.normalOrderToolStripMenuItem.Checked = true;
-			this.normalOrderToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.normalOrderToolStripMenuItem.Name = "normalOrderToolStripMenuItem";
-			this.normalOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-			this.normalOrderToolStripMenuItem.Text = "Normal Order";
-			this.normalOrderToolStripMenuItem.Click += new System.EventHandler(this.normalOrderToolStripMenuItem_Click);
+			this.NameToolStripSeparator.Name = "NameToolStripSeparator";
+			this.NameToolStripSeparator.Size = new System.Drawing.Size(166, 6);
 			// 
-			// ascendingOrderToolStripMenuItem
+			// NameNormalToolStripMenuItem
 			// 
-			this.ascendingOrderToolStripMenuItem.Name = "ascendingOrderToolStripMenuItem";
-			this.ascendingOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-			this.ascendingOrderToolStripMenuItem.Text = "Ascending Order";
-			this.ascendingOrderToolStripMenuItem.Click += new System.EventHandler(this.ascendingOrderToolStripMenuItem_Click);
+			this.NameNormalToolStripMenuItem.Checked = true;
+			this.NameNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.NameNormalToolStripMenuItem.Name = "NameNormalToolStripMenuItem";
+			this.NameNormalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.NameNormalToolStripMenuItem.Text = "Normal Order";
+			this.NameNormalToolStripMenuItem.Click += new System.EventHandler(this.normalOrderToolStripMenuItem_Click);
 			// 
-			// descendingOrderToolStripMenuItem
+			// NameAscendingToolStripMenuItem
 			// 
-			this.descendingOrderToolStripMenuItem.Name = "descendingOrderToolStripMenuItem";
-			this.descendingOrderToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-			this.descendingOrderToolStripMenuItem.Text = "Descending Order";
-			this.descendingOrderToolStripMenuItem.Click += new System.EventHandler(this.descendingOrderToolStripMenuItem_Click);
+			this.NameAscendingToolStripMenuItem.Name = "NameAscendingToolStripMenuItem";
+			this.NameAscendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.NameAscendingToolStripMenuItem.Text = "Ascending Order";
+			this.NameAscendingToolStripMenuItem.Click += new System.EventHandler(this.ascendingOrderToolStripMenuItem_Click);
+			// 
+			// NameDescendingToolStripMenuItem
+			// 
+			this.NameDescendingToolStripMenuItem.Name = "NameDescendingToolStripMenuItem";
+			this.NameDescendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.NameDescendingToolStripMenuItem.Text = "Descending Order";
+			this.NameDescendingToolStripMenuItem.Click += new System.EventHandler(this.descendingOrderToolStripMenuItem_Click);
 			// 
 			// ColourContentDGV
 			// 
@@ -309,13 +340,13 @@ namespace PassGuard.GUI
 			this.ColourContentDGV.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.ColourContentDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.ColourContentDGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle73.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle73.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle73.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle73.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle73.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle73.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle73;
 			this.ColourContentDGV.ColumnHeadersHeight = 47;
 			this.ColourContentDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.ColourContentDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -327,14 +358,14 @@ namespace PassGuard.GUI
             this.ChosenConfigColumn,
             this.FavouriteColumn,
             this.DeleteRowColumn});
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
-			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle81.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle81.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle81.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle81.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle81.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
+			dataGridViewCellStyle81.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle81.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle81;
 			this.ColourContentDGV.EnableHeadersVisualStyles = false;
 			this.ColourContentDGV.GridColor = System.Drawing.SystemColors.InfoText;
 			this.ColourContentDGV.Location = new System.Drawing.Point(19, 67);
@@ -348,12 +379,13 @@ namespace PassGuard.GUI
 			this.ColourContentDGV.Size = new System.Drawing.Size(801, 415);
 			this.ColourContentDGV.TabIndex = 19;
 			this.ColourContentDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColourContentDGV_CellContentClick);
+			this.ColourContentDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColourContentDGV_ColumnHeaderMouseClick);
 			// 
 			// ConfigNameColumn
 			// 
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle74.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle74.SelectionForeColor = System.Drawing.Color.Black;
+			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle74;
 			this.ConfigNameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ConfigNameColumn.HeaderText = "ConfigName";
 			this.ConfigNameColumn.Name = "ConfigNameColumn";
@@ -362,9 +394,9 @@ namespace PassGuard.GUI
 			// 
 			// RedColumn
 			// 
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle75.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle75.SelectionForeColor = System.Drawing.Color.Black;
+			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle75;
 			this.RedColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.RedColumn.HeaderText = "Red";
 			this.RedColumn.Name = "RedColumn";
@@ -373,9 +405,9 @@ namespace PassGuard.GUI
 			// 
 			// GreenColumn
 			// 
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
-			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle76.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle76.SelectionForeColor = System.Drawing.Color.Black;
+			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle76;
 			this.GreenColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.GreenColumn.HeaderText = "Green";
 			this.GreenColumn.Name = "GreenColumn";
@@ -384,9 +416,9 @@ namespace PassGuard.GUI
 			// 
 			// BlueColumn
 			// 
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
-			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle77.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle77.SelectionForeColor = System.Drawing.Color.Black;
+			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle77;
 			this.BlueColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BlueColumn.HeaderText = "Blue";
 			this.BlueColumn.Name = "BlueColumn";
@@ -403,10 +435,10 @@ namespace PassGuard.GUI
 			// 
 			// ChosenConfigColumn
 			// 
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle6.NullValue = false;
-			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
-			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle78.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle78.NullValue = false;
+			dataGridViewCellStyle78.SelectionForeColor = System.Drawing.Color.Black;
+			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle78;
 			this.ChosenConfigColumn.HeaderText = "ChosenConfig";
 			this.ChosenConfigColumn.Name = "ChosenConfigColumn";
 			this.ChosenConfigColumn.ReadOnly = true;
@@ -414,10 +446,10 @@ namespace PassGuard.GUI
 			// 
 			// FavouriteColumn
 			// 
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle7.NullValue = false;
-			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
-			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle79.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle79.NullValue = false;
+			dataGridViewCellStyle79.SelectionForeColor = System.Drawing.Color.Black;
+			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle79;
 			this.FavouriteColumn.HeaderText = "Favourite";
 			this.FavouriteColumn.Name = "FavouriteColumn";
 			this.FavouriteColumn.ReadOnly = true;
@@ -425,9 +457,9 @@ namespace PassGuard.GUI
 			// 
 			// DeleteRowColumn
 			// 
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
-			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle80.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle80.SelectionForeColor = System.Drawing.Color.Black;
+			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle80;
 			this.DeleteRowColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteRowColumn.HeaderText = "Delete Row";
 			this.DeleteRowColumn.Name = "DeleteRowColumn";
@@ -435,6 +467,163 @@ namespace PassGuard.GUI
 			this.DeleteRowColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.DeleteRowColumn.Text = "Delete";
 			this.DeleteRowColumn.UseColumnTextForButtonValue = true;
+			// 
+			// RedCMS
+			// 
+			this.RedCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RedToolStripSeparator,
+            this.RedNormalToolStripMenuItem,
+            this.RedAscendingToolStripMenuItem,
+            this.RedDescendingToolStripMenuItem});
+			this.RedCMS.Name = "NameCMS";
+			this.RedCMS.Size = new System.Drawing.Size(170, 76);
+			// 
+			// RedToolStripSeparator
+			// 
+			this.RedToolStripSeparator.Name = "RedToolStripSeparator";
+			this.RedToolStripSeparator.Size = new System.Drawing.Size(166, 6);
+			// 
+			// RedNormalToolStripMenuItem
+			// 
+			this.RedNormalToolStripMenuItem.Checked = true;
+			this.RedNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.RedNormalToolStripMenuItem.Name = "RedNormalToolStripMenuItem";
+			this.RedNormalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.RedNormalToolStripMenuItem.Text = "Normal Order";
+			this.RedNormalToolStripMenuItem.Click += new System.EventHandler(this.RedNormalToolStripMenuItem_Click);
+			// 
+			// RedAscendingToolStripMenuItem
+			// 
+			this.RedAscendingToolStripMenuItem.Name = "RedAscendingToolStripMenuItem";
+			this.RedAscendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.RedAscendingToolStripMenuItem.Text = "Ascending Order";
+			this.RedAscendingToolStripMenuItem.Click += new System.EventHandler(this.RedAscendingToolStripMenuItem_Click);
+			// 
+			// RedDescendingToolStripMenuItem
+			// 
+			this.RedDescendingToolStripMenuItem.Name = "RedDescendingToolStripMenuItem";
+			this.RedDescendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.RedDescendingToolStripMenuItem.Text = "Descending Order";
+			this.RedDescendingToolStripMenuItem.Click += new System.EventHandler(this.RedDescendingToolStripMenuItem_Click);
+			// 
+			// GreenCMS
+			// 
+			this.GreenCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GreenToolStripSeparator,
+            this.GreenNormalToolStripMenuItem,
+            this.GreenAscendingToolStripMenuItem,
+            this.GreenDescendingToolStripMenuItem});
+			this.GreenCMS.Name = "NameCMS";
+			this.GreenCMS.Size = new System.Drawing.Size(170, 76);
+			// 
+			// GreenToolStripSeparator
+			// 
+			this.GreenToolStripSeparator.Name = "GreenToolStripSeparator";
+			this.GreenToolStripSeparator.Size = new System.Drawing.Size(177, 6);
+			// 
+			// GreenNormalToolStripMenuItem
+			// 
+			this.GreenNormalToolStripMenuItem.Checked = true;
+			this.GreenNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.GreenNormalToolStripMenuItem.Name = "GreenNormalToolStripMenuItem";
+			this.GreenNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenNormalToolStripMenuItem.Text = "Normal Order";
+			this.GreenNormalToolStripMenuItem.Click += new System.EventHandler(this.GreenNormalToolStripMenuItem_Click);
+			// 
+			// GreenAscendingToolStripMenuItem
+			// 
+			this.GreenAscendingToolStripMenuItem.Name = "GreenAscendingToolStripMenuItem";
+			this.GreenAscendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenAscendingToolStripMenuItem.Text = "Ascending Order";
+			this.GreenAscendingToolStripMenuItem.Click += new System.EventHandler(this.GreenAscendingToolStripMenuItem_Click);
+			// 
+			// GreenDescendingToolStripMenuItem
+			// 
+			this.GreenDescendingToolStripMenuItem.Name = "GreenDescendingToolStripMenuItem";
+			this.GreenDescendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenDescendingToolStripMenuItem.Text = "Descending Order";
+			this.GreenDescendingToolStripMenuItem.Click += new System.EventHandler(this.GreenDescendingToolStripMenuItem_Click);
+			// 
+			// BlueCMS
+			// 
+			this.BlueCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BlueToolStripSeparator,
+            this.BlueNormalToolStripMenuItem,
+            this.BlueAscendingToolStripMenuItem,
+            this.BlueDescendingToolStripMenuItem});
+			this.BlueCMS.Name = "NameCMS";
+			this.BlueCMS.Size = new System.Drawing.Size(170, 76);
+			// 
+			// BlueToolStripSeparator
+			// 
+			this.BlueToolStripSeparator.Name = "BlueToolStripSeparator";
+			this.BlueToolStripSeparator.Size = new System.Drawing.Size(166, 6);
+			// 
+			// BlueNormalToolStripMenuItem
+			// 
+			this.BlueNormalToolStripMenuItem.Checked = true;
+			this.BlueNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.BlueNormalToolStripMenuItem.Name = "BlueNormalToolStripMenuItem";
+			this.BlueNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueNormalToolStripMenuItem.Text = "Normal Order";
+			this.BlueNormalToolStripMenuItem.Click += new System.EventHandler(this.BlueNormalToolStripMenuItem_Click);
+			// 
+			// BlueAscendingToolStripMenuItem
+			// 
+			this.BlueAscendingToolStripMenuItem.Name = "BlueAscendingToolStripMenuItem";
+			this.BlueAscendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueAscendingToolStripMenuItem.Text = "Ascending Order";
+			this.BlueAscendingToolStripMenuItem.Click += new System.EventHandler(this.BlueAscendingToolStripMenuItem_Click);
+			// 
+			// BlueDescendingToolStripMenuItem
+			// 
+			this.BlueDescendingToolStripMenuItem.Name = "BlueDescendingToolStripMenuItem";
+			this.BlueDescendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueDescendingToolStripMenuItem.Text = "Descending Order";
+			this.BlueDescendingToolStripMenuItem.Click += new System.EventHandler(this.BlueDescendingToolStripMenuItem_Click);
+			// 
+			// FavouriteCMS
+			// 
+			this.FavouriteCMS.AutoSize = false;
+			this.FavouriteCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FavouriteToolStripSeparator,
+            this.FavouriteNormalToolStripMenuItem,
+            this.FavouriteAscendingToolStripMenuItem,
+            this.FavouriteDescendingToolStripMenuItem});
+			this.FavouriteCMS.Name = "NameCMS";
+			this.FavouriteCMS.Size = new System.Drawing.Size(191, 98);
+			// 
+			// FavouriteToolStripSeparator
+			// 
+			this.FavouriteToolStripSeparator.AutoSize = false;
+			this.FavouriteToolStripSeparator.Name = "FavouriteToolStripSeparator";
+			this.FavouriteToolStripSeparator.Size = new System.Drawing.Size(187, 6);
+			// 
+			// FavouriteNormalToolStripMenuItem
+			// 
+			this.FavouriteNormalToolStripMenuItem.AutoSize = false;
+			this.FavouriteNormalToolStripMenuItem.Checked = true;
+			this.FavouriteNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.FavouriteNormalToolStripMenuItem.Name = "FavouriteNormalToolStripMenuItem";
+			this.FavouriteNormalToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.FavouriteNormalToolStripMenuItem.Text = "Normal Order";
+			this.FavouriteNormalToolStripMenuItem.Click += new System.EventHandler(this.FavouriteNormalToolStripMenuItem_Click);
+			// 
+			// FavouriteAscendingToolStripMenuItem
+			// 
+			this.FavouriteAscendingToolStripMenuItem.AutoSize = false;
+			this.FavouriteAscendingToolStripMenuItem.Name = "FavouriteAscendingToolStripMenuItem";
+			this.FavouriteAscendingToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.FavouriteAscendingToolStripMenuItem.Text = "Ascending Order";
+			this.FavouriteAscendingToolStripMenuItem.Click += new System.EventHandler(this.FavouriteAscendingToolStripMenuItem_Click);
+			// 
+			// FavouriteDescendingToolStripMenuItem
+			// 
+			this.FavouriteDescendingToolStripMenuItem.AutoSize = false;
+			this.FavouriteDescendingToolStripMenuItem.Name = "FavouriteDescendingToolStripMenuItem";
+			this.FavouriteDescendingToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.FavouriteDescendingToolStripMenuItem.Text = "Descending Order";
+			this.FavouriteDescendingToolStripMenuItem.Click += new System.EventHandler(this.FavouriteDescendingToolStripMenuItem_Click);
 			// 
 			// AskRGBforSettings
 			// 
@@ -468,6 +657,10 @@ namespace PassGuard.GUI
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).EndInit();
 			this.NameCMS.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ColourContentDGV)).EndInit();
+			this.RedCMS.ResumeLayout(false);
+			this.GreenCMS.ResumeLayout(false);
+			this.BlueCMS.ResumeLayout(false);
+			this.FavouriteCMS.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -488,9 +681,9 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Button AddButton;
         private System.Windows.Forms.ContextMenuStrip NameCMS;
-        private System.Windows.Forms.ToolStripMenuItem normalOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ascendingOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem descendingOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem NameNormalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem NameAscendingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem NameDescendingToolStripMenuItem;
         internal System.Windows.Forms.NumericUpDown RedNUD;
         internal System.Windows.Forms.NumericUpDown GreenNUD;
         internal System.Windows.Forms.NumericUpDown BlueNUD;
@@ -503,5 +696,26 @@ namespace PassGuard.GUI
 		private System.Windows.Forms.DataGridViewCheckBoxColumn ChosenConfigColumn;
 		private System.Windows.Forms.DataGridViewCheckBoxColumn FavouriteColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn DeleteRowColumn;
+		private System.Windows.Forms.ToolStripSeparator NameToolStripSeparator;
+		private System.Windows.Forms.ContextMenuStrip RedCMS;
+		private System.Windows.Forms.ToolStripSeparator RedToolStripSeparator;
+		private System.Windows.Forms.ToolStripMenuItem RedNormalToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem RedAscendingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem RedDescendingToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip GreenCMS;
+		private System.Windows.Forms.ToolStripSeparator GreenToolStripSeparator;
+		private System.Windows.Forms.ToolStripMenuItem GreenNormalToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem GreenAscendingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem GreenDescendingToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip BlueCMS;
+		private System.Windows.Forms.ToolStripSeparator BlueToolStripSeparator;
+		private System.Windows.Forms.ToolStripMenuItem BlueNormalToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem BlueAscendingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem BlueDescendingToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip FavouriteCMS;
+		private System.Windows.Forms.ToolStripSeparator FavouriteToolStripSeparator;
+		private System.Windows.Forms.ToolStripMenuItem FavouriteNormalToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem FavouriteAscendingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem FavouriteDescendingToolStripMenuItem;
 	}
 }

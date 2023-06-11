@@ -41,7 +41,6 @@ namespace PassGuard.GUI
 			this.SendButton = new System.Windows.Forms.Button();
 			this.FavouriteCheckbox = new System.Windows.Forms.CheckBox();
 			this.NoteRGBLabel = new System.Windows.Forms.Label();
-			this.ChosenConfigCheckbox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
@@ -158,7 +157,7 @@ namespace PassGuard.GUI
 			this.SendButton.FlatAppearance.BorderSize = 0;
 			this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SendButton.Location = new System.Drawing.Point(164, 372);
+			this.SendButton.Location = new System.Drawing.Point(161, 361);
 			this.SendButton.Margin = new System.Windows.Forms.Padding(2);
 			this.SendButton.Name = "SendButton";
 			this.SendButton.Size = new System.Drawing.Size(115, 37);
@@ -171,7 +170,7 @@ namespace PassGuard.GUI
 			// 
 			this.FavouriteCheckbox.AutoSize = true;
 			this.FavouriteCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.FavouriteCheckbox.Location = new System.Drawing.Point(122, 268);
+			this.FavouriteCheckbox.Location = new System.Drawing.Point(122, 277);
 			this.FavouriteCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.FavouriteCheckbox.Name = "FavouriteCheckbox";
 			this.FavouriteCheckbox.Size = new System.Drawing.Size(198, 20);
@@ -182,7 +181,7 @@ namespace PassGuard.GUI
 			// NoteRGBLabel
 			// 
 			this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.NoteRGBLabel.Location = new System.Drawing.Point(31, 327);
+			this.NoteRGBLabel.Location = new System.Drawing.Point(31, 313);
 			this.NoteRGBLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.NoteRGBLabel.Name = "NoteRGBLabel";
 			this.NoteRGBLabel.Size = new System.Drawing.Size(380, 30);
@@ -191,24 +190,11 @@ namespace PassGuard.GUI
     " that the colors entered are slightly different from those saved.";
 			this.NoteRGBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// ChosenConfigCheckbox
-			// 
-			this.ChosenConfigCheckbox.AutoSize = true;
-			this.ChosenConfigCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ChosenConfigCheckbox.Location = new System.Drawing.Point(122, 295);
-			this.ChosenConfigCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.ChosenConfigCheckbox.Name = "ChosenConfigCheckbox";
-			this.ChosenConfigCheckbox.Size = new System.Drawing.Size(180, 20);
-			this.ChosenConfigCheckbox.TabIndex = 15;
-			this.ChosenConfigCheckbox.Text = "Select and use this config.";
-			this.ChosenConfigCheckbox.UseVisualStyleBackColor = true;
-			// 
 			// AddColorConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(444, 432);
-			this.Controls.Add(this.ChosenConfigCheckbox);
+			this.ClientSize = new System.Drawing.Size(444, 418);
 			this.Controls.Add(this.NoteRGBLabel);
 			this.Controls.Add(this.FavouriteCheckbox);
 			this.Controls.Add(this.SendButton);
@@ -247,6 +233,5 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.CheckBox FavouriteCheckbox;
 		private System.Windows.Forms.Label NoteRGBLabel;
-		private System.Windows.Forms.CheckBox ChosenConfigCheckbox;
 	}
 }

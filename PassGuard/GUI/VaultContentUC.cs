@@ -321,11 +321,14 @@ namespace PassGuard.GUI
 							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
 						});
 					}
+
+					//Reset ordering of rows.
+					ResetCMS();
 				}
 
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete decryption
-			
+				
 				if (add.addedSuccess) //If autobackup is enabled after each change in the Vault, create backup
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
@@ -412,6 +415,9 @@ namespace PassGuard.GUI
 							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
 						});
 					}
+
+					//Reset ordering of rows.
+					ResetCMS();
 				}
 				else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
 				{
@@ -433,6 +439,9 @@ namespace PassGuard.GUI
 							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
 						});
 					}
+
+					//Reset ordering of rows.
+					ResetCMS();
 				}
 
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
@@ -532,6 +541,9 @@ namespace PassGuard.GUI
 							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
 						});
 					}
+
+					//Reset ordering of rows.
+					ResetCMS();
 				}
 
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
@@ -607,6 +619,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Normal, DBColumns.Url);
 
@@ -644,6 +658,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Asc, DBColumns.Url);
 
@@ -681,6 +697,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Desc, DBColumns.Url);
 
@@ -718,6 +736,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Normal, DBColumns.Name);
 
@@ -755,6 +775,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Asc, DBColumns.Name);
 
@@ -793,6 +815,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Desc, DBColumns.Name);
 
@@ -831,6 +855,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Normal, DBColumns.Username);
 
@@ -868,6 +894,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Asc, DBColumns.Username);
 
@@ -905,6 +933,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Desc, DBColumns.Username);
 
@@ -942,6 +972,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Normal, DBColumns.Category);
 
@@ -979,6 +1011,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Asc, DBColumns.Category);
 
@@ -1017,6 +1051,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Desc, DBColumns.Category);
 
@@ -1055,6 +1091,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Normal, DBColumns.Notes);
 
@@ -1093,6 +1131,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				//Load the ordered content depending on column and order, and set toolstrip check property.
 				LoadContent(Order.Asc, DBColumns.Notes);
 
@@ -1130,6 +1170,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				LoadContent(Order.Desc, DBColumns.Notes);
 
 				NotesNormalCMS.Checked = false;
@@ -1167,6 +1209,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				LoadContent(Order.Normal, DBColumns.Important);
 
 				ImportantNormalCMS.Checked = true;
@@ -1203,6 +1247,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				LoadContent(Order.Asc, DBColumns.Important);
 
 				ImportantNormalCMS.Checked = false;
@@ -1239,6 +1285,8 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+
 				LoadContent(Order.Desc, DBColumns.Important);
 
 				ImportantNormalCMS.Checked = false;
@@ -1446,9 +1494,43 @@ namespace PassGuard.GUI
 			}
 		}
 
+		private void UncheckAllMenuItems(ContextMenuStrip contextMenuStrip)
+		{
+			foreach (ToolStripItem item in contextMenuStrip.Items)
+			{
+				if (item is ToolStripMenuItem toolStripMenuItem)
+				{
+					toolStripMenuItem.Checked = false;
+					//CMS dont have submenus, if they had we would need another method.
+				}
+			}
+		}
+
+		private void ResetCMS()
+		{
+			UncheckAllMenuItems(URLCMS);
+			URLNormalToolStripMenuItem.Checked = true;
+
+			UncheckAllMenuItems(NameCMS);
+			NameNormalCMS.Checked = true;
+
+			UncheckAllMenuItems(UsernameCMS);
+			UsernameNormalCMS.Checked = true;
+
+			UncheckAllMenuItems(CategoryCMS);
+			CategoryNormalCMS.Checked = true;
+
+			UncheckAllMenuItems(NotesCMS);
+			NotesNormalCMS.Checked = true;
+
+			UncheckAllMenuItems(ImportantCMS);
+			ImportantNormalCMS.Checked = true;
+
+		}
+
 		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.RowIndex >= 0)
+			if (e.RowIndex >= 0) //Check that cell clicked is a row and not a column header....
 			{
 				String[] lastvalue = encryptedVaultPath.Split('\\');
 				var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
@@ -1502,7 +1584,8 @@ namespace PassGuard.GUI
 								crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-								//VaultContentDGV.Rows.RemoveAt(e.RowIndex);
+								//Reset ordering of rows.
+								ResetCMS();
 							}
 							catch(Exception ex)
 							{

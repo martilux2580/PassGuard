@@ -284,33 +284,33 @@ namespace PassGuard.GUI
             this.URLAscendingToolStripMenuItem,
             this.URLDescendingToolStripMenuItem});
 			this.URLCMS.Name = "URLCMS";
-			this.URLCMS.Size = new System.Drawing.Size(170, 76);
+			this.URLCMS.Size = new System.Drawing.Size(181, 98);
 			// 
 			// URLCMSSeparator
 			// 
 			this.URLCMSSeparator.Name = "URLCMSSeparator";
-			this.URLCMSSeparator.Size = new System.Drawing.Size(166, 6);
+			this.URLCMSSeparator.Size = new System.Drawing.Size(177, 6);
 			// 
 			// URLNormalToolStripMenuItem
 			// 
 			this.URLNormalToolStripMenuItem.Checked = true;
 			this.URLNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.URLNormalToolStripMenuItem.Name = "URLNormalToolStripMenuItem";
-			this.URLNormalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.URLNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.URLNormalToolStripMenuItem.Text = "Normal Order";
 			this.URLNormalToolStripMenuItem.Click += new System.EventHandler(this.URLNormalToolStripMenuItem_Click);
 			// 
 			// URLAscendingToolStripMenuItem
 			// 
 			this.URLAscendingToolStripMenuItem.Name = "URLAscendingToolStripMenuItem";
-			this.URLAscendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.URLAscendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.URLAscendingToolStripMenuItem.Text = "Ascending Order";
 			this.URLAscendingToolStripMenuItem.Click += new System.EventHandler(this.URLAscendingToolStripMenuItem_Click);
 			// 
 			// URLDescendingToolStripMenuItem
 			// 
 			this.URLDescendingToolStripMenuItem.Name = "URLDescendingToolStripMenuItem";
-			this.URLDescendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.URLDescendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.URLDescendingToolStripMenuItem.Text = "Descending Order";
 			this.URLDescendingToolStripMenuItem.Click += new System.EventHandler(this.URLDescendingToolStripMenuItem_Click);
 			// 
