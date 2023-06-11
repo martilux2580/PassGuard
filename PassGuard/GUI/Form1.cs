@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Runtime.Versioning;
 using iText.Layout.Splitting;
 using PassGuard.PDF;
+using System.Text.Json;
 
 namespace PassGuard
 {
@@ -187,6 +188,7 @@ namespace PassGuard
 			
 		}
 
+		[SupportedOSPlatform("windows")]
 		private void changeComplemenToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
@@ -208,7 +210,6 @@ namespace PassGuard
 
 
 				//Get values
-				//If no changes were made, exit. TODO
 				int[] newValues = rgb.finalCalibratedColours;
 				if ((newValues[3] == actualColours[0]) && (newValues[4] == actualColours[1]) && (newValues[5] == actualColours[2])) //Same colours in Logo, we do nothing....
 				{
@@ -220,6 +221,14 @@ namespace PassGuard
 					DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
 					if (dialog == DialogResult.Yes)
 					{
+						Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+						foreach(List<int> values in data.Values)
+						{
+							values[3] = 0;
+						}
+						data[rgb.finalName][3] = 1;
+						config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data);
+
 						config.AppSettings.Settings["RedMenu"].Value = newValues[0].ToString(); //Modify data in the config file for future executions.
 						config.AppSettings.Settings["GreenMenu"].Value = newValues[1].ToString();
 						config.AppSettings.Settings["BlueMenu"].Value = newValues[2].ToString();
@@ -229,6 +238,19 @@ namespace PassGuard
 						config.AppSettings.Settings["RedOptions"].Value = newValues[6].ToString();
 						config.AppSettings.Settings["GreenOptions"].Value = newValues[7].ToString();
 						config.AppSettings.Settings["BlueOptions"].Value = newValues[8].ToString();
+						config.Save(ConfigurationSaveMode.Modified);
+						ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+					}
+					else
+					{
+						Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+						foreach (List<int> values in data.Values)
+						{
+							values[3] = 0;
+						}
+						data[rgb.savedName][3] = 1;
+						config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data);
+
 						config.Save(ConfigurationSaveMode.Modified);
 						ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 					}

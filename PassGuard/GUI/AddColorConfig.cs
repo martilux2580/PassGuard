@@ -69,8 +69,6 @@ namespace PassGuard.GUI
 				red = (int)RedNUD.Value;
 				green = (int)GreenNUD.Value;
 				blue = (int)BlueNUD.Value;
-				if (ChosenConfigCheckbox.Checked) { chosen = 1; }
-				else { chosen = 0; }
 				if (FavouriteCheckbox.Checked) { favourite = 1; }
 				else { favourite = 0; } 
 

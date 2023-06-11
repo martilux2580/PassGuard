@@ -42,7 +42,6 @@ namespace PassGuard.GUI
 			this.RedNUD = new System.Windows.Forms.NumericUpDown();
 			this.FavouriteCheckbox = new System.Windows.Forms.CheckBox();
 			this.NoteRGBLabel = new System.Windows.Forms.Label();
-			this.ChosenConfigCheckbox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
@@ -194,7 +193,7 @@ namespace PassGuard.GUI
 			this.FavouriteCheckbox.AutoSize = true;
 			this.FavouriteCheckbox.Enabled = false;
 			this.FavouriteCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.FavouriteCheckbox.Location = new System.Drawing.Point(489, 93);
+			this.FavouriteCheckbox.Location = new System.Drawing.Point(508, 110);
 			this.FavouriteCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.FavouriteCheckbox.Name = "FavouriteCheckbox";
 			this.FavouriteCheckbox.Size = new System.Drawing.Size(130, 20);
@@ -215,25 +214,11 @@ namespace PassGuard.GUI
     " that the colors entered are slightly different from those saved.";
 			this.NoteRGBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// ChosenConfigCheckbox
-			// 
-			this.ChosenConfigCheckbox.AutoSize = true;
-			this.ChosenConfigCheckbox.Enabled = false;
-			this.ChosenConfigCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ChosenConfigCheckbox.Location = new System.Drawing.Point(489, 133);
-			this.ChosenConfigCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.ChosenConfigCheckbox.Name = "ChosenConfigCheckbox";
-			this.ChosenConfigCheckbox.Size = new System.Drawing.Size(154, 20);
-			this.ChosenConfigCheckbox.TabIndex = 41;
-			this.ChosenConfigCheckbox.Text = "Is Config being used?";
-			this.ChosenConfigCheckbox.UseVisualStyleBackColor = true;
-			// 
 			// EditColorConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(723, 245);
-			this.Controls.Add(this.ChosenConfigCheckbox);
 			this.Controls.Add(this.NoteRGBLabel);
 			this.Controls.Add(this.FavouriteCheckbox);
 			this.Controls.Add(this.BlueNUD);
@@ -274,6 +259,5 @@ namespace PassGuard.GUI
         private System.Windows.Forms.NumericUpDown RedNUD;
         private System.Windows.Forms.CheckBox FavouriteCheckbox;
 		private System.Windows.Forms.Label NoteRGBLabel;
-		private System.Windows.Forms.CheckBox ChosenConfigCheckbox;
 	}
 }

@@ -76,8 +76,6 @@ namespace PassGuard.GUI
 				red = (int)RedNUD.Value;
 				green = (int)GreenNUD.Value;
 				blue = (int)BlueNUD.Value;
-				if (ChosenConfigCheckbox.Checked) { chosen = 1; }
-				else { chosen = 0; }
 				if (FavouriteCheckbox.Checked) { important = 1; }
 				else { important = 0; }
 
@@ -101,7 +99,6 @@ namespace PassGuard.GUI
 				BlueNUD.Enabled = true;
 				EditButton.Enabled = true;
 				FavouriteCheckbox.Enabled = true;
-				ChosenConfigCheckbox.Enabled = true;
 			}
 			else
 			{
@@ -115,7 +112,6 @@ namespace PassGuard.GUI
 				BlueNUD.Enabled = false;
 				EditButton.Enabled = false;
 				FavouriteCheckbox.Enabled = false;
-				ChosenConfigCheckbox.Enabled = false;
 			}
 		}
 
@@ -127,7 +123,6 @@ namespace PassGuard.GUI
 				RedNUD.Value = storedConfigs[NameCombobox.Text][0];
 				GreenNUD.Value = storedConfigs[NameCombobox.Text][1];
 				BlueNUD.Value = storedConfigs[NameCombobox.Text][2];
-				ChosenConfigCheckbox.Checked = Convert.ToBoolean(storedConfigs[NameCombobox.Text][3]);
 				FavouriteCheckbox.Checked = Convert.ToBoolean(storedConfigs[NameCombobox.Text][4]);
 
 				Check(true);
@@ -140,7 +135,6 @@ namespace PassGuard.GUI
 				GreenNUD.Value = 0;
 				BlueNUD.Value = 0;
 				FavouriteCheckbox.Checked = false;
-				ChosenConfigCheckbox.Checked = false;
 
 				Check(false);
 			}

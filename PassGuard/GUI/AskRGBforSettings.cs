@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,7 +20,10 @@ namespace PassGuard.GUI
 	{
 		public Configuration config { get; private set; }
 		public int[] finalCalibratedColours { get; private set; }
+		public string finalName { get; private set; }
+		public string savedName { get; private set; }
 
+		[SupportedOSPlatform("windows")]
 		public AskRGBforSettings(int[] colours, Configuration configg)
 		{
 			InitializeComponent();
@@ -29,6 +33,8 @@ namespace PassGuard.GUI
 			colours[0] = (int)RedNUD.Value;
 			colours[1] = (int)GreenNUD.Value;
 			colours[2] = (int)BlueNUD.Value;
+
+			SetCMS();
 
 			//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
 			finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
@@ -69,6 +75,13 @@ namespace PassGuard.GUI
 			};
 			blueCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+			if (configPair.Value[0] == int.Parse(ConfigurationManager.AppSettings.Get("RedLogo"))
+				&& configPair.Value[1] == int.Parse(ConfigurationManager.AppSettings.Get("GreenLogo"))
+				&& configPair.Value[2] == int.Parse(ConfigurationManager.AppSettings.Get("BlueLogo")))
+			{
+				savedName = configPair.Key;
+			}
+
 			DataGridViewCell viewerCell = new DataGridViewButtonCell
 			{
 				Value = "    ",
@@ -82,7 +95,11 @@ namespace PassGuard.GUI
 			{
 				Selected = false
 			};
-			if (Convert.ToBoolean(configPair.Value[3])) { chosenConfigCell.Value = 1; }
+			if (Convert.ToBoolean(configPair.Value[3])) 
+			{ 
+				chosenConfigCell.Value = 1;
+				finalName = configPair.Key;
+			}
 			else { chosenConfigCell.Value = 0; } //If decrypts to "1" it is chosen and used actually, else is not.
 
 			//Favourite
@@ -121,6 +138,37 @@ namespace PassGuard.GUI
 			RedNUD.Value = colours[0]; //Modify data in the config file for future executions.
 			GreenNUD.Value = colours[1]; //Modify data in the config file for future executions.
 			BlueNUD.Value = colours[2]; //Modify data in the config file for future executions.
+		}
+
+		private void UncheckAllMenuItems(ContextMenuStrip contextMenuStrip)
+		{
+			foreach (ToolStripItem item in contextMenuStrip.Items)
+			{
+				if (item is ToolStripMenuItem toolStripMenuItem)
+				{
+					toolStripMenuItem.Checked = false;
+					//CMS dont have submenus, if they had we would need another method.
+				}
+			}
+		}
+
+		private void ResetCMS()
+		{
+			UncheckAllMenuItems(NameCMS);
+			NameNormalToolStripMenuItem.Checked = true;
+
+			UncheckAllMenuItems(RedCMS);
+			RedNormalToolStripMenuItem.Checked = true;
+
+			UncheckAllMenuItems(GreenCMS);
+			GreenNormalToolStripMenuItem.Checked = true;
+
+			UncheckAllMenuItems(BlueCMS);
+			BlueNormalToolStripMenuItem.Checked = true;
+
+			UncheckAllMenuItems(FavouriteCMS);
+			FavouriteNormalToolStripMenuItem.Checked = true;
+
 		}
 
 		private void AskRGBforSettings_Load(object sender, EventArgs e)
@@ -165,11 +213,6 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void ConfigNameButton_Click(object sender, EventArgs e)
-		{
-			//NameCMS.Show(ConfigNameButton, new Point(ConfigNameButton.Width - ConfigNameButton.Width, ConfigNameButton.Height)); //Sets where to display the ContextMenuStrip...
-		}
-
 		private Dictionary<String, List<int>> UncheckChosenConfigs(Dictionary<String, List<int>> values)
 		{
 			var configs = values;
@@ -212,6 +255,8 @@ namespace PassGuard.GUI
 				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+				//Reset ordering of rows.
+				ResetCMS();
 			}
 
 		}
@@ -255,6 +300,8 @@ namespace PassGuard.GUI
 				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+				//Reset ordering of rows.
+				ResetCMS();
 			}
 
 		}
@@ -286,6 +333,8 @@ namespace PassGuard.GUI
 				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+				//Reset ordering of rows.
+				ResetCMS();
 			}
 			else if (del.deletedAllSuccess)
 			{
@@ -301,6 +350,8 @@ namespace PassGuard.GUI
 				ColourContentDGV.Rows.Clear();
 				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+				//Reset ordering of rows.
+				ResetCMS();
 			}
 
 
@@ -308,38 +359,38 @@ namespace PassGuard.GUI
 
 		private void normalOrderToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			normalOrderToolStripMenuItem.Checked = true;
-			ascendingOrderToolStripMenuItem.Checked = false;
-			descendingOrderToolStripMenuItem.Checked = false;
-
+			ColourContentDGV.Rows.Clear();
 			LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+			NameNormalToolStripMenuItem.Checked = true;
+			NameAscendingToolStripMenuItem.Checked = false;
+			NameDescendingToolStripMenuItem.Checked = false;
 		}
 
 		private void ascendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			normalOrderToolStripMenuItem.Checked = false;
-			ascendingOrderToolStripMenuItem.Checked = true;
-			descendingOrderToolStripMenuItem.Checked = false;
-
 			var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
 
+			ColourContentDGV.Rows.Clear();
 			LoadContent(JsonSerializer.Serialize(values));
-			
+
+			NameNormalToolStripMenuItem.Checked = false;
+			NameAscendingToolStripMenuItem.Checked = true;
+			NameDescendingToolStripMenuItem.Checked = false;
 		}
 
 		private void descendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			normalOrderToolStripMenuItem.Checked = false;
-			ascendingOrderToolStripMenuItem.Checked = false;
-			descendingOrderToolStripMenuItem.Checked = true;
-
 			var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
 			var reversed = values.Reverse();
 			var newValues = reversed.ToDictionary(x => x.Key, x => x.Value);
 
+			ColourContentDGV.Rows.Clear();
 			LoadContent(JsonSerializer.Serialize(newValues));
 
+			NameNormalToolStripMenuItem.Checked = false;
+			NameAscendingToolStripMenuItem.Checked = false;
+			NameDescendingToolStripMenuItem.Checked = true;
 		}
 
 		private void AskRGBforSettings_BackColorChanged(object sender, EventArgs e)
@@ -359,64 +410,402 @@ namespace PassGuard.GUI
 
 		private void ColourContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-
-			DataGridViewColumn clickedColumn = ColourContentDGV.Columns[e.ColumnIndex];
-			string columnName = clickedColumn.HeaderText;
-
-			// Show the context menu strip at the mouse location 
-			switch (columnName)
+			if(e.RowIndex >= 0) //It is a normal cell, not a column header....
 			{
-				case "ConfigName":
-				case "Red":
-				case "Green":
-				case "Blue":
-					//Todos los de arriba solo copias los valores al clipboard.
-					Clipboard.SetText(ColourContentDGV.CurrentCell.Value.ToString());
-					break;
-				case "ChosenConfig":
-					//Deseleccionar todos los chosen y poner esto con mgbox, ademas de guardar en array...
-					if((ColourContentDGV.CurrentCell != null) && (!Convert.ToBoolean(ColourContentDGV.CurrentCell.Value))) //If checkbox is not checked then we do something...
-					{
-						var row = ColourContentDGV.Rows[e.RowIndex];
-						var dialog = MessageBox.Show(text: "Do you want to select and use the config with name '" + row.Cells[0].Value.ToString() + "'?", caption: "Select and Use Config", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-						if (dialog == DialogResult.Yes)
+				DataGridViewColumn clickedColumn = ColourContentDGV.Columns[e.ColumnIndex];
+				string columnName = clickedColumn.HeaderText;
+
+				// Show the context menu strip at the mouse location 
+				switch (columnName)
+				{
+					case "ConfigName":
+					case "Red":
+					case "Green":
+					case "Blue":
+						//Todos los de arriba solo copias los valores al clipboard.
+						Clipboard.SetText(ColourContentDGV.CurrentCell.Value.ToString());
+						break;
+					case "ChosenConfig":
+						if ((ColourContentDGV.CurrentCell != null) && (!Convert.ToBoolean(ColourContentDGV.CurrentCell.Value))) //If checkbox is not checked then we do something...
+						{
+							var row = ColourContentDGV.Rows[e.RowIndex];
+							var dialog = MessageBox.Show(text: "Do you want to select and use the config with name '" + row.Cells[0].Value.ToString() + "'?", caption: "Select and Use Config", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+							if (dialog == DialogResult.Yes)
+							{
+								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								data = UncheckChosenConfigs(data);
+
+								//Set NUDs and chosen to 1...
+								RedNUD.Value = data[row.Cells[0].Value.ToString()][0];
+								GreenNUD.Value = data[row.Cells[0].Value.ToString()][1];
+								BlueNUD.Value = data[row.Cells[0].Value.ToString()][2];
+								data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
+								finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value);
+								finalName = row.Cells[0].Value.ToString();
+
+								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+								config.Save(ConfigurationSaveMode.Modified);
+								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+								ColourContentDGV.Rows.Clear();
+								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								//Reset ordering of rows.
+								ResetCMS();
+							}
+							else
+							{
+								ColourContentDGV.CurrentCell.Value = false; //Uncheck checkbox, just in case...
+							}
+						}
+
+						break;
+					case "Favourite":
+						//Seleccionar esto como favourite y poner esto con mgbox, ademas de guardar en array....
+						if (Convert.ToBoolean(ColourContentDGV.CurrentCell.Value)) //If checkbox is checked....
+						{
+							var row = ColourContentDGV.Rows[e.RowIndex];
+							var dialog = MessageBox.Show(text: "Do you want to unmark the config with name '" + row.Cells[0].Value.ToString() + "' as favourite?", caption: "Unmark config as favourite.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+							if (dialog == DialogResult.Yes)
+							{
+								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								//Set NUDs and chosen to 1...
+								data[row.Cells[0].Value.ToString()][4] = 0; //Set favourite in the row...
+
+								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+								config.Save(ConfigurationSaveMode.Modified);
+								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+								ColourContentDGV.Rows.Clear();
+								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								//Reset ordering of rows.
+								ResetCMS();
+							}
+							else
+							{
+								ColourContentDGV.CurrentCell.Value = true; //Maintain checkbox as it was, just in case...
+							}
+						}
+						else //If checkbox isnt checked...
+						{
+							var row = ColourContentDGV.Rows[e.RowIndex];
+							var dialog = MessageBox.Show(text: "Do you want to mark the config with name '" + row.Cells[0].Value.ToString() + "' as favourite?", caption: "Mark config as favourite.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+							if (dialog == DialogResult.Yes)
+							{
+								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								//Set NUDs and chosen to 1...
+								data[row.Cells[0].Value.ToString()][4] = 1; //Set favourite in the row...
+
+								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+								config.Save(ConfigurationSaveMode.Modified);
+								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+								ColourContentDGV.Rows.Clear();
+								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+								//Reset ordering of rows.
+								ResetCMS();
+							}
+							else
+							{
+								ColourContentDGV.CurrentCell.Value = false; //Uncheck checkbox, just in case...
+							}
+						}
+						break;
+					case "Delete Row":
+						var rowToBeDeleted = ColourContentDGV.Rows[e.RowIndex];
+						var deleteDialog = MessageBox.Show(text: "Do you want to delete the config with name '" + rowToBeDeleted.Cells[0].Value.ToString() + "'? \n\nNote: This action cannot be undone.", caption: "Delete config.", icon: MessageBoxIcon.Exclamation, buttons: MessageBoxButtons.YesNo);
+
+						if (deleteDialog == DialogResult.Yes)
 						{
 							Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-							data = UncheckChosenConfigs(data);
-
 							//Set NUDs and chosen to 1...
-							RedNUD.Value = data[row.Cells[0].Value.ToString()][0];
-							GreenNUD.Value = data[row.Cells[0].Value.ToString()][1];
-							BlueNUD.Value = data[row.Cells[0].Value.ToString()][2];
-							data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
+							data.Remove(rowToBeDeleted.Cells[0].Value.ToString()); //Remove row from data
 
-							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
 							config.Save(ConfigurationSaveMode.Modified);
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear();
 							LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-						}
-						else
-						{
-							ColourContentDGV.CurrentCell.Value = false; //Uncheck checkbox, just in case...
-						}
-					}
 
-					break;
-				case "Favourite":
-					//Seleccionar esto como favourite y poner esto con mgbox, ademas de guardar en array....
-					break;
-				case "Delete Row":
-					//Borrar este dato y la fila y poner esto con mgbox, ademas de guardar en array....
-					break;
-				default:
-					break;
+							//Reset ordering of rows.
+							ResetCMS();
+						}
+						break;
+					default:
+						break;
+				}
 			}
-
 
 		}
 
+		//Sets the contents for the CMS of each header button (except SitePassword)
+		[SupportedOSPlatform("windows")]
+		private void SetCMS()
+		{
+			var titleName = new ToolStripLabel("ORDER BY NAME")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			NameCMS.Items.Insert(0, titleName);
+
+			var titleRed = new ToolStripLabel("ORDER BY RED")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			RedCMS.Items.Insert(0, titleRed);
+
+			var titleGreen = new ToolStripLabel("ORDER BY GREEN")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			GreenCMS.Items.Insert(0, titleGreen);
+
+			var titleBlue = new ToolStripLabel("ORDER BY BLUE")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			BlueCMS.Items.Insert(0, titleBlue);
+
+			var titleFavourite = new ToolStripLabel("ORDER BY FAVOURITE")
+			{
+				Font = new Font("Segoe UI", 10, FontStyle.Bold),
+				TextAlign = ContentAlignment.MiddleCenter,
+				ForeColor = Color.FromArgb(109, 109, 109)
+			};
+			FavouriteCMS.Items.Insert(0, titleFavourite);
+		}
+
+		private void ColourContentDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if ((e.Button == MouseButtons.Left) && (e.RowIndex < 0)) //It is a column header, not a normal row
+			{
+				DataGridViewColumn clickedColumn = ColourContentDGV.Columns[e.ColumnIndex];
+				string columnName = clickedColumn.HeaderText;
+
+				// Show the context menu strip at the mouse location 
+				switch (columnName)
+				{
+					case "ConfigName":
+						NameCMS.Show(Cursor.Position);
+						break;
+					case "Red":
+						RedCMS.Show(Cursor.Position);
+						break;
+					case "Green":
+						GreenCMS.Show(Cursor.Position);
+						break;
+					case "Blue":
+						BlueCMS.Show(Cursor.Position);
+						break;
+					case "Favourite":
+						FavouriteCMS.Show(Cursor.Position);
+						break;
+					default:
+						break;
+				}
+
+			}
+		}
+
+		private void RedNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(data));
+
+			RedNormalToolStripMenuItem.Checked = true;
+			RedAscendingToolStripMenuItem.Checked = false;
+			RedDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void RedAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(0))
+											.ThenBy(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			RedNormalToolStripMenuItem.Checked = false;
+			RedAscendingToolStripMenuItem.Checked = true;
+			RedDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void RedDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(0))
+											.ThenByDescending(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			RedNormalToolStripMenuItem.Checked = false;
+			RedAscendingToolStripMenuItem.Checked = false;
+			RedDescendingToolStripMenuItem.Checked = true;
+		}
+
+		private void GreenNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(data));
+
+			GreenNormalToolStripMenuItem.Checked = true;
+			GreenAscendingToolStripMenuItem.Checked = false;
+			GreenDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void GreenAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(1))
+											.ThenBy(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			GreenNormalToolStripMenuItem.Checked = false;
+			GreenAscendingToolStripMenuItem.Checked = true;
+			GreenDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void GreenDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(1))
+											.ThenByDescending(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			GreenNormalToolStripMenuItem.Checked = false;
+			GreenAscendingToolStripMenuItem.Checked = false;
+			GreenDescendingToolStripMenuItem.Checked = true;
+		}
+
+		private void BlueNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(data));
+
+			BlueNormalToolStripMenuItem.Checked = true;
+			BlueAscendingToolStripMenuItem.Checked = false;
+			BlueDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void BlueAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(2))
+											.ThenBy(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			BlueNormalToolStripMenuItem.Checked = false;
+			BlueAscendingToolStripMenuItem.Checked = true;
+			BlueDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void BlueDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(2))
+											.ThenByDescending(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			BlueNormalToolStripMenuItem.Checked = false;
+			BlueAscendingToolStripMenuItem.Checked = false;
+			BlueDescendingToolStripMenuItem.Checked = true;
+		}
+
+		private void FavouriteNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(data));
+
+			FavouriteNormalToolStripMenuItem.Checked = true;
+			FavouriteAscendingToolStripMenuItem.Checked = false;
+			FavouriteDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void FavouriteAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(4))
+											.ThenBy(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			FavouriteNormalToolStripMenuItem.Checked = false;
+			FavouriteAscendingToolStripMenuItem.Checked = true;
+			FavouriteDescendingToolStripMenuItem.Checked = false;
+		}
+
+		private void FavouriteDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+			// Sort the dictionary by the fourth element of the list and then by name
+			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(4))
+											.ThenByDescending(kvp => kvp.Key)
+											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+			ColourContentDGV.Rows.Clear();
+			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+
+			FavouriteNormalToolStripMenuItem.Checked = false;
+			FavouriteAscendingToolStripMenuItem.Checked = false;
+			FavouriteDescendingToolStripMenuItem.Checked = true;
+		}
 	}
 }
