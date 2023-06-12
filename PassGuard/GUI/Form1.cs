@@ -211,55 +211,10 @@ namespace PassGuard
 
 				//Get values
 				int[] newValues = rgb.finalCalibratedColours;
-				if ((newValues[3] == actualColours[0]) && (newValues[4] == actualColours[1]) && (newValues[5] == actualColours[2])) //Same colours in Logo, we do nothing....
-				{
-					return;
-				}
-				else
-				{
-					//Save values for future executions, or not.
-					DialogResult dialog = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", buttons: MessageBoxButtons.YesNo);
-					if (dialog == DialogResult.Yes)
-					{
-						Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-						foreach(List<int> values in data.Values)
-						{
-							values[3] = 0;
-						}
-						data[rgb.finalName][3] = 1;
-						config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data);
 
-						config.AppSettings.Settings["RedMenu"].Value = newValues[0].ToString(); //Modify data in the config file for future executions.
-						config.AppSettings.Settings["GreenMenu"].Value = newValues[1].ToString();
-						config.AppSettings.Settings["BlueMenu"].Value = newValues[2].ToString();
-						config.AppSettings.Settings["RedLogo"].Value = newValues[3].ToString();
-						config.AppSettings.Settings["GreenLogo"].Value = newValues[4].ToString();
-						config.AppSettings.Settings["BlueLogo"].Value = newValues[5].ToString();
-						config.AppSettings.Settings["RedOptions"].Value = newValues[6].ToString();
-						config.AppSettings.Settings["GreenOptions"].Value = newValues[7].ToString();
-						config.AppSettings.Settings["BlueOptions"].Value = newValues[8].ToString();
-						config.Save(ConfigurationSaveMode.Modified);
-						ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
-					}
-					else
-					{
-						Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-						foreach (List<int> values in data.Values)
-						{
-							values[3] = 0;
-						}
-						data[rgb.savedName][3] = 1;
-						config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data);
-
-						config.Save(ConfigurationSaveMode.Modified);
-						ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
-					}
-
-					MenuPanel.BackColor = Color.FromArgb(newValues[0], newValues[1], newValues[2]);
-					LogoPanel.BackColor = Color.FromArgb(newValues[3], newValues[4], newValues[5]);
-					OptionsPanel.BackColor = Color.FromArgb(newValues[6], newValues[7], newValues[8]);
-
-				}
+				MenuPanel.BackColor = Color.FromArgb(newValues[0], newValues[1], newValues[2]);
+				LogoPanel.BackColor = Color.FromArgb(newValues[3], newValues[4], newValues[5]);
+				OptionsPanel.BackColor = Color.FromArgb(newValues[6], newValues[7], newValues[8]);
 
 			}
 			catch (Exception)

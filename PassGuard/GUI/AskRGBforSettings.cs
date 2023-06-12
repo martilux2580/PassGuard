@@ -19,22 +19,19 @@ namespace PassGuard.GUI
 	public partial class AskRGBforSettings : Form
 	{
 		public Configuration config { get; private set; }
+		private int[] actualColours;
 		public int[] finalCalibratedColours { get; private set; }
-		public string finalName { get; private set; }
-		public string savedName { get; private set; }
 
 		[SupportedOSPlatform("windows")]
 		public AskRGBforSettings(int[] colours, Configuration configg)
 		{
 			InitializeComponent();
-			SetNUDs(colours);
 
-			//Have the actualColours values in the NUDs. Could happen that none of saved configs are the one actually used...
-			colours[0] = (int)RedNUD.Value;
-			colours[1] = (int)GreenNUD.Value;
-			colours[2] = (int)BlueNUD.Value;
+			actualColours = colours; //Set actual colours used in this execution
 
-			SetCMS();
+			SetNUDs();
+
+			SetCMS(); //Set CMSs elements
 
 			//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
 			finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
@@ -75,13 +72,6 @@ namespace PassGuard.GUI
 			};
 			blueCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			if (configPair.Value[0] == int.Parse(ConfigurationManager.AppSettings.Get("RedLogo"))
-				&& configPair.Value[1] == int.Parse(ConfigurationManager.AppSettings.Get("GreenLogo"))
-				&& configPair.Value[2] == int.Parse(ConfigurationManager.AppSettings.Get("BlueLogo")))
-			{
-				savedName = configPair.Key;
-			}
-
 			DataGridViewCell viewerCell = new DataGridViewButtonCell
 			{
 				Value = "    ",
@@ -95,12 +85,12 @@ namespace PassGuard.GUI
 			{
 				Selected = false
 			};
-			if (Convert.ToBoolean(configPair.Value[3])) 
-			{ 
+			if (configPair.Value[0] == actualColours[0] //
+				&& configPair.Value[1] == actualColours[1]
+				&& configPair.Value[2] == actualColours[2])
+			{
 				chosenConfigCell.Value = 1;
-				finalName = configPair.Key;
 			}
-			else { chosenConfigCell.Value = 0; } //If decrypts to "1" it is chosen and used actually, else is not.
 
 			//Favourite
 			DataGridViewCell favouriteCell = new DataGridViewCheckBoxCell
@@ -133,11 +123,15 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void SetNUDs(int[] colours) //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
+		private void SetNUDs() //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
 		{
-			RedNUD.Value = colours[0]; //Modify data in the config file for future executions.
-			GreenNUD.Value = colours[1]; //Modify data in the config file for future executions.
-			BlueNUD.Value = colours[2]; //Modify data in the config file for future executions.
+			RedNextNUD.Value = int.Parse(ConfigurationManager.AppSettings["RedLogo"]); //Modify data in the config file for future executions.
+			GreenNextNUD.Value = int.Parse(ConfigurationManager.AppSettings["GreenLogo"]); //Modify data in the config file for future executions.
+			BlueNextNUD.Value = int.Parse(ConfigurationManager.AppSettings["BlueLogo"]); //Modify data in the config file for future executions.
+
+			RedNowNUD.Value = actualColours[0]; //Modify data in the config file for future executions.
+			GreenNowNUD.Value = actualColours[1]; //Modify data in the config file for future executions.
+			BlueNowNUD.Value = actualColours[2]; //Modify data in the config file for future executions.
 		}
 
 		private void UncheckAllMenuItems(ContextMenuStrip contextMenuStrip)
@@ -199,11 +193,11 @@ namespace PassGuard.GUI
 
 		private void SendButton_Click(object sender, EventArgs e)
 		{
-			if (Utils.BooleanUtils.IsValidColour((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value)) //Check lightness of colour to check if it is valid. Double Check.
+			if (Utils.BooleanUtils.IsValidColour((int)RedNowNUD.Value, (int)GreenNowNUD.Value, (int)BlueNowNUD.Value)) //Check lightness of colour to check if it is valid. Double Check.
 			{
 				//Calibrate colours and set the result variable, because we cannot get the NUD values if he have this.Close() the form.
 				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
-				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value);
+				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNowNUD.Value, (int)GreenNowNUD.Value, (int)BlueNowNUD.Value);
 
 				this.Close();
 			}
@@ -240,9 +234,9 @@ namespace PassGuard.GUI
 				if (add.chosen == 1)
 				{
 					data = UncheckChosenConfigs(data);
-					RedNUD.Value = add.red;
-					GreenNUD.Value = add.green;
-					BlueNUD.Value = add.blue;
+					RedNextNUD.Value = add.red;
+					GreenNextNUD.Value = add.green;
+					BlueNextNUD.Value = add.blue;
 				}
 
 				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.chosen, add.favourite });
@@ -286,9 +280,9 @@ namespace PassGuard.GUI
 				if (chosen == 1) //If chosen, then set values and unset others...
 				{
 					values = UncheckChosenConfigs(values);
-					RedNUD.Value = edit.red;
-					GreenNUD.Value = edit.green;
-					BlueNUD.Value = edit.blue;
+					RedNextNUD.Value = edit.red;
+					GreenNextNUD.Value = edit.green;
+					BlueNextNUD.Value = edit.blue;
 				}
 				values.Add(newName, new List<int> { red, green, blue , chosen, important});
 				String newData = JsonSerializer.Serialize(values);
@@ -434,25 +428,56 @@ namespace PassGuard.GUI
 							{
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-								data = UncheckChosenConfigs(data);
+								DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+								if (dialog2 == DialogResult.Yes)
+								{
+									RedNextNUD.Value = data[row.Cells[0].Value.ToString()][0];
+									GreenNextNUD.Value = data[row.Cells[0].Value.ToString()][1];
+									BlueNextNUD.Value = data[row.Cells[0].Value.ToString()][2];
+									RedNowNUD.Value = data[row.Cells[0].Value.ToString()][0];
+									GreenNowNUD.Value = data[row.Cells[0].Value.ToString()][1];
+									BlueNowNUD.Value = data[row.Cells[0].Value.ToString()][2];
 
-								//Set NUDs and chosen to 1...
-								RedNUD.Value = data[row.Cells[0].Value.ToString()][0];
-								GreenNUD.Value = data[row.Cells[0].Value.ToString()][1];
-								BlueNUD.Value = data[row.Cells[0].Value.ToString()][2];
-								data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
-								finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value);
-								finalName = row.Cells[0].Value.ToString();
+									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
 
-								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
-								config.Save(ConfigurationSaveMode.Modified);
-								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+									finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+									
+									config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+									config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
+									config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
+									config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
+									config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
+									config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
+									config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
+									config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
+									config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
 
-								ColourContentDGV.Rows.Clear();
-								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+									data = UncheckChosenConfigs(data);
+									data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
 
-								//Reset ordering of rows.
-								ResetCMS();
+									config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
+									config.Save(ConfigurationSaveMode.Modified);
+									ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+									ColourContentDGV.Rows.Clear();
+									LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+								}
+								else
+								{
+									RedNowNUD.Value = data[row.Cells[0].Value.ToString()][0];
+									GreenNowNUD.Value = data[row.Cells[0].Value.ToString()][1];
+									BlueNowNUD.Value = data[row.Cells[0].Value.ToString()][2];
+
+									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
+
+									finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+
+									ColourContentDGV.Rows.Clear();
+									LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+
+									//Reset ordering of rows.
+									ResetCMS();
+								}
 							}
 							else
 							{
@@ -807,5 +832,6 @@ namespace PassGuard.GUI
 			FavouriteAscendingToolStripMenuItem.Checked = false;
 			FavouriteDescendingToolStripMenuItem.Checked = true;
 		}
+
 	}
 }
