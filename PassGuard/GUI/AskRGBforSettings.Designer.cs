@@ -30,27 +30,27 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle73 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle81 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle74 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle75 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle76 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle77 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle78 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle79 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle80 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.RGBTitleLabel = new System.Windows.Forms.Label();
-			this.RLabel = new System.Windows.Forms.Label();
-			this.RedNUD = new System.Windows.Forms.NumericUpDown();
-			this.GreenNUD = new System.Windows.Forms.NumericUpDown();
-			this.GLabel = new System.Windows.Forms.Label();
-			this.BlueNUD = new System.Windows.Forms.NumericUpDown();
-			this.BLabel = new System.Windows.Forms.Label();
+			this.RNextLabel = new System.Windows.Forms.Label();
+			this.RedNextNUD = new System.Windows.Forms.NumericUpDown();
+			this.GreenNextNUD = new System.Windows.Forms.NumericUpDown();
+			this.GNextLabel = new System.Windows.Forms.Label();
+			this.BlueNextNUD = new System.Windows.Forms.NumericUpDown();
+			this.BNextLabel = new System.Windows.Forms.Label();
 			this.WebHelpRGB = new System.Windows.Forms.Button();
 			this.RGBWebToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SendButton = new System.Windows.Forms.Button();
 			this.RedHeaderButton = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
+			this.RGBNextExecLabel = new System.Windows.Forms.Label();
 			this.EditButton = new System.Windows.Forms.Button();
 			this.DeleteButton = new System.Windows.Forms.Button();
 			this.AddButton = new System.Windows.Forms.Button();
@@ -88,15 +88,25 @@ namespace PassGuard.GUI
 			this.FavouriteNormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FavouriteAscendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FavouriteDescendingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
+			this.RGBNowExecLabel = new System.Windows.Forms.Label();
+			this.BlueNowNUD = new System.Windows.Forms.NumericUpDown();
+			this.BNowLabel = new System.Windows.Forms.Label();
+			this.GreenNowNUD = new System.Windows.Forms.NumericUpDown();
+			this.GNowLabel = new System.Windows.Forms.Label();
+			this.RedNowNUD = new System.Windows.Forms.NumericUpDown();
+			this.RNowLabel = new System.Windows.Forms.Label();
+			((System.ComponentModel.ISupportInitialize)(this.RedNextNUD)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.GreenNextNUD)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.BlueNextNUD)).BeginInit();
 			this.NameCMS.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ColourContentDGV)).BeginInit();
 			this.RedCMS.SuspendLayout();
 			this.GreenCMS.SuspendLayout();
 			this.BlueCMS.SuspendLayout();
 			this.FavouriteCMS.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.BlueNowNUD)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.GreenNowNUD)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.RedNowNUD)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// RGBTitleLabel
@@ -110,85 +120,85 @@ namespace PassGuard.GUI
 			this.RGBTitleLabel.TabIndex = 0;
 			this.RGBTitleLabel.Text = "Select the one colour you prefer and click the Send Button.";
 			// 
-			// RLabel
+			// RNextLabel
 			// 
-			this.RLabel.AutoSize = true;
-			this.RLabel.Enabled = false;
-			this.RLabel.Location = new System.Drawing.Point(248, 523);
-			this.RLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.RLabel.Name = "RLabel";
-			this.RLabel.Size = new System.Drawing.Size(20, 15);
-			this.RLabel.TabIndex = 1;
-			this.RLabel.Text = "R: ";
+			this.RNextLabel.AutoSize = true;
+			this.RNextLabel.Enabled = false;
+			this.RNextLabel.Location = new System.Drawing.Point(248, 502);
+			this.RNextLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.RNextLabel.Name = "RNextLabel";
+			this.RNextLabel.Size = new System.Drawing.Size(20, 15);
+			this.RNextLabel.TabIndex = 1;
+			this.RNextLabel.Text = "R: ";
 			// 
-			// RedNUD
+			// RedNextNUD
 			// 
-			this.RedNUD.Enabled = false;
-			this.RedNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.RedNUD.Location = new System.Drawing.Point(299, 520);
-			this.RedNUD.Margin = new System.Windows.Forms.Padding(2);
-			this.RedNUD.Maximum = new decimal(new int[] {
+			this.RedNextNUD.Enabled = false;
+			this.RedNextNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RedNextNUD.Location = new System.Drawing.Point(299, 499);
+			this.RedNextNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.RedNextNUD.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-			this.RedNUD.Name = "RedNUD";
-			this.RedNUD.Size = new System.Drawing.Size(105, 25);
-			this.RedNUD.TabIndex = 2;
+			this.RedNextNUD.Name = "RedNextNUD";
+			this.RedNextNUD.Size = new System.Drawing.Size(105, 25);
+			this.RedNextNUD.TabIndex = 2;
 			// 
-			// GreenNUD
+			// GreenNextNUD
 			// 
-			this.GreenNUD.Enabled = false;
-			this.GreenNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.GreenNUD.Location = new System.Drawing.Point(490, 520);
-			this.GreenNUD.Margin = new System.Windows.Forms.Padding(2);
-			this.GreenNUD.Maximum = new decimal(new int[] {
+			this.GreenNextNUD.Enabled = false;
+			this.GreenNextNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GreenNextNUD.Location = new System.Drawing.Point(490, 499);
+			this.GreenNextNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.GreenNextNUD.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-			this.GreenNUD.Name = "GreenNUD";
-			this.GreenNUD.Size = new System.Drawing.Size(105, 25);
-			this.GreenNUD.TabIndex = 4;
+			this.GreenNextNUD.Name = "GreenNextNUD";
+			this.GreenNextNUD.Size = new System.Drawing.Size(105, 25);
+			this.GreenNextNUD.TabIndex = 4;
 			// 
-			// GLabel
+			// GNextLabel
 			// 
-			this.GLabel.AutoSize = true;
-			this.GLabel.Enabled = false;
-			this.GLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.GLabel.Location = new System.Drawing.Point(439, 523);
-			this.GLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.GLabel.Name = "GLabel";
-			this.GLabel.Size = new System.Drawing.Size(28, 17);
-			this.GLabel.TabIndex = 3;
-			this.GLabel.Text = "G:  ";
+			this.GNextLabel.AutoSize = true;
+			this.GNextLabel.Enabled = false;
+			this.GNextLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GNextLabel.Location = new System.Drawing.Point(439, 502);
+			this.GNextLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.GNextLabel.Name = "GNextLabel";
+			this.GNextLabel.Size = new System.Drawing.Size(28, 17);
+			this.GNextLabel.TabIndex = 3;
+			this.GNextLabel.Text = "G:  ";
 			// 
-			// BlueNUD
+			// BlueNextNUD
 			// 
-			this.BlueNUD.Enabled = false;
-			this.BlueNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.BlueNUD.Location = new System.Drawing.Point(683, 520);
-			this.BlueNUD.Margin = new System.Windows.Forms.Padding(2);
-			this.BlueNUD.Maximum = new decimal(new int[] {
+			this.BlueNextNUD.Enabled = false;
+			this.BlueNextNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.BlueNextNUD.Location = new System.Drawing.Point(683, 499);
+			this.BlueNextNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.BlueNextNUD.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-			this.BlueNUD.Name = "BlueNUD";
-			this.BlueNUD.Size = new System.Drawing.Size(105, 25);
-			this.BlueNUD.TabIndex = 6;
+			this.BlueNextNUD.Name = "BlueNextNUD";
+			this.BlueNextNUD.Size = new System.Drawing.Size(105, 25);
+			this.BlueNextNUD.TabIndex = 6;
 			// 
-			// BLabel
+			// BNextLabel
 			// 
-			this.BLabel.AutoSize = true;
-			this.BLabel.Enabled = false;
-			this.BLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.BLabel.Location = new System.Drawing.Point(632, 524);
-			this.BLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.BLabel.Name = "BLabel";
-			this.BLabel.Size = new System.Drawing.Size(22, 17);
-			this.BLabel.TabIndex = 5;
-			this.BLabel.Text = "B: ";
+			this.BNextLabel.AutoSize = true;
+			this.BNextLabel.Enabled = false;
+			this.BNextLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.BNextLabel.Location = new System.Drawing.Point(632, 503);
+			this.BNextLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.BNextLabel.Name = "BNextLabel";
+			this.BNextLabel.Size = new System.Drawing.Size(22, 17);
+			this.BNextLabel.TabIndex = 5;
+			this.BNextLabel.Text = "B: ";
 			// 
 			// WebHelpRGB
 			// 
@@ -238,17 +248,17 @@ namespace PassGuard.GUI
 			this.RedHeaderButton.Text = "Red";
 			this.RedHeaderButton.UseVisualStyleBackColor = true;
 			// 
-			// label1
+			// RGBNextExecLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Enabled = false;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label1.Location = new System.Drawing.Point(47, 521);
-			this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(160, 16);
-			this.label1.TabIndex = 15;
-			this.label1.Text = "Final Selected Values --->";
+			this.RGBNextExecLabel.AutoSize = true;
+			this.RGBNextExecLabel.Enabled = false;
+			this.RGBNextExecLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RGBNextExecLabel.Location = new System.Drawing.Point(47, 500);
+			this.RGBNextExecLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.RGBNextExecLabel.Name = "RGBNextExecLabel";
+			this.RGBNextExecLabel.Size = new System.Drawing.Size(170, 16);
+			this.RGBNextExecLabel.TabIndex = 15;
+			this.RGBNextExecLabel.Text = "RGBs for next execution --->";
 			// 
 			// EditButton
 			// 
@@ -340,13 +350,13 @@ namespace PassGuard.GUI
 			this.ColourContentDGV.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.ColourContentDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.ColourContentDGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle73.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle73.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle73.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle73.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle73.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle73.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle73;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.ColourContentDGV.ColumnHeadersHeight = 47;
 			this.ColourContentDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.ColourContentDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -358,14 +368,14 @@ namespace PassGuard.GUI
             this.ChosenConfigColumn,
             this.FavouriteColumn,
             this.DeleteRowColumn});
-			dataGridViewCellStyle81.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle81.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle81.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle81.ForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle81.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
-			dataGridViewCellStyle81.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle81.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle81;
+			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
+			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle9;
 			this.ColourContentDGV.EnableHeadersVisualStyles = false;
 			this.ColourContentDGV.GridColor = System.Drawing.SystemColors.InfoText;
 			this.ColourContentDGV.Location = new System.Drawing.Point(19, 67);
@@ -383,9 +393,9 @@ namespace PassGuard.GUI
 			// 
 			// ConfigNameColumn
 			// 
-			dataGridViewCellStyle74.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle74.SelectionForeColor = System.Drawing.Color.Black;
-			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle74;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle2;
 			this.ConfigNameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ConfigNameColumn.HeaderText = "ConfigName";
 			this.ConfigNameColumn.Name = "ConfigNameColumn";
@@ -394,9 +404,9 @@ namespace PassGuard.GUI
 			// 
 			// RedColumn
 			// 
-			dataGridViewCellStyle75.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle75.SelectionForeColor = System.Drawing.Color.Black;
-			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle75;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle3;
 			this.RedColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.RedColumn.HeaderText = "Red";
 			this.RedColumn.Name = "RedColumn";
@@ -405,9 +415,9 @@ namespace PassGuard.GUI
 			// 
 			// GreenColumn
 			// 
-			dataGridViewCellStyle76.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle76.SelectionForeColor = System.Drawing.Color.Black;
-			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle76;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
+			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle4;
 			this.GreenColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.GreenColumn.HeaderText = "Green";
 			this.GreenColumn.Name = "GreenColumn";
@@ -416,9 +426,9 @@ namespace PassGuard.GUI
 			// 
 			// BlueColumn
 			// 
-			dataGridViewCellStyle77.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle77.SelectionForeColor = System.Drawing.Color.Black;
-			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle77;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
+			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle5;
 			this.BlueColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BlueColumn.HeaderText = "Blue";
 			this.BlueColumn.Name = "BlueColumn";
@@ -435,10 +445,10 @@ namespace PassGuard.GUI
 			// 
 			// ChosenConfigColumn
 			// 
-			dataGridViewCellStyle78.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle78.NullValue = false;
-			dataGridViewCellStyle78.SelectionForeColor = System.Drawing.Color.Black;
-			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle78;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle6.NullValue = false;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle6;
 			this.ChosenConfigColumn.HeaderText = "ChosenConfig";
 			this.ChosenConfigColumn.Name = "ChosenConfigColumn";
 			this.ChosenConfigColumn.ReadOnly = true;
@@ -446,10 +456,10 @@ namespace PassGuard.GUI
 			// 
 			// FavouriteColumn
 			// 
-			dataGridViewCellStyle79.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle79.NullValue = false;
-			dataGridViewCellStyle79.SelectionForeColor = System.Drawing.Color.Black;
-			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle79;
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle7.NullValue = false;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
+			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle7;
 			this.FavouriteColumn.HeaderText = "Favourite";
 			this.FavouriteColumn.Name = "FavouriteColumn";
 			this.FavouriteColumn.ReadOnly = true;
@@ -457,9 +467,9 @@ namespace PassGuard.GUI
 			// 
 			// DeleteRowColumn
 			// 
-			dataGridViewCellStyle80.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle80.SelectionForeColor = System.Drawing.Color.Black;
-			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle80;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
+			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle8;
 			this.DeleteRowColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteRowColumn.HeaderText = "Delete Row";
 			this.DeleteRowColumn.Name = "DeleteRowColumn";
@@ -519,28 +529,28 @@ namespace PassGuard.GUI
 			// GreenToolStripSeparator
 			// 
 			this.GreenToolStripSeparator.Name = "GreenToolStripSeparator";
-			this.GreenToolStripSeparator.Size = new System.Drawing.Size(177, 6);
+			this.GreenToolStripSeparator.Size = new System.Drawing.Size(166, 6);
 			// 
 			// GreenNormalToolStripMenuItem
 			// 
 			this.GreenNormalToolStripMenuItem.Checked = true;
 			this.GreenNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.GreenNormalToolStripMenuItem.Name = "GreenNormalToolStripMenuItem";
-			this.GreenNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenNormalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.GreenNormalToolStripMenuItem.Text = "Normal Order";
 			this.GreenNormalToolStripMenuItem.Click += new System.EventHandler(this.GreenNormalToolStripMenuItem_Click);
 			// 
 			// GreenAscendingToolStripMenuItem
 			// 
 			this.GreenAscendingToolStripMenuItem.Name = "GreenAscendingToolStripMenuItem";
-			this.GreenAscendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenAscendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.GreenAscendingToolStripMenuItem.Text = "Ascending Order";
 			this.GreenAscendingToolStripMenuItem.Click += new System.EventHandler(this.GreenAscendingToolStripMenuItem_Click);
 			// 
 			// GreenDescendingToolStripMenuItem
 			// 
 			this.GreenDescendingToolStripMenuItem.Name = "GreenDescendingToolStripMenuItem";
-			this.GreenDescendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.GreenDescendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.GreenDescendingToolStripMenuItem.Text = "Descending Order";
 			this.GreenDescendingToolStripMenuItem.Click += new System.EventHandler(this.GreenDescendingToolStripMenuItem_Click);
 			// 
@@ -564,21 +574,21 @@ namespace PassGuard.GUI
 			this.BlueNormalToolStripMenuItem.Checked = true;
 			this.BlueNormalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.BlueNormalToolStripMenuItem.Name = "BlueNormalToolStripMenuItem";
-			this.BlueNormalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueNormalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.BlueNormalToolStripMenuItem.Text = "Normal Order";
 			this.BlueNormalToolStripMenuItem.Click += new System.EventHandler(this.BlueNormalToolStripMenuItem_Click);
 			// 
 			// BlueAscendingToolStripMenuItem
 			// 
 			this.BlueAscendingToolStripMenuItem.Name = "BlueAscendingToolStripMenuItem";
-			this.BlueAscendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueAscendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.BlueAscendingToolStripMenuItem.Text = "Ascending Order";
 			this.BlueAscendingToolStripMenuItem.Click += new System.EventHandler(this.BlueAscendingToolStripMenuItem_Click);
 			// 
 			// BlueDescendingToolStripMenuItem
 			// 
 			this.BlueDescendingToolStripMenuItem.Name = "BlueDescendingToolStripMenuItem";
-			this.BlueDescendingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.BlueDescendingToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.BlueDescendingToolStripMenuItem.Text = "Descending Order";
 			this.BlueDescendingToolStripMenuItem.Click += new System.EventHandler(this.BlueDescendingToolStripMenuItem_Click);
 			// 
@@ -625,24 +635,123 @@ namespace PassGuard.GUI
 			this.FavouriteDescendingToolStripMenuItem.Text = "Descending Order";
 			this.FavouriteDescendingToolStripMenuItem.Click += new System.EventHandler(this.FavouriteDescendingToolStripMenuItem_Click);
 			// 
+			// RGBNowExecLabel
+			// 
+			this.RGBNowExecLabel.AutoSize = true;
+			this.RGBNowExecLabel.Enabled = false;
+			this.RGBNowExecLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RGBNowExecLabel.Location = new System.Drawing.Point(47, 538);
+			this.RGBNowExecLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.RGBNowExecLabel.Name = "RGBNowExecLabel";
+			this.RGBNowExecLabel.Size = new System.Drawing.Size(166, 16);
+			this.RGBNowExecLabel.TabIndex = 26;
+			this.RGBNowExecLabel.Text = "RGBs for this execution --->";
+			// 
+			// BlueNowNUD
+			// 
+			this.BlueNowNUD.Enabled = false;
+			this.BlueNowNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.BlueNowNUD.Location = new System.Drawing.Point(683, 537);
+			this.BlueNowNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.BlueNowNUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.BlueNowNUD.Name = "BlueNowNUD";
+			this.BlueNowNUD.Size = new System.Drawing.Size(105, 25);
+			this.BlueNowNUD.TabIndex = 25;
+			// 
+			// BNowLabel
+			// 
+			this.BNowLabel.AutoSize = true;
+			this.BNowLabel.Enabled = false;
+			this.BNowLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.BNowLabel.Location = new System.Drawing.Point(632, 541);
+			this.BNowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.BNowLabel.Name = "BNowLabel";
+			this.BNowLabel.Size = new System.Drawing.Size(22, 17);
+			this.BNowLabel.TabIndex = 24;
+			this.BNowLabel.Text = "B: ";
+			// 
+			// GreenNowNUD
+			// 
+			this.GreenNowNUD.Enabled = false;
+			this.GreenNowNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GreenNowNUD.Location = new System.Drawing.Point(490, 537);
+			this.GreenNowNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.GreenNowNUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.GreenNowNUD.Name = "GreenNowNUD";
+			this.GreenNowNUD.Size = new System.Drawing.Size(105, 25);
+			this.GreenNowNUD.TabIndex = 23;
+			// 
+			// GNowLabel
+			// 
+			this.GNowLabel.AutoSize = true;
+			this.GNowLabel.Enabled = false;
+			this.GNowLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GNowLabel.Location = new System.Drawing.Point(439, 540);
+			this.GNowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.GNowLabel.Name = "GNowLabel";
+			this.GNowLabel.Size = new System.Drawing.Size(28, 17);
+			this.GNowLabel.TabIndex = 22;
+			this.GNowLabel.Text = "G:  ";
+			// 
+			// RedNowNUD
+			// 
+			this.RedNowNUD.Enabled = false;
+			this.RedNowNUD.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.RedNowNUD.Location = new System.Drawing.Point(299, 537);
+			this.RedNowNUD.Margin = new System.Windows.Forms.Padding(2);
+			this.RedNowNUD.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.RedNowNUD.Name = "RedNowNUD";
+			this.RedNowNUD.Size = new System.Drawing.Size(105, 25);
+			this.RedNowNUD.TabIndex = 21;
+			// 
+			// RNowLabel
+			// 
+			this.RNowLabel.AutoSize = true;
+			this.RNowLabel.Enabled = false;
+			this.RNowLabel.Location = new System.Drawing.Point(248, 540);
+			this.RNowLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.RNowLabel.Name = "RNowLabel";
+			this.RNowLabel.Size = new System.Drawing.Size(20, 15);
+			this.RNowLabel.TabIndex = 20;
+			this.RNowLabel.Text = "R: ";
+			// 
 			// AskRGBforSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(968, 583);
+			this.Controls.Add(this.RGBNowExecLabel);
+			this.Controls.Add(this.BlueNowNUD);
+			this.Controls.Add(this.BNowLabel);
+			this.Controls.Add(this.GreenNowNUD);
+			this.Controls.Add(this.GNowLabel);
+			this.Controls.Add(this.RedNowNUD);
+			this.Controls.Add(this.RNowLabel);
 			this.Controls.Add(this.ColourContentDGV);
 			this.Controls.Add(this.AddButton);
 			this.Controls.Add(this.DeleteButton);
 			this.Controls.Add(this.EditButton);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.RGBNextExecLabel);
 			this.Controls.Add(this.SendButton);
 			this.Controls.Add(this.WebHelpRGB);
-			this.Controls.Add(this.BlueNUD);
-			this.Controls.Add(this.BLabel);
-			this.Controls.Add(this.GreenNUD);
-			this.Controls.Add(this.GLabel);
-			this.Controls.Add(this.RedNUD);
-			this.Controls.Add(this.RLabel);
+			this.Controls.Add(this.BlueNextNUD);
+			this.Controls.Add(this.BNextLabel);
+			this.Controls.Add(this.GreenNextNUD);
+			this.Controls.Add(this.GNextLabel);
+			this.Controls.Add(this.RedNextNUD);
+			this.Controls.Add(this.RNextLabel);
 			this.Controls.Add(this.RGBTitleLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Margin = new System.Windows.Forms.Padding(2);
@@ -652,15 +761,18 @@ namespace PassGuard.GUI
 			this.Text = "PassGuard™";
 			this.Load += new System.EventHandler(this.AskRGBforSettings_Load);
 			this.BackColorChanged += new System.EventHandler(this.AskRGBforSettings_BackColorChanged);
-			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.RedNextNUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.GreenNextNUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.BlueNextNUD)).EndInit();
 			this.NameCMS.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ColourContentDGV)).EndInit();
 			this.RedCMS.ResumeLayout(false);
 			this.GreenCMS.ResumeLayout(false);
 			this.BlueCMS.ResumeLayout(false);
 			this.FavouriteCMS.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.BlueNowNUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.GreenNowNUD)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.RedNowNUD)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -669,14 +781,14 @@ namespace PassGuard.GUI
         #endregion
 
         private System.Windows.Forms.Label RGBTitleLabel;
-        private System.Windows.Forms.Label RLabel;
-        private System.Windows.Forms.Label GLabel;
-        private System.Windows.Forms.Label BLabel;
+        private System.Windows.Forms.Label RNextLabel;
+        private System.Windows.Forms.Label GNextLabel;
+        private System.Windows.Forms.Label BNextLabel;
         private System.Windows.Forms.Button WebHelpRGB;
         private System.Windows.Forms.ToolTip RGBWebToolTip;
         private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.Button RedHeaderButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label RGBNextExecLabel;
         private System.Windows.Forms.Button EditButton;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Button AddButton;
@@ -684,9 +796,9 @@ namespace PassGuard.GUI
         private System.Windows.Forms.ToolStripMenuItem NameNormalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NameAscendingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NameDescendingToolStripMenuItem;
-        internal System.Windows.Forms.NumericUpDown RedNUD;
-        internal System.Windows.Forms.NumericUpDown GreenNUD;
-        internal System.Windows.Forms.NumericUpDown BlueNUD;
+        internal System.Windows.Forms.NumericUpDown RedNextNUD;
+        internal System.Windows.Forms.NumericUpDown GreenNextNUD;
+        internal System.Windows.Forms.NumericUpDown BlueNextNUD;
 		private System.Windows.Forms.DataGridView ColourContentDGV;
 		private System.Windows.Forms.DataGridViewButtonColumn ConfigNameColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn RedColumn;
@@ -717,5 +829,12 @@ namespace PassGuard.GUI
 		private System.Windows.Forms.ToolStripMenuItem FavouriteNormalToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem FavouriteAscendingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem FavouriteDescendingToolStripMenuItem;
+		private System.Windows.Forms.Label RGBNowExecLabel;
+		internal System.Windows.Forms.NumericUpDown BlueNowNUD;
+		private System.Windows.Forms.Label BNowLabel;
+		internal System.Windows.Forms.NumericUpDown GreenNowNUD;
+		private System.Windows.Forms.Label GNowLabel;
+		internal System.Windows.Forms.NumericUpDown RedNowNUD;
+		private System.Windows.Forms.Label RNowLabel;
 	}
 }

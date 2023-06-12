@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +21,7 @@ namespace PassGuard.GUI
 		public int blue { get; private set; }
 		public int chosen { get; private set; }
 		public int favourite { get; private set; }
+		public int persists { get; private set; }
 		private Dictionary<String, List<int>> storedConfigs;
 		public bool addedSuccess { get; private set; }
 
@@ -31,6 +33,7 @@ namespace PassGuard.GUI
 
 			storedConfigs = configs;
 			addedSuccess = false;
+			persists = 0;
 		}
 
 		private void SendButton_Click(object sender, EventArgs e)
@@ -70,7 +73,11 @@ namespace PassGuard.GUI
 				green = (int)GreenNUD.Value;
 				blue = (int)BlueNUD.Value;
 				if (FavouriteCheckbox.Checked) { favourite = 1; }
-				else { favourite = 0; } 
+				else { favourite = 0; }
+				DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+				if (dialog2 == DialogResult.Yes) { persists = 1; }
+				else { persists = 0; }
+
 
 				addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 
