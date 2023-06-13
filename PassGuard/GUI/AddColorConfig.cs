@@ -74,10 +74,15 @@ namespace PassGuard.GUI
 				blue = (int)BlueNUD.Value;
 				if (FavouriteCheckbox.Checked) { favourite = 1; }
 				else { favourite = 0; }
-				DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-				if (dialog2 == DialogResult.Yes) { persists = 1; }
-				else { persists = 0; }
-
+				if (ChosenCheckbox.Checked)
+				{
+					chosen = 1;
+					DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+					if (dialog2 == DialogResult.Yes) { persists = 1; }
+					else { persists = 0; }
+				}
+				else { chosen = 0; }
+				
 
 				addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 

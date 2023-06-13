@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Linq;
@@ -233,10 +234,32 @@ namespace PassGuard.GUI
 
 				if (add.chosen == 1)
 				{
-					data = UncheckChosenConfigs(data);
-					RedNextNUD.Value = add.red;
-					GreenNextNUD.Value = add.green;
-					BlueNextNUD.Value = add.blue;
+					if (add.persists == 1) 
+					{
+						RedNextNUD.Value = add.red;
+						GreenNextNUD.Value = add.green;
+						BlueNextNUD.Value = add.blue;
+
+						data = UncheckChosenConfigs(data);
+						finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
+
+						config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+						config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
+						config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
+						config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
+						config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
+						config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
+						config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
+						config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
+						config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
+					}
+
+					RedNowNUD.Value = add.red;
+					GreenNowNUD.Value = add.green;
+					BlueNowNUD.Value = add.blue;
+
+					actualColours = new int[] { add.red, add.green, add.blue };
+					finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
 				}
 
 				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.chosen, add.favourite });
