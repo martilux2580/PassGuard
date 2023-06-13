@@ -41,6 +41,7 @@ namespace PassGuard.GUI
 			this.SendButton = new System.Windows.Forms.Button();
 			this.FavouriteCheckbox = new System.Windows.Forms.CheckBox();
 			this.NoteRGBLabel = new System.Windows.Forms.Label();
+			this.ChosenCheckbox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
@@ -157,7 +158,7 @@ namespace PassGuard.GUI
 			this.SendButton.FlatAppearance.BorderSize = 0;
 			this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SendButton.Location = new System.Drawing.Point(161, 361);
+			this.SendButton.Location = new System.Drawing.Point(161, 399);
 			this.SendButton.Margin = new System.Windows.Forms.Padding(2);
 			this.SendButton.Name = "SendButton";
 			this.SendButton.Size = new System.Drawing.Size(115, 37);
@@ -181,7 +182,7 @@ namespace PassGuard.GUI
 			// NoteRGBLabel
 			// 
 			this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.NoteRGBLabel.Location = new System.Drawing.Point(31, 313);
+			this.NoteRGBLabel.Location = new System.Drawing.Point(31, 351);
 			this.NoteRGBLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.NoteRGBLabel.Name = "NoteRGBLabel";
 			this.NoteRGBLabel.Size = new System.Drawing.Size(380, 30);
@@ -190,11 +191,24 @@ namespace PassGuard.GUI
     " that the colors entered are slightly different from those saved.";
 			this.NoteRGBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// ChosenCheckbox
+			// 
+			this.ChosenCheckbox.AutoSize = true;
+			this.ChosenCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ChosenCheckbox.Location = new System.Drawing.Point(122, 312);
+			this.ChosenCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.ChosenCheckbox.Name = "ChosenCheckbox";
+			this.ChosenCheckbox.Size = new System.Drawing.Size(129, 20);
+			this.ChosenCheckbox.TabIndex = 15;
+			this.ChosenCheckbox.Text = "Select this config.";
+			this.ChosenCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// AddColorConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(444, 418);
+			this.ClientSize = new System.Drawing.Size(444, 461);
+			this.Controls.Add(this.ChosenCheckbox);
 			this.Controls.Add(this.NoteRGBLabel);
 			this.Controls.Add(this.FavouriteCheckbox);
 			this.Controls.Add(this.SendButton);
@@ -233,5 +247,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.CheckBox FavouriteCheckbox;
 		private System.Windows.Forms.Label NoteRGBLabel;
+		private System.Windows.Forms.CheckBox ChosenCheckbox;
 	}
 }
