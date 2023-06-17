@@ -247,7 +247,9 @@ namespace PassGuard.GUI
 			this.Controls.Add(this.NameLabel);
 			this.Controls.Add(this.NameTextbox);
 			this.Controls.Add(this.EditButton);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.MaximizeBox = false;
 			this.Name = "EditColorConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EditColorConfig";
