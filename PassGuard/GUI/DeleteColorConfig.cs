@@ -19,14 +19,16 @@ namespace PassGuard.GUI
 		public bool deletedAllSuccess { get; private set; }
 		public string name { get; private set; }
 		private List<String> namesStored;
+		private string actualChosenName;
 
-		public DeleteColorConfig(List<String> names)
+		public DeleteColorConfig(List<String> names, string ActualChosenName)
 		{
 			InitializeComponent();
 
 			namesStored = names;
 			deletedAllSuccess = false;
 			deletedSuccess = false;
+			actualChosenName = ActualChosenName;
 
 			NameCombobox.Items.Add("");
 			foreach (String name in namesStored)
@@ -69,6 +71,8 @@ namespace PassGuard.GUI
 				GreenNUD.Value = values[NameCombobox.Text][1];
 				BlueNUD.Value = values[NameCombobox.Text][2];
 				FavouriteCheckbox.Checked = Convert.ToBoolean(values[NameCombobox.Text][3]);
+				if (NameCombobox.Text == actualChosenName) { ChosenCheckbox.Checked = true; }
+				else { ChosenCheckbox.Checked = false; }
 			}
 			else
 			{
@@ -77,7 +81,7 @@ namespace PassGuard.GUI
 				GreenNUD.Value = 0;
 				BlueNUD.Value = 0;
 				FavouriteCheckbox.Checked = false;
-
+				ChosenCheckbox.Checked = false;
 			}
 		}
 
@@ -104,6 +108,8 @@ namespace PassGuard.GUI
 				DeleteButton.Enabled = false;
 				FavouriteCheckbox.Enabled = false;
 				FavouriteCheckbox.Checked = false;
+				ChosenCheckbox.Enabled = false;
+				ChosenCheckbox.Checked = false;
 
 				DeleteAllButton.Enabled = true;
 			}

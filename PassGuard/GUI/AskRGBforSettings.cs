@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PassGuard.PDF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -98,7 +99,7 @@ namespace PassGuard.GUI
 			{
 				Selected = false
 			};
-			if (Convert.ToBoolean(configPair.Value[4])) { favouriteCell.Value = 1; }
+			if (Convert.ToBoolean(configPair.Value[3])) { favouriteCell.Value = 1; }
 			else { favouriteCell.Value = 0; } //If decrypts to "1" it is important, else is not.
 
 			row.Cells.Add(chosenNameCell);
@@ -208,16 +209,6 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private Dictionary<String, List<int>> UncheckChosenConfigs(Dictionary<String, List<int>> values)
-		{
-			var configs = values;
-			foreach(List<int> data in configs.Values)
-			{
-				data[3] = 0; //Uncheck the value of chosen in the data....
-			}
-			return configs;
-		}
-
 		private void AddButton_Click(object sender, EventArgs e)
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
@@ -240,7 +231,6 @@ namespace PassGuard.GUI
 						GreenNextNUD.Value = add.green;
 						BlueNextNUD.Value = add.blue;
 
-						data = UncheckChosenConfigs(data);
 						finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
 
 						config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
@@ -262,7 +252,7 @@ namespace PassGuard.GUI
 					finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
 				}
 
-				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.chosen, add.favourite });
+				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.favourite });
 				string newData = JsonSerializer.Serialize(data);
 
 				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
@@ -282,7 +272,13 @@ namespace PassGuard.GUI
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-			GUI.EditColorConfig edit = new(values)
+			var actualNameChosen = ColourContentDGV.Rows.Cast<DataGridViewRow>().FirstOrDefault(
+				row => row.Cells["RedColumn"].Value.ToString() == RedNowNUD.Value.ToString() &&
+						row.Cells["GreenColumn"].Value.ToString() == GreenNowNUD.Value.ToString() &&
+						row.Cells["BlueColumn"].Value.ToString() == BlueNowNUD.Value.ToString())?
+						.Cells["ConfigNameColumn"].Value.ToString();
+
+			GUI.EditColorConfig edit = new(values, actualNameChosen)
 			{
 				BackColor = this.BackColor
 			};
@@ -290,25 +286,39 @@ namespace PassGuard.GUI
 
 			if (edit.editedSuccess)
 			{
-				String oldName = edit.oldname;
-				String newName = edit.name;
-				int red = edit.red;
-				int green = edit.green;
-				int blue = edit.blue;
-				int chosen = edit.chosen;
-				int important = edit.important;
+				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(edit.red, edit.green, edit.blue);
 
-				values.Remove(oldName);
-
-				if (chosen == 1) //If chosen, then set values and unset others...
+				if (edit.chosen == 1)
 				{
-					values = UncheckChosenConfigs(values);
-					RedNextNUD.Value = edit.red;
-					GreenNextNUD.Value = edit.green;
-					BlueNextNUD.Value = edit.blue;
+					if (edit.persists == 1)
+					{
+						RedNextNUD.Value = edit.red;
+						GreenNextNUD.Value = edit.green;
+						BlueNextNUD.Value = edit.blue;
+
+						config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+						config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
+						config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
+						config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
+						config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
+						config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
+						config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
+						config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
+						config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
+					}
+
+					actualColours = new int[] { edit.red, edit.green, edit.blue };
+
+					RedNowNUD.Value = edit.red;
+					GreenNowNUD.Value = edit.green;
+					BlueNowNUD.Value = edit.blue;
+
 				}
-				values.Add(newName, new List<int> { red, green, blue , chosen, important});
-				String newData = JsonSerializer.Serialize(values);
+
+				data.Remove(edit.oldname);
+				data.Add(key: edit.name, value: new List<int> { edit.red, edit.green, edit.blue, edit.favourite });
+				string newData = JsonSerializer.Serialize(data);
 
 				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
 				config.Save(ConfigurationSaveMode.Modified);
@@ -319,6 +329,7 @@ namespace PassGuard.GUI
 
 				//Reset ordering of rows.
 				ResetCMS();
+
 			}
 
 		}
@@ -328,8 +339,13 @@ namespace PassGuard.GUI
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 			var namesList = new List<String>(values.Keys);
+			var actualNameChosen = ColourContentDGV.Rows.Cast<DataGridViewRow>().FirstOrDefault(
+				row => row.Cells["RedColumn"].Value.ToString() == RedNowNUD.Value.ToString() &&
+						row.Cells["GreenColumn"].Value.ToString() == GreenNowNUD.Value.ToString() &&
+						row.Cells["BlueColumn"].Value.ToString() == BlueNowNUD.Value.ToString())?
+						.Cells["ConfigNameColumn"].Value.ToString();
 
-			GUI.DeleteColorConfig del = new(namesList)
+			GUI.DeleteColorConfig del = new(namesList, actualNameChosen)
 			{
 				BackColor = this.BackColor,
 				Enabled = true
@@ -475,9 +491,6 @@ namespace PassGuard.GUI
 									config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
 									config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
 
-									data = UncheckChosenConfigs(data);
-									data[row.Cells[0].Value.ToString()][3] = 1; //Set chosen to 1 in the row...
-
 									config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
 									config.Save(ConfigurationSaveMode.Modified);
 									ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
@@ -521,7 +534,7 @@ namespace PassGuard.GUI
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 								//Set NUDs and chosen to 1...
-								data[row.Cells[0].Value.ToString()][4] = 0; //Set favourite in the row...
+								data[row.Cells[0].Value.ToString()][3] = 0; //Set favourite in the row...
 
 								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
 								config.Save(ConfigurationSaveMode.Modified);
@@ -548,7 +561,7 @@ namespace PassGuard.GUI
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 								//Set NUDs and chosen to 1...
-								data[row.Cells[0].Value.ToString()][4] = 1; //Set favourite in the row...
+								data[row.Cells[0].Value.ToString()][3] = 1; //Set favourite in the row...
 
 								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
 								config.Save(ConfigurationSaveMode.Modified);
@@ -856,5 +869,70 @@ namespace PassGuard.GUI
 			FavouriteDescendingToolStripMenuItem.Checked = true;
 		}
 
+		[SupportedOSPlatform("windows")]
+		private void ExportAsPdfButton_MouseEnter(object sender, EventArgs e)
+		{
+			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ExportAsPdfButton_MouseLeave(object sender, EventArgs e)
+		{
+			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SendButton_MouseEnter(object sender, EventArgs e)
+		{
+			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SendButton_MouseLeave(object sender, EventArgs e)
+		{
+			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseEnter(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseLeave(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseEnter(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseLeave(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void AddButton_MouseEnter(object sender, EventArgs e)
+		{
+			AddButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void AddButton_MouseLeave(object sender, EventArgs e)
+		{
+			AddButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		private void ExportAsPdfButton_Click(object sender, EventArgs e)
+		{
+			IPDF pdf = new PDFCreator();
+			pdf.CreateOutlinePDF();
+		}
 	}
 }
