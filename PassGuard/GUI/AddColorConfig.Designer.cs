@@ -221,7 +221,9 @@ namespace PassGuard.GUI
 			this.Controls.Add(this.RedLabel);
 			this.Controls.Add(this.NameLabel);
 			this.Controls.Add(this.TitleLabel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.MaximizeBox = false;
 			this.Name = "AddColorConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "AddColorConfig";
