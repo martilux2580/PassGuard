@@ -31,12 +31,13 @@ namespace PassGuard
         {
 			this.components = new System.ComponentModel.Container();
 			this.MenuPanel = new System.Windows.Forms.Panel();
+			this.BottomPanel = new System.Windows.Forms.Panel();
+			this.DesignerLabel = new System.Windows.Forms.Label();
 			this.AppVersionLabel = new System.Windows.Forms.Label();
 			this.CreateQuickPassButton = new System.Windows.Forms.Button();
 			this.LoadVaultButton = new System.Windows.Forms.Button();
 			this.CreateVaultButton = new System.Windows.Forms.Button();
 			this.LogoPanel = new System.Windows.Forms.Panel();
-			this.DesignerLabel = new System.Windows.Forms.Label();
 			this.LogoLabel = new System.Windows.Forms.Label();
 			this.LogoPictureBox = new System.Windows.Forms.PictureBox();
 			this.OptionsPanel = new System.Windows.Forms.Panel();
@@ -62,6 +63,7 @@ namespace PassGuard
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MenuPanel.SuspendLayout();
+			this.BottomPanel.SuspendLayout();
 			this.LogoPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
 			this.OptionsPanel.SuspendLayout();
@@ -70,7 +72,7 @@ namespace PassGuard
 			// 
 			// MenuPanel
 			// 
-			this.MenuPanel.Controls.Add(this.AppVersionLabel);
+			this.MenuPanel.Controls.Add(this.BottomPanel);
 			this.MenuPanel.Controls.Add(this.CreateQuickPassButton);
 			this.MenuPanel.Controls.Add(this.LoadVaultButton);
 			this.MenuPanel.Controls.Add(this.CreateVaultButton);
@@ -82,12 +84,39 @@ namespace PassGuard
 			this.MenuPanel.Size = new System.Drawing.Size(336, 662);
 			this.MenuPanel.TabIndex = 2;
 			// 
+			// BottomPanel
+			// 
+			this.BottomPanel.Controls.Add(this.DesignerLabel);
+			this.BottomPanel.Controls.Add(this.AppVersionLabel);
+			this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.BottomPanel.Location = new System.Drawing.Point(0, 627);
+			this.BottomPanel.Name = "BottomPanel";
+			this.BottomPanel.Size = new System.Drawing.Size(336, 35);
+			this.BottomPanel.TabIndex = 7;
+			// 
+			// DesignerLabel
+			// 
+			this.DesignerLabel.AutoSize = true;
+			this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.DesignerLabel.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
+			this.DesignerLabel.Location = new System.Drawing.Point(148, 8);
+			this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.DesignerLabel.Name = "DesignerLabel";
+			this.DesignerLabel.Size = new System.Drawing.Size(184, 23);
+			this.DesignerLabel.TabIndex = 1;
+			this.DesignerLabel.Text = "Designed by martilux2580";
+			this.DesignerLabel.UseCompatibleTextRendering = true;
+			this.DesignerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DesignerLabel_MouseClick);
+			this.DesignerLabel.MouseEnter += new System.EventHandler(this.DesignerLabel_MouseEnter);
+			this.DesignerLabel.MouseLeave += new System.EventHandler(this.DesignerLabel_MouseLeave);
+			// 
 			// AppVersionLabel
 			// 
 			this.AppVersionLabel.AutoSize = true;
 			this.AppVersionLabel.Font = new System.Drawing.Font("Mongolian Baiti", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.AppVersionLabel.ForeColor = System.Drawing.Color.Black;
-			this.AppVersionLabel.Location = new System.Drawing.Point(10, 635);
+			this.AppVersionLabel.Location = new System.Drawing.Point(11, 10);
 			this.AppVersionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.AppVersionLabel.Name = "AppVersionLabel";
 			this.AppVersionLabel.Size = new System.Drawing.Size(57, 16);
@@ -159,7 +188,6 @@ namespace PassGuard
 			// 
 			// LogoPanel
 			// 
-			this.LogoPanel.Controls.Add(this.DesignerLabel);
 			this.LogoPanel.Controls.Add(this.LogoLabel);
 			this.LogoPanel.Controls.Add(this.LogoPictureBox);
 			this.LogoPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -169,29 +197,12 @@ namespace PassGuard
 			this.LogoPanel.Size = new System.Drawing.Size(336, 153);
 			this.LogoPanel.TabIndex = 3;
 			// 
-			// DesignerLabel
-			// 
-			this.DesignerLabel.AutoSize = true;
-			this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.DesignerLabel.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
-			this.DesignerLabel.Location = new System.Drawing.Point(78, 132);
-			this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.DesignerLabel.Name = "DesignerLabel";
-			this.DesignerLabel.Size = new System.Drawing.Size(184, 23);
-			this.DesignerLabel.TabIndex = 1;
-			this.DesignerLabel.Text = "Designed by martilux2580";
-			this.DesignerLabel.UseCompatibleTextRendering = true;
-			this.DesignerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DesignerLabel_MouseClick);
-			this.DesignerLabel.MouseEnter += new System.EventHandler(this.DesignerLabel_MouseEnter);
-			this.DesignerLabel.MouseLeave += new System.EventHandler(this.DesignerLabel_MouseLeave);
-			// 
 			// LogoLabel
 			// 
 			this.LogoLabel.AutoSize = true;
 			this.LogoLabel.Font = new System.Drawing.Font("CampOpti-Caps", 15.5F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
 			this.LogoLabel.ForeColor = System.Drawing.Color.Black;
-			this.LogoLabel.Location = new System.Drawing.Point(45, 107);
+			this.LogoLabel.Location = new System.Drawing.Point(45, 116);
 			this.LogoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.LogoLabel.Name = "LogoLabel";
 			this.LogoLabel.Size = new System.Drawing.Size(247, 34);
@@ -203,7 +214,7 @@ namespace PassGuard
 			// 
 			this.LogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.LogoPictureBox.Image = global::PassGuard.Properties.Resources.Logo123;
-			this.LogoPictureBox.Location = new System.Drawing.Point(105, -7);
+			this.LogoPictureBox.Location = new System.Drawing.Point(105, -3);
 			this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(2);
 			this.LogoPictureBox.Name = "LogoPictureBox";
 			this.LogoPictureBox.Size = new System.Drawing.Size(125, 125);
@@ -424,7 +435,8 @@ namespace PassGuard
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.MenuPanel.ResumeLayout(false);
-			this.MenuPanel.PerformLayout();
+			this.BottomPanel.ResumeLayout(false);
+			this.BottomPanel.PerformLayout();
 			this.LogoPanel.ResumeLayout(false);
 			this.LogoPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
@@ -467,6 +479,7 @@ namespace PassGuard
         private System.Windows.Forms.ToolStripMenuItem exportOutlineColoursAsPDFToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem exportAVaultsContentAsPDFToolStripMenuItem;
-    }
+		private System.Windows.Forms.Panel BottomPanel;
+	}
 }
 

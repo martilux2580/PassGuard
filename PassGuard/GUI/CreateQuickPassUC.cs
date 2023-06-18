@@ -355,11 +355,8 @@ namespace PassGuard.GUI
 
 		private void InfoPwnageButton_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show(text:"If this option is checked, for every generated password we will check if it has been pwned by inserting it into the " +
-				"webpage https://haveibeenpwned.com/Passwords. \nThis website will check in their database if this password has been cracked already. " +
-				"\nFor more info about why should you write down your passwords in this webpage and how is the privacy of searched passwords being kept, " + 
-				"visit https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity." + "\n\nNote: Press Ctrl+C to copy " + 
-				"the whole content of this dialog.", caption: "Notes about pwned passwords");
+			GUI.InfoPwnageForm info = new();
+			info.ShowDialog();
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -423,13 +420,13 @@ namespace PassGuard.GUI
 		[SupportedOSPlatform("windows")]
 		private void NoteSymbolsButton_MouseEnter(object sender, EventArgs e)
 		{
-			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);//If mouse over button, underline text
+			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline);//If mouse over button, underline text
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void NoteSymbolsButton_MouseLeave(object sender, EventArgs e)
 		{
-			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 8, FontStyle.Regular); //If mouse leaves button, regular text
+			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //If mouse leaves button, regular text
 		}
 
 		[SupportedOSPlatform("windows")]

@@ -939,5 +939,23 @@ namespace PassGuard.GUI
 			IPDF pdf = new PDFCreator();
 			pdf.CreateOutlinePDF();
 		}
+
+		[SupportedOSPlatform("windows")]
+		private void HelpButton_MouseEnter(object sender, EventArgs e)
+		{
+			HelpButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the butto
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void HelpButton_MouseLeave(object sender, EventArgs e)
+		{
+			HelpButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		private void HelpButton_Click(object sender, EventArgs e)
+		{
+			GUI.HelpColourConfigsForm help = new();
+			help.ShowDialog();
+		}
 	}
 }

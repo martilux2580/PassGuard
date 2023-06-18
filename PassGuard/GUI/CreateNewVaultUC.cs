@@ -133,16 +133,9 @@ namespace PassGuard.GUI
 					ConfigurationManager.RefreshSection("appSettings");
 
 					//Inform user
-					var data = "\tVault Name: " + VaultNameTextbox.Text + "\n\tFilename: " + VaultNameTextbox.Text + ".encrypted" + "\n\tEmail: " + VaultEmailTextbox.Text + "\n\tVault Password: " + VaultPassTextbox.Text + "\n\tSecurity Key: " + rndsalt;
-					var message = "Congrats! Your new Password Vault has been created successfully!\nThe information you must store and remember in order to load and access to your Password Vault is the following: \n\n"
-						+ data + "\n\nNotes: \n\tWithout any of those three values, your Password Vault and its content will be inacessible. \n\tBy clicking OK, those three values will be copied to the clipboard, please save them carefully."
-						+ "\n\tSecurity Key will be remembered by PassGuard, and if the option was checked the email will be also saved. However, if another Password Vault is created, its Security Key will be remembered by PassGuard and the previous key will be deleted, and if the option was checked the email will be remembered and the previously saved email will be deleted, "
-						+ "so make sure you keep save and remember the email, password and Security Key of each Password Vault you create.";
-					DialogResult dialog = MessageBox.Show(text: message, caption: "Success!", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
-					if (dialog == DialogResult.OK)
-					{
-						Clipboard.SetText(data.Replace("\t", ""));
-					}
+					var data = "\t• Vault Name: " + VaultNameTextbox.Text + "\n\t• Filename: " + VaultNameTextbox.Text + ".encrypted" + "\n\t• Email: " + VaultEmailTextbox.Text + "\n\t• Vault Password: " + VaultPassTextbox.Text + "\n\t• Security Key: " + rndsalt;
+					GUI.InfoNewVaultCreatedForm info = new(data);
+					info.ShowDialog();
 				}
 				catch(Exception)
 				{
