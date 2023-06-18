@@ -13,6 +13,10 @@ using System.Runtime.Versioning;
 using iText.Layout.Splitting;
 using PassGuard.PDF;
 using System.Text.Json;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
+using Microsoft.VisualBasic.ApplicationServices;
+using System.Diagnostics;
 
 namespace PassGuard
 {
@@ -22,10 +26,50 @@ namespace PassGuard
 
 		internal Task autobackup = null;
 
+		[SupportedOSPlatform("windows")]
 		public mainWindow()
 		{
 			InitializeComponent();
 			this.Size = this.MinimumSize; //We init the form with the minimum size to avoid Minimum Size bug (setting Min Size in Properties to the actual size makes Minimum Size decrease by 20-30 pixels aprox).
+			
+			try
+			{
+				//Install fonts in PC, although they are already incluided...just in case
+				LoadCustomFonts(Properties.Resources.CampCaps);
+				LoadCustomFonts(Properties.Resources.Roboto);
+			}
+			catch (Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not load some fonts. \n\nPlease install Roboto and CampCaps fonts on your computer to proceed.", caption: "Fonts not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void LoadCustomFonts(byte[] font)
+		{
+			//Doc: https://stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
+
+			//Create your private font collection object.
+			PrivateFontCollection pfc = new();
+
+			//Select your font from the resources.
+			int fontLength = font.Length;
+
+			// create a buffer to read in to
+			byte[] fontdata = font;
+
+			// create an unsafe memory block for the font data
+			System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+
+			// copy the bytes to the unsafe memory block
+			Marshal.Copy(fontdata, 0, data, fontLength);
+
+			// pass the font to the font collection
+			pfc.AddMemoryFont(data, fontLength);
+
+			//Release the font after you are sure that it can never be used again
+			//pfc.Dispose();
+			//Marshal.FreeCoTaskMem(data)
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -114,13 +158,14 @@ namespace PassGuard
 		[SupportedOSPlatform("windows")]
 		private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
 		{
-			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			//Microsoft Sans Serif
+			CreateVaultButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void CreateVaultButton_MouseLeave(object sender, EventArgs e)
 		{
-			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			CreateVaultButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void LoadVaultButton_Click(object sender, EventArgs e)
@@ -134,25 +179,25 @@ namespace PassGuard
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
 		{
-			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			LoadVaultButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
 		{
-			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			LoadVaultButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseEnter(object sender, EventArgs e)
 		{
-			DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+			DesignerLabel.Font = new Font("Roboto", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseLeave(object sender, EventArgs e)
 		{
-			DesignerLabel.Font = new Font("Mongolian Baiti", 10, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			DesignerLabel.Font = new Font("Roboto", 11, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
@@ -160,7 +205,11 @@ namespace PassGuard
 			string url = "https://github.com/martilux2580?tab=repositories";
 			try
 			{
-				System.Diagnostics.Process.Start(url); //Open browser with webpage.
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = url,
+					UseShellExecute = true
+				}); ////Open webpage with default browser...
 			}
 			catch (Exception)
 			{
@@ -280,13 +329,13 @@ namespace PassGuard
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseEnter(object sender, EventArgs e)
 		{
-			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			CreateQuickPassButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseLeave(object sender, EventArgs e)
 		{
-			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			CreateQuickPassButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void CreateQuickPassButton_Click(object sender, EventArgs e)

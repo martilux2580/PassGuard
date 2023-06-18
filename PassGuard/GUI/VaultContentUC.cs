@@ -598,19 +598,8 @@ namespace PassGuard.GUI
 
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
-			var data = "In this panel the contents of the Vault you have logged in will be shown. This panel is composed of a table with seven columns (buttons) that show the saved data of each of your passwords, a space where all the passwords in your Vault will be displayed, and four buttons at the bottom where you can Add, Edit, Delete or get Help on how PassGuard works."
-				+ "\nIf you click in any of the column buttons, you can select to order your passwords by that column you´ve clicked in Normal Order (just as they where added), Ascending Order (from A-Z) or Descending Order (from Z-A). Initially everything is ordered in Normal Order. The Vault cannot be ordered by two or more columns simultaneosly."
-				+ "\nRows composed of buttons with your password data will be shown in the table. In case of the password itself, a text composed of '***************' will be displayed. If any of those buttons is clicked, the whole text data will be copied to your clipboard. All data is stored, but because of space issues it may not be shown completely, this could be the case of the Notes column."
-				+ "\nFour buttons at the bottom of the form will be displayed: "
-				+ "\n\tAdd: Adds a password to your Vault. Name, Username and Password cannot be blank, and the new Name cannot be already registered in your Vault. Be aware that textboxes support a limited amount of characters, in case of the Notes column you should be OK if you save brief notes."
-				+ "\n\tEdit: Edits a password from your Vault. In the drop-down list you can select the Name of the password you want to edit. Any field of the password can be modified, but the new Name cannot be already registered in your Vault (you can check all the registered names in the drop-down list)."
-				+ "\n\tDelete: Deletes a password from your Vault, or delete all the passwords from your Vault: In the drop-down list you can select the Name of the password you want to delete, then click on the button 'Delete Selected Element' and the data of that selected password will be deleted."
-				+ "\n\t\tIf the checkbox is Enabled, you can click in the button 'Delete All Elements' and all the elements of your Vault will be deleted."
-				+ "\n\t\tAny deleted element cannot be recovered. Before deleting an element or all the elements, a pop-up window asking for confirmation of the action will be shown."
-				+ "\n\tExport as PDF: Exports all the data from the current Vault into PDF format. This PDF will be stored in your My Documents folder in Windows OS. This action could take some minutes depending on the amount of data to export."
-				+ "\n\tHelp: Displays a pop-up window with information about how to manage your PassGuard Vault."
-				+ "\n\nHave a good day :)";
-			MessageBox.Show(text: data, caption: "Information about operations in a Vault.", icon: MessageBoxIcon.Information, buttons: MessageBoxButtons.OK);
+			GUI.HelpVaultForm help = new();
+			help.ShowDialog();
 		}
 
 		private void URLNormalToolStripMenuItem_Click(object sender, EventArgs e)
