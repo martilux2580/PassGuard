@@ -30,5 +30,7 @@ namespace PassGuard.GUI
 			TimeLabel.Text = DateTime.Now.ToLongTimeString(); //When a tick occurs, change text and date to actual date, to simulate a clock.
 			DateLabel.Text = DateTime.Now.ToString("D", new CultureInfo("en-US"));
 		}
+
+		//Franklin Gothic Medium Cond
 	}
 }

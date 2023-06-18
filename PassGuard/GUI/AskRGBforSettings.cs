@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Linq;
@@ -184,7 +185,11 @@ namespace PassGuard.GUI
 			string url = "https://htmlcolorcodes.com/es";
 			try
 			{
-				System.Diagnostics.Process.Start(url); //Open browser with webpage.
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = url,
+					UseShellExecute = true
+				}); ////Open webpage with default browser...
 			}
 			catch (Exception)
 			{
