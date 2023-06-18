@@ -96,6 +96,7 @@ namespace PassGuard.GUI
 			this.RedNowNUD = new System.Windows.Forms.NumericUpDown();
 			this.RNowLabel = new System.Windows.Forms.Label();
 			this.ExportAsPdfButton = new System.Windows.Forms.Button();
+			this.HelpButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.RedNextNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNextNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNextNUD)).BeginInit();
@@ -233,7 +234,7 @@ namespace PassGuard.GUI
 			this.SendButton.Name = "SendButton";
 			this.SendButton.Size = new System.Drawing.Size(115, 37);
 			this.SendButton.TabIndex = 11;
-			this.SendButton.Text = "Send";
+			this.SendButton.Text = "Send Changes";
 			this.SendButton.UseVisualStyleBackColor = true;
 			this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
 			this.SendButton.MouseEnter += new System.EventHandler(this.SendButton_MouseEnter);
@@ -268,12 +269,12 @@ namespace PassGuard.GUI
 			this.EditButton.FlatAppearance.BorderSize = 0;
 			this.EditButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.EditButton.Location = new System.Drawing.Point(841, 192);
+			this.EditButton.Location = new System.Drawing.Point(841, 161);
 			this.EditButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.EditButton.Name = "EditButton";
 			this.EditButton.Size = new System.Drawing.Size(114, 39);
 			this.EditButton.TabIndex = 16;
-			this.EditButton.Text = "Edit Config";
+			this.EditButton.Text = "Edit";
 			this.EditButton.UseVisualStyleBackColor = true;
 			this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
 			this.EditButton.MouseEnter += new System.EventHandler(this.EditButton_MouseEnter);
@@ -289,7 +290,7 @@ namespace PassGuard.GUI
 			this.DeleteButton.Name = "DeleteButton";
 			this.DeleteButton.Size = new System.Drawing.Size(114, 39);
 			this.DeleteButton.TabIndex = 17;
-			this.DeleteButton.Text = "Delete Config";
+			this.DeleteButton.Text = "Delete";
 			this.DeleteButton.UseVisualStyleBackColor = true;
 			this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
 			this.DeleteButton.MouseEnter += new System.EventHandler(this.DeleteButton_MouseEnter);
@@ -305,7 +306,7 @@ namespace PassGuard.GUI
 			this.AddButton.Name = "AddButton";
 			this.AddButton.Size = new System.Drawing.Size(114, 39);
 			this.AddButton.TabIndex = 18;
-			this.AddButton.Text = "Add Config";
+			this.AddButton.Text = "Add";
 			this.AddButton.UseVisualStyleBackColor = true;
 			this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
 			this.AddButton.MouseEnter += new System.EventHandler(this.AddButton_MouseEnter);
@@ -741,7 +742,7 @@ namespace PassGuard.GUI
 			this.ExportAsPdfButton.FlatAppearance.BorderSize = 0;
 			this.ExportAsPdfButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ExportAsPdfButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ExportAsPdfButton.Location = new System.Drawing.Point(841, 318);
+			this.ExportAsPdfButton.Location = new System.Drawing.Point(841, 349);
 			this.ExportAsPdfButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.ExportAsPdfButton.Name = "ExportAsPdfButton";
 			this.ExportAsPdfButton.Size = new System.Drawing.Size(114, 39);
@@ -752,11 +753,28 @@ namespace PassGuard.GUI
 			this.ExportAsPdfButton.MouseEnter += new System.EventHandler(this.ExportAsPdfButton_MouseEnter);
 			this.ExportAsPdfButton.MouseLeave += new System.EventHandler(this.ExportAsPdfButton_MouseLeave);
 			// 
+			// HelpButton
+			// 
+			this.HelpButton.FlatAppearance.BorderSize = 0;
+			this.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.HelpButton.Location = new System.Drawing.Point(840, 255);
+			this.HelpButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.HelpButton.Name = "HelpButton";
+			this.HelpButton.Size = new System.Drawing.Size(114, 39);
+			this.HelpButton.TabIndex = 28;
+			this.HelpButton.Text = "Help";
+			this.HelpButton.UseVisualStyleBackColor = true;
+			this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+			this.HelpButton.MouseEnter += new System.EventHandler(this.HelpButton_MouseEnter);
+			this.HelpButton.MouseLeave += new System.EventHandler(this.HelpButton_MouseLeave);
+			// 
 			// AskRGBforSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(968, 583);
+			this.Controls.Add(this.HelpButton);
 			this.Controls.Add(this.ExportAsPdfButton);
 			this.Controls.Add(this.RGBNowExecLabel);
 			this.Controls.Add(this.BlueNowNUD);
@@ -863,5 +881,6 @@ namespace PassGuard.GUI
 		internal System.Windows.Forms.NumericUpDown RedNowNUD;
 		private System.Windows.Forms.Label RNowLabel;
 		private System.Windows.Forms.Button ExportAsPdfButton;
+		private System.Windows.Forms.Button HelpButton;
 	}
 }

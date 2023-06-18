@@ -68,9 +68,9 @@ namespace PassGuard.GUI
 			this.TitleLabel.Location = new System.Drawing.Point(14, 10);
 			this.TitleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.TitleLabel.Name = "TitleLabel";
-			this.TitleLabel.Size = new System.Drawing.Size(355, 18);
+			this.TitleLabel.Size = new System.Drawing.Size(379, 18);
 			this.TitleLabel.TabIndex = 49;
-			this.TitleLabel.Text = "Select the name of the password you want to delete: ";
+			this.TitleLabel.Text = "Select the name of the outline colour you want to delete: ";
 			// 
 			// BlueLabel
 			// 
