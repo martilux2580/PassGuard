@@ -14,7 +14,6 @@ using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static iText.Svg.SvgConstants;
 
 namespace PassGuard.GUI
 {
@@ -875,15 +874,15 @@ namespace PassGuard.GUI
 		}
 
 		[SupportedOSPlatform("windows")]
-		private void ExportAsPdfButton_MouseEnter(object sender, EventArgs e)
+		private void ExportButton_MouseEnter(object sender, EventArgs e)
 		{
-			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+			ExportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
-		private void ExportAsPdfButton_MouseLeave(object sender, EventArgs e)
+		private void ExportButton_MouseLeave(object sender, EventArgs e)
 		{
-			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+			ExportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -934,10 +933,10 @@ namespace PassGuard.GUI
 			AddButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
-		private void ExportAsPdfButton_Click(object sender, EventArgs e)
+		private void ExportButton_Click(object sender, EventArgs e)
 		{
-			IPDF pdf = new PDFCreator();
-			pdf.CreateOutlinePDF();
+			ExportVaultConfigs export = new();
+			export.ShowDialog();
 		}
 
 		[SupportedOSPlatform("windows")]
