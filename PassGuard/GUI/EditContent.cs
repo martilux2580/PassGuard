@@ -26,6 +26,7 @@ namespace PassGuard.GUI
 		public String important { get; private set; }
 
 		private List<String> namesInDB; //Names already in the Vault
+		private List<String> categories; 
 		private readonly byte[] Key;
 		private readonly String decPath;
 		public bool editedSuccess { get; private set; }
@@ -36,9 +37,9 @@ namespace PassGuard.GUI
 		internal String getHashofName(String name)
 		{
 			return map.FirstOrDefault(x => x.Value == name).Key; //Return the key, given the value.
-		}        
+		}
 
-		public EditContent(List<String> names, byte[] key, String decpath)
+		public EditContent(List<String> names, byte[] key, String decpath, List<String> rawCategories)
 		{
 			InitializeComponent();
 
@@ -58,6 +59,9 @@ namespace PassGuard.GUI
 				NameCombobox.Items.Add(crypt.DecryptText(key: Key, src: name));
 			}
 			editedSuccess = false;
+			categories = new();
+
+			LoadCategoryCombobox(rawCategories);
 
 			try
 			{
@@ -66,6 +70,23 @@ namespace PassGuard.GUI
 			catch (Exception)
 			{
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+		}
+
+		private void LoadCategoryCombobox(List<String> categorias)
+		{
+			var rawCategories = new List<String>();
+			for (int i = 0; i < categorias.Count; i++)
+			{
+				rawCategories.Add(crypt.DecryptText(key: Key, src: categorias[i]));
+			}
+
+			categories = new HashSet<String>(rawCategories).ToList<String>(); //Remove dups
+
+			CategoryCombobox.Items.Add("");
+			foreach (String category in categories)
+			{
+				CategoryCombobox.Items.Add(category);
 			}
 		}
 
@@ -97,7 +118,7 @@ namespace PassGuard.GUI
 				name = crypt.EncryptText(key: Key, src: NameTextbox.Text);
 				username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
 				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
-				category = crypt.EncryptText(key: Key, src: CategoryTextbox.Text);
+				category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
 				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
 				if (ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
 				else { important = crypt.EncryptText(key: Key, src: "0"); }
@@ -126,7 +147,7 @@ namespace PassGuard.GUI
 				NameTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[1]);
 				UsernameTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[2]);
 				PasswordTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[3]);
-				CategoryTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[4]);
+				CategoryCombobox.Text = crypt.DecryptText(key: Key, src: fullResults[4]);
 				NotesTextbox.Text = crypt.DecryptText(key: Key, src: fullResults[5]);
 				if(Convert.ToBoolean(Int32.Parse(crypt.DecryptText(key: Key, src: fullResults[6])))){ ImportantCheckbox.Checked = true; }
 				else { ImportantCheckbox.Checked = false; }
@@ -141,7 +162,7 @@ namespace PassGuard.GUI
 				PassLabel.Enabled = true;
 				PasswordTextbox.Enabled = true;
 				CategoryLabel.Enabled = true;
-				CategoryTextbox.Enabled = true;
+				CategoryCombobox.Enabled = true;
 				NotesLabel.Enabled = true;
 				NotesTextbox.Enabled = true;
 				EditButton.Enabled = true;
@@ -155,7 +176,7 @@ namespace PassGuard.GUI
 				NameTextbox.Text = null;
 				UsernameTextbox.Text = null;
 				PasswordTextbox.Text = null;
-				CategoryTextbox.Text = null;
+				CategoryCombobox.Text = null;
 				NotesTextbox.Text = null;
 				ImportantCheckbox.Checked = false;
 
@@ -169,7 +190,7 @@ namespace PassGuard.GUI
 				PassLabel.Enabled = false;
 				PasswordTextbox.Enabled = false;
 				CategoryLabel.Enabled = false;
-				CategoryTextbox.Enabled = false;
+				CategoryCombobox.Enabled = false;
 				NotesLabel.Enabled = false;
 				NotesTextbox.Enabled = false;
 				EditButton.Enabled = false;
@@ -189,6 +210,25 @@ namespace PassGuard.GUI
 			{
 				PasswordTextbox.UseSystemPasswordChar = true;
 				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
+
+		private void CategoryCombobox_Validating(object sender, CancelEventArgs e)
+		{
+			string enteredValue = CategoryCombobox.Text;
+
+			if (!string.IsNullOrEmpty(enteredValue))
+			{
+				// Case-insensitive search for a matching item
+				string matchedItem = CategoryCombobox.Items
+					.OfType<string>()
+					.FirstOrDefault(item => item.Equals(enteredValue, StringComparison.OrdinalIgnoreCase));
+
+				// If a matching item is found, set it as the selected item
+				if (matchedItem != null)
+				{
+					CategoryCombobox.SelectedItem = matchedItem;
+				}
 			}
 		}
 	}

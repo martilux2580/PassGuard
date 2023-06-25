@@ -1,4 +1,5 @@
 ﻿using PassGuard.Crypto;
+using PassGuard.VaultQueries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,11 +26,12 @@ namespace PassGuard.GUI
 		public String notes { get; private set; }
 		public String important { get; private set; }
 		private List<String> namesInDB; //List of names already in Vault.
+		private List<String> categories; 
 		public bool addedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
 		private readonly byte[] Key; //Key 
 		private ICrypt crypt = new AESAlgorithm();
 
-		public AddContent(List<String> names, byte[] key)
+		public AddContent(List<String> names, byte[] key, List<String> rawCategories)
 		{
 			InitializeComponent();
 
@@ -40,6 +42,10 @@ namespace PassGuard.GUI
 				namesInDB[i] = crypt.DecryptText(key: Key, src: namesInDB[i]);
 			}
 			addedSuccess = false;
+			categories = new();
+
+			LoadCategoryCombobox(rawCategories);
+
 			try
 			{
 				this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
@@ -47,6 +53,23 @@ namespace PassGuard.GUI
 			catch (Exception)
 			{
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+		}
+
+		private void LoadCategoryCombobox(List<String> categorias)
+		{
+			var rawCategories = new List<String>();
+			for (int i = 0; i < categorias.Count; i++) 
+			{
+				rawCategories.Add(crypt.DecryptText(key: Key, src: categorias[i]));
+			}
+
+			categories = new HashSet<String>(rawCategories).ToList<String>(); //Remove dups
+
+			CategoryCombobox.Items.Add("");
+			foreach (String category in categories) 
+			{
+				CategoryCombobox.Items.Add(category);
 			}
 		}
 
@@ -86,7 +109,7 @@ namespace PassGuard.GUI
 				name = crypt.EncryptText(key: Key, src: NameTextbox.Text);
 				username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
 				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
-				category = crypt.EncryptText(key: Key, src: CategoryTextbox.Text);
+				category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
 				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
 				if(ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
 				else { important = crypt.EncryptText(key: Key, src: "0"); }
@@ -110,6 +133,25 @@ namespace PassGuard.GUI
 			{
 				PasswordTextbox.UseSystemPasswordChar = true;
 				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
+
+		private void CategoryCombobox_Validating(object sender, CancelEventArgs e)
+		{
+			string enteredValue = CategoryCombobox.Text;
+
+			if (!string.IsNullOrEmpty(enteredValue))
+			{
+				// Case-insensitive search for a matching item
+				string matchedItem = CategoryCombobox.Items
+					.OfType<string>()
+					.FirstOrDefault(item => item.Equals(enteredValue, StringComparison.OrdinalIgnoreCase));
+
+				// If a matching item is found, set it as the selected item
+				if (matchedItem != null)
+				{
+					CategoryCombobox.SelectedItem = matchedItem;
+				}
 			}
 		}
 	}

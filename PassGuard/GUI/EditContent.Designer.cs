@@ -32,7 +32,6 @@ namespace PassGuard.GUI
 			this.EditButton = new System.Windows.Forms.Button();
 			this.NotesTextbox = new System.Windows.Forms.TextBox();
 			this.NotesLabel = new System.Windows.Forms.Label();
-			this.CategoryTextbox = new System.Windows.Forms.TextBox();
 			this.CategoryLabel = new System.Windows.Forms.Label();
 			this.PasswordTextbox = new System.Windows.Forms.TextBox();
 			this.PassLabel = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@ namespace PassGuard.GUI
 			this.NameCombobox = new System.Windows.Forms.ComboBox();
 			this.PassVisibilityButton = new System.Windows.Forms.Button();
 			this.ImportantCheckbox = new System.Windows.Forms.CheckBox();
+			this.CategoryCombobox = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// EditButton
@@ -86,16 +86,6 @@ namespace PassGuard.GUI
 			this.NotesLabel.Size = new System.Drawing.Size(125, 18);
 			this.NotesLabel.TabIndex = 23;
 			this.NotesLabel.Text = "Notes (Optional): ";
-			// 
-			// CategoryTextbox
-			// 
-			this.CategoryTextbox.Enabled = false;
-			this.CategoryTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.CategoryTextbox.Location = new System.Drawing.Point(250, 219);
-			this.CategoryTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.CategoryTextbox.Name = "CategoryTextbox";
-			this.CategoryTextbox.Size = new System.Drawing.Size(472, 22);
-			this.CategoryTextbox.TabIndex = 22;
 			// 
 			// CategoryLabel
 			// 
@@ -248,18 +238,28 @@ namespace PassGuard.GUI
 			this.ImportantCheckbox.Text = "Save as Important Password?";
 			this.ImportantCheckbox.UseVisualStyleBackColor = true;
 			// 
+			// CategoryCombobox
+			// 
+			this.CategoryCombobox.Enabled = false;
+			this.CategoryCombobox.FormattingEnabled = true;
+			this.CategoryCombobox.Location = new System.Drawing.Point(250, 223);
+			this.CategoryCombobox.Name = "CategoryCombobox";
+			this.CategoryCombobox.Size = new System.Drawing.Size(472, 23);
+			this.CategoryCombobox.TabIndex = 45;
+			this.CategoryCombobox.Validating += new System.ComponentModel.CancelEventHandler(this.CategoryCombobox_Validating);
+			// 
 			// EditContent
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 434);
+			this.Controls.Add(this.CategoryCombobox);
 			this.Controls.Add(this.ImportantCheckbox);
 			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.NameCombobox);
 			this.Controls.Add(this.TitleLabel);
 			this.Controls.Add(this.NotesTextbox);
 			this.Controls.Add(this.NotesLabel);
-			this.Controls.Add(this.CategoryTextbox);
 			this.Controls.Add(this.CategoryLabel);
 			this.Controls.Add(this.PasswordTextbox);
 			this.Controls.Add(this.PassLabel);
@@ -286,7 +286,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Button EditButton;
         private System.Windows.Forms.TextBox NotesTextbox;
         private System.Windows.Forms.Label NotesLabel;
-        private System.Windows.Forms.TextBox CategoryTextbox;
         private System.Windows.Forms.Label CategoryLabel;
         private System.Windows.Forms.TextBox PasswordTextbox;
         private System.Windows.Forms.Label PassLabel;
@@ -300,5 +299,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.ComboBox NameCombobox;
 		private System.Windows.Forms.Button PassVisibilityButton;
 		private System.Windows.Forms.CheckBox ImportantCheckbox;
+		private System.Windows.Forms.ComboBox CategoryCombobox;
 	}
 }
