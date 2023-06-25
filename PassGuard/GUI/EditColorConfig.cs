@@ -25,9 +25,9 @@ namespace PassGuard.GUI
 		public int blue { get; private set; }
 		public int chosen { get; private set; }
 		public int favourite { get; private set; }
-		public int persists { get; private set; }
+		public int persists { get; private set; } //Know if config will stay for future executions...
 		private Dictionary<String, List<int>> storedConfigs;
-		private string actualChosenName;
+		private string actualChosenName; //Name of config that has chosen checkbox checked...
 
 		public EditColorConfig(Dictionary<String, List<int>> configs, string ActuallyChosenName)
 		{
@@ -57,6 +57,13 @@ namespace PassGuard.GUI
 
 		private void EditButton_Click(object sender, EventArgs e)
 		{
+			/** 3 things to check:
+			 *	Name changes or not
+			 *	RGB values changes or not
+			 *	Checkboxes changes or not (either fav or chosen)
+			 **/
+
+			//3 variables checking if those 3 things changed, if they changed value is 0, not changed is 1
 			bool nameEqual = NameTextbox.Text == NameCombobox.Text;
 
 			var colorConfig = new List<int> { (int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value };
@@ -68,13 +75,14 @@ namespace PassGuard.GUI
 				&& (Convert.ToBoolean(storedConfigs[NameCombobox.Text][3]) == FavouriteCheckbox.Checked);
 				
 
+			//Compound the bits and check what changed exactly, so to act for each case....
 			string result = Convert.ToInt32(nameEqual).ToString() + Convert.ToInt32(rgbEqual).ToString() + Convert.ToInt32(checksEqual).ToString();
 			string errorMessages = "The following errors have been found:\n\n";
 			switch (result)
 			{
-				case "000":
-				case "001":
-					// Code for when bits is 000 or 001
+				case "000": //3 values changed
+				case "001": //Name and rgb changed
+					// Check if new name and rgb arent already saved....
 					rgbEqual = false;
 					foreach (List<int> savedConfig in storedConfigs.Values)
 					{
@@ -112,9 +120,9 @@ namespace PassGuard.GUI
 						MessageBox.Show(text: errorMessages + "\nThere is already a saved config with that name, or with that RGB configuration.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 					}
 					break;
-				case "010":
-				case "011":
-					// Code for when bits is 010 or 011
+				case "010": //Name and checkboxes changed
+				case "011": //Name changed
+					// Just check if new name isnt already saved...
 					if (!storedConfigs.ContainsKey(NameTextbox.Text))
 					{
 						oldname = NameCombobox.Text;
@@ -141,9 +149,9 @@ namespace PassGuard.GUI
 						MessageBox.Show(text: errorMessages + "\nThere is already a saved config with that name.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 					}
 					break;
-				case "100":
-				case "101":
-					// Code for when bits is 100 or 101
+				case "100": //Rgb and checks changed
+				case "101": //Rgb changed
+					// Check new rgb isnt already saved...
 					foreach (List<int> savedConfig in storedConfigs.Values)
 					{
 						if ((savedConfig[0] == colorConfig[0]) && (savedConfig[1] == colorConfig[1]) && (savedConfig[2] == colorConfig[2])) //.Contains() does not work.
@@ -179,8 +187,8 @@ namespace PassGuard.GUI
 						MessageBox.Show(text: errorMessages + "\nThere is already a saved config with that RGB configuration.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 					}
 					break;
-				case "110":
-					// Code for when bits is 110
+				case "110": //Checks changed
+					// Just save it, no need to check anything...
 					oldname = NameCombobox.Text;
 					name = NameTextbox.Text;
 					red = (int)RedNUD.Value;
@@ -200,8 +208,8 @@ namespace PassGuard.GUI
 					editedSuccess = true;
 					this.Close();
 					break;
-				case "111":
-					// Code for when bits is 111
+				case "111": //Nothing changed
+					// Tell user that nothing changed...
 					MessageBox.Show(text: errorMessages + "There is an exact same config already saved >:(", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
 					break;
 				default:
