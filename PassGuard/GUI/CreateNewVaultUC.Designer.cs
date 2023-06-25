@@ -217,6 +217,7 @@ namespace PassGuard.GUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.SaveEmailCheckbox);
 			this.Controls.Add(this.CreateNewVaultButton);

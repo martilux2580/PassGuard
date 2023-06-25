@@ -124,7 +124,7 @@ namespace PassGuard.GUI
 			this.NotesTextbox.Multiline = true;
 			this.NotesTextbox.Name = "NotesTextbox";
 			this.NotesTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.NotesTextbox.Size = new System.Drawing.Size(472, 36);
+			this.NotesTextbox.Size = new System.Drawing.Size(472, 49);
 			this.NotesTextbox.TabIndex = 38;
 			// 
 			// NotesLabel
@@ -269,7 +269,7 @@ namespace PassGuard.GUI
 			this.ImportantCheckbox.AutoSize = true;
 			this.ImportantCheckbox.Enabled = false;
 			this.ImportantCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ImportantCheckbox.Location = new System.Drawing.Point(289, 320);
+			this.ImportantCheckbox.Location = new System.Drawing.Point(288, 333);
 			this.ImportantCheckbox.Name = "ImportantCheckbox";
 			this.ImportantCheckbox.Size = new System.Drawing.Size(225, 22);
 			this.ImportantCheckbox.TabIndex = 45;

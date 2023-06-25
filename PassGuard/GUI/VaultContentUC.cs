@@ -285,8 +285,9 @@ namespace PassGuard.GUI
 
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				List<String> names = query.GetColumn(DBColumns.Name.ToString());
+				List<String> categories = query.GetColumn(DBColumns.Category.ToString());
 
-				GUI.AddContent add = new(names, cKey)
+				GUI.AddContent add = new(names, cKey, categories)
 				{
 					BackColor = this.Parent.BackColor
 				}; //Invoke Form and retrieve new data
@@ -506,8 +507,9 @@ namespace PassGuard.GUI
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 
 				List<String> names = query.GetColumn(DBColumns.Name.ToString());
-				
-				GUI.EditContent edit = new(names, cKey, decVault)
+				List<String> categories = query.GetColumn(DBColumns.Category.ToString());
+
+				GUI.EditContent edit = new(names, cKey, decVault, categories)
 				{
 					BackColor = this.Parent.BackColor
 				}; //Invoke edit form and retrieve data
