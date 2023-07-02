@@ -25,5 +25,10 @@ namespace PassGuard.Utils
 					blue
 				}.ToArray();
 		}
+
+		internal static bool IsInRange(int value, int min, int max)
+		{
+			return (min <= value && value <= max);
+		}
 	}
 }

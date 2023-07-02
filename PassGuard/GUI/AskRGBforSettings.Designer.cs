@@ -30,15 +30,15 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.RGBTitleLabel = new System.Windows.Forms.Label();
 			this.RNextLabel = new System.Windows.Forms.Label();
 			this.RedNextNUD = new System.Windows.Forms.NumericUpDown();
@@ -97,6 +97,7 @@ namespace PassGuard.GUI
 			this.RNowLabel = new System.Windows.Forms.Label();
 			this.ExportButton = new System.Windows.Forms.Button();
 			this.HelpButton = new System.Windows.Forms.Button();
+			this.ImportButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.RedNextNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNextNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNextNUD)).BeginInit();
@@ -360,13 +361,13 @@ namespace PassGuard.GUI
 			this.ColourContentDGV.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.ColourContentDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.ColourContentDGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.ColourContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
 			this.ColourContentDGV.ColumnHeadersHeight = 47;
 			this.ColourContentDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.ColourContentDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -378,14 +379,14 @@ namespace PassGuard.GUI
             this.ChosenConfigColumn,
             this.FavouriteColumn,
             this.DeleteRowColumn});
-			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle18.ForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
-			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle27.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.ButtonShadow;
+			dataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.ColourContentDGV.DefaultCellStyle = dataGridViewCellStyle27;
 			this.ColourContentDGV.EnableHeadersVisualStyles = false;
 			this.ColourContentDGV.GridColor = System.Drawing.SystemColors.InfoText;
 			this.ColourContentDGV.Location = new System.Drawing.Point(19, 67);
@@ -403,9 +404,9 @@ namespace PassGuard.GUI
 			// 
 			// ConfigNameColumn
 			// 
-			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.Black;
-			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle20.SelectionForeColor = System.Drawing.Color.Black;
+			this.ConfigNameColumn.DefaultCellStyle = dataGridViewCellStyle20;
 			this.ConfigNameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ConfigNameColumn.HeaderText = "ConfigName";
 			this.ConfigNameColumn.Name = "ConfigNameColumn";
@@ -414,9 +415,9 @@ namespace PassGuard.GUI
 			// 
 			// RedColumn
 			// 
-			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.Black;
-			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle21.SelectionForeColor = System.Drawing.Color.Black;
+			this.RedColumn.DefaultCellStyle = dataGridViewCellStyle21;
 			this.RedColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.RedColumn.HeaderText = "Red";
 			this.RedColumn.Name = "RedColumn";
@@ -425,9 +426,9 @@ namespace PassGuard.GUI
 			// 
 			// GreenColumn
 			// 
-			dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.Black;
-			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle13;
+			dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle22.SelectionForeColor = System.Drawing.Color.Black;
+			this.GreenColumn.DefaultCellStyle = dataGridViewCellStyle22;
 			this.GreenColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.GreenColumn.HeaderText = "Green";
 			this.GreenColumn.Name = "GreenColumn";
@@ -436,9 +437,9 @@ namespace PassGuard.GUI
 			// 
 			// BlueColumn
 			// 
-			dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
-			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle14;
+			dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle23.SelectionForeColor = System.Drawing.Color.Black;
+			this.BlueColumn.DefaultCellStyle = dataGridViewCellStyle23;
 			this.BlueColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.BlueColumn.HeaderText = "Blue";
 			this.BlueColumn.Name = "BlueColumn";
@@ -455,10 +456,10 @@ namespace PassGuard.GUI
 			// 
 			// ChosenConfigColumn
 			// 
-			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle15.NullValue = false;
-			dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black;
-			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle15;
+			dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle24.NullValue = false;
+			dataGridViewCellStyle24.SelectionForeColor = System.Drawing.Color.Black;
+			this.ChosenConfigColumn.DefaultCellStyle = dataGridViewCellStyle24;
 			this.ChosenConfigColumn.HeaderText = "ChosenConfig";
 			this.ChosenConfigColumn.Name = "ChosenConfigColumn";
 			this.ChosenConfigColumn.ReadOnly = true;
@@ -466,10 +467,10 @@ namespace PassGuard.GUI
 			// 
 			// FavouriteColumn
 			// 
-			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle16.NullValue = false;
-			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
-			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle16;
+			dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle25.NullValue = false;
+			dataGridViewCellStyle25.SelectionForeColor = System.Drawing.Color.Black;
+			this.FavouriteColumn.DefaultCellStyle = dataGridViewCellStyle25;
 			this.FavouriteColumn.HeaderText = "Favourite";
 			this.FavouriteColumn.Name = "FavouriteColumn";
 			this.FavouriteColumn.ReadOnly = true;
@@ -477,9 +478,9 @@ namespace PassGuard.GUI
 			// 
 			// DeleteRowColumn
 			// 
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.Color.Black;
-			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle26.SelectionForeColor = System.Drawing.Color.Black;
+			this.DeleteRowColumn.DefaultCellStyle = dataGridViewCellStyle26;
 			this.DeleteRowColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.DeleteRowColumn.HeaderText = "Delete Row";
 			this.DeleteRowColumn.Name = "DeleteRowColumn";
@@ -769,11 +770,28 @@ namespace PassGuard.GUI
 			this.HelpButton.MouseEnter += new System.EventHandler(this.HelpButton_MouseEnter);
 			this.HelpButton.MouseLeave += new System.EventHandler(this.HelpButton_MouseLeave);
 			// 
+			// ImportButton
+			// 
+			this.ImportButton.FlatAppearance.BorderSize = 0;
+			this.ImportButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.ImportButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ImportButton.Location = new System.Drawing.Point(706, 12);
+			this.ImportButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.ImportButton.Name = "ImportButton";
+			this.ImportButton.Size = new System.Drawing.Size(114, 39);
+			this.ImportButton.TabIndex = 29;
+			this.ImportButton.Text = "Import Data";
+			this.ImportButton.UseVisualStyleBackColor = true;
+			this.ImportButton.Click += new System.EventHandler(this.ImportButton_Click);
+			this.ImportButton.MouseEnter += new System.EventHandler(this.ImportButton_MouseEnter);
+			this.ImportButton.MouseLeave += new System.EventHandler(this.ImportButton_MouseLeave);
+			// 
 			// AskRGBforSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(968, 583);
+			this.Controls.Add(this.ImportButton);
 			this.Controls.Add(this.HelpButton);
 			this.Controls.Add(this.ExportButton);
 			this.Controls.Add(this.RGBNowExecLabel);
@@ -882,5 +900,6 @@ namespace PassGuard.GUI
 		private System.Windows.Forms.Label RNowLabel;
 		private System.Windows.Forms.Button ExportButton;
 		private System.Windows.Forms.Button HelpButton;
+		private System.Windows.Forms.Button ImportButton;
 	}
 }

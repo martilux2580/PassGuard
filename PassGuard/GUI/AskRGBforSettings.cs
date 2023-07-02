@@ -1,14 +1,18 @@
 ﻿using PassGuard.PDF;
+using PassGuard.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Runtime.Versioning;
 using System.Security.Policy;
 using System.Text.Json;
@@ -956,5 +960,164 @@ namespace PassGuard.GUI
 			GUI.HelpColourConfigsForm help = new();
 			help.ShowDialog();
 		}
+
+		[SupportedOSPlatform("windows")]
+		private void ImportButton_MouseEnter(object sender, EventArgs e)
+		{
+			ImportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the butto
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ImportButton_MouseLeave(object sender, EventArgs e)
+		{
+			ImportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		private void ImportButton_Click(object sender, EventArgs e)
+		{
+			DialogResult confirmation = MessageBox.Show(text: "If you import configurations from a file, your saved configurations will be replaced by the imported configurations, and cannot be recovered.\n\nAre you sure you want to continue with the import process?", caption: "Import confirmation", buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question);
+			if (confirmation == DialogResult.Yes)
+			{
+				//Select and Save filepath and extension.
+				string filepath = "";
+				string ext = ""; //File extension
+				bool cancelPathSearch = false;
+				while (ext != ".json" && !cancelPathSearch)
+				{
+					OpenFileDialog ofd = new()
+					{
+						Filter = "JSON file|*.json" //Type of file we are looking for...
+					}; //File selector
+
+					var result = ofd.ShowDialog();
+					filepath = ofd.FileName;
+					ext = Path.GetExtension(filepath).ToLower();
+
+					if (result == DialogResult.Cancel)
+					{
+						cancelPathSearch = true; //Stop loop, as user hit cancel button.
+					}
+					else if (ext != ".json") //If user specified file with diff extension...
+					{
+						MessageBox.Show(text: "Selected file must have .json extension.", caption: "Wrong File", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+					}
+				}
+				if (filepath != "")
+				{
+					if (ValidateJsonFormat(File.ReadAllText(filepath)))
+					{
+						// Deserialize JSON content into an object
+						var goodFormData = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(File.ReadAllText(filepath));
+						var newData = ValidateAndGetJsonContent(goodFormData);
+						if (newData != null)
+						{
+							if(newData.Count == 0)
+							{
+								newData.Add("Default", new List<int> { 0, 191, 144, 1 });
+							}
+							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(newData); //Modify data in the config file for future executions.
+							config.Save(ConfigurationSaveMode.Modified);
+							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+
+							ColourContentDGV.Rows.Clear();
+							LoadContent(JsonSerializer.Serialize(newData));
+							ResetCMS();
+						}
+						else
+						{
+							MessageBox.Show(text: "Content of your JSON file is not valid.", caption: "Content Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+						}
+					}
+				}
+			}
+
+		}
+
+		private bool ValidateJsonFormat(string rawData)
+		{
+			try
+			{
+				// Deserialize JSON content into an object
+				var data = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(rawData);
+				return true;
+			}
+			catch(Exception)
+			{
+				MessageBox.Show(text: "Format of your JSON file is not valid.", caption: "Format Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+				return false;
+			}
+		}
+
+		private Dictionary<string, List<int>> ValidateAndGetJsonContent(Dictionary<string, List<int>> rawData)
+		{
+			//If all values are OK, we will return them. If not, we will return an empty dict.
+			//With all this conditions for the JSON, we are pretty much controlling JSON Injections....
+			Dictionary<string, List<int>> result = new();
+			// Validate the JSON data
+			foreach (var kvp in rawData)
+			{
+				string key = kvp.Key;
+				List<int> values = kvp.Value;
+
+				// Check if the value is a list of 4 integers
+				if (!(values.Count == 4)) //All integers
+				{
+					result = null;
+					return result;
+				}
+
+				Predicate<int> isInRange = number => number >= 0 && number <= 255;
+				// Check if the first 3 values are between 0 and 255
+				if (!values.GetRange(0, 3).TrueForAll(isInRange))
+				{
+					result = null;
+					return result;
+				}
+
+				// Check the last value is either 0 or 1
+				if (values[3] != 0 && values[3] != 1)
+				{
+					result = null;
+					return result;
+				}
+
+				// Check all the things you would check when you add a new config
+				if (!(result == null || result.Count <= 0))
+				{
+					bool areValuesValid = CheckAddConfigConditions(result, key, values);
+					if (!areValuesValid)
+					{
+						result = null;
+						return result;
+					}
+				}
+
+				result.Add(key, values);
+			}
+
+			return result;
+		}
+
+		public bool CheckAddConfigConditions(Dictionary<string, List<int>> content, string key, List<int> values)
+		{
+			if ((String.IsNullOrWhiteSpace(key)) || (content.ContainsKey(key))
+			|| (!Utils.BooleanUtils.IsValidColour(values[0], values[1], values[2]))
+			)
+			{
+				return false;
+			}
+
+			var colorConfig = new List<int> { values[0], values[1], values[2] };
+			foreach (List<int> savedConfig in content.Values)
+			{
+				if ((savedConfig[0] == colorConfig[0]) && (savedConfig[1] == colorConfig[1]) && (savedConfig[2] == colorConfig[2])) //.Contains() does not work.
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
+
 }
