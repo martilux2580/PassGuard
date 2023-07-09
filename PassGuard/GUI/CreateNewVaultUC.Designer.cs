@@ -52,6 +52,7 @@ namespace PassGuard.GUI
 			this.VaultNameTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultNameTextbox.Location = new System.Drawing.Point(406, 133);
 			this.VaultNameTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultNameTextbox.MaxLength = 2100;
 			this.VaultNameTextbox.Name = "VaultNameTextbox";
 			this.VaultNameTextbox.Size = new System.Drawing.Size(493, 24);
 			this.VaultNameTextbox.TabIndex = 0;
@@ -84,6 +85,7 @@ namespace PassGuard.GUI
 			this.VaultPathTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultPathTextbox.Location = new System.Drawing.Point(406, 361);
 			this.VaultPathTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultPathTextbox.MaxLength = 2100;
 			this.VaultPathTextbox.Name = "VaultPathTextbox";
 			this.VaultPathTextbox.Size = new System.Drawing.Size(457, 24);
 			this.VaultPathTextbox.TabIndex = 2;
@@ -118,6 +120,7 @@ namespace PassGuard.GUI
 			this.VaultPassTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultPassTextbox.Location = new System.Drawing.Point(406, 208);
 			this.VaultPassTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultPassTextbox.MaxLength = 2100;
 			this.VaultPassTextbox.Name = "VaultPassTextbox";
 			this.VaultPassTextbox.Size = new System.Drawing.Size(457, 24);
 			this.VaultPassTextbox.TabIndex = 5;
@@ -139,6 +142,7 @@ namespace PassGuard.GUI
 			this.ConfirmPassVaultTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.ConfirmPassVaultTextbox.Location = new System.Drawing.Point(406, 284);
 			this.ConfirmPassVaultTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.ConfirmPassVaultTextbox.MaxLength = 2100;
 			this.ConfirmPassVaultTextbox.Name = "ConfirmPassVaultTextbox";
 			this.ConfirmPassVaultTextbox.PasswordChar = '*';
 			this.ConfirmPassVaultTextbox.Size = new System.Drawing.Size(493, 24);
@@ -160,6 +164,7 @@ namespace PassGuard.GUI
 			this.VaultEmailTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultEmailTextbox.Location = new System.Drawing.Point(406, 58);
 			this.VaultEmailTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultEmailTextbox.MaxLength = 2100;
 			this.VaultEmailTextbox.Name = "VaultEmailTextbox";
 			this.VaultEmailTextbox.Size = new System.Drawing.Size(383, 24);
 			this.VaultEmailTextbox.TabIndex = 9;

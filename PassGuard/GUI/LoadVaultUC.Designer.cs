@@ -63,6 +63,7 @@ namespace PassGuard.GUI
 			this.VaultEmailTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultEmailTextbox.Location = new System.Drawing.Point(284, 89);
 			this.VaultEmailTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultEmailTextbox.MaxLength = 2100;
 			this.VaultEmailTextbox.Name = "VaultEmailTextbox";
 			this.VaultEmailTextbox.Size = new System.Drawing.Size(336, 24);
 			this.VaultEmailTextbox.TabIndex = 17;
@@ -84,6 +85,7 @@ namespace PassGuard.GUI
 			this.VaultPassTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultPassTextbox.Location = new System.Drawing.Point(284, 175);
 			this.VaultPassTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultPassTextbox.MaxLength = 2100;
 			this.VaultPassTextbox.Name = "VaultPassTextbox";
 			this.VaultPassTextbox.Size = new System.Drawing.Size(621, 24);
 			this.VaultPassTextbox.TabIndex = 13;
@@ -105,6 +107,7 @@ namespace PassGuard.GUI
 			this.SecurityKeyTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SecurityKeyTextbox.Location = new System.Drawing.Point(284, 263);
 			this.SecurityKeyTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.SecurityKeyTextbox.MaxLength = 2100;
 			this.SecurityKeyTextbox.Name = "SecurityKeyTextbox";
 			this.SecurityKeyTextbox.Size = new System.Drawing.Size(336, 24);
 			this.SecurityKeyTextbox.TabIndex = 11;

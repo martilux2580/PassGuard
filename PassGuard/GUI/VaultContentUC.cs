@@ -56,6 +56,8 @@ namespace PassGuard.GUI
 		private readonly byte[] cKey; //Content
 		private ICrypt crypt = new AESAlgorithm();
 		private IQuery query;
+		private DBColumns actualColumn;
+		private Order actualOrder;
 
 		[SupportedOSPlatform("windows")]
 		public VaultContentUC(String path, String email, String pass, byte[] key, String SK)
@@ -67,6 +69,8 @@ namespace PassGuard.GUI
 			vaultEmail = email;
 			vaultPass = pass;
 			vKey = key;
+			actualColumn = DBColumns.NULLVALUESS;
+			actualOrder = Order.Normal;
 
 			//Calculate cKey
 			var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
@@ -74,7 +78,7 @@ namespace PassGuard.GUI
 			cKey = kdf.GetVaultKey(password: (keyVStr + (vaultEmail + vaultPass)), salt: Encoding.Default.GetBytes(skStr + keyVStr), bytes: 32);
 
 			//Load the content of the Vault without any column order, and set the CMS for the orders.
-			LoadContent(Order.Normal, DBColumns.NULLVALUESS);
+			LoadContent(actualOrder, actualColumn);
 			SetCMS();
 
 		}
@@ -324,7 +328,7 @@ namespace PassGuard.GUI
 					}
 
 					//Reset ordering of rows.
-					ResetCMS();
+					//ResetCMS();
 				}
 
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
@@ -418,7 +422,7 @@ namespace PassGuard.GUI
 					}
 
 					//Reset ordering of rows.
-					ResetCMS();
+					//ResetCMS();
 				}
 				else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
 				{
@@ -442,7 +446,7 @@ namespace PassGuard.GUI
 					}
 
 					//Reset ordering of rows.
-					ResetCMS();
+					//ResetCMS();
 				}
 
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
@@ -526,30 +530,13 @@ namespace PassGuard.GUI
 					String newImportant = edit.important;
 
 					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant, edit.getHashofName(name: edit.nameToBeEdited));
-					List<String[]> fullResults = query.GetAllData();
+					//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
+					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
 					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-					foreach (String[] row in fullResults)
-					{
-						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
-							crypt.DecryptText(key: cKey, src: row[0]),
-							crypt.DecryptText(key: cKey, src: row[1]),
-							crypt.DecryptText(key: cKey, src: row[2]),
-							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
-							crypt.DecryptText(key: cKey, src: row[4]),
-							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
-					}
-
-					//Reset ordering of rows.
-					ResetCMS();
+					LoadContent(actualOrder, actualColumn);
 				}
-
-				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
-				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
 				if (edit.editedSuccess) 
 				{
@@ -618,6 +605,8 @@ namespace PassGuard.GUI
 				URLNormalToolStripMenuItem.Checked = true;
 				URLAscendingToolStripMenuItem.Checked = false;
 				URLDescendingToolStripMenuItem.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Url;
 			}
 			catch (Exception ex)
 			{
@@ -657,6 +646,8 @@ namespace PassGuard.GUI
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = true;
 				URLDescendingToolStripMenuItem.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Url;
 			}
 			catch (Exception ex)
 			{
@@ -696,6 +687,8 @@ namespace PassGuard.GUI
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = false;
 				URLDescendingToolStripMenuItem.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Url;
 			}
 			catch (Exception ex)
 			{
@@ -735,6 +728,8 @@ namespace PassGuard.GUI
 				NameNormalCMS.Checked = true;
 				NameAscendingCMS.Checked = false;
 				NameDescendingCMS.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Name;
 			}
 			catch (Exception ex)
 			{
@@ -774,6 +769,8 @@ namespace PassGuard.GUI
 				NameNormalCMS.Checked = false;
 				NameAscendingCMS.Checked = true;
 				NameDescendingCMS.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Name;
 			}
 			catch (Exception ex)
 			{
@@ -814,6 +811,8 @@ namespace PassGuard.GUI
 				NameNormalCMS.Checked = false;
 				NameAscendingCMS.Checked = false;
 				NameDescendingCMS.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Name;
 			}
 			catch (Exception ex)
 			{
@@ -854,6 +853,8 @@ namespace PassGuard.GUI
 				UsernameNormalCMS.Checked = true;
 				UsernameAscendingCMS.Checked = false;
 				UsernameDescendingCMS.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Username;
 			}
 			catch (Exception ex)
 			{
@@ -893,6 +894,8 @@ namespace PassGuard.GUI
 				UsernameNormalCMS.Checked = false;
 				UsernameAscendingCMS.Checked = true;
 				UsernameDescendingCMS.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Username;
 			}
 			catch (Exception ex)
 			{
@@ -932,6 +935,8 @@ namespace PassGuard.GUI
 				UsernameNormalCMS.Checked = false;
 				UsernameAscendingCMS.Checked = false;
 				UsernameDescendingCMS.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Username;
 			}
 			catch (Exception ex)
 			{
@@ -971,6 +976,8 @@ namespace PassGuard.GUI
 				CategoryNormalCMS.Checked = true;
 				CategoryAscendingCMS.Checked = false;
 				CategoryDescendingCMS.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Category;
 			}
 			catch (Exception ex)
 			{
@@ -1010,6 +1017,8 @@ namespace PassGuard.GUI
 				CategoryNormalCMS.Checked = false;
 				CategoryAscendingCMS.Checked = true;
 				CategoryDescendingCMS.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Category;
 			}
 			catch (Exception ex)
 			{
@@ -1050,6 +1059,8 @@ namespace PassGuard.GUI
 				CategoryNormalCMS.Checked = false;
 				CategoryAscendingCMS.Checked = false;
 				CategoryDescendingCMS.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Category;
 			}
 			catch (Exception ex)
 			{
@@ -1090,6 +1101,8 @@ namespace PassGuard.GUI
 				NotesNormalCMS.Checked = true;
 				NotesAscendingCMS.Checked = false;
 				NotesDescendingCMS.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Notes;
 			}
 			catch (Exception ex)
 			{
@@ -1130,6 +1143,8 @@ namespace PassGuard.GUI
 				NotesNormalCMS.Checked = false;
 				NotesAscendingCMS.Checked = true;
 				NotesDescendingCMS.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Notes;
 			}
 			catch (Exception ex)
 			{
@@ -1168,6 +1183,8 @@ namespace PassGuard.GUI
 				NotesNormalCMS.Checked = false;
 				NotesAscendingCMS.Checked = false;
 				NotesDescendingCMS.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Notes;
 			}
 			catch (Exception ex)
 			{
@@ -1207,6 +1224,8 @@ namespace PassGuard.GUI
 				ImportantNormalCMS.Checked = true;
 				ImportantAscendingCMS.Checked = false;
 				ImportantDescendingCMS.Checked = false;
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Important;
 			}
 			catch (Exception ex)
 			{
@@ -1245,6 +1264,8 @@ namespace PassGuard.GUI
 				ImportantNormalCMS.Checked = false;
 				ImportantAscendingCMS.Checked = true;
 				ImportantDescendingCMS.Checked = false;
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Important;
 			}
 			catch (Exception ex)
 			{
@@ -1283,6 +1304,8 @@ namespace PassGuard.GUI
 				ImportantNormalCMS.Checked = false;
 				ImportantAscendingCMS.Checked = false;
 				ImportantDescendingCMS.Checked = true;
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Important;
 			}
 			catch (Exception ex)
 			{
@@ -1497,7 +1520,7 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void ResetCMS()
+		/**private void ResetCMS()
 		{
 			UncheckAllMenuItems(URLCMS);
 			URLNormalToolStripMenuItem.Checked = true;
@@ -1517,7 +1540,7 @@ namespace PassGuard.GUI
 			UncheckAllMenuItems(ImportantCMS);
 			ImportantNormalCMS.Checked = true;
 
-		}
+		}*/
 
 		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -1576,7 +1599,7 @@ namespace PassGuard.GUI
 								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
 								//Reset ordering of rows.
-								ResetCMS();
+								//ResetCMS();
 							}
 							catch(Exception ex)
 							{
@@ -1660,6 +1683,59 @@ namespace PassGuard.GUI
 						break;
 				}
 			}
+		}
+
+		private void SearchButton_Click(object sender, EventArgs e)
+		{
+			List<DataGridViewRow> matchingRows = new List<DataGridViewRow>();
+
+			foreach (DataGridViewRow row in VaultContentDGV.Rows)
+			{
+				if (row.Cells["NameColumn"].Value != null)
+				{
+					string name = row.Cells["NameColumn"].Value.ToString();
+
+					if (name.Contains("ne", StringComparison.OrdinalIgnoreCase))
+					{
+						matchingRows.Add(row);
+					}
+				}
+			}
+
+			// Display the matching rows in the DataGridView
+			VaultContentDGV.Rows.Clear();
+			VaultContentDGV.Rows.AddRange(matchingRows.ToArray());
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SearchButton_MouseEnter(object sender, EventArgs e)
+		{
+			SearchButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SearchButton_MouseLeave(object sender, EventArgs e)
+		{
+			SearchButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
+		}
+
+		private void ResetButton_Click(object sender, EventArgs e)
+		{
+			VaultContentDGV.Rows.Clear();
+			LoadContent(actualOrder, actualColumn);
+
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ResetButton_MouseEnter(object sender, EventArgs e)
+		{
+			ResetButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ResetButton_MouseLeave(object sender, EventArgs e)
+		{
+			ResetButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
 		}
 	}
 }
