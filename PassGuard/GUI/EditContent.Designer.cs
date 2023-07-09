@@ -69,6 +69,7 @@ namespace PassGuard.GUI
 			this.NotesTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NotesTextbox.Location = new System.Drawing.Point(250, 263);
 			this.NotesTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.NotesTextbox.MaxLength = 2100;
 			this.NotesTextbox.Multiline = true;
 			this.NotesTextbox.Name = "NotesTextbox";
 			this.NotesTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -105,6 +106,7 @@ namespace PassGuard.GUI
 			this.PasswordTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.PasswordTextbox.Location = new System.Drawing.Point(250, 175);
 			this.PasswordTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.PasswordTextbox.MaxLength = 2100;
 			this.PasswordTextbox.Name = "PasswordTextbox";
 			this.PasswordTextbox.Size = new System.Drawing.Size(434, 22);
 			this.PasswordTextbox.TabIndex = 20;
@@ -128,6 +130,7 @@ namespace PassGuard.GUI
 			this.UsernameTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.UsernameTextbox.Location = new System.Drawing.Point(250, 132);
 			this.UsernameTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.UsernameTextbox.MaxLength = 2100;
 			this.UsernameTextbox.Name = "UsernameTextbox";
 			this.UsernameTextbox.Size = new System.Drawing.Size(472, 22);
 			this.UsernameTextbox.TabIndex = 18;
@@ -150,6 +153,7 @@ namespace PassGuard.GUI
 			this.NameTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NameTextbox.Location = new System.Drawing.Point(250, 89);
 			this.NameTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.NameTextbox.MaxLength = 2100;
 			this.NameTextbox.Name = "NameTextbox";
 			this.NameTextbox.Size = new System.Drawing.Size(472, 22);
 			this.NameTextbox.TabIndex = 16;
@@ -172,6 +176,7 @@ namespace PassGuard.GUI
 			this.URLTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.URLTextbox.Location = new System.Drawing.Point(250, 48);
 			this.URLTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.URLTextbox.MaxLength = 2100;
 			this.URLTextbox.Name = "URLTextbox";
 			this.URLTextbox.Size = new System.Drawing.Size(472, 22);
 			this.URLTextbox.TabIndex = 14;

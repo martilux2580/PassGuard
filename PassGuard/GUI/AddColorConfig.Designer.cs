@@ -107,6 +107,7 @@ namespace PassGuard.GUI
 			this.NameTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NameTextbox.Location = new System.Drawing.Point(230, 76);
 			this.NameTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.NameTextbox.MaxLength = 2100;
 			this.NameTextbox.Name = "NameTextbox";
 			this.NameTextbox.Size = new System.Drawing.Size(166, 22);
 			this.NameTextbox.TabIndex = 5;
