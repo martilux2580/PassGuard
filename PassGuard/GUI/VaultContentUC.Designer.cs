@@ -30,12 +30,12 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.VaultContentDGV = new System.Windows.Forms.DataGridView();
 			this.URLColumn = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.NameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -102,13 +102,13 @@ namespace PassGuard.GUI
 			this.VaultContentDGV.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.VaultContentDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.VaultContentDGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.VaultContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.VaultContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.VaultContentDGV.ColumnHeadersHeight = 47;
 			this.VaultContentDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.VaultContentDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -120,22 +120,22 @@ namespace PassGuard.GUI
             this.NotesColumn,
             this.ImportantColumn,
             this.DeleteRowColumn});
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle17.ForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.Red;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.VaultContentDGV.DefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Red;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.VaultContentDGV.DefaultCellStyle = dataGridViewCellStyle5;
 			this.VaultContentDGV.EnableHeadersVisualStyles = false;
 			this.VaultContentDGV.GridColor = System.Drawing.SystemColors.InfoText;
 			this.VaultContentDGV.Location = new System.Drawing.Point(4, 3);
 			this.VaultContentDGV.Name = "VaultContentDGV";
 			this.VaultContentDGV.RowHeadersVisible = false;
 			this.VaultContentDGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-			this.VaultContentDGV.RowsDefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			this.VaultContentDGV.RowsDefaultCellStyle = dataGridViewCellStyle6;
 			this.VaultContentDGV.RowTemplate.Height = 38;
 			this.VaultContentDGV.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.VaultContentDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -146,10 +146,10 @@ namespace PassGuard.GUI
 			// 
 			// URLColumn
 			// 
-			dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.URLColumn.DefaultCellStyle = dataGridViewCellStyle14;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.URLColumn.DefaultCellStyle = dataGridViewCellStyle2;
 			this.URLColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.URLColumn.HeaderText = "URL";
 			this.URLColumn.Name = "URLColumn";
@@ -166,9 +166,9 @@ namespace PassGuard.GUI
 			// 
 			// SiteUsernameColumn
 			// 
-			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.SiteUsernameColumn.DefaultCellStyle = dataGridViewCellStyle15;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.SiteUsernameColumn.DefaultCellStyle = dataGridViewCellStyle3;
 			this.SiteUsernameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SiteUsernameColumn.HeaderText = "Site Username";
 			this.SiteUsernameColumn.Name = "SiteUsernameColumn";
@@ -177,9 +177,9 @@ namespace PassGuard.GUI
 			// 
 			// PasswordColumn
 			// 
-			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.PasswordColumn.DefaultCellStyle = dataGridViewCellStyle16;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.PasswordColumn.DefaultCellStyle = dataGridViewCellStyle4;
 			this.PasswordColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.PasswordColumn.HeaderText = "Password";
 			this.PasswordColumn.Name = "PasswordColumn";
@@ -529,13 +529,14 @@ namespace PassGuard.GUI
 			// 
 			// SearchButton
 			// 
+			this.SearchButton.Enabled = false;
 			this.SearchButton.FlatAppearance.BorderSize = 0;
 			this.SearchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SearchButton.Location = new System.Drawing.Point(660, 423);
+			this.SearchButton.Location = new System.Drawing.Point(793, 426);
 			this.SearchButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SearchButton.Name = "SearchButton";
-			this.SearchButton.Size = new System.Drawing.Size(158, 37);
+			this.SearchButton.Size = new System.Drawing.Size(119, 31);
 			this.SearchButton.TabIndex = 9;
 			this.SearchButton.Text = "Search";
 			this.SearchButton.UseVisualStyleBackColor = true;
@@ -546,23 +547,24 @@ namespace PassGuard.GUI
 			// SearchTextbox
 			// 
 			this.SearchTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SearchTextbox.Location = new System.Drawing.Point(294, 423);
-			this.SearchTextbox.Multiline = true;
+			this.SearchTextbox.Location = new System.Drawing.Point(132, 429);
 			this.SearchTextbox.Name = "SearchTextbox";
 			this.SearchTextbox.PlaceholderText = "Search for Names...";
-			this.SearchTextbox.Size = new System.Drawing.Size(265, 37);
+			this.SearchTextbox.Size = new System.Drawing.Size(461, 24);
 			this.SearchTextbox.TabIndex = 10;
 			this.SearchTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.SearchTextbox.TextChanged += new System.EventHandler(this.SearchTextbox_TextChanged);
 			// 
 			// ResetButton
 			// 
+			this.ResetButton.Enabled = false;
 			this.ResetButton.FlatAppearance.BorderSize = 0;
 			this.ResetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ResetButton.Location = new System.Drawing.Point(860, 423);
+			this.ResetButton.Location = new System.Drawing.Point(632, 426);
 			this.ResetButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.ResetButton.Name = "ResetButton";
-			this.ResetButton.Size = new System.Drawing.Size(158, 37);
+			this.ResetButton.Size = new System.Drawing.Size(119, 31);
 			this.ResetButton.TabIndex = 11;
 			this.ResetButton.Text = "Reset";
 			this.ResetButton.UseVisualStyleBackColor = true;

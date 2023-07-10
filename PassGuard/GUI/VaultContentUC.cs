@@ -58,6 +58,7 @@ namespace PassGuard.GUI
 		private IQuery query;
 		private DBColumns actualColumn;
 		private Order actualOrder;
+		private bool isSearched;
 
 		[SupportedOSPlatform("windows")]
 		public VaultContentUC(String path, String email, String pass, byte[] key, String SK)
@@ -71,6 +72,7 @@ namespace PassGuard.GUI
 			vKey = key;
 			actualColumn = DBColumns.NULLVALUESS;
 			actualOrder = Order.Normal;
+			isSearched = false;
 
 			//Calculate cKey
 			var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
@@ -309,30 +311,21 @@ namespace PassGuard.GUI
 
 					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant);
 
-					List<String[]> fullResults = query.GetAllData();
+					//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
+					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-					foreach (String[] row in fullResults)
+					if(isSearched)
 					{
-						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
-							crypt.DecryptText(key: cKey, src: row[0]),
-							crypt.DecryptText(key: cKey, src: row[1]),
-							crypt.DecryptText(key: cKey, src: row[2]),
-							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
-							crypt.DecryptText(key: cKey, src: row[4]),
-							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
+						SearchButton.PerformClick();
 					}
-
-					//Reset ordering of rows.
-					//ResetCMS();
+					else
+					{
+						VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+						LoadContent(actualOrder, actualColumn);
+					}
+					
 				}
-
-				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
-				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete decryption
 				
 				if (add.addedSuccess) //If autobackup is enabled after each change in the Vault, create backup
 				{
@@ -403,54 +396,26 @@ namespace PassGuard.GUI
 				if (del.deletedSuccess) //If valid data is for deleting one row.
 				{
 					query.DeletePassword(del.nameToBeDeleted);
-					List<String[]> fullResults = query.GetAllData();
 
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-					foreach (String[] row in fullResults)
-					{
-						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
-							crypt.DecryptText(key: cKey, src: row[0]),
-							crypt.DecryptText(key: cKey, src: row[1]),
-							crypt.DecryptText(key: cKey, src: row[2]),
-							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
-							crypt.DecryptText(key: cKey, src: row[4]),
-							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
-					}
-
-					//Reset ordering of rows.
-					//ResetCMS();
 				}
 				else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
 				{
 					query.DeleteAllData();
-					List<String[]> fullResults = query.GetAllData();
-
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-					foreach (String[] row in fullResults)
-					{
-						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
-							crypt.DecryptText(key: cKey, src: row[0]),
-							crypt.DecryptText(key: cKey, src: row[1]),
-							crypt.DecryptText(key: cKey, src: row[2]),
-							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
-							crypt.DecryptText(key: cKey, src: row[4]),
-							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
-					}
-
-					//Reset ordering of rows.
-					//ResetCMS();
 				}
 
+				//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
+
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					LoadContent(actualOrder, actualColumn);
+				}
 
 				if (del.deletedSuccess || del.deletedAllSuccess) 
 				{
@@ -534,8 +499,15 @@ namespace PassGuard.GUI
 					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-					LoadContent(actualOrder, actualColumn);
+					if (isSearched)
+					{
+						SearchButton.PerformClick();
+					}
+					else
+					{
+						VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+						LoadContent(actualOrder, actualColumn);
+					}
 				}
 
 				if (edit.editedSuccess) 
@@ -591,22 +563,61 @@ namespace PassGuard.GUI
 			help.ShowDialog();
 		}
 
+		private void ResetOrdering()
+		{
+			actualOrder = Order.Normal;
+			actualColumn = DBColumns.NULLVALUESS;
+
+			URLNormalToolStripMenuItem.Checked = true;
+			URLAscendingToolStripMenuItem.Checked = false;
+			URLDescendingToolStripMenuItem.Checked = false;
+
+			NameNormalCMS.Checked = true;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
+
+			UsernameNormalCMS.Checked = true;
+			UsernameAscendingCMS.Checked = false;
+			UsernameDescendingCMS.Checked = false;
+
+			CategoryNormalCMS.Checked = true;
+			CategoryAscendingCMS.Checked = false;
+			CategoryDescendingCMS.Checked = false;
+
+			NotesNormalCMS.Checked = true;
+			NotesAscendingCMS.Checked = false;
+			NotesDescendingCMS.Checked = false;
+
+			ImportantNormalCMS.Checked = true;
+			ImportantAscendingCMS.Checked = false;
+			ImportantDescendingCMS.Checked = false;
+		}
+
 		private void URLNormalToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
-				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Url;
 
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Normal, DBColumns.Url);
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					LoadContent(Order.Normal, DBColumns.Url);
+				}
 
 				URLNormalToolStripMenuItem.Checked = true;
 				URLAscendingToolStripMenuItem.Checked = false;
 				URLDescendingToolStripMenuItem.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Url;
+				
 			}
 			catch (Exception ex)
 			{
@@ -629,6 +640,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -641,7 +653,15 @@ namespace PassGuard.GUI
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 
 				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Asc, DBColumns.Url);
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					LoadContent(Order.Asc, DBColumns.Url);
+				}
 
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = true;
@@ -670,6 +690,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -682,7 +703,15 @@ namespace PassGuard.GUI
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 
 				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Desc, DBColumns.Url);
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					LoadContent(Order.Desc, DBColumns.Url);
+				}
 
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = false;
@@ -711,6 +740,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -752,6 +782,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -793,6 +824,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -828,6 +860,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering();
 			}
 			finally
 			{
@@ -835,6 +868,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -877,6 +911,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -918,6 +953,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -959,6 +995,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1000,6 +1037,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1041,6 +1079,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -1083,6 +1122,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -1125,6 +1165,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -1167,6 +1208,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1207,6 +1249,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 
 		}
@@ -1248,6 +1291,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1288,6 +1332,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1328,6 +1373,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
+				ResetOrdering();
 			}
 		}
 
@@ -1520,28 +1566,6 @@ namespace PassGuard.GUI
 			}
 		}
 
-		/**private void ResetCMS()
-		{
-			UncheckAllMenuItems(URLCMS);
-			URLNormalToolStripMenuItem.Checked = true;
-
-			UncheckAllMenuItems(NameCMS);
-			NameNormalCMS.Checked = true;
-
-			UncheckAllMenuItems(UsernameCMS);
-			UsernameNormalCMS.Checked = true;
-
-			UncheckAllMenuItems(CategoryCMS);
-			CategoryNormalCMS.Checked = true;
-
-			UncheckAllMenuItems(NotesCMS);
-			NotesNormalCMS.Checked = true;
-
-			UncheckAllMenuItems(ImportantCMS);
-			ImportantNormalCMS.Checked = true;
-
-		}*/
-
 		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (e.RowIndex >= 0) //Check that cell clicked is a row and not a column header....
@@ -1577,29 +1601,12 @@ namespace PassGuard.GUI
 
 								query.DeletePassword(encNameToDelete);
 
-								List<String[]> fullResults = query.GetAllData();
-
-								VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-								foreach (String[] row in fullResults)
-								{
-									var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-									VaultContentDGV.Rows.Add(new String[]
-									{
-										crypt.DecryptText(key: cKey, src: row[0]),
-										crypt.DecryptText(key: cKey, src: row[1]),
-										crypt.DecryptText(key: cKey, src: row[2]),
-										String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
-										crypt.DecryptText(key: cKey, src: row[4]),
-										crypt.DecryptText(key: cKey, src: row[5]),
-										tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-									});
-								}
-
+								//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
 								crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-								//Reset ordering of rows.
-								//ResetCMS();
+								VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+								LoadContent(actualOrder, actualColumn);
 							}
 							catch(Exception ex)
 							{
@@ -1687,6 +1694,10 @@ namespace PassGuard.GUI
 
 		private void SearchButton_Click(object sender, EventArgs e)
 		{
+			//Reset content, so that you dont search content on the previously searched ocntent....
+			VaultContentDGV.Rows.Clear();
+			LoadContent(actualOrder, actualColumn);
+
 			List<DataGridViewRow> matchingRows = new List<DataGridViewRow>();
 
 			foreach (DataGridViewRow row in VaultContentDGV.Rows)
@@ -1695,7 +1706,7 @@ namespace PassGuard.GUI
 				{
 					string name = row.Cells["NameColumn"].Value.ToString();
 
-					if (name.Contains("ne", StringComparison.OrdinalIgnoreCase))
+					if (name.Contains(SearchTextbox.Text, StringComparison.OrdinalIgnoreCase))
 					{
 						matchingRows.Add(row);
 					}
@@ -1705,6 +1716,9 @@ namespace PassGuard.GUI
 			// Display the matching rows in the DataGridView
 			VaultContentDGV.Rows.Clear();
 			VaultContentDGV.Rows.AddRange(matchingRows.ToArray());
+
+			ResetButton.Enabled = true;
+			isSearched = true;
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -1722,7 +1736,11 @@ namespace PassGuard.GUI
 		private void ResetButton_Click(object sender, EventArgs e)
 		{
 			VaultContentDGV.Rows.Clear();
+			SearchTextbox.Text = string.Empty;
 			LoadContent(actualOrder, actualColumn);
+
+			ResetButton.Enabled = false;
+			isSearched = false;
 
 		}
 
@@ -1737,5 +1755,15 @@ namespace PassGuard.GUI
 		{
 			ResetButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
 		}
+
+		private void SearchTextbox_TextChanged(object sender, EventArgs e)
+		{
+			if (!String.IsNullOrWhiteSpace(SearchTextbox.Text))
+			{
+				SearchButton.Enabled = true;
+			}
+			else { SearchButton.Enabled = false; }
+		}
+
 	}
 }
