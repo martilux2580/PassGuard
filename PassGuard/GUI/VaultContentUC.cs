@@ -563,10 +563,13 @@ namespace PassGuard.GUI
 			help.ShowDialog();
 		}
 
-		private void ResetOrdering()
+		private void ResetOrdering(bool actualSelects)
 		{
-			actualOrder = Order.Normal;
-			actualColumn = DBColumns.NULLVALUESS;
+			if (actualSelects) 
+			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.NULLVALUESS;
+			}
 
 			URLNormalToolStripMenuItem.Checked = true;
 			URLAscendingToolStripMenuItem.Checked = false;
@@ -603,17 +606,17 @@ namespace PassGuard.GUI
 				actualColumn = DBColumns.Url;
 
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				//Load the ordered content depending on column and order, and set toolstrip check property.
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
 				}
 				else
 				{
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					//Load the ordered content depending on column and order, and set toolstrip check property.
 					LoadContent(Order.Normal, DBColumns.Url);
 				}
 
+				ResetOrdering(false);
 				URLNormalToolStripMenuItem.Checked = true;
 				URLAscendingToolStripMenuItem.Checked = false;
 				URLDescendingToolStripMenuItem.Checked = false;
@@ -633,6 +636,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -640,7 +644,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
+				
 			}
 		}
 
@@ -650,24 +654,24 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
-				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Url;
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
 				}
 				else
 				{
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					//Load the ordered content depending on column and order, and set toolstrip check property.
 					LoadContent(Order.Asc, DBColumns.Url);
 				}
 
+				ResetOrdering(false);
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = true;
 				URLDescendingToolStripMenuItem.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Url;
 			}
 			catch (Exception ex)
 			{
@@ -683,6 +687,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -690,7 +695,7 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
+				
 			}
 		}
 
@@ -700,24 +705,24 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
-				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Url;
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
+				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
 				}
 				else
 				{
-					VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+					//Load the ordered content depending on column and order, and set toolstrip check property.
 					LoadContent(Order.Desc, DBColumns.Url);
 				}
 
+				ResetOrdering(false);
 				URLNormalToolStripMenuItem.Checked = false;
 				URLAscendingToolStripMenuItem.Checked = false;
 				URLDescendingToolStripMenuItem.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Url;
 			}
 			catch (Exception ex)
 			{
@@ -733,6 +738,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -740,7 +746,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -750,16 +755,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Name;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Normal, DBColumns.Name);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Normal, DBColumns.Name);
-
+				ResetOrdering(false);
 				NameNormalCMS.Checked = true;
 				NameAscendingCMS.Checked = false;
 				NameDescendingCMS.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Name;
+
 			}
 			catch (Exception ex)
 			{
@@ -775,6 +789,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -782,7 +797,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -792,16 +806,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Name;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Asc, DBColumns.Name);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Asc, DBColumns.Name);
-
+				ResetOrdering(false);
 				NameNormalCMS.Checked = false;
 				NameAscendingCMS.Checked = true;
 				NameDescendingCMS.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Name;
+
 			}
 			catch (Exception ex)
 			{
@@ -817,6 +840,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -824,7 +848,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -835,16 +858,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Name;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Desc, DBColumns.Name);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Desc, DBColumns.Name);
-
+				ResetOrdering(false);
 				NameNormalCMS.Checked = false;
 				NameAscendingCMS.Checked = false;
 				NameDescendingCMS.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Name;
+
 			}
 			catch (Exception ex)
 			{
@@ -860,7 +892,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering();
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -868,7 +900,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -879,16 +910,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Username;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Normal, DBColumns.Username);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Normal, DBColumns.Username);
-
+				ResetOrdering(false);
 				UsernameNormalCMS.Checked = true;
 				UsernameAscendingCMS.Checked = false;
 				UsernameDescendingCMS.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Username;
+
 			}
 			catch (Exception ex)
 			{
@@ -904,6 +944,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -911,7 +952,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -921,16 +961,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Username;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Asc, DBColumns.Username);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Asc, DBColumns.Username);
-
+				ResetOrdering(false);
 				UsernameNormalCMS.Checked = false;
 				UsernameAscendingCMS.Checked = true;
 				UsernameDescendingCMS.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Username;
+
 			}
 			catch (Exception ex)
 			{
@@ -946,6 +995,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -953,7 +1003,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -963,16 +1012,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Username;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Desc, DBColumns.Username);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Desc, DBColumns.Username);
-
+				ResetOrdering(false);
 				UsernameNormalCMS.Checked = false;
 				UsernameAscendingCMS.Checked = false;
 				UsernameDescendingCMS.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Username;
+
 			}
 			catch (Exception ex)
 			{
@@ -988,6 +1046,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -995,7 +1054,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -1005,16 +1063,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Category;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Normal, DBColumns.Category);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Normal, DBColumns.Category);
-
+				ResetOrdering(false);
 				CategoryNormalCMS.Checked = true;
 				CategoryAscendingCMS.Checked = false;
 				CategoryDescendingCMS.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Category;
+
 			}
 			catch (Exception ex)
 			{
@@ -1030,6 +1097,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1037,7 +1105,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -1047,16 +1114,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Category;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Asc, DBColumns.Category);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Asc, DBColumns.Category);
-
+				ResetOrdering(false);
 				CategoryNormalCMS.Checked = false;
 				CategoryAscendingCMS.Checked = true;
 				CategoryDescendingCMS.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Category;
+
 			}
 			catch (Exception ex)
 			{
@@ -1072,6 +1148,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1079,7 +1156,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -1090,16 +1166,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Category;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Desc, DBColumns.Category);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Desc, DBColumns.Category);
-
+				ResetOrdering(false);
 				CategoryNormalCMS.Checked = false;
 				CategoryAscendingCMS.Checked = false;
 				CategoryDescendingCMS.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Category;
+
 			}
 			catch (Exception ex)
 			{
@@ -1115,6 +1200,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1122,7 +1208,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -1133,16 +1218,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Notes;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Normal, DBColumns.Notes);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Normal, DBColumns.Notes);
-
+				ResetOrdering(false);
 				NotesNormalCMS.Checked = true;
 				NotesAscendingCMS.Checked = false;
 				NotesDescendingCMS.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Notes;
+
 			}
 			catch (Exception ex)
 			{
@@ -1158,6 +1252,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1165,7 +1260,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -1176,16 +1270,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Notes;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Asc, DBColumns.Notes);
+				}
 
-				//Load the ordered content depending on column and order, and set toolstrip check property.
-				LoadContent(Order.Asc, DBColumns.Notes);
-
+				ResetOrdering(false);
 				NotesNormalCMS.Checked = false;
 				NotesAscendingCMS.Checked = true;
 				NotesDescendingCMS.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Notes;
+
 			}
 			catch (Exception ex)
 			{
@@ -1201,6 +1304,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1208,7 +1312,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -1218,15 +1321,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Notes;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Desc, DBColumns.Notes);
+				}
 
-				LoadContent(Order.Desc, DBColumns.Notes);
-
+				ResetOrdering(false);
 				NotesNormalCMS.Checked = false;
 				NotesAscendingCMS.Checked = false;
 				NotesDescendingCMS.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Notes;
+
 			}
 			catch (Exception ex)
 			{
@@ -1242,6 +1355,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1249,7 +1363,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 
 		}
@@ -1260,15 +1373,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.Important;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Normal, DBColumns.Important);
+				}
 
-				LoadContent(Order.Normal, DBColumns.Important);
-
+				ResetOrdering(false);
 				ImportantNormalCMS.Checked = true;
 				ImportantAscendingCMS.Checked = false;
 				ImportantDescendingCMS.Checked = false;
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.Important;
+
 			}
 			catch (Exception ex)
 			{
@@ -1284,6 +1407,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1291,7 +1415,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -1301,15 +1424,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Asc;
+				actualColumn = DBColumns.Important;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Asc, DBColumns.Important);
+				}
 
-				LoadContent(Order.Asc, DBColumns.Important);
-
+				ResetOrdering(false);
 				ImportantNormalCMS.Checked = false;
 				ImportantAscendingCMS.Checked = true;
 				ImportantDescendingCMS.Checked = false;
-				actualOrder = Order.Asc;
-				actualColumn = DBColumns.Important;
+
 			}
 			catch (Exception ex)
 			{
@@ -1325,6 +1458,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1332,7 +1466,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
@@ -1342,15 +1475,25 @@ namespace PassGuard.GUI
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				actualOrder = Order.Desc;
+				actualColumn = DBColumns.Important;
+
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(Order.Desc, DBColumns.Important);
+				}
 
-				LoadContent(Order.Desc, DBColumns.Important);
-
+				ResetOrdering(false);
 				ImportantNormalCMS.Checked = false;
 				ImportantAscendingCMS.Checked = false;
 				ImportantDescendingCMS.Checked = true;
-				actualOrder = Order.Desc;
-				actualColumn = DBColumns.Important;
+
 			}
 			catch (Exception ex)
 			{
@@ -1366,6 +1509,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
+				ResetOrdering(true);
 			}
 			finally
 			{
@@ -1373,7 +1517,6 @@ namespace PassGuard.GUI
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
-				ResetOrdering();
 			}
 		}
 
