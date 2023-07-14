@@ -144,6 +144,7 @@ namespace PassGuard.GUI
 			this.VaultPathTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.VaultPathTextbox.Location = new System.Drawing.Point(284, 348);
 			this.VaultPathTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.VaultPathTextbox.MaxLength = 2100;
 			this.VaultPathTextbox.Name = "VaultPathTextbox";
 			this.VaultPathTextbox.Size = new System.Drawing.Size(621, 24);
 			this.VaultPathTextbox.TabIndex = 19;

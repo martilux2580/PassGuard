@@ -548,6 +548,7 @@ namespace PassGuard.GUI
 			// 
 			this.SearchTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SearchTextbox.Location = new System.Drawing.Point(132, 429);
+			this.SearchTextbox.MaxLength = 2100;
 			this.SearchTextbox.Name = "SearchTextbox";
 			this.SearchTextbox.PlaceholderText = "Search for Names...";
 			this.SearchTextbox.Size = new System.Drawing.Size(461, 24);
