@@ -73,6 +73,17 @@ namespace PassGuard.GUI
 			}
 		}
 
+		public void TrimComponents()
+		{
+			NameCombobox.Text = NameCombobox.Text.Trim();
+			URLTextbox.Text = URLTextbox.Text.Trim();
+			NameTextbox.Text = NameTextbox.Text.Trim();
+			UsernameTextbox.Text = UsernameTextbox.Text.Trim();
+			PasswordTextbox.Text = PasswordTextbox.Text.Trim();
+			CategoryCombobox.Text = CategoryCombobox.Text.Trim();
+			NotesTextbox.Text = NotesTextbox.Text.Trim();
+		}
+
 		private void LoadCategoryCombobox(List<String> categorias)
 		{
 			var rawCategories = new List<String>();
@@ -92,6 +103,8 @@ namespace PassGuard.GUI
 
 		private void EditButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			String errorMessages = "";
 
 			if (String.IsNullOrWhiteSpace(NameTextbox.Text) || String.IsNullOrWhiteSpace(UsernameTextbox.Text) || String.IsNullOrWhiteSpace(PasswordTextbox.Text))

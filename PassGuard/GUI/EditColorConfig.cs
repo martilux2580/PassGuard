@@ -55,6 +55,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		public void TrimComponents()
+		{
+			NameCombobox.Text = NameCombobox.Text.Trim();
+			NameTextbox.Text = NameTextbox.Text.Trim();
+		}
+
 		private void EditButton_Click(object sender, EventArgs e)
 		{
 			/** 3 things to check:
@@ -62,6 +68,8 @@ namespace PassGuard.GUI
 			 *	RGB values changes or not
 			 *	Checkboxes changes or not (either fav or chosen)
 			 **/
+
+			TrimComponents();
 
 			//3 variables checking if those 3 things changed, if they changed value is 0, not changed is 1
 			bool nameEqual = NameTextbox.Text == NameCombobox.Text;

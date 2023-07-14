@@ -33,6 +33,12 @@ namespace PassGuard.GUI
 			success = false;
 		}
 
+		public void TrimComponents()
+		{
+			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
+			VaultBackupPathTextbox.Text = VaultBackupPathTextbox.Text.Trim();
+		}
+
 		private void SelectVaultBackupPathButton_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog fbd = new(); //Folder Selector
@@ -59,6 +65,8 @@ namespace PassGuard.GUI
 
 		private void SendButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			if (String.IsNullOrEmpty(VaultPathTextbox.Text))
 			{
 				MessageBox.Show(text: "The path for the Vault that is going to be backed up cannot be empty.", caption: "Warning(s)", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);

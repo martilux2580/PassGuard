@@ -46,6 +46,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		public void TrimComponents()
+		{
+			NameTextbox.Text = NameTextbox.Text.Trim();
+			NameCombobox.Text = NameCombobox.Text.Trim();
+		}
+
 		private void DeleteAllButton_Click(object sender, EventArgs e)
 		{
 			deletedAllSuccess = true;
@@ -54,6 +60,8 @@ namespace PassGuard.GUI
 
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			name = NameCombobox.Text;
 			deletedSuccess = true;
 			this.Close();

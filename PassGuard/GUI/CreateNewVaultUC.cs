@@ -28,6 +28,16 @@ namespace PassGuard.GUI
 			SaveEmailTooltip.SetToolTip(SaveEmailCheckbox, "If this option is checked and the new vault is created successfully, this email \nwill be saved so that the process of loading the password vault is faster. \nNote: If another vault is created and this option is checked, previously saved email \nwill be deleted and the new email will be saved.");
 		}
 
+		public void TrimComponents()
+		{
+			VaultEmailTextbox.Text = VaultEmailTextbox.Text.Trim();
+			VaultNameTextbox.Text = VaultNameTextbox.Text.Trim();
+			VaultPassTextbox.Text = VaultPassTextbox.Text.Trim();
+			ConfirmPassVaultTextbox.Text = ConfirmPassVaultTextbox.Text.Trim();
+			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
+
+		}
+
 		[SupportedOSPlatform("windows")]
 		private void CreateNewVaultButton_MouseEnter(object sender, EventArgs e)
 		{
@@ -42,6 +52,7 @@ namespace PassGuard.GUI
 
 		private void CreateNewVaultButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
 			ICrypt crypt = new AESAlgorithm();
 			IQuery query;
 			IKDF kdf = new PBKDF2Function();
