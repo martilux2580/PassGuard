@@ -563,7 +563,7 @@ namespace PassGuard.GUI
 			help.ShowDialog();
 		}
 
-		private void ResetOrdering(bool actualSelects)
+		private void ResetToNormalOrdering(bool actualSelects)
 		{
 			if (actualSelects) 
 			{
@@ -596,6 +596,33 @@ namespace PassGuard.GUI
 			ImportantDescendingCMS.Checked = false;
 		}
 
+		private void UncheckOrdering()
+		{
+			URLNormalToolStripMenuItem.Checked = false;
+			URLAscendingToolStripMenuItem.Checked = false;
+			URLDescendingToolStripMenuItem.Checked = false;
+
+			NameNormalCMS.Checked = false;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
+
+			UsernameNormalCMS.Checked = false;
+			UsernameAscendingCMS.Checked = false;
+			UsernameDescendingCMS.Checked = false;
+
+			CategoryNormalCMS.Checked = false;
+			CategoryAscendingCMS.Checked = false;
+			CategoryDescendingCMS.Checked = false;
+
+			NotesNormalCMS.Checked = false;
+			NotesAscendingCMS.Checked = false;
+			NotesDescendingCMS.Checked = false;
+
+			ImportantNormalCMS.Checked = false;
+			ImportantAscendingCMS.Checked = false;
+			ImportantDescendingCMS.Checked = false;
+		}
+
 		private void URLNormalToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -616,10 +643,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Url);
 				}
 
-				ResetOrdering(false);
-				URLNormalToolStripMenuItem.Checked = true;
-				URLAscendingToolStripMenuItem.Checked = false;
-				URLDescendingToolStripMenuItem.Checked = false;
+				ResetToNormalOrdering(false);
 				
 			}
 			catch (Exception ex)
@@ -636,7 +660,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -668,10 +692,9 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Url);
 				}
 
-				ResetOrdering(false);
-				URLNormalToolStripMenuItem.Checked = false;
+				UncheckOrdering();
 				URLAscendingToolStripMenuItem.Checked = true;
-				URLDescendingToolStripMenuItem.Checked = false;
+
 			}
 			catch (Exception ex)
 			{
@@ -687,7 +710,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -719,9 +742,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Url);
 				}
 
-				ResetOrdering(false);
-				URLNormalToolStripMenuItem.Checked = false;
-				URLAscendingToolStripMenuItem.Checked = false;
+				UncheckOrdering();
 				URLDescendingToolStripMenuItem.Checked = true;
 			}
 			catch (Exception ex)
@@ -738,7 +759,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -769,10 +790,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Name);
 				}
 
-				ResetOrdering(false);
-				NameNormalCMS.Checked = true;
-				NameAscendingCMS.Checked = false;
-				NameDescendingCMS.Checked = false;
+				ResetToNormalOrdering(false);
 
 			}
 			catch (Exception ex)
@@ -789,7 +807,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -820,10 +838,8 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Name);
 				}
 
-				ResetOrdering(false);
-				NameNormalCMS.Checked = false;
+				UncheckOrdering();
 				NameAscendingCMS.Checked = true;
-				NameDescendingCMS.Checked = false;
 
 			}
 			catch (Exception ex)
@@ -840,7 +856,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -872,9 +888,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Name);
 				}
 
-				ResetOrdering(false);
-				NameNormalCMS.Checked = false;
-				NameAscendingCMS.Checked = false;
+				UncheckOrdering();
 				NameDescendingCMS.Checked = true;
 
 			}
@@ -892,7 +906,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -924,10 +938,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Username);
 				}
 
-				ResetOrdering(false);
-				UsernameNormalCMS.Checked = true;
-				UsernameAscendingCMS.Checked = false;
-				UsernameDescendingCMS.Checked = false;
+				ResetToNormalOrdering(false);
 
 			}
 			catch (Exception ex)
@@ -944,7 +955,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -975,10 +986,8 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Username);
 				}
 
-				ResetOrdering(false);
-				UsernameNormalCMS.Checked = false;
+				UncheckOrdering();
 				UsernameAscendingCMS.Checked = true;
-				UsernameDescendingCMS.Checked = false;
 
 			}
 			catch (Exception ex)
@@ -995,7 +1004,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1026,9 +1035,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Username);
 				}
 
-				ResetOrdering(false);
-				UsernameNormalCMS.Checked = false;
-				UsernameAscendingCMS.Checked = false;
+				UncheckOrdering();
 				UsernameDescendingCMS.Checked = true;
 
 			}
@@ -1046,7 +1053,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1077,10 +1084,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Category);
 				}
 
-				ResetOrdering(false);
-				CategoryNormalCMS.Checked = true;
-				CategoryAscendingCMS.Checked = false;
-				CategoryDescendingCMS.Checked = false;
+				ResetToNormalOrdering(false);
 
 			}
 			catch (Exception ex)
@@ -1097,7 +1101,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1128,10 +1132,8 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Category);
 				}
 
-				ResetOrdering(false);
-				CategoryNormalCMS.Checked = false;
+				UncheckOrdering();
 				CategoryAscendingCMS.Checked = true;
-				CategoryDescendingCMS.Checked = false;
 
 			}
 			catch (Exception ex)
@@ -1148,7 +1150,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1180,9 +1182,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Category);
 				}
 
-				ResetOrdering(false);
-				CategoryNormalCMS.Checked = false;
-				CategoryAscendingCMS.Checked = false;
+				UncheckOrdering();
 				CategoryDescendingCMS.Checked = true;
 
 			}
@@ -1200,7 +1200,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1232,10 +1232,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Notes);
 				}
 
-				ResetOrdering(false);
-				NotesNormalCMS.Checked = true;
-				NotesAscendingCMS.Checked = false;
-				NotesDescendingCMS.Checked = false;
+				ResetToNormalOrdering(false);
 
 			}
 			catch (Exception ex)
@@ -1252,7 +1249,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1284,10 +1281,8 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Notes);
 				}
 
-				ResetOrdering(false);
-				NotesNormalCMS.Checked = false;
+				UncheckOrdering();
 				NotesAscendingCMS.Checked = true;
-				NotesDescendingCMS.Checked = false;
 
 			}
 			catch (Exception ex)
@@ -1304,7 +1299,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1335,9 +1330,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Notes);
 				}
 
-				ResetOrdering(false);
-				NotesNormalCMS.Checked = false;
-				NotesAscendingCMS.Checked = false;
+				UncheckOrdering();
 				NotesDescendingCMS.Checked = true;
 
 			}
@@ -1355,7 +1348,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1387,10 +1380,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Normal, DBColumns.Important);
 				}
 
-				ResetOrdering(false);
-				ImportantNormalCMS.Checked = true;
-				ImportantAscendingCMS.Checked = false;
-				ImportantDescendingCMS.Checked = false;
+				ResetToNormalOrdering(false);
 
 			}
 			catch (Exception ex)
@@ -1407,7 +1397,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1438,10 +1428,8 @@ namespace PassGuard.GUI
 					LoadContent(Order.Asc, DBColumns.Important);
 				}
 
-				ResetOrdering(false);
-				ImportantNormalCMS.Checked = false;
+				UncheckOrdering();
 				ImportantAscendingCMS.Checked = true;
-				ImportantDescendingCMS.Checked = false;
 
 			}
 			catch (Exception ex)
@@ -1458,7 +1446,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{
@@ -1489,9 +1477,7 @@ namespace PassGuard.GUI
 					LoadContent(Order.Desc, DBColumns.Important);
 				}
 
-				ResetOrdering(false);
-				ImportantNormalCMS.Checked = false;
-				ImportantAscendingCMS.Checked = false;
+				UncheckOrdering();
 				ImportantDescendingCMS.Checked = true;
 
 			}
@@ -1509,7 +1495,7 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetOrdering(true);
+				ResetToNormalOrdering(true);
 			}
 			finally
 			{

@@ -55,6 +55,7 @@ namespace PassGuard.GUI
 			this.NameCombobox.FormattingEnabled = true;
 			this.NameCombobox.Location = new System.Drawing.Point(416, 7);
 			this.NameCombobox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.NameCombobox.MaxLength = 2100;
 			this.NameCombobox.Name = "NameCombobox";
 			this.NameCombobox.Size = new System.Drawing.Size(279, 26);
 			this.NameCombobox.TabIndex = 34;

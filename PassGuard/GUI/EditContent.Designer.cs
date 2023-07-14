@@ -212,6 +212,7 @@ namespace PassGuard.GUI
 			this.NameCombobox.IntegralHeight = false;
 			this.NameCombobox.Location = new System.Drawing.Point(416, 7);
 			this.NameCombobox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.NameCombobox.MaxLength = 2100;
 			this.NameCombobox.Name = "NameCombobox";
 			this.NameCombobox.Size = new System.Drawing.Size(305, 26);
 			this.NameCombobox.TabIndex = 26;
@@ -248,6 +249,7 @@ namespace PassGuard.GUI
 			this.CategoryCombobox.Enabled = false;
 			this.CategoryCombobox.FormattingEnabled = true;
 			this.CategoryCombobox.Location = new System.Drawing.Point(250, 223);
+			this.CategoryCombobox.MaxLength = 2100;
 			this.CategoryCombobox.Name = "CategoryCombobox";
 			this.CategoryCombobox.Size = new System.Drawing.Size(472, 23);
 			this.CategoryCombobox.TabIndex = 45;
