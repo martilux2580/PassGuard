@@ -36,8 +36,14 @@ namespace PassGuard.GUI
 			persists = 0;
 		}
 
+		public void TrimComponents()
+		{
+			NameTextbox.Text = NameTextbox.Text.Trim();
+		}
+
 		private void SendButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
 			string errorMessages = "";
 
 			if(String.IsNullOrWhiteSpace(NameTextbox.Text))
@@ -91,5 +97,6 @@ namespace PassGuard.GUI
 
 
 		}
+
 	}
 }

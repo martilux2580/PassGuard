@@ -48,6 +48,14 @@ namespace PassGuard.GUI
 
 		}
 
+		public void TrimComponents()
+		{
+			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
+			BackupPathFilesTextbox.Text = BackupPathFilesTextbox.Text.Trim();
+			FrequencyCombobox.Text = FrequencyCombobox.Text.Trim();
+
+		}
+
 		//Loads the values saved from previous configurations of AutoBackup
 		private void SetupInitialValues()
 		{
@@ -106,6 +114,8 @@ namespace PassGuard.GUI
 
 		private void SetupAutoBackupButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			if (ActivateBackupCheckbox.Checked == false) //It it was deactivated...
 			{
 				AutoBackupState = "false";

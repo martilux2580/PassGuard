@@ -23,6 +23,14 @@ namespace PassGuard.GUI
 			InitializeComponent();
 		}
 
+		public void TrimComponents()
+		{
+			VaultEmailTextbox.Text = VaultEmailTextbox.Text.Trim();
+			VaultPassTextbox.Text = VaultPassTextbox.Text.Trim();
+			SecurityKeyTextbox.Text = SecurityKeyTextbox.Text.Trim();
+			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
+		}
+
 		private void LoadSavedEmailButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -136,6 +144,8 @@ namespace PassGuard.GUI
 
 		private void ExportPDFButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			ICrypt crypt = new AESAlgorithm();
 			IPDF pdf = new PDFCreator();
 			IKDF kdf = new PBKDF2Function();

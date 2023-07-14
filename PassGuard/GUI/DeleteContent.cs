@@ -57,6 +57,17 @@ namespace PassGuard.GUI
 			}
 		}
 
+		public void TrimComponents()
+		{
+			NameCombobox.Text = NameCombobox.Text.Trim();
+			URLTextbox.Text = URLTextbox.Text.Trim();
+			NameTextbox.Text = NameTextbox.Text.Trim();
+			UsernameTextbox.Text = UsernameTextbox.Text.Trim();
+			PasswordTextbox.Text = PasswordTextbox.Text.Trim();
+			CategoryTextbox.Text = CategoryTextbox.Text.Trim();
+			NotesTextbox.Text = NotesTextbox.Text.Trim();
+		}
+
 		private void EnableDeleteAllCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if(EnableDeleteAllCheckbox.Checked == true)
@@ -91,6 +102,8 @@ namespace PassGuard.GUI
 
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			if (String.IsNullOrEmpty(NameCombobox.Text) || String.IsNullOrWhiteSpace(NameCombobox.Text))
 			{
 				MessageBox.Show(text: "An element must be selected in order to be deleted.", caption: "No element selected", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);

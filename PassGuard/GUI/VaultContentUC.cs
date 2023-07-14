@@ -23,7 +23,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace PassGuard.GUI
 {
@@ -83,6 +82,11 @@ namespace PassGuard.GUI
 			LoadContent(actualOrder, actualColumn);
 			SetCMS();
 
+		}
+
+		public void TrimComponents()
+		{
+			SearchTextbox.Text = SearchTextbox.Text.Trim();
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -279,6 +283,66 @@ namespace PassGuard.GUI
 			crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); //Encrypt Vault
 			File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])); //Delete decrypted vault
 
+		}
+
+		private void ResetToNormalOrdering(bool actualSelects)
+		{
+			if (actualSelects)
+			{
+				actualOrder = Order.Normal;
+				actualColumn = DBColumns.NULLVALUESS;
+			}
+
+			URLNormalToolStripMenuItem.Checked = true;
+			URLAscendingToolStripMenuItem.Checked = false;
+			URLDescendingToolStripMenuItem.Checked = false;
+
+			NameNormalCMS.Checked = true;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
+
+			UsernameNormalCMS.Checked = true;
+			UsernameAscendingCMS.Checked = false;
+			UsernameDescendingCMS.Checked = false;
+
+			CategoryNormalCMS.Checked = true;
+			CategoryAscendingCMS.Checked = false;
+			CategoryDescendingCMS.Checked = false;
+
+			NotesNormalCMS.Checked = true;
+			NotesAscendingCMS.Checked = false;
+			NotesDescendingCMS.Checked = false;
+
+			ImportantNormalCMS.Checked = true;
+			ImportantAscendingCMS.Checked = false;
+			ImportantDescendingCMS.Checked = false;
+		}
+
+		private void UncheckOrdering()
+		{
+			URLNormalToolStripMenuItem.Checked = false;
+			URLAscendingToolStripMenuItem.Checked = false;
+			URLDescendingToolStripMenuItem.Checked = false;
+
+			NameNormalCMS.Checked = false;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
+
+			UsernameNormalCMS.Checked = false;
+			UsernameAscendingCMS.Checked = false;
+			UsernameDescendingCMS.Checked = false;
+
+			CategoryNormalCMS.Checked = false;
+			CategoryAscendingCMS.Checked = false;
+			CategoryDescendingCMS.Checked = false;
+
+			NotesNormalCMS.Checked = false;
+			NotesAscendingCMS.Checked = false;
+			NotesDescendingCMS.Checked = false;
+
+			ImportantNormalCMS.Checked = false;
+			ImportantAscendingCMS.Checked = false;
+			ImportantDescendingCMS.Checked = false;
 		}
 
 		private void AddButton_Click(object sender, EventArgs e)
@@ -561,66 +625,6 @@ namespace PassGuard.GUI
 		{
 			GUI.HelpVaultForm help = new();
 			help.ShowDialog();
-		}
-
-		private void ResetToNormalOrdering(bool actualSelects)
-		{
-			if (actualSelects) 
-			{
-				actualOrder = Order.Normal;
-				actualColumn = DBColumns.NULLVALUESS;
-			}
-
-			URLNormalToolStripMenuItem.Checked = true;
-			URLAscendingToolStripMenuItem.Checked = false;
-			URLDescendingToolStripMenuItem.Checked = false;
-
-			NameNormalCMS.Checked = true;
-			NameAscendingCMS.Checked = false;
-			NameDescendingCMS.Checked = false;
-
-			UsernameNormalCMS.Checked = true;
-			UsernameAscendingCMS.Checked = false;
-			UsernameDescendingCMS.Checked = false;
-
-			CategoryNormalCMS.Checked = true;
-			CategoryAscendingCMS.Checked = false;
-			CategoryDescendingCMS.Checked = false;
-
-			NotesNormalCMS.Checked = true;
-			NotesAscendingCMS.Checked = false;
-			NotesDescendingCMS.Checked = false;
-
-			ImportantNormalCMS.Checked = true;
-			ImportantAscendingCMS.Checked = false;
-			ImportantDescendingCMS.Checked = false;
-		}
-
-		private void UncheckOrdering()
-		{
-			URLNormalToolStripMenuItem.Checked = false;
-			URLAscendingToolStripMenuItem.Checked = false;
-			URLDescendingToolStripMenuItem.Checked = false;
-
-			NameNormalCMS.Checked = false;
-			NameAscendingCMS.Checked = false;
-			NameDescendingCMS.Checked = false;
-
-			UsernameNormalCMS.Checked = false;
-			UsernameAscendingCMS.Checked = false;
-			UsernameDescendingCMS.Checked = false;
-
-			CategoryNormalCMS.Checked = false;
-			CategoryAscendingCMS.Checked = false;
-			CategoryDescendingCMS.Checked = false;
-
-			NotesNormalCMS.Checked = false;
-			NotesAscendingCMS.Checked = false;
-			NotesDescendingCMS.Checked = false;
-
-			ImportantNormalCMS.Checked = false;
-			ImportantAscendingCMS.Checked = false;
-			ImportantDescendingCMS.Checked = false;
 		}
 
 		private void URLNormalToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1823,6 +1827,8 @@ namespace PassGuard.GUI
 
 		private void SearchButton_Click(object sender, EventArgs e)
 		{
+			TrimComponents();
+
 			//Reset content, so that you dont search content on the previously searched ocntent....
 			VaultContentDGV.Rows.Clear();
 			LoadContent(actualOrder, actualColumn);
