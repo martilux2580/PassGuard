@@ -1,10 +1,12 @@
 ﻿using PassGuard.PDF;
 using PassGuard.Utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -24,9 +26,27 @@ namespace PassGuard.GUI
 	//Form to obtain new RGB values for the outline colours.
 	public partial class AskRGBforSettings : Form
 	{
+		private enum Order //Enum for the order of each column
+		{
+			Normal,
+			Asc,
+			Desc
+		}
+		private enum CFColumns //Enum for the valid names 
+		{
+			NULLVALUESS,
+			Name,
+			Red,
+			Green,
+			Blue,
+			Favourite
+		}
 		public Configuration config { get; private set; }
 		private int[] actualColours;
 		public int[] finalCalibratedColours { get; private set; }
+		private CFColumns actualColumn;
+		private Order actualOrder;
+		private bool isSearched;
 
 		[SupportedOSPlatform("windows")]
 		public AskRGBforSettings(int[] colours, Configuration configg)
@@ -34,17 +54,33 @@ namespace PassGuard.GUI
 			InitializeComponent();
 
 			actualColours = colours; //Set actual colours used in this execution
+			actualColumn = CFColumns.NULLVALUESS;
+			actualOrder = Order.Normal;
+			isSearched = false;
+			
+			try
+			{
+				SetNUDs();
 
-			SetNUDs();
+				SetCMS(); //Set CMSs elements
 
-			SetCMS(); //Set CMSs elements
+				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
+				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
 
-			//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
-			finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
-
-			LoadContent(ConfigurationManager.AppSettings.Get("OutlineSavedColours"));
+				LoadContent(CFColumns.NULLVALUESS, Order.Normal);
+			}
+			catch(Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+			
 			config = configg;
 
+		}
+
+		public void TrimComponents()
+		{
+			SearchTextbox.Text = SearchTextbox.Text.Trim();
 		}
 
 		private DataGridViewRow GenerateNewRow(KeyValuePair<String, List<int>> configPair)
@@ -117,16 +153,86 @@ namespace PassGuard.GUI
 			return row;
 		}
 
-		internal void LoadContent(String configs)
+		private void LoadContent(CFColumns col, Order order)
 		{
-			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(configs);
+			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			Dictionary<String, List<int>> valuesToShow = new();
+
+			if (order == Order.Normal) { valuesToShow = values; }
+			else if((order == Order.Asc) || (order == Order.Desc))
+			{
+				switch (col)
+				{
+					case CFColumns.Name:
+						var sortedNames = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"])).ToDictionary(x => x.Key, x => x.Value);
+						if(order == Order.Desc)
+						{
+							var reversedTemp = sortedNames.Reverse();
+							sortedNames = reversedTemp.ToDictionary(x => x.Key, x => x.Value);
+						}
+						valuesToShow = sortedNames;
+						break;
+
+					case CFColumns.Red:
+						// Sort the dictionary by the fourth element of the list and then by name
+						Dictionary<string, List<int>> sortedReds = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(0))
+														.ThenBy(kvp => kvp.Key)
+														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+						if (order == Order.Desc)
+						{
+							var reversedTemp = sortedReds.Reverse();
+							sortedReds = reversedTemp.ToDictionary(x => x.Key, x => x.Value);
+						}
+						valuesToShow = sortedReds;
+						break;
+					case CFColumns.Green:
+						// Sort the dictionary by the fourth element of the list and then by name
+						Dictionary<string, List<int>> sortedGreens = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(1))
+														.ThenBy(kvp => kvp.Key)
+														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+						if (order == Order.Desc)
+						{
+							var reversedTemp = sortedGreens.Reverse();
+							sortedGreens = reversedTemp.ToDictionary(x => x.Key, x => x.Value);
+						}
+						valuesToShow = sortedGreens;
+						break;
+					case CFColumns.Blue:
+						// Sort the dictionary by the fourth element of the list and then by name
+						Dictionary<string, List<int>> sortedBlues = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(2))
+														.ThenBy(kvp => kvp.Key)
+														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+						if (order == Order.Desc)
+						{
+							var reversedTemp = sortedBlues.Reverse();
+							sortedBlues = reversedTemp.ToDictionary(x => x.Key, x => x.Value);
+						}
+						valuesToShow = sortedBlues;
+						break;
+					case CFColumns.Favourite:
+						// Sort the dictionary by the fourth element of the list and then by name
+						//Sustituye los 1 del Favourite por cero para así ordenar ascendente y que los Favourite queden arriba, ya que pasan a ser 0 en vez de 1.
+						Dictionary<string, List<int>> sortedFavs = values.OrderBy(kv => kv.Value[3] == 1 ? 0 : 1).ThenBy(kv => kv.Value[3]).ThenBy(kv => kv.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+						if (order == Order.Desc)
+						{
+							sortedFavs = values.OrderBy(kv => kv.Value[3] == 1 ? 0 : 1).ThenByDescending(kv => kv.Value[3]).ThenByDescending(kv => kv.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+						}
+						valuesToShow = sortedFavs;
+						break;
+					default:
+						break;
+				}
+			}
 
 			ColourContentDGV.Rows.Clear();
-			foreach (KeyValuePair<String, List<int>> configColor in values)
+			foreach (KeyValuePair<String, List<int>> configColor in valuesToShow)
 			{
 				ColourContentDGV.Rows.Add(GenerateNewRow(configColor));
-				
+
 			}
+
 		}
 
 		private void SetNUDs() //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
@@ -140,35 +246,56 @@ namespace PassGuard.GUI
 			BlueNowNUD.Value = actualColours[2]; //Modify data in the config file for future executions.
 		}
 
-		private void UncheckAllMenuItems(ContextMenuStrip contextMenuStrip)
+		private void ResetToNormalOrdering(bool actualSelects)
 		{
-			foreach (ToolStripItem item in contextMenuStrip.Items)
+			if (actualSelects)
 			{
-				if (item is ToolStripMenuItem toolStripMenuItem)
-				{
-					toolStripMenuItem.Checked = false;
-					//CMS dont have submenus, if they had we would need another method.
-				}
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.NULLVALUESS;
 			}
+
+			NameNormalCMS.Checked = true;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
+
+			RedNormalCMS.Checked = true;
+			RedAscendingCMS.Checked = false;
+			RedDescendingCMS.Checked = false;
+
+			GreenNormalCMS.Checked = true;
+			GreenAscendingCMS.Checked = false;
+			GreenDescendingCMS.Checked = false;
+
+			BlueNormalCMS.Checked = true;
+			BlueAscendingCMS.Checked = false;
+			BlueDescendingCMS.Checked = false;
+
+			FavouriteNormalCMS.Checked = true;
+			FavouriteAscendingCMS.Checked = false;
+			FavouriteDescendingCMS.Checked = false;
 		}
 
-		private void ResetCMS()
+		private void UncheckOrdering()
 		{
-			UncheckAllMenuItems(NameCMS);
-			NameNormalToolStripMenuItem.Checked = true;
+			NameNormalCMS.Checked = false;
+			NameAscendingCMS.Checked = false;
+			NameDescendingCMS.Checked = false;
 
-			UncheckAllMenuItems(RedCMS);
-			RedNormalToolStripMenuItem.Checked = true;
+			RedNormalCMS.Checked = false;
+			RedAscendingCMS.Checked = false;
+			RedDescendingCMS.Checked = false;
 
-			UncheckAllMenuItems(GreenCMS);
-			GreenNormalToolStripMenuItem.Checked = true;
+			GreenNormalCMS.Checked = false;
+			GreenAscendingCMS.Checked = false;
+			GreenDescendingCMS.Checked = false;
 
-			UncheckAllMenuItems(BlueCMS);
-			BlueNormalToolStripMenuItem.Checked = true;
+			BlueNormalCMS.Checked = false;
+			BlueAscendingCMS.Checked = false;
+			BlueDescendingCMS.Checked = false;
 
-			UncheckAllMenuItems(FavouriteCMS);
-			FavouriteNormalToolStripMenuItem.Checked = true;
-
+			FavouriteNormalCMS.Checked = false;
+			FavouriteAscendingCMS.Checked = false;
+			FavouriteDescendingCMS.Checked = false;
 		}
 
 		private void AskRGBforSettings_Load(object sender, EventArgs e)
@@ -267,11 +394,17 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ColourContentDGV.Rows.Clear();
-				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-				//Reset ordering of rows.
-				ResetCMS();
 			}
 
 		}
@@ -332,11 +465,16 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ColourContentDGV.Rows.Clear();
-				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-
-				//Reset ordering of rows.
-				ResetCMS();
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
 			}
 
@@ -371,11 +509,17 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ColourContentDGV.Rows.Clear();
-				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-				//Reset ordering of rows.
-				ResetCMS();
 			}
 			else if (del.deletedAllSuccess)
 			{
@@ -388,50 +532,20 @@ namespace PassGuard.GUI
 				config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-				ColourContentDGV.Rows.Clear();
-				LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-				//Reset ordering of rows.
-				ResetCMS();
 			}
 
 
-		}
-
-		private void normalOrderToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ColourContentDGV.Rows.Clear();
-			LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-
-			NameNormalToolStripMenuItem.Checked = true;
-			NameAscendingToolStripMenuItem.Checked = false;
-			NameDescendingToolStripMenuItem.Checked = false;
-		}
-
-		private void ascendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
-
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(values));
-
-			NameNormalToolStripMenuItem.Checked = false;
-			NameAscendingToolStripMenuItem.Checked = true;
-			NameDescendingToolStripMenuItem.Checked = false;
-		}
-
-		private void descendingOrderToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
-			var reversed = values.Reverse();
-			var newValues = reversed.ToDictionary(x => x.Key, x => x.Value);
-
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(newValues));
-
-			NameNormalToolStripMenuItem.Checked = false;
-			NameAscendingToolStripMenuItem.Checked = false;
-			NameDescendingToolStripMenuItem.Checked = true;
 		}
 
 		private void AskRGBforSettings_BackColorChanged(object sender, EventArgs e)
@@ -503,8 +617,16 @@ namespace PassGuard.GUI
 									config.Save(ConfigurationSaveMode.Modified);
 									ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-									ColourContentDGV.Rows.Clear();
-									LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+									if (isSearched)
+									{
+										SearchButton.PerformClick();
+									}
+									else
+									{
+										//Load the ordered content depending on column and order, and set toolstrip check property.
+										LoadContent(actualColumn, actualOrder);
+									}
 								}
 								else
 								{
@@ -516,11 +638,17 @@ namespace PassGuard.GUI
 
 									finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
 
-									ColourContentDGV.Rows.Clear();
-									LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+									if (isSearched)
+									{
+										SearchButton.PerformClick();
+									}
+									else
+									{
+										//Load the ordered content depending on column and order, and set toolstrip check property.
+										LoadContent(actualColumn, actualOrder);
+									}
 
-									//Reset ordering of rows.
-									ResetCMS();
 								}
 							}
 							else
@@ -548,11 +676,17 @@ namespace PassGuard.GUI
 								config.Save(ConfigurationSaveMode.Modified);
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-								ColourContentDGV.Rows.Clear();
-								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+								if (isSearched)
+								{
+									SearchButton.PerformClick();
+								}
+								else
+								{
+									//Load the ordered content depending on column and order, and set toolstrip check property.
+									LoadContent(actualColumn, actualOrder);
+								}
 
-								//Reset ordering of rows.
-								ResetCMS();
 							}
 							else
 							{
@@ -575,11 +709,17 @@ namespace PassGuard.GUI
 								config.Save(ConfigurationSaveMode.Modified);
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-								ColourContentDGV.Rows.Clear();
-								LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+								if (isSearched)
+								{
+									SearchButton.PerformClick();
+								}
+								else
+								{
+									//Load the ordered content depending on column and order, and set toolstrip check property.
+									LoadContent(actualColumn, actualOrder);
+								}
 
-								//Reset ordering of rows.
-								ResetCMS();
 							}
 							else
 							{
@@ -602,11 +742,17 @@ namespace PassGuard.GUI
 							config.Save(ConfigurationSaveMode.Modified);
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-							ColourContentDGV.Rows.Clear();
-							LoadContent(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+							ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+							if (isSearched)
+							{
+								SearchButton.PerformClick();
+							}
+							else
+							{
+								//Load the ordered content depending on column and order, and set toolstrip check property.
+								LoadContent(actualColumn, actualOrder);
+							}
 
-							//Reset ordering of rows.
-							ResetCMS();
 						}
 						break;
 					default:
@@ -693,188 +839,524 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void RedNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void NameNormalCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.Name;
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(data));
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			RedNormalToolStripMenuItem.Checked = true;
-			RedAscendingToolStripMenuItem.Checked = false;
-			RedDescendingToolStripMenuItem.Checked = false;
+				ResetToNormalOrdering(false);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void RedAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void NameAscendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Asc;
+				actualColumn = CFColumns.Name;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(0))
-											.ThenBy(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			RedNormalToolStripMenuItem.Checked = false;
-			RedAscendingToolStripMenuItem.Checked = true;
-			RedDescendingToolStripMenuItem.Checked = false;
+				UncheckOrdering();
+				NameAscendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void RedDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void NameDescendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Desc;
+				actualColumn = CFColumns.Name;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(0))
-											.ThenByDescending(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			RedNormalToolStripMenuItem.Checked = false;
-			RedAscendingToolStripMenuItem.Checked = false;
-			RedDescendingToolStripMenuItem.Checked = true;
+				UncheckOrdering();
+				NameDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void GreenNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void RedNormalCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.Red;
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(data));
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			GreenNormalToolStripMenuItem.Checked = true;
-			GreenAscendingToolStripMenuItem.Checked = false;
-			GreenDescendingToolStripMenuItem.Checked = false;
+				ResetToNormalOrdering(false);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void GreenAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void RedAscendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Asc;
+				actualColumn = CFColumns.Red;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(1))
-											.ThenBy(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			GreenNormalToolStripMenuItem.Checked = false;
-			GreenAscendingToolStripMenuItem.Checked = true;
-			GreenDescendingToolStripMenuItem.Checked = false;
+				UncheckOrdering();
+				RedAscendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void GreenDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void RedDescendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Desc;
+				actualColumn = CFColumns.Red;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(1))
-											.ThenByDescending(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			GreenNormalToolStripMenuItem.Checked = false;
-			GreenAscendingToolStripMenuItem.Checked = false;
-			GreenDescendingToolStripMenuItem.Checked = true;
+				UncheckOrdering();
+				RedDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void BlueNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void GreenNormalCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.Green;
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(data));
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			BlueNormalToolStripMenuItem.Checked = true;
-			BlueAscendingToolStripMenuItem.Checked = false;
-			BlueDescendingToolStripMenuItem.Checked = false;
+				ResetToNormalOrdering(false);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void BlueAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void GreenAscendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Asc;
+				actualColumn = CFColumns.Green;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderBy(kvp => kvp.Value.ElementAtOrDefault(2))
-											.ThenBy(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			BlueNormalToolStripMenuItem.Checked = false;
-			BlueAscendingToolStripMenuItem.Checked = true;
-			BlueDescendingToolStripMenuItem.Checked = false;
+				UncheckOrdering();
+				GreenAscendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void BlueDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void GreenDescendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Desc;
+				actualColumn = CFColumns.Green;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(2))
-											.ThenByDescending(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			BlueNormalToolStripMenuItem.Checked = false;
-			BlueAscendingToolStripMenuItem.Checked = false;
-			BlueDescendingToolStripMenuItem.Checked = true;
+				UncheckOrdering();
+				GreenDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void FavouriteNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void BlueNormalCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.Blue;
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(data));
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			FavouriteNormalToolStripMenuItem.Checked = true;
-			FavouriteAscendingToolStripMenuItem.Checked = false;
-			FavouriteDescendingToolStripMenuItem.Checked = false;
+				ResetToNormalOrdering(false);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void FavouriteAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void BlueAscendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Asc;
+				actualColumn = CFColumns.Blue;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(4))
-											.ThenBy(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
-
-			FavouriteNormalToolStripMenuItem.Checked = false;
-			FavouriteAscendingToolStripMenuItem.Checked = true;
-			FavouriteDescendingToolStripMenuItem.Checked = false;
+				UncheckOrdering();
+				BlueAscendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
-		private void FavouriteDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void BlueDescendingCMS_Click(object sender, EventArgs e)
 		{
-			Dictionary<string, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
+			try
+			{
+				actualOrder = Order.Desc;
+				actualColumn = CFColumns.Blue;
 
-			// Sort the dictionary by the fourth element of the list and then by name
-			Dictionary<string, List<int>> sortedDictionary = data.OrderByDescending(kvp => kvp.Value.ElementAtOrDefault(4))
-											.ThenByDescending(kvp => kvp.Key)
-											.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
 
-			ColourContentDGV.Rows.Clear();
-			LoadContent(JsonSerializer.Serialize(sortedDictionary));
+				UncheckOrdering();
+				BlueDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
+		}
 
-			FavouriteNormalToolStripMenuItem.Checked = false;
-			FavouriteAscendingToolStripMenuItem.Checked = false;
-			FavouriteDescendingToolStripMenuItem.Checked = true;
+		private void FavouriteNormalCMS_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				actualOrder = Order.Normal;
+				actualColumn = CFColumns.Favourite;
+
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
+
+				ResetToNormalOrdering(false);
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
+		}
+
+		private void FavouriteAscendingCMS_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				actualOrder = Order.Asc;
+				actualColumn = CFColumns.Favourite;
+
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
+
+				UncheckOrdering();
+				FavouriteAscendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
+		}
+
+		private void FavouriteDescendingCMS_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				actualOrder = Order.Desc;
+				actualColumn = CFColumns.Favourite;
+
+				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				if (isSearched)
+				{
+					SearchButton.PerformClick();
+				}
+				else
+				{
+					//Load the ordered content depending on column and order, and set toolstrip check property.
+					LoadContent(actualColumn, actualOrder);
+				}
+
+				UncheckOrdering();
+				FavouriteDescendingCMS.Checked = true;
+			}
+			catch (Exception ex)
+			{
+				if (ex is ConfigurationErrorsException)
+				{
+					MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				else
+				{
+					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				ResetToNormalOrdering(true);
+			}
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -1020,8 +1502,9 @@ namespace PassGuard.GUI
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear();
-							LoadContent(JsonSerializer.Serialize(newData));
-							ResetCMS();
+							LoadContent(actualColumn, actualOrder);
+							ResetButton.PerformClick();
+
 						}
 						else
 						{
@@ -1117,6 +1600,80 @@ namespace PassGuard.GUI
 			}
 
 			return true;
+		}
+
+		private void SearchButton_Click(object sender, EventArgs e)
+		{
+			TrimComponents();
+
+			//Reset content, so that you dont search content on the previously searched ocntent....
+			ColourContentDGV.Rows.Clear();
+			LoadContent(actualColumn, actualOrder);
+
+			List<DataGridViewRow> matchingRows = new List<DataGridViewRow>();
+
+			foreach (DataGridViewRow row in ColourContentDGV.Rows)
+			{
+				if (row.Cells["ConfigNameColumn"].Value != null)
+				{
+					string name = row.Cells["ConfigNameColumn"].Value.ToString();
+
+					if (name.Contains(SearchTextbox.Text, StringComparison.OrdinalIgnoreCase))
+					{
+						matchingRows.Add(row);
+					}
+				}
+			}
+
+			// Display the matching rows in the DataGridView
+			ColourContentDGV.Rows.Clear();
+			ColourContentDGV.Rows.AddRange(matchingRows.ToArray());
+
+			ResetButton.Enabled = true;
+			isSearched = true;
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SearchButton_MouseEnter(object sender, EventArgs e)
+		{
+			SearchButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SearchButton_MouseLeave(object sender, EventArgs e)
+		{
+			SearchButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ResetButton_MouseEnter(object sender, EventArgs e)
+		{
+			ResetButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void ResetButton_MouseLeave(object sender, EventArgs e)
+		{
+			ResetButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		private void ResetButton_Click(object sender, EventArgs e)
+		{
+			ColourContentDGV.Rows.Clear();
+			SearchTextbox.Text = string.Empty;
+			LoadContent(actualColumn, actualOrder);
+
+			ResetButton.Enabled = false;
+			isSearched = false;
+		}
+
+		private void SearchTextbox_TextChanged(object sender, EventArgs e)
+		{
+			if (!String.IsNullOrWhiteSpace(SearchTextbox.Text))
+			{
+				SearchButton.Enabled = true;
+			}
+			else { SearchButton.Enabled = false; }
 		}
 	}
 
