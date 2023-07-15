@@ -293,9 +293,9 @@ namespace PassGuard.GUI
 				actualColumn = DBColumns.NULLVALUESS;
 			}
 
-			URLNormalToolStripMenuItem.Checked = true;
-			URLAscendingToolStripMenuItem.Checked = false;
-			URLDescendingToolStripMenuItem.Checked = false;
+			URLNormalCMS.Checked = true;
+			URLAscendingCMS.Checked = false;
+			URLDescendingCMS.Checked = false;
 
 			NameNormalCMS.Checked = true;
 			NameAscendingCMS.Checked = false;
@@ -320,9 +320,9 @@ namespace PassGuard.GUI
 
 		private void UncheckOrdering()
 		{
-			URLNormalToolStripMenuItem.Checked = false;
-			URLAscendingToolStripMenuItem.Checked = false;
-			URLDescendingToolStripMenuItem.Checked = false;
+			URLNormalCMS.Checked = false;
+			URLAscendingCMS.Checked = false;
+			URLDescendingCMS.Checked = false;
 
 			NameNormalCMS.Checked = false;
 			NameAscendingCMS.Checked = false;
@@ -627,7 +627,7 @@ namespace PassGuard.GUI
 			help.ShowDialog();
 		}
 
-		private void URLNormalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void URLNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
@@ -676,7 +676,7 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void URLAscendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void URLAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
@@ -697,7 +697,7 @@ namespace PassGuard.GUI
 				}
 
 				UncheckOrdering();
-				URLAscendingToolStripMenuItem.Checked = true;
+				URLAscendingCMS.Checked = true;
 
 			}
 			catch (Exception ex)
@@ -726,7 +726,7 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void URLDescendingToolStripMenuItem_Click(object sender, EventArgs e)
+		private void URLDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
@@ -747,7 +747,7 @@ namespace PassGuard.GUI
 				}
 
 				UncheckOrdering();
-				URLDescendingToolStripMenuItem.Checked = true;
+				URLDescendingCMS.Checked = true;
 			}
 			catch (Exception ex)
 			{
