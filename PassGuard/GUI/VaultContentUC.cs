@@ -622,7 +622,10 @@ namespace PassGuard.GUI
 
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
-			GUI.HelpVaultForm help = new();
+			GUI.HelpVaultForm help = new()
+			{
+				BackColor = this.Parent.BackColor
+			};
 			help.ShowDialog();
 		}
 
@@ -1589,6 +1592,7 @@ namespace PassGuard.GUI
 			// Set the back color of the selection
 			VaultContentDGV.DefaultCellStyle.SelectionBackColor = this.BackColor;
 
+
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -1975,5 +1979,58 @@ namespace PassGuard.GUI
 			else { SearchButton.Enabled = false; }
 		}
 
+		private void StatsButton_Click(object sender, EventArgs e)
+		{
+			String[] lastvalue = encryptedVaultPath.Split('\\');
+			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
+			var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Path of decrypted Vault
+			try
+			{
+				crypt.Decrypt(vKey, encryptedVaultPath, decVault);
+				var necessaryData = query.GetAllData();
+				//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
+				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
+
+				// Access the parent form of the contentpanel
+				Form mainForm = this.Parent.FindForm();
+				// Find the logopanel control within the parent form
+				Panel logopanel = mainForm.Controls.Find("LogoPanel", true).FirstOrDefault() as Panel;
+				// Access the BackColor property of the logopanel
+				Color logoBackColor = logopanel.BackColor;
+
+				GUI.VaultStats stats = new(cKey, necessaryData, new int[] { logoBackColor.R, logoBackColor.G, logoBackColor.B })
+				{
+					BackColor = this.Parent.BackColor
+				};
+				stats.ShowDialog();
+			}
+			catch(Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+			finally
+			{
+				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old files in case of errors
+				{
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+				}
+			}
+		
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void StatsButton_MouseEnter(object sender, EventArgs e)
+		{
+			StatsButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void StatsButton_MouseLeave(object sender, EventArgs e)
+		{
+			StatsButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
+		}
+
+		
 	}
 }
