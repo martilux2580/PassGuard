@@ -41,7 +41,6 @@ namespace PassGuard.GUI
 			this.GreenNUD = new System.Windows.Forms.NumericUpDown();
 			this.RedNUD = new System.Windows.Forms.NumericUpDown();
 			this.FavouriteCheckbox = new System.Windows.Forms.CheckBox();
-			this.NoteRGBLabel = new System.Windows.Forms.Label();
 			this.ChosenCheckbox = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).BeginInit();
@@ -204,19 +203,6 @@ namespace PassGuard.GUI
 			this.FavouriteCheckbox.Text = "Favourite Config?";
 			this.FavouriteCheckbox.UseVisualStyleBackColor = true;
 			// 
-			// NoteRGBLabel
-			// 
-			this.NoteRGBLabel.AutoSize = true;
-			this.NoteRGBLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.NoteRGBLabel.Location = new System.Drawing.Point(29, 217);
-			this.NoteRGBLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.NoteRGBLabel.Name = "NoteRGBLabel";
-			this.NoteRGBLabel.Size = new System.Drawing.Size(667, 13);
-			this.NoteRGBLabel.TabIndex = 40;
-			this.NoteRGBLabel.Text = "Note: Very light or dark RGB combinations may be subject to slight variations, so" +
-    " that the colors entered are slightly different from those saved.";
-			this.NoteRGBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// ChosenCheckbox
 			// 
 			this.ChosenCheckbox.AutoSize = true;
@@ -234,9 +220,8 @@ namespace PassGuard.GUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(723, 245);
+			this.ClientSize = new System.Drawing.Size(723, 221);
 			this.Controls.Add(this.ChosenCheckbox);
-			this.Controls.Add(this.NoteRGBLabel);
 			this.Controls.Add(this.FavouriteCheckbox);
 			this.Controls.Add(this.BlueNUD);
 			this.Controls.Add(this.GreenNUD);
@@ -277,7 +262,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.NumericUpDown GreenNUD;
         private System.Windows.Forms.NumericUpDown RedNUD;
         private System.Windows.Forms.CheckBox FavouriteCheckbox;
-		private System.Windows.Forms.Label NoteRGBLabel;
 		private System.Windows.Forms.CheckBox ChosenCheckbox;
 	}
 }

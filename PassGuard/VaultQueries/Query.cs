@@ -194,6 +194,13 @@ namespace PassGuard.VaultQueries
 			Execute(query, parameters: new List<string> { newUrl,newName, newUsername, newPassword, newCategory, newNotes, newImportant, nameToBeEdited });
 		}
 
+		public void UpdateImportance(string newImportant, string nameToBeEdited)
+		{
+			string query = "UPDATE Vault SET Important = @param0 WHERE Name = @param1;";
+
+			Execute(query, parameters: new List<string> { newImportant, nameToBeEdited });
+		}
+
 		public List<String[]> GetNameAndImportance()
 		{
 			string query = "SELECT Name, Important FROM Vault;";
