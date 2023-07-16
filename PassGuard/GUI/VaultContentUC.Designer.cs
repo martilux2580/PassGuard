@@ -30,21 +30,14 @@ namespace PassGuard.GUI
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.VaultContentDGV = new System.Windows.Forms.DataGridView();
-			this.URLColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.NameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.SiteUsernameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.PasswordColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.CategoryColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.NotesColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.ImportantColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.DeleteRowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.AddButton = new System.Windows.Forms.Button();
 			this.EditButton = new System.Windows.Forms.Button();
 			this.HelpButton = new System.Windows.Forms.Button();
@@ -83,6 +76,14 @@ namespace PassGuard.GUI
 			this.SearchButton = new System.Windows.Forms.Button();
 			this.SearchTextbox = new System.Windows.Forms.TextBox();
 			this.ResetButton = new System.Windows.Forms.Button();
+			this.URLColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.NameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.SiteUsernameColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.PasswordColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.CategoryColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.NotesColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.ImportantColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.DeleteRowColumn = new System.Windows.Forms.DataGridViewButtonColumn();
 			((System.ComponentModel.ISupportInitialize)(this.VaultContentDGV)).BeginInit();
 			this.URLCMS.SuspendLayout();
 			this.NameCMS.SuspendLayout();
@@ -102,13 +103,13 @@ namespace PassGuard.GUI
 			this.VaultContentDGV.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.VaultContentDGV.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
 			this.VaultContentDGV.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.VaultContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			this.VaultContentDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.VaultContentDGV.ColumnHeadersHeight = 47;
 			this.VaultContentDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 			this.VaultContentDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -120,22 +121,22 @@ namespace PassGuard.GUI
             this.NotesColumn,
             this.ImportantColumn,
             this.DeleteRowColumn});
-			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.Red;
-			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.VaultContentDGV.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Red;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.VaultContentDGV.DefaultCellStyle = dataGridViewCellStyle6;
 			this.VaultContentDGV.EnableHeadersVisualStyles = false;
 			this.VaultContentDGV.GridColor = System.Drawing.SystemColors.InfoText;
 			this.VaultContentDGV.Location = new System.Drawing.Point(4, 3);
 			this.VaultContentDGV.Name = "VaultContentDGV";
 			this.VaultContentDGV.RowHeadersVisible = false;
 			this.VaultContentDGV.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-			dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-			this.VaultContentDGV.RowsDefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+			this.VaultContentDGV.RowsDefaultCellStyle = dataGridViewCellStyle7;
 			this.VaultContentDGV.RowTemplate.Height = 38;
 			this.VaultContentDGV.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			this.VaultContentDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -143,77 +144,6 @@ namespace PassGuard.GUI
 			this.VaultContentDGV.TabIndex = 0;
 			this.VaultContentDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.VaultContentDGV_CellContentClick);
 			this.VaultContentDGV.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.VaultContentDGV_ColumnHeaderMouseClick);
-			// 
-			// URLColumn
-			// 
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.URLColumn.DefaultCellStyle = dataGridViewCellStyle8;
-			this.URLColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.URLColumn.HeaderText = "URL";
-			this.URLColumn.Name = "URLColumn";
-			this.URLColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.URLColumn.Text = "";
-			// 
-			// NameColumn
-			// 
-			this.NameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.NameColumn.HeaderText = "Name";
-			this.NameColumn.Name = "NameColumn";
-			this.NameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.NameColumn.Text = "";
-			// 
-			// SiteUsernameColumn
-			// 
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.SiteUsernameColumn.DefaultCellStyle = dataGridViewCellStyle9;
-			this.SiteUsernameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SiteUsernameColumn.HeaderText = "Site Username";
-			this.SiteUsernameColumn.Name = "SiteUsernameColumn";
-			this.SiteUsernameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.SiteUsernameColumn.Text = "";
-			// 
-			// PasswordColumn
-			// 
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.PasswordColumn.DefaultCellStyle = dataGridViewCellStyle10;
-			this.PasswordColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.PasswordColumn.HeaderText = "Password";
-			this.PasswordColumn.Name = "PasswordColumn";
-			this.PasswordColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// CategoryColumn
-			// 
-			this.CategoryColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CategoryColumn.HeaderText = "Category";
-			this.CategoryColumn.Name = "CategoryColumn";
-			this.CategoryColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// NotesColumn
-			// 
-			this.NotesColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.NotesColumn.HeaderText = "Notes";
-			this.NotesColumn.Name = "NotesColumn";
-			this.NotesColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// ImportantColumn
-			// 
-			this.ImportantColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.ImportantColumn.HeaderText = "Important";
-			this.ImportantColumn.Name = "ImportantColumn";
-			this.ImportantColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// DeleteRowColumn
-			// 
-			this.DeleteRowColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.DeleteRowColumn.HeaderText = "Delete Row";
-			this.DeleteRowColumn.Name = "DeleteRowColumn";
-			this.DeleteRowColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.DeleteRowColumn.Text = "Delete";
-			this.DeleteRowColumn.UseColumnTextForButtonValue = true;
 			// 
 			// AddButton
 			// 
@@ -287,33 +217,33 @@ namespace PassGuard.GUI
             this.URLAscendingCMS,
             this.URLDescendingCMS});
 			this.URLCMS.Name = "URLCMS";
-			this.URLCMS.Size = new System.Drawing.Size(181, 98);
+			this.URLCMS.Size = new System.Drawing.Size(170, 76);
 			// 
 			// URLCMSSeparator
 			// 
 			this.URLCMSSeparator.Name = "URLCMSSeparator";
-			this.URLCMSSeparator.Size = new System.Drawing.Size(177, 6);
+			this.URLCMSSeparator.Size = new System.Drawing.Size(166, 6);
 			// 
 			// URLNormalCMS
 			// 
 			this.URLNormalCMS.Checked = true;
 			this.URLNormalCMS.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.URLNormalCMS.Name = "URLNormalCMS";
-			this.URLNormalCMS.Size = new System.Drawing.Size(180, 22);
+			this.URLNormalCMS.Size = new System.Drawing.Size(169, 22);
 			this.URLNormalCMS.Text = "Normal Order";
 			this.URLNormalCMS.Click += new System.EventHandler(this.URLNormalCMS_Click);
 			// 
 			// URLAscendingCMS
 			// 
 			this.URLAscendingCMS.Name = "URLAscendingCMS";
-			this.URLAscendingCMS.Size = new System.Drawing.Size(180, 22);
+			this.URLAscendingCMS.Size = new System.Drawing.Size(169, 22);
 			this.URLAscendingCMS.Text = "Ascending Order";
 			this.URLAscendingCMS.Click += new System.EventHandler(this.URLAscendingCMS_Click);
 			// 
 			// URLDescendingCMS
 			// 
 			this.URLDescendingCMS.Name = "URLDescendingCMS";
-			this.URLDescendingCMS.Size = new System.Drawing.Size(180, 22);
+			this.URLDescendingCMS.Size = new System.Drawing.Size(169, 22);
 			this.URLDescendingCMS.Text = "Descending Order";
 			this.URLDescendingCMS.Click += new System.EventHandler(this.URLDescendingCMS_Click);
 			// 
@@ -573,6 +503,81 @@ namespace PassGuard.GUI
 			this.ResetButton.MouseEnter += new System.EventHandler(this.ResetButton_MouseEnter);
 			this.ResetButton.MouseLeave += new System.EventHandler(this.ResetButton_MouseLeave);
 			// 
+			// URLColumn
+			// 
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.URLColumn.DefaultCellStyle = dataGridViewCellStyle2;
+			this.URLColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.URLColumn.HeaderText = "URL";
+			this.URLColumn.Name = "URLColumn";
+			this.URLColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.URLColumn.Text = "";
+			// 
+			// NameColumn
+			// 
+			this.NameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.NameColumn.HeaderText = "Name";
+			this.NameColumn.Name = "NameColumn";
+			this.NameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.NameColumn.Text = "";
+			// 
+			// SiteUsernameColumn
+			// 
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.SiteUsernameColumn.DefaultCellStyle = dataGridViewCellStyle3;
+			this.SiteUsernameColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.SiteUsernameColumn.HeaderText = "Site Username";
+			this.SiteUsernameColumn.Name = "SiteUsernameColumn";
+			this.SiteUsernameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.SiteUsernameColumn.Text = "";
+			// 
+			// PasswordColumn
+			// 
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.PasswordColumn.DefaultCellStyle = dataGridViewCellStyle4;
+			this.PasswordColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.PasswordColumn.HeaderText = "Password";
+			this.PasswordColumn.Name = "PasswordColumn";
+			this.PasswordColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// CategoryColumn
+			// 
+			this.CategoryColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.CategoryColumn.HeaderText = "Category";
+			this.CategoryColumn.Name = "CategoryColumn";
+			this.CategoryColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// NotesColumn
+			// 
+			this.NotesColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.NotesColumn.HeaderText = "Notes";
+			this.NotesColumn.Name = "NotesColumn";
+			this.NotesColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// ImportantColumn
+			// 
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+			dataGridViewCellStyle5.NullValue = false;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
+			this.ImportantColumn.DefaultCellStyle = dataGridViewCellStyle5;
+			this.ImportantColumn.HeaderText = "Important";
+			this.ImportantColumn.Name = "ImportantColumn";
+			this.ImportantColumn.ReadOnly = true;
+			this.ImportantColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// DeleteRowColumn
+			// 
+			this.DeleteRowColumn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.DeleteRowColumn.HeaderText = "Delete Row";
+			this.DeleteRowColumn.Name = "DeleteRowColumn";
+			this.DeleteRowColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.DeleteRowColumn.Text = "Delete";
+			this.DeleteRowColumn.UseColumnTextForButtonValue = true;
+			// 
 			// VaultContentUC
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -639,16 +644,16 @@ namespace PassGuard.GUI
 		private System.Windows.Forms.ToolStripMenuItem ImportantAscendingCMS;
 		private System.Windows.Forms.ToolStripMenuItem ImportantDescendingCMS;
 		private System.Windows.Forms.DataGridView VaultContentDGV;
+		private System.Windows.Forms.Button SearchButton;
+		private System.Windows.Forms.TextBox SearchTextbox;
+		private System.Windows.Forms.Button ResetButton;
 		private System.Windows.Forms.DataGridViewButtonColumn URLColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn NameColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn SiteUsernameColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn PasswordColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn CategoryColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn NotesColumn;
-		private System.Windows.Forms.DataGridViewButtonColumn ImportantColumn;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn ImportantColumn;
 		private System.Windows.Forms.DataGridViewButtonColumn DeleteRowColumn;
-		private System.Windows.Forms.Button SearchButton;
-		private System.Windows.Forms.TextBox SearchTextbox;
-		private System.Windows.Forms.Button ResetButton;
 	}
 }

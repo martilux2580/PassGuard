@@ -1502,6 +1502,7 @@ namespace PassGuard.GUI
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear();
+							//When we import, I assume we want to see all the content and not the result of a previous search from a previous set of configs....
 							LoadContent(actualColumn, actualOrder);
 							ResetButton.PerformClick();
 

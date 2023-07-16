@@ -19,10 +19,12 @@ using System.Linq.Expressions;
 using System.Runtime.Versioning;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PassGuard.GUI
 {
@@ -203,16 +205,15 @@ namespace PassGuard.GUI
 					foreach (String[] row in fullResults)
 					{
 						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
+						VaultContentDGV.Rows.Add(
 							crypt.DecryptText(key: cKey, src: row[0]),
 							crypt.DecryptText(key: cKey, src: row[1]),
 							crypt.DecryptText(key: cKey, src: row[2]),
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
+							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+						);
 					}
 				}
 				else //Other column than Important, we can order them easily.
@@ -245,16 +246,15 @@ namespace PassGuard.GUI
 					foreach (String[] row in fullResults)
 					{
 						var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-						VaultContentDGV.Rows.Add(new String[]
-						{
+						VaultContentDGV.Rows.Add(
 							crypt.DecryptText(key: cKey, src: row[0]),
 							crypt.DecryptText(key: cKey, src: row[1]),
 							crypt.DecryptText(key: cKey, src: row[2]),
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-						});
+							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+						);
 					}
 
 				}
@@ -267,16 +267,15 @@ namespace PassGuard.GUI
 				foreach (String[] row in fullResults)
 				{
 					var tempImportant = crypt.DecryptText(key: cKey, src: row[6]); //Not to decrypt two times same string....
-					VaultContentDGV.Rows.Add(new String[]
-					{
+					VaultContentDGV.Rows.Add(
 							crypt.DecryptText(key: cKey, src: row[0]),
 							crypt.DecryptText(key: cKey, src: row[1]),
 							crypt.DecryptText(key: cKey, src: row[2]),
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? "Important" : "Not Important" //If decrypts to "1" it is important, else is not.
-					});
+							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+					);
 				}
 			}
 
@@ -644,7 +643,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Url);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -693,7 +692,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Url);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -743,7 +742,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Url);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -791,7 +790,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Name);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -839,7 +838,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Name);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -889,7 +888,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Name);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -939,7 +938,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Username);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -987,7 +986,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Username);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1036,7 +1035,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Username);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1085,7 +1084,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Category);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -1133,7 +1132,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Category);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1183,7 +1182,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Category);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1233,7 +1232,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Notes);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -1282,7 +1281,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Notes);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1331,7 +1330,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Notes);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1381,7 +1380,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Normal, DBColumns.Important);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				ResetToNormalOrdering(false);
@@ -1429,7 +1428,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Asc, DBColumns.Important);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1478,7 +1477,7 @@ namespace PassGuard.GUI
 				else
 				{
 					//Load the ordered content depending on column and order, and set toolstrip check property.
-					LoadContent(Order.Desc, DBColumns.Important);
+					LoadContent(actualOrder, actualColumn);
 				}
 
 				UncheckOrdering();
@@ -1687,18 +1686,6 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private void UncheckAllMenuItems(ContextMenuStrip contextMenuStrip)
-		{
-			foreach (ToolStripItem item in contextMenuStrip.Items)
-			{
-				if (item is ToolStripMenuItem toolStripMenuItem)
-				{
-					toolStripMenuItem.Checked = false;
-					//CMS dont have submenus, if they had we would need another method.
-				}
-			}
-		}
-
 		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (e.RowIndex >= 0) //Check that cell clicked is a row and not a column header....
@@ -1739,7 +1726,15 @@ namespace PassGuard.GUI
 								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
 								VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-								LoadContent(actualOrder, actualColumn);
+								if (isSearched)
+								{
+									SearchButton.PerformClick();
+								}
+								else
+								{
+									//Load the ordered content depending on column and order, and set toolstrip check property.
+									LoadContent(actualOrder, actualColumn);
+								}
 							}
 							catch(Exception ex)
 							{
@@ -1783,9 +1778,90 @@ namespace PassGuard.GUI
 								{
 									encNameToCopy = namesInDb;
 									break;
+
 								}
 							}
 							Clipboard.SetText(crypt.DecryptText(key: cKey, src: query.GetPassword(name: encNameToCopy)[3]));
+
+							//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
+							crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+							File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
+
+
+						}
+						catch (Exception ex)
+						{
+							if (ex is ConfigurationErrorsException)
+							{
+								MessageBox.Show(text: "PassGuard could not load configuration file, AutoBackup could not run.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+							else if (ex is FormatException)
+							{
+								MessageBox.Show(text: "PassGuard could not decrypt your Vault.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+							else
+							{
+								MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+							}
+						}
+						finally
+						{
+							if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //Delete old files in case of errors
+							{
+								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
+							}
+						}
+						break;
+					case "ImportantColumn":
+						try
+						{
+							var initialState = VaultContentDGV.CurrentCell.Value;
+							var row = VaultContentDGV.Rows[e.RowIndex];
+							DialogResult dialog2 = new();
+
+							if (Convert.ToBoolean(VaultContentDGV.CurrentCell.Value)) { dialog2 = MessageBox.Show(text: "Do you want to unmark the password with name '" + row.Cells[1].Value.ToString() + "' as important?", caption: "Unmark password as important.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo); }
+							else { dialog2 = MessageBox.Show(text: "Do you want to mark the password with name '" + row.Cells[1].Value.ToString() + "' as important?", caption: "Mark password as important.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo); }
+
+							if (dialog2 == DialogResult.Yes)
+							{
+								crypt.Decrypt(vKey, encryptedVaultPath, decVault);
+
+								var decryptedName = row.Cells[1].Value.ToString();
+								var encNameToEdit = "";
+								foreach (String namesInDb in query.GetColumn(DBColumns.Name.ToString())) //Decrypt names in db.
+								{
+									var temp = crypt.DecryptText(key: cKey, src: namesInDb);
+									if (temp == decryptedName)
+									{
+										encNameToEdit = namesInDb;
+										break;
+									}
+								}
+
+								if (Convert.ToBoolean(VaultContentDGV.CurrentCell.Value)) { query.UpdateImportance(crypt.EncryptText(key: cKey, src: "0"), encNameToEdit); }
+								else { query.UpdateImportance(crypt.EncryptText(key: cKey, src: "1"), encNameToEdit); }
+
+								//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
+								crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
+								File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
+
+
+								VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+								if (isSearched)
+								{
+									SearchButton.PerformClick();
+								}
+								else
+								{
+									//Load the ordered content depending on column and order, and set toolstrip check property.
+									LoadContent(actualOrder, actualColumn);
+								}
+
+							}
+							else
+							{
+								VaultContentDGV.CurrentCell.Value = initialState; //Maintain checkbox as it was, just in case...
+							}
 						}
 						catch (Exception ex)
 						{
@@ -1815,7 +1891,6 @@ namespace PassGuard.GUI
 					case "SiteUsernameColumn":
 					case "CategoryColumn":
 					case "NotesColumn":
-					case "ImportantColumn":
 						// Copy the button text to clipboard
 						Clipboard.SetText(clickedCell.Value.ToString());
 						break;
