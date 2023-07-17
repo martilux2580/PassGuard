@@ -30,5 +30,10 @@ namespace PassGuard.Utils
 		{
 			return (min <= value && value <= max);
 		}
+
+		internal static int[] GetComplementaryRGB(int r, int g, int b)
+		{
+			return new int[] { 255 - r, 255 - g, 255 - b};
+		}
 	}
 }
