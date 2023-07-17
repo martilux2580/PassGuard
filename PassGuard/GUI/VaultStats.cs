@@ -71,6 +71,12 @@ namespace PassGuard.GUI
 
 					break;
 				case "Security Properties":
+					var someSecData = allData.Select(arr => arr[3]).ToList(); //Get just Name, Pass and Importance from all data.
+					var someSecDataDecrypted = someSecData.Select(str => crypt.DecryptText(Key, str)).ToList();
+
+					StatsPanel.Controls.Clear();
+					GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
+					StatsPanel.Controls.Add(stat1);
 					break;
 				default:
 					break;

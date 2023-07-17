@@ -42,7 +42,8 @@ namespace PassGuard.GUI
 
 		//Fill the dictionary with corresponding pair CheckBox(symbols)-String
 		private Dictionary<CheckBox, string> fillSymbolsDict(Dictionary<CheckBox, string> symbols)
-		{   
+		{
+			// !$%&/\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡
 			symbols.Add(CheckBoxExclamation, "!");
 			symbols.Add(CheckboxDollar, "$");
 			symbols.Add(CheckboxPercentage, "%");

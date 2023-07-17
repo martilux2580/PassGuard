@@ -15,6 +15,7 @@ using OxyPlot.Wpf;
 using OxyPlot.WindowsForms;
 using OxyPlot.Annotations;
 using PassGuard.Crypto;
+using PassGuard.Utils;
 
 namespace PassGuard.GUI
 {
@@ -22,12 +23,12 @@ namespace PassGuard.GUI
 	{
 		private List<String[]> myData = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
-		private ICrypt crypt = new AESAlgorithm();
 
 		public ContentStatsUC(List<String[]> someData, int[] ContextColour)
 		{
 			InitializeComponent();
 			TextStatsTextbox.BackColor = Color.FromArgb(230, 230, 230); //Dunno why sometimes it shows a lighter white....
+			H2LegendTextbox.BackColor = Color.FromArgb(230, 230, 230); //Dunno why sometimes it shows a lighter white....
 
 			myData = someData;
 			contextColour = ContextColour;
@@ -85,16 +86,63 @@ namespace PassGuard.GUI
 
 			// Add the series to the plot model's series collection
 			plotModel.Series.Add(series);
-
 			// Set custom labels for the bars on the Y-axis
 			yAxis.Labels.AddRange(new List<string> { "<6 chars", "6+ chars", "9+ chars", "12+ chars", "15+ chars", "18+ chars", "21+ chars" });
-			// Set the PlotMargins to adjust the plot area within the available space
-			// Update the PlotArea to include the axes labels
-			Histogram1Plotview.Model = plotModel;
+
 
 
 			//Histogram2
+			// Create a new PlotModel
+			var plotModel1 = new PlotModel
+			{
+				Title = "Password Composition"
+			};
 
+			// Create a CategoryAxis for Y-axis (Categories)
+			var yAxis1 = new CategoryAxis
+			{
+				Position = AxisPosition.Left,
+				Key = "YAxisKey1",
+				FontSize = 12
+			};
+
+			// Create a LinearAxis for X-axis (Values)
+			var xAxis1 = new LinearAxis
+			{
+				Position = AxisPosition.Bottom,
+				Title = "Values",
+			};
+
+			// Add the axes to the plot model
+			plotModel1.Axes.Add(yAxis1);
+			plotModel1.Axes.Add(xAxis1);
+
+			var complementaryColour = IntUtils.GetComplementaryRGB(contextColour[0], contextColour[1], contextColour[2]);
+			// Create a BarSeries for the bars
+			var series1 = new BarSeries
+			{
+				Title = "Bars",
+				FillColor = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2])), // Set custom RGB color for the fill
+				StrokeColor = OxyColors.Black,
+				StrokeThickness = 1
+			};
+
+			var passCompositions = calculatePassCompositions();
+			// Set the data for the bars
+			series1.Items.Add(new BarItem { Value = passCompositions[0], CategoryIndex = 0 });
+			series1.Items.Add(new BarItem { Value = passCompositions[1], CategoryIndex = 1 });
+			series1.Items.Add(new BarItem { Value = passCompositions[2], CategoryIndex = 2 });
+			series1.Items.Add(new BarItem { Value = passCompositions[3], CategoryIndex = 3 });
+			series1.Items.Add(new BarItem { Value = passCompositions[4], CategoryIndex = 4 });
+			series1.Items.Add(new BarItem { Value = passCompositions[5], CategoryIndex = 5 });
+			series1.Items.Add(new BarItem { Value = passCompositions[6], CategoryIndex = 6 });
+
+			// Add the series to the plot model's series collection
+			plotModel1.Series.Add(series1);
+			// Set custom labels for the bars on the Y-axis
+			yAxis1.Labels.AddRange(new List<string> { "N/A", "L+N", "U+L", "U+L+N", "S+L+N", "S+U+L", "S+U+L+N" });
+			
+			
 
 			//StatsText
 			StringBuilder sb = new();
@@ -109,6 +157,39 @@ namespace PassGuard.GUI
 			TextStatsTextbox.SelectAll();
 			TextStatsTextbox.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 
+
+
+			//Show both histograms at same time....
+			Histogram1Plotview.Model = plotModel;
+			Histogram2Plotview.Model = plotModel1;
+
+		}
+
+		private List<int> calculatePassCompositions()
+		{
+			List<String> allPass = myData.Select(arr => arr[1]).ToList();
+			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
+			List<int> results = new List<int> { 0, 0, 0, 0, 0, 0, 0};
+			string symbols = "!$%&/\\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡";
+
+			foreach (String pass in allPass)
+			{
+				bool containsSymbols = pass.Any(c => symbols.Contains(c));
+				bool containsUpper = pass.Any(char.IsUpper);
+				bool containsLower = pass.Any(char.IsLower);
+				bool containsNumbers = pass.Any(char.IsDigit);
+				bool previousCases = false;
+
+				if (containsSymbols && containsUpper && containsLower && containsNumbers) { results[6] += 1; previousCases = true; } //SULN
+				if (containsSymbols && containsUpper && containsLower) { results[5] += 1; previousCases = true; } //SUN
+				if (containsSymbols && containsLower && containsNumbers) { results[4] += 1; previousCases = true; } //SLN
+				if (containsUpper && containsLower && containsNumbers) { results[3] += 1; previousCases = true; } //ULN
+				if (containsUpper && containsLower) { results[2] += 1; previousCases = true; } //UL
+				if (containsLower && containsNumbers) { results[1] += 1; previousCases = true; } //LN
+				if(!previousCases) { results[0] += 1; } //NA
+
+			}
+			return results;
 		}
 
 		private List<int> calculatePassLengthsAndSum()

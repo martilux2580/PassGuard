@@ -41,7 +41,7 @@
 			this.UnderstoodButton.FlatAppearance.BorderSize = 0;
 			this.UnderstoodButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.UnderstoodButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.UnderstoodButton.Location = new System.Drawing.Point(427, 533);
+			this.UnderstoodButton.Location = new System.Drawing.Point(507, 533);
 			this.UnderstoodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.UnderstoodButton.Name = "UnderstoodButton";
 			this.UnderstoodButton.Size = new System.Drawing.Size(130, 38);
@@ -56,7 +56,7 @@
 			// 
 			this.TitleLabel.AutoSize = true;
 			this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.TitleLabel.Location = new System.Drawing.Point(12, 22);
+			this.TitleLabel.Location = new System.Drawing.Point(30, 22);
 			this.TitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.TitleLabel.Name = "TitleLabel";
 			this.TitleLabel.Size = new System.Drawing.Size(311, 18);
@@ -72,11 +72,11 @@
             "",
             "Content Properties",
             "Security Properties"});
-			this.StatTypeCombobox.Location = new System.Drawing.Point(343, 19);
+			this.StatTypeCombobox.Location = new System.Drawing.Point(361, 19);
 			this.StatTypeCombobox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.StatTypeCombobox.MaxLength = 2100;
 			this.StatTypeCombobox.Name = "StatTypeCombobox";
-			this.StatTypeCombobox.Size = new System.Drawing.Size(323, 26);
+			this.StatTypeCombobox.Size = new System.Drawing.Size(473, 26);
 			this.StatTypeCombobox.TabIndex = 35;
 			this.StatTypeCombobox.TextChanged += new System.EventHandler(this.StatTypeCombobox_TextChanged);
 			// 
@@ -84,7 +84,7 @@
 			// 
 			this.StatsPanel.Location = new System.Drawing.Point(12, 64);
 			this.StatsPanel.Name = "StatsPanel";
-			this.StatsPanel.Size = new System.Drawing.Size(944, 463);
+			this.StatsPanel.Size = new System.Drawing.Size(1144, 463);
 			this.StatsPanel.TabIndex = 36;
 			// 
 			// ResetButton
@@ -93,7 +93,7 @@
 			this.ResetButton.FlatAppearance.BorderSize = 0;
 			this.ResetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.ResetButton.Location = new System.Drawing.Point(676, 17);
+			this.ResetButton.Location = new System.Drawing.Point(876, 16);
 			this.ResetButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.ResetButton.Name = "ResetButton";
 			this.ResetButton.Size = new System.Drawing.Size(119, 31);
@@ -110,7 +110,7 @@
 			this.SearchButton.FlatAppearance.BorderSize = 0;
 			this.SearchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SearchButton.Location = new System.Drawing.Point(837, 17);
+			this.SearchButton.Location = new System.Drawing.Point(1037, 16);
 			this.SearchButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SearchButton.Name = "SearchButton";
 			this.SearchButton.Size = new System.Drawing.Size(119, 31);
@@ -125,7 +125,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(968, 578);
+			this.ClientSize = new System.Drawing.Size(1168, 578);
 			this.Controls.Add(this.ResetButton);
 			this.Controls.Add(this.SearchButton);
 			this.Controls.Add(this.StatsPanel);
