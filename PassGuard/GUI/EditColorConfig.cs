@@ -37,8 +37,10 @@ namespace PassGuard.GUI
 			storedConfigs = configs;
 			actualChosenName = ActuallyChosenName;
 			NameCombobox.Items.Add("");
+			NameTextbox.BackColor = Color.FromArgb(116, 118, 117);
+			RedNUD.BackColor =  Color.FromArgb(116, 118, 117);
 
-			foreach(String name in storedConfigs.Keys)
+			foreach (String name in storedConfigs.Keys)
 			{
 				NameCombobox.Items.Add(name);
 			}

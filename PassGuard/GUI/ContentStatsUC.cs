@@ -27,15 +27,12 @@ namespace PassGuard.GUI
 		public ContentStatsUC(List<String[]> someData, int[] ContextColour)
 		{
 			InitializeComponent();
-			TextStatsTextbox.BackColor = Color.FromArgb(230, 230, 230); //Dunno why sometimes it shows a lighter white....
-			H2LegendTextbox.BackColor = Color.FromArgb(230, 230, 230); //Dunno why sometimes it shows a lighter white....
 
 			myData = someData;
 			contextColour = ContextColour;
-			LoadingLabel.Visible = true;
 
 			LoadStats();
-			LoadingLabel.Visible = false;
+
 		}
 
 		private void LoadStats()
@@ -141,27 +138,27 @@ namespace PassGuard.GUI
 			plotModel1.Series.Add(series1);
 			// Set custom labels for the bars on the Y-axis
 			yAxis1.Labels.AddRange(new List<string> { "N/A", "L+N", "U+L", "U+L+N", "S+L+N", "S+U+L", "S+U+L+N" });
-			
-			
-
-			//StatsText
-			StringBuilder sb = new();
-			var d1 = myData.Count;
-			var d2 = ((decimal) passLengths[7] / myData.Count);
-			var d3 = (((decimal) passLengths[8] / myData.Count) * 100);
-
-			sb.Append("Number of saved passwords: " + d1.ToString() + " passwords.");
-			sb.Append("\nAverage characters per saved password: " + Math.Round(d2, 3).ToString() + " characters.");
-			sb.Append("\nPercentage of important passwords from total: " + passLengths[8].ToString() + "/" + myData.Count.ToString() + " = " + Math.Round(d3, 3).ToString() + "%.");
-			TextStatsTextbox.Text = ""; TextStatsTextbox.Text = sb.ToString();
-			TextStatsTextbox.SelectAll();
-			TextStatsTextbox.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Center;
 
 
 
 			//Show both histograms at same time....
 			Histogram1Plotview.Model = plotModel;
 			Histogram2Plotview.Model = plotModel1;
+
+
+
+			//StatsText
+			StringBuilder sb = new();
+			var d1 = myData.Count;
+			var d2 = ((decimal)passLengths[7] / myData.Count);
+			var d3 = (((decimal)passLengths[8] / myData.Count) * 100);
+
+			sb.Append("Number of saved passwords: " + d1.ToString() + " passwords.");
+			sb.Append("\nAverage characters per saved password: " + Math.Round(d2, 3).ToString() + " characters.");
+			sb.Append("\nPercentage of important passwords from total: " + passLengths[8].ToString() + "/" + myData.Count.ToString() + " = " + Math.Round(d3, 3).ToString() + "%.");
+			TextStatsLabel.Text = sb.ToString();
+			H2InfoLabel.Text = "Legend: S = Symbols (@#%...), U = Upper Case letters (ABC...), L = Lower Case letters (abc...), N = Numbers (012...).";
+
 
 		}
 

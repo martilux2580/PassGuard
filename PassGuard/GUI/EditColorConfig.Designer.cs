@@ -49,6 +49,7 @@ namespace PassGuard.GUI
 			// 
 			// NameCombobox
 			// 
+			this.NameCombobox.BackColor = System.Drawing.SystemColors.Window;
 			this.NameCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.NameCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NameCombobox.FormattingEnabled = true;

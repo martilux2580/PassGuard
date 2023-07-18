@@ -62,21 +62,26 @@ namespace PassGuard.GUI
 			switch (StatTypeCombobox.Text)
 			{
 				case "Content Properties":
+					GenDiagramLabel.Text = "Generating Diagrams....";
 					var someData = allData.Select(arr => new string[] { arr[1], arr[3], arr[6] }).ToList(); //Get just Name, Pass and Importance from all data.
 					var someDataDecrypted = someData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
 					StatsPanel.Controls.Clear();
 					GUI.ContentStatsUC stat = new(someDataDecrypted, contextColour);
 					StatsPanel.Controls.Add(stat);
+					GenDiagramLabel.Text = "";
 
 					break;
 				case "Security Properties":
+					GenDiagramLabel.Text = "Generating Diagrams....";
 					var someSecData = allData.Select(arr => arr[3]).ToList(); //Get just Name, Pass and Importance from all data.
 					var someSecDataDecrypted = someSecData.Select(str => crypt.DecryptText(Key, str)).ToList();
 
 					StatsPanel.Controls.Clear();
 					GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
 					StatsPanel.Controls.Add(stat1);
+					GenDiagramLabel.Text = "";
+
 					break;
 				default:
 					break;
