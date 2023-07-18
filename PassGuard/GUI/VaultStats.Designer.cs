@@ -34,6 +34,7 @@
 			this.StatsPanel = new System.Windows.Forms.Panel();
 			this.ResetButton = new System.Windows.Forms.Button();
 			this.SearchButton = new System.Windows.Forms.Button();
+			this.GenDiagramLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// UnderstoodButton
@@ -121,11 +122,21 @@
 			this.SearchButton.MouseEnter += new System.EventHandler(this.SearchButton_MouseEnter);
 			this.SearchButton.MouseLeave += new System.EventHandler(this.SearchButton_MouseLeave);
 			// 
+			// GenDiagramLabel
+			// 
+			this.GenDiagramLabel.AutoSize = true;
+			this.GenDiagramLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GenDiagramLabel.Location = new System.Drawing.Point(983, 546);
+			this.GenDiagramLabel.Name = "GenDiagramLabel";
+			this.GenDiagramLabel.Size = new System.Drawing.Size(0, 15);
+			this.GenDiagramLabel.TabIndex = 39;
+			// 
 			// VaultStats
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1168, 578);
+			this.Controls.Add(this.GenDiagramLabel);
 			this.Controls.Add(this.ResetButton);
 			this.Controls.Add(this.SearchButton);
 			this.Controls.Add(this.StatsPanel);
@@ -150,5 +161,6 @@
 		private System.Windows.Forms.Panel StatsPanel;
 		private System.Windows.Forms.Button ResetButton;
 		private System.Windows.Forms.Button SearchButton;
+		private System.Windows.Forms.Label GenDiagramLabel;
 	}
 }
