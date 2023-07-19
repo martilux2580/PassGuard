@@ -60,7 +60,7 @@
 			// 
 			// TextStatsLabel
 			// 
-			this.TextStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.TextStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.TextStatsLabel.Location = new System.Drawing.Point(3, 409);
 			this.TextStatsLabel.Name = "TextStatsLabel";
 			this.TextStatsLabel.Size = new System.Drawing.Size(1138, 51);

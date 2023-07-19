@@ -74,8 +74,8 @@ namespace PassGuard.GUI
 					break;
 				case "Security Properties":
 					GenDiagramLabel.Text = "Generating Diagrams....";
-					var someSecData = allData.Select(arr => arr[3]).ToList(); //Get just Name, Pass and Importance from all data.
-					var someSecDataDecrypted = someSecData.Select(str => crypt.DecryptText(Key, str)).ToList();
+					var someSecData = allData.Select(arr => new string[] { arr[3], arr[6] }).ToList(); //Get just Pass and Importance from all data.
+					var someSecDataDecrypted = someSecData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
 					StatsPanel.Controls.Clear();
 					GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
