@@ -11,15 +11,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PassGuard.Utils;
+using OxyPlot.WindowsForms;
+using OxyPlot.Wpf;
 
 namespace PassGuard.GUI
 {
 	public partial class SecurityStatsUC : UserControl
 	{
-		private List<String> myData = new();
+		private List<String[]> myData = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
-		public SecurityStatsUC(List<String> someData, int[] ContextColour)
+		public SecurityStatsUC(List<String[]> someData, int[] ContextColour)
 		{
 			InitializeComponent();
 
@@ -35,7 +37,7 @@ namespace PassGuard.GUI
 			// Create the plot model
 			var plotModel1 = new PlotModel
 			{
-				Title = "Distinct Password Repetition"
+				Title = "Distinct Password Pwnage"
 			};
 
 			// Create the pie series
@@ -49,15 +51,17 @@ namespace PassGuard.GUI
 			};
 
 			// Add data to the pie series
-			double percentagePwned = Convert.ToDouble(await CalculatePwns(myData.Distinct().ToList()));
+			decimal[] pwnsAndImportance = await CalculatePwns(myData.Distinct().ToList());
+			double percentagePwns = Convert.ToDouble((((decimal)pwnsAndImportance[0] / myData.Distinct().Count()) * 100));
+			double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
 
-			var slice11 = new PieSlice("Pwned", Math.Round(percentagePwned, 3))
+			var slice11 = new PieSlice("Pwned", Math.Round(percentagePwns, 3))
 			{
 				Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
 			};
 
 			var complementaryColour = IntUtils.GetComplementaryRGB(contextColour[0], contextColour[1], contextColour[2]);
-			var slice22 = new PieSlice("Unpwned", Math.Round(100 - percentagePwned, 3))
+			var slice22 = new PieSlice("Unpwned", Math.Round(100 - percentagePwns, 3))
 			{
 				Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
 			};
@@ -89,13 +93,14 @@ namespace PassGuard.GUI
 			};
 
 			// Add data to the pie series
-			var uniqueStrings = myData.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key);
+			var passes = myData.Select(array => array[0]).ToList();
+			var uniqueStrings = passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key);
 			int uniqueStringsCount = uniqueStrings.Count();
-			int repeatedStringsCount = myData.Distinct().Count() - uniqueStringsCount;
-			int totalStringsCount = myData.Count;
-			var percentageUniqueStringsCount = (((double)uniqueStringsCount / myData.Distinct().Count()) * 100);
-			var percentageRepeatedStringsCount = (((double)repeatedStringsCount / myData.Distinct().Count()) * 100);
-			var numberRepetitions = myData.Count - uniqueStringsCount;
+			int repeatedStringsCount = passes.Distinct().Count() - uniqueStringsCount;
+			int totalStringsCount = passes.Count;
+			var percentageUniqueStringsCount = (((double)uniqueStringsCount / passes.Distinct().Count()) * 100);
+			var percentageRepeatedStringsCount = (((double)repeatedStringsCount / passes.Distinct().Count()) * 100);
+			var numberRepetitions = passes.Count - uniqueStringsCount;
 
 			var slice1 = new PieSlice("Unique", Math.Round(percentageUniqueStringsCount, 3))
 			{
@@ -129,28 +134,34 @@ namespace PassGuard.GUI
 			sb.Append("Number of total saved passwords: " + d1.ToString() + " passwords.");
 			sb.Append("        Number of total unique passwords: " + uniqueStringsCount + " passwords.");
 			sb.Append("        Number of total repetitions of passwords: " + numberRepetitions + " passwords.");
-			sb.Append("\nNumber of total different saved passwords: " + myData.Distinct().Count().ToString() + " passwords.");
-			//TODO
+			sb.Append("\nNumber of total different saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
+			sb.Append("        From different pwned password, percentage of those that where marked as important: " + pwnsAndImportance[1].ToString() + "/" + pwnsAndImportance[0].ToString() + " = " + Math.Round(percentageImportance, 3).ToString() + "%.");
+			sb.Append("\nPercentage of all saved passwords that have been pwned (includes repetitions): " + Math.Round(percentageImportance, 3).ToString() + "%.");
 			TextStatsLabel.Text = sb.ToString();
 			H1InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
 			H2InfoLabel.Text = "Different passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
 
 		}
 
-		private async Task<decimal> CalculatePwns(List<String> data)
+		private async Task<decimal[]> CalculatePwns(List<String[]> data)
 		{
-			int result = 0;
+			decimal[] result = new decimal[] { 0, 0 };
 
-			foreach(String pass in data)
+			foreach (String[] pair in data)
 			{
-				if(await Pwned.Pwned.CheckPwnage(pass)) 
-				{ 
-					result += 1; 
+				if(await Pwned.Pwned.CheckPwnage(pair[0])) 
+				{
+					result[0] += 1;
+					if (Convert.ToInt32(pair[1]) == 1)
+					{
+						result[1] += 1;
+					}
 				}
 				
 			}
-			
-			return (((decimal)result / data.Count) * 100);
+
+			return result;
 		}
+
 	}
 }
