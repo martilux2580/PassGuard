@@ -13,12 +13,15 @@ using System.Windows.Forms;
 using PassGuard.Utils;
 using OxyPlot.WindowsForms;
 using OxyPlot.Wpf;
+using System.IO.Packaging;
 
 namespace PassGuard.GUI
 {
 	public partial class SecurityStatsUC : UserControl
 	{
 		private List<String[]> myData = new();
+		private List<String> passes = new();
+		private List<String> importances = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
 		public SecurityStatsUC(List<String[]> someData, int[] ContextColour)
@@ -26,6 +29,9 @@ namespace PassGuard.GUI
 			InitializeComponent();
 
 			myData = someData;
+			// Separate the first and second values using LINQ
+			passes = myData.Select(item => item[0]).ToList();
+			importances = myData.Select(item => item[1]).ToList();
 			contextColour = ContextColour;
 
 			LoadStats();
@@ -51,9 +57,9 @@ namespace PassGuard.GUI
 			};
 
 			// Add data to the pie series
-			decimal[] pwnsAndImportance = await CalculatePwns(myData.Distinct().ToList());
-			double percentagePwns = Convert.ToDouble((((decimal)pwnsAndImportance[0] / myData.Distinct().Count()) * 100));
-			double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
+			Dictionary<String, int[]> pwns = await CalculatePwns();
+			double percentagePwns = Convert.ToDouble((((decimal)pwns.Values.Count(arr => arr[0] != 0) / pwns.Count()) * 100));
+			//double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
 
 			var slice11 = new PieSlice("Pwned", Math.Round(percentagePwns, 3))
 			{
@@ -93,21 +99,14 @@ namespace PassGuard.GUI
 			};
 
 			// Add data to the pie series
-			var passes = myData.Select(array => array[0]).ToList();
-			var uniqueStrings = passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key);
-			int uniqueStringsCount = uniqueStrings.Count();
-			int repeatedStringsCount = passes.Distinct().Count() - uniqueStringsCount;
-			int totalStringsCount = passes.Count;
-			var percentageUniqueStringsCount = (((double)uniqueStringsCount / passes.Distinct().Count()) * 100);
-			var percentageRepeatedStringsCount = (((double)repeatedStringsCount / passes.Distinct().Count()) * 100);
-			var numberRepetitions = passes.Count - uniqueStringsCount;
 
-			var slice1 = new PieSlice("Unique", Math.Round(percentageUniqueStringsCount, 3))
+			decimal percentageUnique = (((decimal)passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count() / passes.Distinct().Count()) * 100);
+			var slice1 = new PieSlice("Unique", Math.Round(Convert.ToDouble(percentageUnique), 3))
 			{
 				Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
 			};
 
-			var slice2 = new PieSlice("Duplicated/Repeated", Math.Round(percentageRepeatedStringsCount, 3))
+			var slice2 = new PieSlice("Duplicated/Repeated", Math.Round(Convert.ToDouble(100 - percentageUnique), 3))
 			{
 				Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
 			};
@@ -129,38 +128,62 @@ namespace PassGuard.GUI
 
 			//StatsText
 			StringBuilder sb = new();
-			var d1 = myData.Count;
 
-			sb.Append("Number of total saved passwords: " + d1.ToString() + " passwords.");
-			sb.Append("        Number of total unique passwords: " + uniqueStringsCount + " passwords.");
-			sb.Append("        Number of total repetitions of passwords: " + numberRepetitions + " passwords.");
-			sb.Append("\nNumber of total different saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
-			sb.Append("        From different pwned password, percentage of those that where marked as important: " + pwnsAndImportance[1].ToString() + "/" + pwnsAndImportance[0].ToString() + " = " + Math.Round(percentageImportance, 3).ToString() + "%.");
-			sb.Append("\nPercentage of all saved passwords that have been pwned (includes repetitions): " + Math.Round(percentageImportance, 3).ToString() + "%.");
+			sb.Append("Total saved passwords: " + myData.Count.ToString() + " passwords.");
+			sb.Append("        Total number of passwords used once (Unique): " + passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count().ToString() + " passwords.");
+			sb.Append("        Total number repetitions of passwords: " + (passes.Count - passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count()).ToString() + " passwords.");
+			sb.Append("\nNumber of distinct saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
+			sb.Append("        Distinct pwned passwords: " + pwns.Values.Count(arr => arr[0] != 0).ToString() + " passwords.");
+			sb.Append("        Total pwned passwords: " + pwns.Values.Sum(arr => arr[0]).ToString() + " passwords.");
+			sb.Append("\nTotal pwned passwords marked as Important: " + pwns.Values.Where(arr => arr[1] == 1).Sum(arr => arr[0]).ToString() + " passwords.");
 			TextStatsLabel.Text = sb.ToString();
-			H1InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
-			H2InfoLabel.Text = "Different passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
+			H2InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
+			H1InfoLabel.Text = "Distinct passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
 
 		}
 
-		private async Task<decimal[]> CalculatePwns(List<String[]> data)
+		private async Task<Dictionary<String, int[]>> CalculatePwns()
 		{
-			decimal[] result = new decimal[] { 0, 0 };
+			Dictionary<String, int[]> passAndPwns = new();
+			var data = passes.ToList();
 
-			foreach (String[] pair in data)
+			// Using a for loop to iterate through the list
+			for (int i = 0; i < data.Count; i++)
 			{
-				if(await Pwned.Pwned.CheckPwnage(pair[0])) 
+				if (!passAndPwns.ContainsKey(data[i]))
 				{
-					result[0] += 1;
-					if (Convert.ToInt32(pair[1]) == 1)
+					if (await Pwned.Pwned.CheckPwnage(data[i]))
 					{
-						result[1] += 1;
+						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 1, 1 }; }
+						else { passAndPwns[data[i]] = new int[] { 1, 0 }; }
+
+					}
+					else 
+					{
+						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
+						else { passAndPwns[data[i]] = new int[] { 0, 0 }; }
 					}
 				}
-				
+				else
+				{
+					if (passAndPwns[data[i]][0] > 0)
+					{
+						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) 
+						{
+							passAndPwns[data[i]] = new int[] { passAndPwns[data[i]][0] + 1, passAndPwns[data[i]][1] };
+
+						}
+						else { passAndPwns[data[i]] = new int[] { passAndPwns[data[i]][0] += 1, 0 }; }
+					}
+					else
+					{
+						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
+						else { passAndPwns[data[i]] = new int[] { 0, 0 }; }
+					}
+				}
 			}
 
-			return result;
+			return passAndPwns;
 		}
 
 	}
