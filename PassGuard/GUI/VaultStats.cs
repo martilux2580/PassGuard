@@ -62,25 +62,25 @@ namespace PassGuard.GUI
 			switch (StatTypeCombobox.Text)
 			{
 				case "Content Properties":
-					GenDiagramLabel.Text = "Generating Diagrams....";
+					Able(false);
 					var someData = allData.Select(arr => new string[] { arr[1], arr[3], arr[6] }).ToList(); //Get just Name, Pass and Importance from all data.
 					var someDataDecrypted = someData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
 					StatsPanel.Controls.Clear();
 					GUI.ContentStatsUC stat = new(someDataDecrypted, contextColour);
 					StatsPanel.Controls.Add(stat);
-					GenDiagramLabel.Text = "";
+					Able(true);
 
 					break;
 				case "Security Properties":
-					GenDiagramLabel.Text = "Generating Diagrams....";
+					Able(false);
 					var someSecData = allData.Select(arr => new string[] { arr[3], arr[6] }).ToList(); //Get just Pass and Importance from all data.
 					var someSecDataDecrypted = someSecData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
 					StatsPanel.Controls.Clear();
 					GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
 					StatsPanel.Controls.Add(stat1);
-					GenDiagramLabel.Text = "";
+					Able(true);
 
 					break;
 				default:
@@ -88,6 +88,29 @@ namespace PassGuard.GUI
 			}
 
 			ResetButton.Enabled = true;
+		}
+
+		private void Able(bool value) //Enable/Disable components
+		{
+			if(value)
+			{
+				ResetButton.Enabled = true;
+				SearchButton.Enabled = true;
+				StatsPanel.Enabled = true;
+				StatTypeCombobox.Enabled = true;
+				TitleLabel.Enabled= true;
+				UnderstoodButton.Enabled = true;
+			}
+			else
+			{
+				ResetButton.Enabled = false;
+				SearchButton.Enabled = false;
+				StatsPanel.Enabled = false;
+				StatTypeCombobox.Enabled = false;
+				TitleLabel.Enabled = false;
+				UnderstoodButton.Enabled = false;
+
+			}
 		}
 
 		private void ResetButton_Click(object sender, EventArgs e)
@@ -129,6 +152,20 @@ namespace PassGuard.GUI
 				SearchButton.Enabled = true;
 			}
 			else { SearchButton.Enabled = false; }
+		}
+
+		private void VaultStats_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				StatTypeCombobox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				StatTypeCombobox.BackColor = Color.FromArgb(152, 154, 153);
+
+			}
 		}
 	}
 }

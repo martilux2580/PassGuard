@@ -46,5 +46,19 @@ namespace PassGuard.GUI
 		{
 			UnderstoodButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
+
+		private void InfoNewVaultCreatedForm_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				ContentRichTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				ContentRichTextbox.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
+		}
 	}
 }

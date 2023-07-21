@@ -152,5 +152,27 @@ namespace PassGuard.GUI
 				Check(false);
 			}
 		}
+
+		private void DeleteColorConfig_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				NameCombobox.BackColor = SystemColors.Window;
+				NameTextbox.BackColor = SystemColors.Window;
+				RedNUD.BackColor = SystemColors.Window;
+				GreenNUD.BackColor = SystemColors.Window;
+				BlueNUD.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				NameCombobox.BackColor = Color.FromArgb(128, 130, 129);
+				NameTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				RedNUD.BackColor = Color.FromArgb(152, 154, 153);
+				GreenNUD.BackColor = Color.FromArgb(152, 154, 153);
+				BlueNUD.BackColor = Color.FromArgb(152, 154, 153);
+
+			}
+		}
 	}
 }

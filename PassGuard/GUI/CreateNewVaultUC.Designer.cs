@@ -240,6 +240,7 @@ namespace PassGuard.GUI
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "CreateNewVaultUC";
 			this.Size = new System.Drawing.Size(1050, 512);
+			this.BackColorChanged += new System.EventHandler(this.CreateNewVaultUC_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

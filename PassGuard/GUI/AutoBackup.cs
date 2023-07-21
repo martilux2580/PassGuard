@@ -231,5 +231,23 @@ namespace PassGuard.GUI
 				BackupPathFilesTextbox.Text = fbd.SelectedPath;
 			}
 		}
+
+		private void AutoBackup_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				VaultPathTextbox.BackColor = SystemColors.Window;
+				BackupPathFilesTextbox.BackColor = SystemColors.Window;
+				FrequencyCombobox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				VaultPathTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				BackupPathFilesTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				FrequencyCombobox.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
+		}
 	}
 }

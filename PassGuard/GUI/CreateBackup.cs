@@ -131,5 +131,20 @@ namespace PassGuard.GUI
 			VaultPathTextbox.Text = filepath;
 		}
 
+		private void CreateBackup_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				VaultPathTextbox.BackColor = SystemColors.Window;
+				VaultBackupPathTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				VaultPathTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				VaultBackupPathTextbox.BackColor = Color.FromArgb(152, 154, 153);
+
+			}
+		}
 	}
 }

@@ -162,6 +162,7 @@ namespace PassGuard.GUI
 			this.Name = "CreateBackup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "PassGuard™";
+			this.BackColorChanged += new System.EventHandler(this.CreateBackup_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

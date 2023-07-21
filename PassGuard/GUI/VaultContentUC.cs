@@ -1592,6 +1592,8 @@ namespace PassGuard.GUI
 			// Set the back color of the selection
 			VaultContentDGV.DefaultCellStyle.SelectionBackColor = this.BackColor;
 
+			if(this.BackColor == Color.FromArgb(230, 230, 230)) { SearchTextbox.BackColor = SystemColors.Window; }
+			else { SearchTextbox.BackColor = Color.FromArgb(152, 154, 153); }
 
 		}
 
@@ -1992,18 +1994,27 @@ namespace PassGuard.GUI
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
-				// Access the parent form of the contentpanel
-				Form mainForm = this.Parent.FindForm();
-				// Find the logopanel control within the parent form
-				Panel logopanel = mainForm.Controls.Find("LogoPanel", true).FirstOrDefault() as Panel;
-				// Access the BackColor property of the logopanel
-				Color logoBackColor = logopanel.BackColor;
-
-				GUI.VaultStats stats = new(cKey, necessaryData, new int[] { logoBackColor.R, logoBackColor.G, logoBackColor.B })
+				if(necessaryData.Count >= 10)
 				{
-					BackColor = this.Parent.BackColor
-				};
-				stats.ShowDialog();
+					// Access the parent form of the contentpanel
+					Form mainForm = this.Parent.FindForm();
+					// Find the logopanel control within the parent form
+					Panel logopanel = mainForm.Controls.Find("LogoPanel", true).FirstOrDefault() as Panel;
+					// Access the BackColor property of the logopanel
+					Color logoBackColor = logopanel.BackColor;
+
+					GUI.VaultStats stats = new(cKey, necessaryData, new int[] { logoBackColor.R, logoBackColor.G, logoBackColor.B })
+					{
+						BackColor = this.Parent.BackColor
+					};
+					stats.ShowDialog();
+				}
+				else
+				{
+					MessageBox.Show(text: "To generate relevant statistics, your Passguard Vault must have a minimum of 10 saved passwords." + "\n\nNote: Currently your selected Passguard Vault has " + necessaryData.Count.ToString() + 
+						" saved password(s).", caption: "Statistics Generation Information", icon: MessageBoxIcon.Exclamation, buttons: MessageBoxButtons.OK);
+				}
+				
 			}
 			catch(Exception)
 			{
@@ -2030,7 +2041,5 @@ namespace PassGuard.GUI
 		{
 			StatsButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
 		}
-
-		
 	}
 }

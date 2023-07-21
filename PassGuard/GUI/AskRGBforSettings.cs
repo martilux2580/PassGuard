@@ -561,6 +561,29 @@ namespace PassGuard.GUI
 
 			// Set the back color of the selection
 			ColourContentDGV.DefaultCellStyle.SelectionBackColor = this.BackColor;
+
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				SearchTextbox.BackColor = SystemColors.Window;
+				RedNextNUD.BackColor = SystemColors.Window;
+				GreenNextNUD.BackColor = SystemColors.Window;
+				BlueNextNUD.BackColor = SystemColors.Window;
+				RedNowNUD.BackColor = SystemColors.Window;
+				GreenNowNUD.BackColor = SystemColors.Window;
+				BlueNowNUD.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				SearchTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				RedNextNUD.BackColor = Color.FromArgb(152, 154, 153);
+				GreenNextNUD.BackColor = Color.FromArgb(152, 154, 153);
+				BlueNextNUD.BackColor = Color.FromArgb(152, 154, 153);
+				RedNowNUD.BackColor = Color.FromArgb(152, 154, 153);
+				GreenNowNUD.BackColor = Color.FromArgb(152, 154, 153);
+				BlueNowNUD.BackColor = Color.FromArgb(152, 154, 153);
+
+			}
 		}
 
 		private void ColourContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -1421,7 +1444,10 @@ namespace PassGuard.GUI
 
 		private void ExportButton_Click(object sender, EventArgs e)
 		{
-			ExportVaultConfigs export = new();
+			ExportVaultConfigs export = new()
+			{
+				BackColor = this.BackColor
+			};
 			export.ShowDialog();
 		}
 
@@ -1439,7 +1465,10 @@ namespace PassGuard.GUI
 
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
-			GUI.HelpColourConfigsForm help = new();
+			GUI.HelpColourConfigsForm help = new()
+			{
+				BackColor = this.BackColor
+			}; ;
 			help.ShowDialog();
 		}
 

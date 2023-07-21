@@ -104,6 +104,7 @@ namespace PassGuard.GUI
 			// 
 			// SecurityKeyTextbox
 			// 
+			this.SecurityKeyTextbox.BackColor = System.Drawing.SystemColors.Window;
 			this.SecurityKeyTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SecurityKeyTextbox.Location = new System.Drawing.Point(284, 263);
 			this.SecurityKeyTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -276,6 +277,7 @@ namespace PassGuard.GUI
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "LoadVaultUC";
 			this.Size = new System.Drawing.Size(1050, 512);
+			this.BackColorChanged += new System.EventHandler(this.LoadVaultUC_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -225,5 +225,25 @@ namespace PassGuard.GUI
 				}
 			}
 		}
+
+		private void ExportPdfFromSettings_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				VaultEmailTextbox.BackColor = SystemColors.Window;
+				VaultPassTextbox.BackColor = SystemColors.Window;
+				SecurityKeyTextbox.BackColor = SystemColors.Window;
+				VaultPathTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				VaultEmailTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPassTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				SecurityKeyTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPathTextbox.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
+		}
 	}
 }

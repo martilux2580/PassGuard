@@ -181,5 +181,31 @@ namespace PassGuard.GUI
 				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
 			}
 		}
+
+		private void DeleteContent_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				NameCombobox.BackColor = SystemColors.Window;
+				URLTextbox.BackColor = SystemColors.Window;
+				NameTextbox.BackColor = SystemColors.Window;
+				UsernameTextbox.BackColor = SystemColors.Window;
+				PasswordTextbox.BackColor = SystemColors.Window;
+				CategoryTextbox.BackColor = SystemColors.Window;
+				NotesTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				NameCombobox.BackColor = Color.FromArgb(128, 130, 129);
+				URLTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				NameTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				UsernameTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				PasswordTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				CategoryTextbox.BackColor = Color.FromArgb(152, 154, 153);
+				NotesTextbox.BackColor = Color.FromArgb(152, 154, 153);
+
+			}
+		}
 	}
 }

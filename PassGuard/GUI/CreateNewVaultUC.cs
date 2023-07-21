@@ -146,7 +146,10 @@ namespace PassGuard.GUI
 					//Inform user
 					var data = "\t• Vault Name: " + VaultNameTextbox.Text + "\n\t• Filename: " + VaultNameTextbox.Text + ".encrypted" + "\n\t• Email: " + VaultEmailTextbox.Text + "\n\t• Vault Password: " + VaultPassTextbox.Text + "\n\t• Security Key: " + rndsalt;
 					Clipboard.SetText(data);
-					GUI.InfoNewVaultCreatedForm info = new(data);
+					GUI.InfoNewVaultCreatedForm info = new(data)
+					{
+						BackColor = this.BackColor
+					};
 					info.ShowDialog();
 				}
 				catch(Exception)
@@ -183,6 +186,28 @@ namespace PassGuard.GUI
 			{
 				VaultPassTextbox.UseSystemPasswordChar = true;
 				PassVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
+
+		private void CreateNewVaultUC_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				VaultEmailTextbox.BackColor = SystemColors.Window;
+				VaultNameTextbox.BackColor = SystemColors.Window;
+				VaultPassTextbox.BackColor = SystemColors.Window;
+				ConfirmPassVaultTextbox.BackColor = SystemColors.Window;
+				VaultPathTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				VaultEmailTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultNameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPassTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				ConfirmPassVaultTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPathTextbox.BackColor = Color.FromArgb(152, 154, 153);
+
 			}
 		}
 	}

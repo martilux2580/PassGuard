@@ -313,6 +313,7 @@ namespace PassGuard.GUI
 			this.Name = "DeleteContent";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "PassGuard™";
+			this.BackColorChanged += new System.EventHandler(this.DeleteContent_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

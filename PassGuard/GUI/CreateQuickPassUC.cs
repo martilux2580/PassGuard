@@ -356,7 +356,10 @@ namespace PassGuard.GUI
 
 		private void InfoPwnageButton_Click(object sender, EventArgs e)
 		{
-			GUI.InfoPwnageForm info = new();
+			GUI.InfoPwnageForm info = new()
+			{
+				BackColor = this.BackColor
+			};
 			info.ShowDialog();
 		}
 
@@ -440,6 +443,24 @@ namespace PassGuard.GUI
 		private void GenPassButton_MouseLeave(object sender, EventArgs e)
 		{
 			GenPassButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //If mouse leaves button, regular text
+		}
+
+		private void CreateQuickPassUC_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				NPasswordsNUD.BackColor = SystemColors.Window;
+				PassLengthNUD.BackColor = SystemColors.Window;
+				PasswordTextBox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				NPasswordsNUD.BackColor = Color.FromArgb(128, 130, 129);
+				PassLengthNUD.BackColor = Color.FromArgb(128, 130, 129);
+				PasswordTextBox.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
 		}
 	}
 }

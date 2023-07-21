@@ -244,5 +244,31 @@ namespace PassGuard.GUI
 				}
 			}
 		}
+
+		private void EditContent_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				NameCombobox.BackColor = SystemColors.Window;
+				URLTextbox.BackColor = SystemColors.Window;
+				NameTextbox.BackColor = SystemColors.Window;
+				UsernameTextbox.BackColor = SystemColors.Window;
+				PasswordTextbox.BackColor = SystemColors.Window;
+				CategoryCombobox.BackColor = SystemColors.Window;
+				NotesTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				NameCombobox.BackColor = Color.FromArgb(128, 130, 129);
+				URLTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				NameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				UsernameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				PasswordTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				CategoryCombobox.BackColor = Color.FromArgb(128, 130, 129);
+				NotesTextbox.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
+		}
 	}
 }

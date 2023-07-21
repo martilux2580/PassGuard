@@ -268,6 +268,7 @@
 			this.Controls.Add(this.SecurityKeyTextbox);
 			this.Name = "ExportPdfFromSettings";
 			this.Size = new System.Drawing.Size(1050, 512);
+			this.BackColorChanged += new System.EventHandler(this.ExportPdfFromSettings_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
