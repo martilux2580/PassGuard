@@ -283,6 +283,7 @@ namespace PassGuard.GUI
 			this.Name = "EditContent";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "PassGuard™";
+			this.BackColorChanged += new System.EventHandler(this.EditContent_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

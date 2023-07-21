@@ -72,6 +72,7 @@
 			this.Name = "HelpColourConfigsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HelpColourConfigsForm";
+			this.BackColorChanged += new System.EventHandler(this.HelpColourConfigsForm_BackColorChanged);
 			this.ResumeLayout(false);
 
 		}

@@ -54,6 +54,7 @@ namespace PassGuard.GUI
 			{
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
+
 		}
 
 		public void TrimComponents()
@@ -163,6 +164,30 @@ namespace PassGuard.GUI
 				{
 					CategoryCombobox.SelectedItem = matchedItem;
 				}
+			}
+		}
+
+		private void AddContent_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				URLTextbox.BackColor = SystemColors.Window;
+				NameTextbox.BackColor = SystemColors.Window;
+				UsernameTextbox.BackColor = SystemColors.Window;
+				PasswordTextbox.BackColor = SystemColors.Window;
+				CategoryCombobox.BackColor = SystemColors.Window;
+				NotesTextbox.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				URLTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				NameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				UsernameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				PasswordTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				CategoryCombobox.BackColor = Color.FromArgb(128, 130, 129);
+				NotesTextbox.BackColor = Color.FromArgb(128, 130, 129);
+
 			}
 		}
 	}

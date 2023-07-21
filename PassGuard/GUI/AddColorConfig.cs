@@ -98,5 +98,24 @@ namespace PassGuard.GUI
 
 		}
 
+		private void AddColorConfig_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230))
+			{
+				NameTextbox.BackColor = SystemColors.Window;
+				RedNUD.BackColor = SystemColors.Window;
+				GreenNUD.BackColor = SystemColors.Window;
+				BlueNUD.BackColor = SystemColors.Window;
+
+			}
+			else
+			{
+				NameTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				RedNUD.BackColor = Color.FromArgb(128, 130, 129);
+				GreenNUD.BackColor = Color.FromArgb(128, 130, 129);
+				BlueNUD.BackColor = Color.FromArgb(128, 130, 129);
+
+			}
+		}
 	}
 }

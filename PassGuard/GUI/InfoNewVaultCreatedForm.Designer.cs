@@ -71,6 +71,7 @@
 			this.Name = "InfoNewVaultCreatedForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "InfoNewVaultCreatedForm";
+			this.BackColorChanged += new System.EventHandler(this.InfoNewVaultCreatedForm_BackColorChanged);
 			this.ResumeLayout(false);
 
 		}

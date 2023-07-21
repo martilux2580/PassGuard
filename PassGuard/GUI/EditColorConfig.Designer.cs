@@ -241,6 +241,7 @@ namespace PassGuard.GUI
 			this.Name = "EditColorConfig";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EditColorConfig";
+			this.BackColorChanged += new System.EventHandler(this.EditColorConfig_BackColorChanged);
 			((System.ComponentModel.ISupportInitialize)(this.BlueNUD)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.GreenNUD)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.RedNUD)).EndInit();

@@ -28,8 +28,8 @@ namespace PassGuard.GUI
 			InitializeComponent();
 			settings = setts;
 			if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
-		   
 
+			
 		}
 
 		public void TrimComponents()
@@ -304,6 +304,26 @@ namespace PassGuard.GUI
 			{
 				SecurityKeyTextbox.UseSystemPasswordChar = true;
 				SKVisibilityButton.Image = Properties.Resources.VisibilityOn24;
+			}
+		}
+
+		private void LoadVaultUC_BackColorChanged(object sender, EventArgs e)
+		{
+			if (this.BackColor == Color.FromArgb(230, 230, 230)) 
+			{ 
+				VaultEmailTextbox.BackColor = SystemColors.Window;
+				VaultPassTextbox.BackColor = SystemColors.Window;
+				SecurityKeyTextbox.BackColor = SystemColors.Window;
+				VaultPathTextbox.BackColor = SystemColors.Window;
+
+			}
+			else 
+			{
+				VaultEmailTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPassTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				SecurityKeyTextbox.BackColor = Color.FromArgb(128, 130, 129);
+				VaultPathTextbox.BackColor = Color.FromArgb(128, 130, 129);
+
 			}
 		}
 	}

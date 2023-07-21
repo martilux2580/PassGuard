@@ -72,6 +72,7 @@
 			this.Name = "HelpVaultForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HelpVaultForm";
+			this.BackColorChanged += new System.EventHandler(this.HelpVaultForm_BackColorChanged);
 			this.ResumeLayout(false);
 
 		}

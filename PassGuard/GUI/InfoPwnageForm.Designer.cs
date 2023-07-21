@@ -70,6 +70,7 @@
 			this.Name = "InfoPwnageForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "InfoPwnageForm";
+			this.BackColorChanged += new System.EventHandler(this.InfoPwnageForm_BackColorChanged);
 			this.ResumeLayout(false);
 
 		}
