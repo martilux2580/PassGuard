@@ -14,6 +14,12 @@ using PassGuard.Utils;
 using OxyPlot.WindowsForms;
 using OxyPlot.Wpf;
 using System.IO.Packaging;
+using System.Runtime.Versioning;
+using System.Text.Json;
+using System.Windows.Input;
+using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json.Nodes;
 
 namespace PassGuard.GUI
 {
@@ -21,8 +27,9 @@ namespace PassGuard.GUI
 	{
 		private List<String[]> myData = new();
 		private List<String> passes = new();
-		private List<String> importances = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
+
+		private Dictionary<String, int[]> pwns = new();
 
 		public SecurityStatsUC(List<String[]> someData, int[] ContextColour)
 		{
@@ -30,8 +37,7 @@ namespace PassGuard.GUI
 
 			myData = someData;
 			// Separate the first and second values using LINQ
-			passes = myData.Select(item => item[0]).ToList();
-			importances = myData.Select(item => item[1]).ToList();
+			passes = myData.Select(item => item[1]).ToList();
 			contextColour = ContextColour;
 
 			LoadStats();
@@ -57,7 +63,7 @@ namespace PassGuard.GUI
 			};
 
 			// Add data to the pie series
-			Dictionary<String, int[]> pwns = await CalculatePwns();
+			pwns = await CalculatePwns();
 			double percentagePwns = Convert.ToDouble((((decimal)pwns.Values.Count(arr => arr[0] != 0) / pwns.Count()) * 100));
 			//double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
 
@@ -131,14 +137,16 @@ namespace PassGuard.GUI
 
 			sb.Append("Total saved passwords: " + myData.Count.ToString() + " passwords.");
 			sb.Append("        Total number of passwords used once (Unique): " + passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count().ToString() + " passwords.");
-			sb.Append("        Total number repetitions of passwords: " + (passes.Count - passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count()).ToString() + " passwords.");
-			sb.Append("\nNumber of distinct saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
-			sb.Append("        Distinct pwned passwords: " + pwns.Values.Count(arr => arr[0] != 0).ToString() + " passwords.");
+			sb.Append("\nTotal number repetitions of passwords: " + (passes.Count - passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count()).ToString() + " passwords.");
+			sb.Append("        Number of distinct saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
+			sb.Append("\nDistinct pwned passwords: " + pwns.Values.Count(arr => arr[0] != 0).ToString() + " passwords.");
 			sb.Append("        Total pwned passwords: " + pwns.Values.Sum(arr => arr[0]).ToString() + " passwords.");
-			sb.Append("\nTotal pwned passwords marked as Important: " + pwns.Values.Where(arr => arr[1] == 1).Sum(arr => arr[0]).ToString() + " passwords.");
+			sb.Append("        Total pwned passwords marked as Important: " + pwns.Values.Where(arr => arr[1] == 1).Sum(arr => arr[0]).ToString() + " passwords.");
 			TextStatsLabel.Text = sb.ToString();
 			H2InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
 			H1InfoLabel.Text = "Distinct passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
+			DownloadData1Button.Text = "Download Pwned Data Details";
+			DownloadData2Button.Text = "Download Password Repetition Details";
 
 		}
 
@@ -154,13 +162,13 @@ namespace PassGuard.GUI
 				{
 					if (await Pwned.Pwned.CheckPwnage(data[i]))
 					{
-						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 1, 1 }; }
+						if (myData.Any(arr => arr[1] == data[i] && arr[2] == "1")) { passAndPwns[data[i]] = new int[] { 1, 1 }; }
 						else { passAndPwns[data[i]] = new int[] { 1, 0 }; }
 
 					}
 					else 
 					{
-						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
+						if (myData.Any(arr => arr[1] == data[i] && arr[2] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
 						else { passAndPwns[data[i]] = new int[] { 0, 0 }; }
 					}
 				}
@@ -168,7 +176,7 @@ namespace PassGuard.GUI
 				{
 					if (passAndPwns[data[i]][0] > 0)
 					{
-						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) 
+						if (myData.Any(arr => arr[1] == data[i] && arr[2] == "1")) 
 						{
 							passAndPwns[data[i]] = new int[] { passAndPwns[data[i]][0] + 1, passAndPwns[data[i]][1] };
 
@@ -177,7 +185,7 @@ namespace PassGuard.GUI
 					}
 					else
 					{
-						if (myData.Any(arr => arr[0] == data[i] && arr[1] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
+						if (myData.Any(arr => arr[1] == data[i] && arr[2] == "1")) { passAndPwns[data[i]] = new int[] { 0, 1 }; }
 						else { passAndPwns[data[i]] = new int[] { 0, 0 }; }
 					}
 				}
@@ -186,5 +194,99 @@ namespace PassGuard.GUI
 			return passAndPwns;
 		}
 
+		private void DownloadData1Button_Click(object sender, EventArgs e)
+		{
+			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PwnageStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
+
+			if (File.Exists(filePath)) { MessageBox.Show(text: "There is already a file with the name of the JSON file. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
+			else
+			{
+				var notPwnedPasses = pwns.Where(kvp => kvp.Value[0] == 0).Select(kvp => kvp.Key).ToList();
+				var notPwnedNames = myData.Where(arr => notPwnedPasses.Contains(arr[1])).Select(arr => arr[0]).ToList();
+				var pwnedPasses = pwns.Where(kvp => kvp.Value[0] > 0).Select(kvp => kvp.Key).ToList();
+				var pwnedNames = myData.Where(arr => pwnedPasses.Contains(arr[1])).Select(arr => arr[0]).ToList();
+
+
+				// Create a JSON object with some data
+				Dictionary<string, List<string>> jsonObject = new Dictionary<string, List<string>>
+				{
+					{ "PwnedPasswordNames", pwnedNames },
+					{ "NotPwnedPasswordNames", notPwnedNames },
+					{ "TotalNameCount", new List<string> { (pwnedNames.Count + notPwnedNames.Count).ToString() } }
+				};
+
+				// Serialize the dictionary to a JSON string
+				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
+				{
+					WriteIndented = true,
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+				});
+
+				// Export the JSON string to a JSON file
+				File.WriteAllText(filePath, jsonString);
+
+				MessageBox.Show(text: "JSON file with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+			}
+
+		}
+
+		private void DownloadData2Button_Click(object sender, EventArgs e)
+		{
+			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RepetitionStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
+
+			if (File.Exists(filePath)) { MessageBox.Show(text: "There is already a file with the name of the JSON file. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
+			else
+			{
+				var notRepeatedPasses = passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key);
+				var notRepeatedNames = myData.Where(arr => notRepeatedPasses.Contains(arr[1])).Select(arr => arr[0]).ToList();
+				var repeatedPasses = passes.GroupBy(x => x).Where(g => g.Count() > 1).Select(g => g.Key);
+				var repeatedNames = myData.Where(arr => repeatedPasses.Contains(arr[1])).Select(arr => arr[0]).ToList();
+
+
+				// Create a JSON object with some data
+				Dictionary<string, List<string>> jsonObject = new Dictionary<string, List<string>>
+				{
+					{ "PasswordNames with repeated passwords", repeatedNames },
+					{ "PasswordNames with unique passwords", notRepeatedNames },
+					{ "TotalNameCount", new List<string> { (repeatedNames.Count + notRepeatedNames.Count).ToString() } }
+				};
+
+				// Serialize the dictionary to a JSON string
+				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
+				{
+					WriteIndented = true,
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+				});
+
+				// Export the JSON string to a JSON file
+				File.WriteAllText(filePath, jsonString);
+
+				MessageBox.Show(text: "JSON file with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData1Button_MouseEnter(object sender, EventArgs e)
+		{
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData1Button_MouseLeave(object sender, EventArgs e)
+		{
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData2Button_MouseEnter(object sender, EventArgs e)
+		{
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData2Button_MouseLeave(object sender, EventArgs e)
+		{
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+		}
 	}
 }
