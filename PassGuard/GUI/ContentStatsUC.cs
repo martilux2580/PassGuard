@@ -16,6 +16,11 @@ using OxyPlot.WindowsForms;
 using OxyPlot.Annotations;
 using PassGuard.Crypto;
 using PassGuard.Utils;
+using System.Runtime.Versioning;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using iText.StyledXmlParser.Jsoup.Parser;
+using System.IO;
 
 namespace PassGuard.GUI
 {
@@ -23,6 +28,26 @@ namespace PassGuard.GUI
 	{
 		private List<String[]> myData = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
+		private Dictionary<String, List<String>> compositionNames = new()
+		{
+			{ "N/A", new() },
+			{ "L+N", new() },
+			{ "U+L", new() },
+			{ "U+L+N", new() },
+			{ "S+L+N", new() },
+			{ "S+U+L", new() },
+			{ "S+U+L+N", new() }
+		};
+		private List<List<String>> lengthNames = new()
+		{
+			new(),
+			new(),
+			new(),
+			new(),
+			new(),
+			new(),
+			new()
+		};
 
 		public ContentStatsUC(List<String[]> someData, int[] ContextColour)
 		{
@@ -158,32 +183,32 @@ namespace PassGuard.GUI
 			sb.Append("\nPercentage of important passwords from total: " + passLengths[8].ToString() + "/" + myData.Count.ToString() + " = " + Math.Round(d3, 3).ToString() + "%.");
 			TextStatsLabel.Text = sb.ToString();
 			H2InfoLabel.Text = "Legend: S = Symbols (@#%...), U = Upper Case letters (ABC...), L = Lower Case letters (abc...), N = Numbers (012...).";
-
+			DownloadData1Button.Text = "Password Length Details";
+			DownloadData2Button.Text = "Password Composition Details";
 
 		}
 
 		private List<int> calculatePassCompositions()
 		{
-			List<String> allPass = myData.Select(arr => arr[1]).ToList();
 			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
-			List<int> results = new List<int> { 0, 0, 0, 0, 0, 0, 0};
+			List<int> results = new() { 0, 0, 0, 0, 0, 0, 0};
 			string symbols = "!$%&/\\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡";
 
-			foreach (String pass in allPass)
+			foreach (String[] data in myData)
 			{
-				bool containsSymbols = pass.Any(c => symbols.Contains(c));
-				bool containsUpper = pass.Any(char.IsUpper);
-				bool containsLower = pass.Any(char.IsLower);
-				bool containsNumbers = pass.Any(char.IsDigit);
+				bool containsSymbols = data[1].Any(c => symbols.Contains(c));
+				bool containsUpper = data[1].Any(char.IsUpper);
+				bool containsLower = data[1].Any(char.IsLower);
+				bool containsNumbers = data[1].Any(char.IsDigit);
 				bool previousCases = false;
-
-				if (containsSymbols && containsUpper && containsLower && containsNumbers) { results[6] += 1; previousCases = true; } //SULN
-				if (containsSymbols && containsUpper && containsLower) { results[5] += 1; previousCases = true; } //SUN
-				if (containsSymbols && containsLower && containsNumbers) { results[4] += 1; previousCases = true; } //SLN
-				if (containsUpper && containsLower && containsNumbers) { results[3] += 1; previousCases = true; } //ULN
-				if (containsUpper && containsLower) { results[2] += 1; previousCases = true; } //UL
-				if (containsLower && containsNumbers) { results[1] += 1; previousCases = true; } //LN
-				if(!previousCases) { results[0] += 1; } //NA
+				
+				if (containsSymbols && containsUpper && containsLower && containsNumbers) { results[6] += 1; previousCases = true; compositionNames["S+U+L+N"].Add(data[0]); } //SULN
+				if (containsSymbols && containsUpper && containsLower) { results[5] += 1; previousCases = true; compositionNames["S+U+L"].Add(data[0]); } //SUN
+				if (containsSymbols && containsLower && containsNumbers) { results[4] += 1; previousCases = true; compositionNames["S+L+N"].Add(data[0]); } //SLN
+				if (containsUpper && containsLower && containsNumbers) { results[3] += 1; previousCases = true; compositionNames["U+L+N"].Add(data[0]); } //ULN
+				if (containsUpper && containsLower) { results[2] += 1; previousCases = true; compositionNames["U+L"].Add(data[0]); } //UL
+				if (containsLower && containsNumbers) { results[1] += 1; previousCases = true; compositionNames["L+N"].Add(data[0]); } //LN
+				if (!previousCases) { results[0] += 1; compositionNames["N/A"].Add(data[0]); } //NA
 
 			}
 			return results;
@@ -192,34 +217,119 @@ namespace PassGuard.GUI
 		private List<int> calculatePassLengthsAndSum()
 		{
 			int[] lengths = { 6, 9, 12, 15, 18, 21 };
-			List<String[]> allPass = myData.Select(arr => new String[] { arr[1], arr[2] }).ToList();
 			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
 			List<int> results = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
 
 
-			foreach(String[] pass in allPass)
+			foreach(String[] pass in myData)
 			{
-				if(pass[0].Length < 6 ) 
+				if(pass[1].Length < 6 ) 
 				{ 
 					results[0] += 1;
-					results[7] += pass[0].Length; //Add to the sum
-					if (pass[1] == "1") { results[8] += 1; } //If important, +1 the counter
+					results[7] += pass[1].Length; //Add to the sum
+					if (pass[2] == "1") { results[8] += 1; } //If important, +1 the counter
+					lengthNames[0].Add(pass[0]);
 				}
 				else
 				{
 					for (int i = 1; i <= lengths.Length; i++)
 					{
-						if (pass[0].Length >= lengths[i-1])
+						if (pass[1].Length >= lengths[i-1])
 						{
 							results[i] += 1;
+							lengthNames[i].Add(pass[0]);
 						}
 					}
-					results[7] += pass[0].Length; //Add to the sum
-					if (pass[1] == "1") { results[8] += 1; } //If important, +1 the counter
+					results[7] += pass[1].Length; //Add to the sum
+					if (pass[2] == "1") { results[8] += 1; } //If important, +1 the counter
 				}
 				
 			}
 			return results;
+		}
+
+		private void DownloadData1Button_Click(object sender, EventArgs e)
+		{
+			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LengthStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
+
+			if (File.Exists(filePath)) { MessageBox.Show(text: "There is already a file with the name of the JSON file. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
+			else
+			{
+				// Create a JSON object with some data
+				Dictionary<String, List<String>> jsonObject = new()
+				{
+					{ "<6 chars", lengthNames[0] },
+					{ "6+ chars", lengthNames[1] },
+					{ "9+ chars", lengthNames[2] },
+					{ "12+ chars", lengthNames[3] },
+					{ "15+ chars", lengthNames[4] },
+					{ "18+ chars", lengthNames[5] },
+					{ "21+ chars", lengthNames[6] },
+					{ "TotalNameCount", new() { myData.Count.ToString() } }
+				};
+
+				// Serialize the dictionary to a JSON string
+				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
+				{
+					WriteIndented = true,
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+				});
+
+				// Export the JSON string to a JSON file
+				File.WriteAllText(filePath, jsonString);
+
+				MessageBox.Show(text: "JSON file with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+			}
+
+		}
+
+		private void DownloadData2Button_Click(object sender, EventArgs e)
+		{
+			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CompositionStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
+
+			if (File.Exists(filePath)) { MessageBox.Show(text: "There is already a file with the name of the JSON file. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
+			else
+			{
+				// Create a JSON object with some data
+				Dictionary<String, List<String>> jsonObject = compositionNames;
+				jsonObject.Add("TotalNameCount", new() { myData.Count.ToString() } );
+
+				// Serialize the dictionary to a JSON string
+				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
+				{
+					WriteIndented = true,
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+				});
+
+				// Export the JSON string to a JSON file
+				File.WriteAllText(filePath, jsonString);
+
+				MessageBox.Show(text: "JSON file with the content of the Vault was generated successfully in your Documents Folder :)", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData1Button_MouseEnter(object sender, EventArgs e)
+		{
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData1Button_MouseLeave(object sender, EventArgs e)
+		{
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData2Button_MouseEnter(object sender, EventArgs e)
+		{
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DownloadData2Button_MouseLeave(object sender, EventArgs e)
+		{
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 	}
 }

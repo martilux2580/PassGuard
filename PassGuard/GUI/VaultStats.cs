@@ -17,7 +17,6 @@ namespace PassGuard.GUI
 	{
 		private readonly byte[] Key; //Content
 		private ICrypt crypt = new AESAlgorithm();
-		private IQuery query;
 		private readonly List<string[]> allData = new();
 		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
@@ -74,7 +73,7 @@ namespace PassGuard.GUI
 					break;
 				case "Security Properties":
 					Able(false);
-					var someSecData = allData.Select(arr => new string[] { arr[3], arr[6] }).ToList(); //Get just Pass and Importance from all data.
+					var someSecData = allData.Select(arr => new string[] { arr[1], arr[3], arr[6] }).ToList(); //Get just Name, Pass and Importance from all data.
 					var someSecDataDecrypted = someSecData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
 					StatsPanel.Controls.Clear();
