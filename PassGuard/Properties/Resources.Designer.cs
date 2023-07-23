@@ -61,16 +61,6 @@ namespace PassGuard.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] CampCaps {
-            get {
-                object obj = ResourceManager.GetObject("CampCaps", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap CheckIcon {
@@ -141,22 +131,22 @@ namespace PassGuard.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap LogoAndTitle {
+            get {
+                object obj = ResourceManager.GetObject("LogoAndTitle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon LogoIcon64123 {
             get {
                 object obj = ResourceManager.GetObject("LogoIcon64123", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] Roboto {
-            get {
-                object obj = ResourceManager.GetObject("Roboto", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

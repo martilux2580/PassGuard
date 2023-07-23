@@ -43,6 +43,7 @@
 			this.ContentRichTextbox.Size = new System.Drawing.Size(547, 164);
 			this.ContentRichTextbox.TabIndex = 27;
 			this.ContentRichTextbox.Text = resources.GetString("ContentRichTextbox.Text");
+			this.ContentRichTextbox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.ContentRichTextbox_LinkClicked);
 			// 
 			// UnderstoodButton
 			// 

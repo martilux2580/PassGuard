@@ -32,44 +32,6 @@ namespace PassGuard
 			InitializeComponent();
 			this.Size = this.MinimumSize; //We init the form with the minimum size to avoid Minimum Size bug (setting Min Size in Properties to the actual size makes Minimum Size decrease by 20-30 pixels aprox).
 			
-			try
-			{
-				//Install fonts in PC, although they are already incluided...just in case
-				LoadCustomFonts(Properties.Resources.CampCaps);
-				LoadCustomFonts(Properties.Resources.Roboto);
-			}
-			catch (Exception)
-			{
-				MessageBox.Show(text: "PassGuard could not load some fonts. \n\nPlease install Roboto and CampCaps fonts on your computer to proceed.", caption: "Fonts not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-			}
-		}
-
-		[SupportedOSPlatform("windows")]
-		private void LoadCustomFonts(byte[] font)
-		{
-			//Doc: https://stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
-
-			//Create your private font collection object.
-			PrivateFontCollection pfc = new();
-
-			//Select your font from the resources.
-			int fontLength = font.Length;
-
-			// create a buffer to read in to
-			byte[] fontdata = font;
-
-			// create an unsafe memory block for the font data
-			System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-
-			// copy the bytes to the unsafe memory block
-			Marshal.Copy(fontdata, 0, data, fontLength);
-
-			// pass the font to the font collection
-			pfc.AddMemoryFont(data, fontLength);
-
-			//Release the font after you are sure that it can never be used again
-			//pfc.Dispose();
-			//Marshal.FreeCoTaskMem(data)
 		}
 
 		private void Form1_Load(object sender, EventArgs e)

@@ -59,6 +59,7 @@
 			this.ContentRichTextbox.Size = new System.Drawing.Size(749, 300);
 			this.ContentRichTextbox.TabIndex = 25;
 			this.ContentRichTextbox.Text = resources.GetString("ContentRichTextbox.Text");
+			this.ContentRichTextbox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.ContentRichTextbox_LinkClicked);
 			// 
 			// HelpVaultForm
 			// 
