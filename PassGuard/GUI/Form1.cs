@@ -17,6 +17,7 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace PassGuard
 {
@@ -25,13 +26,114 @@ namespace PassGuard
 	{
 
 		internal Task autobackup = null;
+		private NotifyIcon trayIcon;
+		private ContextMenuStrip trayMenu;
 
 		[SupportedOSPlatform("windows")]
 		public mainWindow()
 		{
 			InitializeComponent();
 			this.Size = this.MinimumSize; //We init the form with the minimum size to avoid Minimum Size bug (setting Min Size in Properties to the actual size makes Minimum Size decrease by 20-30 pixels aprox).
+
+			SetTray();
 			
+		}
+
+		private void SetTray()
+		{
+			// Initialize the system tray icon
+			trayIcon = new()
+			{
+				Icon = Properties.Resources.LogoIcon64123, // Replace "YourIcon.ico" with the path to your application's icon
+				Text = "Passguard",
+				Visible = true
+			};
+
+			// Handle the MouseDoubleClick event to restore the main form when the icon is double-clicked
+			trayIcon.MouseDoubleClick += TrayIcon_MouseDoubleClick;
+			trayIcon.DoubleClick += OnNotifyIconDoubleClick;
+
+			// Initialize the context menu
+			trayMenu = new ContextMenuStrip();
+
+			// Add options to the context menu
+			trayMenu.Items.Add("Passguard", null, OnShowWindowMenuItemClick);
+			trayMenu.Items.Add("Settings", null, OnShowSettingsClick);
+			trayMenu.Items.Add("New Password Vault", null, OnNewVaultClick);
+			trayMenu.Items.Add("Load Password Vault", null, OnLoadVaultClick);
+			trayMenu.Items.Add("Create Quick Password", null, OnCreatePasswordClick);
+			trayMenu.Items.Add("Exit", null, OnExitClick);
+
+			// Assign the context menu to the tray icon
+			trayIcon.ContextMenuStrip = trayMenu;
+		}
+
+		// Click event handler for the "Show Window" menu item
+		private void OnExitClick(object sender, EventArgs e)
+		{
+			//Implement "Save Changes" Part? Things already are saved in each change by encrypting again.
+			Application.Exit(); //Close Application
+		}
+
+		// Click event handler for the "Show Window" menu item
+		private void OnNewVaultClick(object sender, EventArgs e)
+		{
+			// Show the form when the menu item is clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			CreateVaultButton.PerformClick();
+		}
+
+		// Click event handler for the "Show Window" menu item
+		private void OnLoadVaultClick(object sender, EventArgs e)
+		{
+			// Show the form when the menu item is clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			LoadVaultButton.PerformClick();
+		}
+
+		// Click event handler for the "Show Window" menu item
+		private void OnCreatePasswordClick(object sender, EventArgs e)
+		{
+			// Show the form when the menu item is clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			CreateQuickPassButton.PerformClick();
+		}
+
+		// Click event handler for the "Show Window" menu item
+		private void OnShowWindowMenuItemClick(object sender, EventArgs e)
+		{
+			// Show the form when the menu item is clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			LogoPictureBox_MouseClick(LogoPictureBox, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
+		}
+
+		private void OnShowSettingsClick(object sender, EventArgs e)
+		{
+			// Show the form when the menu item is clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			SettingButton.PerformClick();
+		}
+
+		private void TrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			// Restore the main form when the icon is double-clicked
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			trayIcon.Visible = true;
+		}
+
+		// Double-click event handler for the NotifyIcon
+		private void OnNotifyIconDoubleClick(object sender, EventArgs e)
+		{
+			// Show the form again and hide the NotifyIcon from the system tray
+			this.Show();
+			this.WindowState = FormWindowState.Normal;
+			trayIcon.Visible = false;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -51,6 +153,10 @@ namespace PassGuard
 
 			try
 			{
+				if(Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"])) { setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to run on startup"; }
+				else { setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup"; }
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"])) { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to minimize to tray"; }
+				else { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray"; }
 				AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
 				SetConfigTheme(); //Set theme based on saved config.
 				SetConfigColours(); //Set outline colours based on saved config.				
@@ -433,27 +539,45 @@ namespace PassGuard
 		{
 			try
 			{
-				if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
+				// Check if the form is closing
+				if (e.CloseReason == CloseReason.UserClosing)
 				{
-					if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
+					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
 					{
-						if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+						if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
 						{
-							MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+							if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+							{
+								MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+							}
+							else
+							{
+								MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+							}
 						}
-						else
-						{
-							MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
-						}
+
 					}
 
+					if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
+					{
+						// Prevent the form from closing
+						e.Cancel = true;
+
+						// Hide the form and show the NotifyIcon in the system tray
+						this.Hide();
+						trayIcon.Visible = true;
+					}
 				}
+
+				
 			}
 			catch (Exception)
 			{
 				MessageBox.Show(text: "PassGuard could not access config file, Autobackup could not check state of backup.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 			
+			
+
 		}
 
 		private void exportOutlineColoursAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
@@ -470,6 +594,97 @@ namespace PassGuard
 			ContentPanel.Controls.Clear();
 			ContentPanel.Controls.Add(export);
 
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void setPassguardToRunBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == true)
+				{
+					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from running on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+					if (dialog == DialogResult.Yes)
+					{
+						// Get the current user's "Run" key in the Windows Registry
+						RegistryKey runKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+						// Remove your application's entry from the "Run" key
+						runKey.DeleteValue("Passguard", true);
+
+						config.AppSettings.Settings["StartupState"].Value = false.ToString();
+						setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup";
+					}
+
+				}
+				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == false)
+				{
+					var dialog = MessageBox.Show(text: "Do you want Passguard to run on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+					if (dialog == DialogResult.Yes)
+					{
+						// Get the current user's "Run" key in the Windows Registry
+						RegistryKey runKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+						// Add your application's executable path to the "Run" key
+						runKey.SetValue("Passguard", Application.ExecutablePath);
+						config.AppSettings.Settings["StartupState"].Value = true.ToString();
+						setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to run on startup";
+					}
+
+
+				}
+
+				config.Save(ConfigurationSaveMode.Modified);
+				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+			}
+			catch (Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+			
+		}
+
+		private void setPassguardToMinimizeToTrayToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
+				{
+					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from minimizing to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+					if (dialog == DialogResult.Yes)
+					{
+						config.AppSettings.Settings["MinimizeToTrayState"].Value = false.ToString();
+						setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to minimize to tray";
+					}
+
+				}
+				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == false)
+				{
+					var dialog = MessageBox.Show(text: "Do you want Passguard to run on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+
+					if (dialog == DialogResult.Yes)
+					{
+						config.AppSettings.Settings["MinimizeToTrayState"].Value = true.ToString();
+						setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to minimize to tray";
+					}
+
+
+				}
+
+				config.Save(ConfigurationSaveMode.Modified);
+				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
+			}
+			catch (Exception)
+			{
+				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
 		}
 	}
 }
