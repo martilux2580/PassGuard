@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Versioning;
@@ -58,6 +59,23 @@ namespace PassGuard.GUI
 			{
 				ContentRichTextbox.BackColor = Color.FromArgb(128, 130, 129);
 
+			}
+		}
+
+		private void ContentRichTextbox_LinkClicked(object sender, LinkClickedEventArgs e)
+		{
+			try
+			{
+				Process.Start(new ProcessStartInfo
+				{
+					FileName = e.LinkText,
+					UseShellExecute = true
+				}); ////Open webpage with default browser...
+			}
+			catch (Exception)
+			{
+				Clipboard.SetText(e.LinkText);
+				MessageBox.Show(text: "ERROR: The following webpage: \n\n" + e.LinkText + "\n\ncould not be opened. However, the link has been copied to your clipboard. You can paste it in your favourite web browser :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 		}
 	}

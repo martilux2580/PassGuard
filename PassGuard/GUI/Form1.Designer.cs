@@ -38,7 +38,6 @@ namespace PassGuard
 			this.LoadVaultButton = new System.Windows.Forms.Button();
 			this.CreateVaultButton = new System.Windows.Forms.Button();
 			this.LogoPanel = new System.Windows.Forms.Panel();
-			this.LogoLabel = new System.Windows.Forms.Label();
 			this.LogoPictureBox = new System.Windows.Forms.PictureBox();
 			this.OptionsPanel = new System.Windows.Forms.Panel();
 			this.SettingButton = new System.Windows.Forms.Button();
@@ -129,7 +128,7 @@ namespace PassGuard
 			this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
 			this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CreateQuickPassButton.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
 			this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 339);
 			this.CreateQuickPassButton.Margin = new System.Windows.Forms.Padding(2);
@@ -150,7 +149,7 @@ namespace PassGuard
 			this.LoadVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.LoadVaultButton.FlatAppearance.BorderSize = 0;
 			this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.LoadVaultButton.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.LoadVaultButton.ForeColor = System.Drawing.Color.Black;
 			this.LoadVaultButton.Location = new System.Drawing.Point(0, 246);
 			this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(2);
@@ -171,7 +170,7 @@ namespace PassGuard
 			this.CreateVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.CreateVaultButton.FlatAppearance.BorderSize = 0;
 			this.CreateVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CreateVaultButton.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.CreateVaultButton.ForeColor = System.Drawing.Color.Black;
 			this.CreateVaultButton.Location = new System.Drawing.Point(0, 153);
 			this.CreateVaultButton.Margin = new System.Windows.Forms.Padding(2);
@@ -188,7 +187,6 @@ namespace PassGuard
 			// 
 			// LogoPanel
 			// 
-			this.LogoPanel.Controls.Add(this.LogoLabel);
 			this.LogoPanel.Controls.Add(this.LogoPictureBox);
 			this.LogoPanel.Dock = System.Windows.Forms.DockStyle.Top;
 			this.LogoPanel.Location = new System.Drawing.Point(0, 0);
@@ -197,27 +195,14 @@ namespace PassGuard
 			this.LogoPanel.Size = new System.Drawing.Size(336, 153);
 			this.LogoPanel.TabIndex = 3;
 			// 
-			// LogoLabel
-			// 
-			this.LogoLabel.AutoSize = true;
-			this.LogoLabel.Font = new System.Drawing.Font("CampOpti-Caps", 15.5F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-			this.LogoLabel.ForeColor = System.Drawing.Color.Black;
-			this.LogoLabel.Location = new System.Drawing.Point(45, 116);
-			this.LogoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.LogoLabel.Name = "LogoLabel";
-			this.LogoLabel.Size = new System.Drawing.Size(247, 34);
-			this.LogoLabel.TabIndex = 0;
-			this.LogoLabel.Text = "PassGuard";
-			this.LogoLabel.UseCompatibleTextRendering = true;
-			// 
 			// LogoPictureBox
 			// 
 			this.LogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.LogoPictureBox.Image = global::PassGuard.Properties.Resources.Logo123;
-			this.LogoPictureBox.Location = new System.Drawing.Point(105, -3);
+			this.LogoPictureBox.Image = global::PassGuard.Properties.Resources.LogoAndTitle;
+			this.LogoPictureBox.Location = new System.Drawing.Point(40, 3);
 			this.LogoPictureBox.Margin = new System.Windows.Forms.Padding(2);
 			this.LogoPictureBox.Name = "LogoPictureBox";
-			this.LogoPictureBox.Size = new System.Drawing.Size(125, 125);
+			this.LogoPictureBox.Size = new System.Drawing.Size(257, 148);
 			this.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.LogoPictureBox.TabIndex = 3;
 			this.LogoPictureBox.TabStop = false;
@@ -251,7 +236,7 @@ namespace PassGuard
 			// TitleLabel
 			// 
 			this.TitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.TitleLabel.Font = new System.Drawing.Font("Roboto", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.TitleLabel.ForeColor = System.Drawing.SystemColors.Desktop;
 			this.TitleLabel.Location = new System.Drawing.Point(0, 0);
 			this.TitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -438,7 +423,6 @@ namespace PassGuard
 			this.BottomPanel.ResumeLayout(false);
 			this.BottomPanel.PerformLayout();
 			this.LogoPanel.ResumeLayout(false);
-			this.LogoPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
 			this.OptionsPanel.ResumeLayout(false);
 			this.SettingsCMS.ResumeLayout(false);
@@ -450,7 +434,6 @@ namespace PassGuard
         #endregion
         private System.Windows.Forms.Panel MenuPanel;
         private System.Windows.Forms.Panel LogoPanel;
-        private System.Windows.Forms.Label LogoLabel;
         private System.Windows.Forms.Label DesignerLabel;
         private System.Windows.Forms.PictureBox LogoPictureBox;
         private System.Windows.Forms.Panel OptionsPanel;
