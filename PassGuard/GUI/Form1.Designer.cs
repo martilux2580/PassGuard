@@ -60,7 +60,10 @@ namespace PassGuard
 			this.exportAVaultsContentAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exportOutlineColoursAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.setPassguardToRunBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.setPassguardToMinimizeToTrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MenuPanel.SuspendLayout();
 			this.BottomPanel.SuspendLayout();
 			this.LogoPanel.SuspendLayout();
@@ -97,12 +100,12 @@ namespace PassGuard
 			// 
 			this.DesignerLabel.AutoSize = true;
 			this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.DesignerLabel.Font = new System.Drawing.Font("Roboto", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DesignerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
 			this.DesignerLabel.Location = new System.Drawing.Point(148, 8);
 			this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.DesignerLabel.Name = "DesignerLabel";
-			this.DesignerLabel.Size = new System.Drawing.Size(184, 23);
+			this.DesignerLabel.Size = new System.Drawing.Size(184, 22);
 			this.DesignerLabel.TabIndex = 1;
 			this.DesignerLabel.Text = "Designed by martilux2580";
 			this.DesignerLabel.UseCompatibleTextRendering = true;
@@ -295,11 +298,14 @@ namespace PassGuard
             this.exportAVaultsContentAsPDFToolStripMenuItem,
             this.exportOutlineColoursAsPDFToolStripMenuItem,
             this.toolStripSeparator3,
+            this.setPassguardToRunBackgroundToolStripMenuItem,
+            this.setPassguardToMinimizeToTrayToolStripMenuItem,
+            this.toolStripSeparator4,
             this.saveChangesClosePassGuardToolStripMenuItem});
 			this.SettingsCMS.Name = "SettingsCMS";
 			this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.SettingsCMS.ShowImageMargin = false;
-			this.SettingsCMS.Size = new System.Drawing.Size(246, 203);
+			this.SettingsCMS.Size = new System.Drawing.Size(246, 275);
 			// 
 			// TitleSettingsToolStripMenuItem
 			// 
@@ -394,12 +400,31 @@ namespace PassGuard
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
 			this.toolStripSeparator3.Size = new System.Drawing.Size(242, 6);
 			// 
+			// setPassguardToRunBackgroundToolStripMenuItem
+			// 
+			this.setPassguardToRunBackgroundToolStripMenuItem.Name = "setPassguardToRunBackgroundToolStripMenuItem";
+			this.setPassguardToRunBackgroundToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+			this.setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup";
+			this.setPassguardToRunBackgroundToolStripMenuItem.Click += new System.EventHandler(this.setPassguardToRunBackgroundToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(242, 6);
+			// 
 			// saveChangesClosePassGuardToolStripMenuItem
 			// 
 			this.saveChangesClosePassGuardToolStripMenuItem.Name = "saveChangesClosePassGuardToolStripMenuItem";
 			this.saveChangesClosePassGuardToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
 			this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
 			this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
+			// 
+			// setPassguardToMinimizeToTrayToolStripMenuItem
+			// 
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Name = "setPassguardToMinimizeToTrayToolStripMenuItem";
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray";
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Click += new System.EventHandler(this.setPassguardToMinimizeToTrayToolStripMenuItem_Click);
 			// 
 			// mainWindow
 			// 
@@ -463,6 +488,9 @@ namespace PassGuard
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem exportAVaultsContentAsPDFToolStripMenuItem;
 		private System.Windows.Forms.Panel BottomPanel;
+		private System.Windows.Forms.ToolStripMenuItem setPassguardToRunBackgroundToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripMenuItem setPassguardToMinimizeToTrayToolStripMenuItem;
 	}
 }
 
