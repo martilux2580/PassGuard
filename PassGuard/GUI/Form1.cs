@@ -39,6 +39,7 @@ namespace PassGuard
 			
 		}
 
+
 		private void SetTray()
 		{
 			// Initialize the system tray icon
@@ -133,7 +134,6 @@ namespace PassGuard
 			// Show the form again and hide the NotifyIcon from the system tray
 			this.Show();
 			this.WindowState = FormWindowState.Normal;
-			trayIcon.Visible = false;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -661,18 +661,18 @@ namespace PassGuard
 					if (dialog == DialogResult.Yes)
 					{
 						config.AppSettings.Settings["MinimizeToTrayState"].Value = false.ToString();
-						setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to minimize to tray";
+						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray";
 					}
 
 				}
-				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == false)
+				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == false)
 				{
-					var dialog = MessageBox.Show(text: "Do you want Passguard to run on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+					var dialog = MessageBox.Show(text: "Do you want Passguard to minimize to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
 					if (dialog == DialogResult.Yes)
 					{
 						config.AppSettings.Settings["MinimizeToTrayState"].Value = true.ToString();
-						setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to minimize to tray";
+						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to minimize to tray";
 					}
 
 
@@ -684,6 +684,16 @@ namespace PassGuard
 			catch (Exception)
 			{
 				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
+		}
+
+		private void mainWindow_Shown(object sender, EventArgs e)
+		{
+			if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]))
+			{
+				// Hide the form and show the NotifyIcon in the system tray
+				this.Hide();
+				trayIcon.Visible = true;
 			}
 		}
 	}

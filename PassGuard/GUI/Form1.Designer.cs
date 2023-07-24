@@ -61,9 +61,9 @@ namespace PassGuard
 			this.exportOutlineColoursAsPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.setPassguardToRunBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.setPassguardToMinimizeToTrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveChangesClosePassGuardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.setPassguardToMinimizeToTrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MenuPanel.SuspendLayout();
 			this.BottomPanel.SuspendLayout();
 			this.LogoPanel.SuspendLayout();
@@ -305,7 +305,7 @@ namespace PassGuard
 			this.SettingsCMS.Name = "SettingsCMS";
 			this.SettingsCMS.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.SettingsCMS.ShowImageMargin = false;
-			this.SettingsCMS.Size = new System.Drawing.Size(246, 275);
+			this.SettingsCMS.Size = new System.Drawing.Size(246, 253);
 			// 
 			// TitleSettingsToolStripMenuItem
 			// 
@@ -407,6 +407,13 @@ namespace PassGuard
 			this.setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup";
 			this.setPassguardToRunBackgroundToolStripMenuItem.Click += new System.EventHandler(this.setPassguardToRunBackgroundToolStripMenuItem_Click);
 			// 
+			// setPassguardToMinimizeToTrayToolStripMenuItem
+			// 
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Name = "setPassguardToMinimizeToTrayToolStripMenuItem";
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray";
+			this.setPassguardToMinimizeToTrayToolStripMenuItem.Click += new System.EventHandler(this.setPassguardToMinimizeToTrayToolStripMenuItem_Click);
+			// 
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
@@ -418,13 +425,6 @@ namespace PassGuard
 			this.saveChangesClosePassGuardToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
 			this.saveChangesClosePassGuardToolStripMenuItem.Text = "Save Changes + Close PassGuard";
 			this.saveChangesClosePassGuardToolStripMenuItem.Click += new System.EventHandler(this.saveChangesClosePassGuardToolStripMenuItem_Click);
-			// 
-			// setPassguardToMinimizeToTrayToolStripMenuItem
-			// 
-			this.setPassguardToMinimizeToTrayToolStripMenuItem.Name = "setPassguardToMinimizeToTrayToolStripMenuItem";
-			this.setPassguardToMinimizeToTrayToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-			this.setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray";
-			this.setPassguardToMinimizeToTrayToolStripMenuItem.Click += new System.EventHandler(this.setPassguardToMinimizeToTrayToolStripMenuItem_Click);
 			// 
 			// mainWindow
 			// 
@@ -444,6 +444,7 @@ namespace PassGuard
 			this.Text = "PassGuard™";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
 			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Shown += new System.EventHandler(this.mainWindow_Shown);
 			this.MenuPanel.ResumeLayout(false);
 			this.BottomPanel.ResumeLayout(false);
 			this.BottomPanel.PerformLayout();
