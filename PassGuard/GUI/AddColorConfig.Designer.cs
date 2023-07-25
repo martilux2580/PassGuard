@@ -157,7 +157,7 @@ namespace PassGuard.GUI
 			// 
 			this.SendButton.FlatAppearance.BorderSize = 0;
 			this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SendButton.Location = new System.Drawing.Point(160, 354);
 			this.SendButton.Margin = new System.Windows.Forms.Padding(2);
 			this.SendButton.Name = "SendButton";
@@ -166,6 +166,8 @@ namespace PassGuard.GUI
 			this.SendButton.Text = "Send";
 			this.SendButton.UseVisualStyleBackColor = true;
 			this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+			this.SendButton.MouseEnter += new System.EventHandler(this.SendButton_MouseEnter);
+			this.SendButton.MouseLeave += new System.EventHandler(this.SendButton_MouseLeave);
 			// 
 			// FavouriteCheckbox
 			// 

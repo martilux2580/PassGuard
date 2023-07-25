@@ -211,6 +211,8 @@ namespace PassGuard.GUI
 			this.SaveEmailButton.Text = "Save Email";
 			this.SaveEmailButton.UseVisualStyleBackColor = true;
 			this.SaveEmailButton.Click += new System.EventHandler(this.SaveEmailButton_Click);
+			this.SaveEmailButton.MouseEnter += new System.EventHandler(this.SaveEmailButton_MouseEnter);
+			this.SaveEmailButton.MouseLeave += new System.EventHandler(this.SaveEmailButton_MouseLeave);
 			// 
 			// SaveSKButton
 			// 
@@ -225,6 +227,8 @@ namespace PassGuard.GUI
 			this.SaveSKButton.Text = "Save SK";
 			this.SaveSKButton.UseVisualStyleBackColor = true;
 			this.SaveSKButton.Click += new System.EventHandler(this.SaveSKButton_Click);
+			this.SaveSKButton.MouseEnter += new System.EventHandler(this.SaveSKButton_MouseEnter);
+			this.SaveSKButton.MouseLeave += new System.EventHandler(this.SaveSKButton_MouseLeave);
 			// 
 			// PassVisibilityButton
 			// 

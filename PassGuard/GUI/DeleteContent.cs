@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -55,6 +56,21 @@ namespace PassGuard.GUI
 			{
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
+
+			SetAcceptButton();
+		}
+
+		private void SetAcceptButton()
+		{
+			// Set the button1 as the AcceptButton for the parent form
+			if ((DeleteAllButton.Enabled == true) && (DeleteButton.Enabled == false))
+			{
+				this.AcceptButton = DeleteAllButton;
+			}
+			else if ((DeleteButton.Enabled == true) && (DeleteAllButton.Enabled == false))
+			{
+				this.AcceptButton = DeleteButton;
+			}
 		}
 
 		public void TrimComponents()
@@ -88,6 +104,8 @@ namespace PassGuard.GUI
 				//Enable elements
 				DeleteAllButton.Enabled = true;
 				DeleteButton.Enabled = false;
+
+				SetAcceptButton();
 			}
 			else if (EnableDeleteAllCheckbox.Checked == false)
 			{
@@ -97,6 +115,8 @@ namespace PassGuard.GUI
 				DeleteAllButton.Enabled = false;
 				DeleteButton.Enabled = true;
 				NameCombobox.Enabled = true;
+
+				SetAcceptButton();
 			}
 		}
 
@@ -206,6 +226,30 @@ namespace PassGuard.GUI
 				NotesTextbox.BackColor = Color.FromArgb(152, 154, 153);
 
 			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseEnter(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteButton_MouseLeave(object sender, EventArgs e)
+		{
+			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteAllButton_MouseEnter(object sender, EventArgs e)
+		{
+			DeleteAllButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void DeleteAllButton_MouseLeave(object sender, EventArgs e)
+		{
+			DeleteAllButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 	}
 }

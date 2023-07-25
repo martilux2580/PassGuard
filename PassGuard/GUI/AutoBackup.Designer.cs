@@ -46,7 +46,7 @@ namespace PassGuard.GUI
 			// 
 			this.SetupAutoBackupButton.FlatAppearance.BorderSize = 0;
 			this.SetupAutoBackupButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SetupAutoBackupButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SetupAutoBackupButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SetupAutoBackupButton.Location = new System.Drawing.Point(306, 232);
 			this.SetupAutoBackupButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SetupAutoBackupButton.Name = "SetupAutoBackupButton";
@@ -55,6 +55,8 @@ namespace PassGuard.GUI
 			this.SetupAutoBackupButton.Text = "Setup AutoBackup";
 			this.SetupAutoBackupButton.UseVisualStyleBackColor = true;
 			this.SetupAutoBackupButton.Click += new System.EventHandler(this.SetupAutoBackupButton_Click);
+			this.SetupAutoBackupButton.MouseEnter += new System.EventHandler(this.SetupAutoBackupButton_MouseEnter);
+			this.SetupAutoBackupButton.MouseLeave += new System.EventHandler(this.SetupAutoBackupButton_MouseLeave);
 			// 
 			// ActivateBackupCheckbox
 			// 
@@ -184,6 +186,7 @@ namespace PassGuard.GUI
 			// 
 			// AutoBackup
 			// 
+			this.AcceptButton = this.SetupAutoBackupButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 301);

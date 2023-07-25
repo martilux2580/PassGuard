@@ -124,7 +124,7 @@ namespace PassGuard.GUI
 			this.EditButton.Enabled = false;
 			this.EditButton.FlatAppearance.BorderSize = 0;
 			this.EditButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.EditButton.Location = new System.Drawing.Point(492, 159);
 			this.EditButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.EditButton.Name = "EditButton";
@@ -133,6 +133,8 @@ namespace PassGuard.GUI
 			this.EditButton.Text = "Edit Element";
 			this.EditButton.UseVisualStyleBackColor = true;
 			this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+			this.EditButton.MouseEnter += new System.EventHandler(this.EditButton_MouseEnter);
+			this.EditButton.MouseLeave += new System.EventHandler(this.EditButton_MouseLeave);
 			// 
 			// RedLabel
 			// 
@@ -219,6 +221,7 @@ namespace PassGuard.GUI
 			// 
 			// EditColorConfig
 			// 
+			this.AcceptButton = this.EditButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(723, 221);

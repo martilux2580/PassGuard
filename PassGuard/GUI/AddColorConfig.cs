@@ -117,5 +117,17 @@ namespace PassGuard.GUI
 
 			}
 		}
+
+		[SupportedOSPlatform("windows")]
+		private void SendButton_MouseEnter(object sender, EventArgs e)
+		{
+			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SendButton_MouseLeave(object sender, EventArgs e)
+		{
+			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
+		}
 	}
 }

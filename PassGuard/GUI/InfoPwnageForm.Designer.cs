@@ -49,7 +49,7 @@
 			// 
 			this.UnderstoodButton.FlatAppearance.BorderSize = 0;
 			this.UnderstoodButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.UnderstoodButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.UnderstoodButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.UnderstoodButton.Location = new System.Drawing.Point(229, 182);
 			this.UnderstoodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.UnderstoodButton.Name = "UnderstoodButton";
@@ -61,6 +61,7 @@
 			// 
 			// InfoPwnageForm
 			// 
+			this.AcceptButton = this.UnderstoodButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(571, 228);

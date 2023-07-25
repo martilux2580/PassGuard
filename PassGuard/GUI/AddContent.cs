@@ -77,7 +77,6 @@ namespace PassGuard.GUI
 
 			categories = new HashSet<String>(rawCategories).ToList<String>(); //Remove dups
 
-			CategoryCombobox.Items.Add("");
 			foreach (String category in categories) 
 			{
 				CategoryCombobox.Items.Add(category);

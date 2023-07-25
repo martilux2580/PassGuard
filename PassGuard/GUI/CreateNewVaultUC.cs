@@ -26,6 +26,20 @@ namespace PassGuard.GUI
 			InitializeComponent();
 			VaultPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
 			SaveEmailTooltip.SetToolTip(SaveEmailCheckbox, "If this option is checked and the new vault is created successfully, this email \nwill be saved so that the process of loading the password vault is faster. \nNote: If another vault is created and this option is checked, previously saved email \nwill be deleted and the new email will be saved.");
+
+			SetAcceptButton();
+		}
+
+		private void SetAcceptButton()
+		{
+			// Get the parent form of the user control
+			Form parentForm = this.FindForm();
+
+			// Set the button1 as the AcceptButton for the parent form
+			if (parentForm != null)
+			{
+				parentForm.AcceptButton = CreateNewVaultButton;
+			}
 		}
 
 		public void TrimComponents()

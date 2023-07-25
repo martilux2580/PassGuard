@@ -20,11 +20,24 @@ namespace PassGuard.GUI
 			this.Anchor = AnchorStyles.None;
 			InitializeComponent();
 
+			SetAcceptButton();
 		}
 
 		//Dictionaries containing the relation between a checkbox and the char/text it represents.
 		private Dictionary<CheckBox, string> characters { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
 		private Dictionary<CheckBox, string> symbols { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
+
+		private void SetAcceptButton()
+		{
+			// Get the parent form of the user control
+			Form parentForm = this.FindForm();
+
+			// Set the button1 as the AcceptButton for the parent form
+			if (parentForm != null)
+			{
+				parentForm.AcceptButton = GenPassButton;
+			}
+		}
 
 		//Fill the dictionary with corresponding pair CheckBox(characters)-String
 		private Dictionary<CheckBox, string> fillCharDict (Dictionary<CheckBox, string> characters)

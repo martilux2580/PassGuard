@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -248,6 +249,18 @@ namespace PassGuard.GUI
 				FrequencyCombobox.BackColor = Color.FromArgb(128, 130, 129);
 
 			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SetupAutoBackupButton_MouseEnter(object sender, EventArgs e)
+		{
+			SetupAutoBackupButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SetupAutoBackupButton_MouseLeave(object sender, EventArgs e)
+		{
+			SetupAutoBackupButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Underline the text when mouse is in the button
 		}
 	}
 }

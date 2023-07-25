@@ -51,7 +51,7 @@ namespace PassGuard.GUI
 			// 
 			this.AddButton.FlatAppearance.BorderSize = 0;
 			this.AddButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.AddButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.AddButton.Location = new System.Drawing.Point(564, 365);
 			this.AddButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.AddButton.Name = "AddButton";
@@ -230,6 +230,7 @@ namespace PassGuard.GUI
 			// 
 			// AddContent
 			// 
+			this.AcceptButton = this.AddButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 434);
