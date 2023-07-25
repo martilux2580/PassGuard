@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -94,7 +95,6 @@ namespace PassGuard.GUI
 
 			categories = new HashSet<String>(rawCategories).ToList<String>(); //Remove dups
 
-			CategoryCombobox.Items.Add("");
 			foreach (String category in categories)
 			{
 				CategoryCombobox.Items.Add(category);
@@ -269,6 +269,18 @@ namespace PassGuard.GUI
 				NotesTextbox.BackColor = Color.FromArgb(128, 130, 129);
 
 			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseEnter(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseLeave(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 	}
 }

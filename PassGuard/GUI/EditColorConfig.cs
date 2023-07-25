@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -310,6 +311,18 @@ namespace PassGuard.GUI
 				BlueNUD.BackColor = Color.FromArgb(128, 130, 129);
 
 			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseEnter(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void EditButton_MouseLeave(object sender, EventArgs e)
+		{
+			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 	}
 }

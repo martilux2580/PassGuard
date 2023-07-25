@@ -87,6 +87,8 @@
 			this.SaveEmailButton.Text = "Save Email";
 			this.SaveEmailButton.UseVisualStyleBackColor = true;
 			this.SaveEmailButton.Click += new System.EventHandler(this.SaveEmailButton_Click);
+			this.SaveEmailButton.MouseEnter += new System.EventHandler(this.SaveEmailButton_MouseEnter);
+			this.SaveEmailButton.MouseLeave += new System.EventHandler(this.SaveEmailButton_MouseLeave);
 			// 
 			// SaveSKButton
 			// 
@@ -101,6 +103,8 @@
 			this.SaveSKButton.Text = "Save SK";
 			this.SaveSKButton.UseVisualStyleBackColor = true;
 			this.SaveSKButton.Click += new System.EventHandler(this.SaveSKButton_Click);
+			this.SaveSKButton.MouseEnter += new System.EventHandler(this.SaveSKButton_MouseEnter);
+			this.SaveSKButton.MouseLeave += new System.EventHandler(this.SaveSKButton_MouseLeave);
 			// 
 			// LoadSavedEmailButton
 			// 
@@ -115,6 +119,8 @@
 			this.LoadSavedEmailButton.Text = "Load Saved Email";
 			this.LoadSavedEmailButton.UseVisualStyleBackColor = true;
 			this.LoadSavedEmailButton.Click += new System.EventHandler(this.LoadSavedEmailButton_Click);
+			this.LoadSavedEmailButton.MouseEnter += new System.EventHandler(this.LoadSavedEmailButton_MouseEnter);
+			this.LoadSavedEmailButton.MouseLeave += new System.EventHandler(this.LoadSavedEmailButton_MouseLeave);
 			// 
 			// ExportPDFButton
 			// 
@@ -143,6 +149,8 @@
 			this.LoadSavedSKButton.Text = "Load Saved SK";
 			this.LoadSavedSKButton.UseVisualStyleBackColor = true;
 			this.LoadSavedSKButton.Click += new System.EventHandler(this.LoadSavedSKButton_Click);
+			this.LoadSavedSKButton.MouseEnter += new System.EventHandler(this.LoadSavedSKButton_MouseEnter);
+			this.LoadSavedSKButton.MouseLeave += new System.EventHandler(this.LoadSavedSKButton_MouseLeave);
 			// 
 			// SelectVaultPathButton
 			// 

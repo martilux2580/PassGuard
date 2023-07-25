@@ -96,7 +96,7 @@ namespace PassGuard.GUI
 			// 
 			this.GenPassButton.FlatAppearance.BorderSize = 0;
 			this.GenPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.GenPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.GenPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.GenPassButton.Location = new System.Drawing.Point(392, 288);
 			this.GenPassButton.Margin = new System.Windows.Forms.Padding(2);
 			this.GenPassButton.Name = "GenPassButton";
@@ -179,6 +179,7 @@ namespace PassGuard.GUI
 			this.NoteSymbolsButton.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.NoteSymbolsButton.FlatAppearance.BorderSize = 0;
 			this.NoteSymbolsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.NoteSymbolsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NoteSymbolsButton.Location = new System.Drawing.Point(817, 10);
 			this.NoteSymbolsButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.NoteSymbolsButton.Name = "NoteSymbolsButton";
@@ -196,7 +197,7 @@ namespace PassGuard.GUI
 			this.SelectAllSymbolsButton.Enabled = false;
 			this.SelectAllSymbolsButton.FlatAppearance.BorderSize = 0;
 			this.SelectAllSymbolsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SelectAllSymbolsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SelectAllSymbolsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SelectAllSymbolsButton.Location = new System.Drawing.Point(733, 210);
 			this.SelectAllSymbolsButton.Margin = new System.Windows.Forms.Padding(2);
 			this.SelectAllSymbolsButton.Name = "SelectAllSymbolsButton";

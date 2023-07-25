@@ -117,7 +117,7 @@ namespace PassGuard
 			// AppVersionLabel
 			// 
 			this.AppVersionLabel.Dock = System.Windows.Forms.DockStyle.Left;
-			this.AppVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.AppVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.AppVersionLabel.ForeColor = System.Drawing.Color.Black;
 			this.AppVersionLabel.Location = new System.Drawing.Point(0, 0);
 			this.AppVersionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -133,7 +133,7 @@ namespace PassGuard
 			this.CreateQuickPassButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.CreateQuickPassButton.FlatAppearance.BorderSize = 0;
 			this.CreateQuickPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.CreateQuickPassButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.CreateQuickPassButton.ForeColor = System.Drawing.Color.Black;
 			this.CreateQuickPassButton.Location = new System.Drawing.Point(0, 339);
 			this.CreateQuickPassButton.Margin = new System.Windows.Forms.Padding(2);
@@ -154,7 +154,7 @@ namespace PassGuard
 			this.LoadVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.LoadVaultButton.FlatAppearance.BorderSize = 0;
 			this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.LoadVaultButton.ForeColor = System.Drawing.Color.Black;
 			this.LoadVaultButton.Location = new System.Drawing.Point(0, 246);
 			this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(2);
@@ -175,7 +175,7 @@ namespace PassGuard
 			this.CreateVaultButton.Dock = System.Windows.Forms.DockStyle.Top;
 			this.CreateVaultButton.FlatAppearance.BorderSize = 0;
 			this.CreateVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.CreateVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.CreateVaultButton.ForeColor = System.Drawing.Color.Black;
 			this.CreateVaultButton.Location = new System.Drawing.Point(0, 153);
 			this.CreateVaultButton.Margin = new System.Windows.Forms.Padding(2);

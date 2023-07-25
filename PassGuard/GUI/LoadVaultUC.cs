@@ -29,7 +29,19 @@ namespace PassGuard.GUI
 			settings = setts;
 			if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
 
-			
+			SetAcceptButton();
+		}
+
+		private void SetAcceptButton()
+		{
+			// Get the parent form of the user control
+			Form parentForm = this.FindForm();
+
+			// Set the button1 as the AcceptButton for the parent form
+			if (parentForm != null)
+			{
+				parentForm.AcceptButton = LoadVaultButton;
+			}
 		}
 
 		public void TrimComponents()
@@ -326,5 +338,30 @@ namespace PassGuard.GUI
 
 			}
 		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveEmailButton_MouseEnter(object sender, EventArgs e)
+		{
+			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveEmailButton_MouseLeave(object sender, EventArgs e)
+		{
+			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveSKButton_MouseEnter(object sender, EventArgs e)
+		{
+			SaveSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveSKButton_MouseLeave(object sender, EventArgs e)
+		{
+			SaveSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
 	}
 }

@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,6 +22,20 @@ namespace PassGuard.GUI
 		public ExportPdfFromSettings()
 		{
 			InitializeComponent();
+
+			SetAcceptButton();
+		}
+
+		private void SetAcceptButton()
+		{
+			// Get the parent form of the user control
+			Form parentForm = this.FindForm();
+
+			// Set the button1 as the AcceptButton for the parent form
+			if (parentForm != null)
+			{
+				parentForm.AcceptButton = ExportPDFButton;
+			}
 		}
 
 		public void TrimComponents()
@@ -244,6 +259,54 @@ namespace PassGuard.GUI
 				VaultPathTextbox.BackColor = Color.FromArgb(128, 130, 129);
 
 			}
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void LoadSavedEmailButton_MouseEnter(object sender, EventArgs e)
+		{
+			LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void LoadSavedEmailButton_MouseLeave(object sender, EventArgs e)
+		{
+			LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveEmailButton_MouseEnter(object sender, EventArgs e)
+		{
+			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveEmailButton_MouseLeave(object sender, EventArgs e)
+		{
+			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void LoadSavedSKButton_MouseEnter(object sender, EventArgs e)
+		{
+			LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void LoadSavedSKButton_MouseLeave(object sender, EventArgs e)
+		{
+			LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveSKButton_MouseEnter(object sender, EventArgs e)
+		{
+			SaveSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
+		}
+
+		[SupportedOSPlatform("windows")]
+		private void SaveSKButton_MouseLeave(object sender, EventArgs e)
+		{
+			SaveSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 	}
 }

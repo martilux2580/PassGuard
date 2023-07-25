@@ -150,7 +150,7 @@ namespace PassGuard.GUI
 			this.DeleteAllButton.Enabled = false;
 			this.DeleteAllButton.FlatAppearance.BorderSize = 0;
 			this.DeleteAllButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.DeleteAllButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DeleteAllButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DeleteAllButton.Location = new System.Drawing.Point(18, 215);
 			this.DeleteAllButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DeleteAllButton.Name = "DeleteAllButton";
@@ -159,12 +159,14 @@ namespace PassGuard.GUI
 			this.DeleteAllButton.Text = "Delete All Elements";
 			this.DeleteAllButton.UseVisualStyleBackColor = true;
 			this.DeleteAllButton.Click += new System.EventHandler(this.DeleteAllButton_Click);
+			this.DeleteAllButton.MouseEnter += new System.EventHandler(this.DeleteAllButton_MouseEnter);
+			this.DeleteAllButton.MouseLeave += new System.EventHandler(this.DeleteAllButton_MouseLeave);
 			// 
 			// DeleteButton
 			// 
 			this.DeleteButton.FlatAppearance.BorderSize = 0;
 			this.DeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DeleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DeleteButton.Location = new System.Drawing.Point(481, 215);
 			this.DeleteButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DeleteButton.Name = "DeleteButton";
@@ -173,6 +175,8 @@ namespace PassGuard.GUI
 			this.DeleteButton.Text = "Delete Selected Element";
 			this.DeleteButton.UseVisualStyleBackColor = true;
 			this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+			this.DeleteButton.MouseEnter += new System.EventHandler(this.DeleteButton_MouseEnter);
+			this.DeleteButton.MouseLeave += new System.EventHandler(this.DeleteButton_MouseLeave);
 			// 
 			// BlueNUD
 			// 

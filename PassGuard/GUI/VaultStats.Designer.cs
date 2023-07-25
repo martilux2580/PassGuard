@@ -40,7 +40,7 @@
 			// 
 			this.UnderstoodButton.FlatAppearance.BorderSize = 0;
 			this.UnderstoodButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.UnderstoodButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.UnderstoodButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.UnderstoodButton.Location = new System.Drawing.Point(507, 533);
 			this.UnderstoodButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.UnderstoodButton.Name = "UnderstoodButton";
@@ -92,7 +92,7 @@
 			this.ResetButton.Enabled = false;
 			this.ResetButton.FlatAppearance.BorderSize = 0;
 			this.ResetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.ResetButton.Location = new System.Drawing.Point(876, 16);
 			this.ResetButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.ResetButton.Name = "ResetButton";
@@ -109,7 +109,7 @@
 			this.SearchButton.Enabled = false;
 			this.SearchButton.FlatAppearance.BorderSize = 0;
 			this.SearchButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SearchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.SearchButton.Location = new System.Drawing.Point(1037, 16);
 			this.SearchButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.SearchButton.Name = "SearchButton";
@@ -123,6 +123,7 @@
 			// 
 			// VaultStats
 			// 
+			this.AcceptButton = this.SearchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1168, 578);

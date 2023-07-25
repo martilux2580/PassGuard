@@ -227,13 +227,13 @@ namespace PassGuard
 		private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
 		{
 			//Microsoft Sans Serif
-			CreateVaultButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void CreateVaultButton_MouseLeave(object sender, EventArgs e)
 		{
-			CreateVaultButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void LoadVaultButton_Click(object sender, EventArgs e)
@@ -247,25 +247,25 @@ namespace PassGuard
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
 		{
-			LoadVaultButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
 		{
-			LoadVaultButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseEnter(object sender, EventArgs e)
 		{
-			DesignerLabel.Font = new Font("Roboto", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+			DesignerLabel.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseLeave(object sender, EventArgs e)
 		{
-			DesignerLabel.Font = new Font("Roboto", 11, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			DesignerLabel.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
@@ -397,13 +397,13 @@ namespace PassGuard
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseEnter(object sender, EventArgs e)
 		{
-			CreateQuickPassButton.Font = new Font("Roboto", 14, FontStyle.Underline); //Underline the text when mouse is in the button
+			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseLeave(object sender, EventArgs e)
 		{
-			CreateQuickPassButton.Font = new Font("Roboto", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
+			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
 		private void CreateQuickPassButton_Click(object sender, EventArgs e)
