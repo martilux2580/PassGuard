@@ -100,7 +100,7 @@ namespace PassGuard
 			// 
 			this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.DesignerLabel.Dock = System.Windows.Forms.DockStyle.Right;
-			this.DesignerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DesignerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
 			this.DesignerLabel.Location = new System.Drawing.Point(130, 0);
 			this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
