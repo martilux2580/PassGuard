@@ -98,16 +98,17 @@ namespace PassGuard
 			// 
 			// DesignerLabel
 			// 
-			this.DesignerLabel.AutoSize = true;
 			this.DesignerLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.DesignerLabel.Dock = System.Windows.Forms.DockStyle.Right;
 			this.DesignerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DesignerLabel.ForeColor = System.Drawing.Color.Black;
-			this.DesignerLabel.Location = new System.Drawing.Point(148, 8);
+			this.DesignerLabel.Location = new System.Drawing.Point(130, 0);
 			this.DesignerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.DesignerLabel.Name = "DesignerLabel";
-			this.DesignerLabel.Size = new System.Drawing.Size(184, 22);
+			this.DesignerLabel.Size = new System.Drawing.Size(206, 35);
 			this.DesignerLabel.TabIndex = 1;
 			this.DesignerLabel.Text = "Designed by martilux2580";
+			this.DesignerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.DesignerLabel.UseCompatibleTextRendering = true;
 			this.DesignerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DesignerLabel_MouseClick);
 			this.DesignerLabel.MouseEnter += new System.EventHandler(this.DesignerLabel_MouseEnter);
@@ -115,15 +116,16 @@ namespace PassGuard
 			// 
 			// AppVersionLabel
 			// 
-			this.AppVersionLabel.AutoSize = true;
-			this.AppVersionLabel.Font = new System.Drawing.Font("Mongolian Baiti", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.AppVersionLabel.Dock = System.Windows.Forms.DockStyle.Left;
+			this.AppVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.AppVersionLabel.ForeColor = System.Drawing.Color.Black;
-			this.AppVersionLabel.Location = new System.Drawing.Point(11, 10);
+			this.AppVersionLabel.Location = new System.Drawing.Point(0, 0);
 			this.AppVersionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 			this.AppVersionLabel.Name = "AppVersionLabel";
-			this.AppVersionLabel.Size = new System.Drawing.Size(57, 16);
+			this.AppVersionLabel.Size = new System.Drawing.Size(95, 35);
 			this.AppVersionLabel.TabIndex = 4;
 			this.AppVersionLabel.Text = "          ";
+			this.AppVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// CreateQuickPassButton
 			// 
@@ -447,7 +449,6 @@ namespace PassGuard
 			this.Shown += new System.EventHandler(this.mainWindow_Shown);
 			this.MenuPanel.ResumeLayout(false);
 			this.BottomPanel.ResumeLayout(false);
-			this.BottomPanel.PerformLayout();
 			this.LogoPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
 			this.OptionsPanel.ResumeLayout(false);
