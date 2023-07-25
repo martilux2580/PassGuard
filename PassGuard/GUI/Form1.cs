@@ -696,5 +696,6 @@ namespace PassGuard
 				trayIcon.Visible = true;
 			}
 		}
+
 	}
 }
