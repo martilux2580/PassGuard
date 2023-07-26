@@ -63,7 +63,7 @@
 			// 
 			// H2InfoLabel
 			// 
-			this.H2InfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.H2InfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.H2InfoLabel.Location = new System.Drawing.Point(591, 387);
 			this.H2InfoLabel.Name = "H2InfoLabel";
 			this.H2InfoLabel.Size = new System.Drawing.Size(550, 16);
@@ -72,7 +72,7 @@
 			// 
 			// H1InfoLabel
 			// 
-			this.H1InfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.H1InfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.H1InfoLabel.Location = new System.Drawing.Point(3, 387);
 			this.H1InfoLabel.Name = "H1InfoLabel";
 			this.H1InfoLabel.Size = new System.Drawing.Size(550, 16);
@@ -81,7 +81,7 @@
 			// 
 			// TextStatsLabel
 			// 
-			this.TextStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.TextStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.TextStatsLabel.Location = new System.Drawing.Point(173, 409);
 			this.TextStatsLabel.Name = "TextStatsLabel";
 			this.TextStatsLabel.Size = new System.Drawing.Size(798, 51);
@@ -92,7 +92,7 @@
 			// 
 			this.DownloadData1Button.FlatAppearance.BorderSize = 0;
 			this.DownloadData1Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.DownloadData1Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DownloadData1Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DownloadData1Button.Location = new System.Drawing.Point(3, 409);
 			this.DownloadData1Button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DownloadData1Button.Name = "DownloadData1Button";
@@ -107,7 +107,7 @@
 			// 
 			this.DownloadData2Button.FlatAppearance.BorderSize = 0;
 			this.DownloadData2Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.DownloadData2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.DownloadData2Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.DownloadData2Button.Location = new System.Drawing.Point(977, 409);
 			this.DownloadData2Button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.DownloadData2Button.Name = "DownloadData2Button";

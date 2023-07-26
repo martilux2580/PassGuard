@@ -138,14 +138,7 @@ namespace PassGuard.GUI
 
 		private void CopyClipboardButton_Click(object sender, EventArgs e)
 		{
-			if (String.IsNullOrEmpty(PasswordTextBox.Text))//If nothing in Textbox, we will copy a whitespace as "" cannot be copied.
-			{
-				Clipboard.SetText(" ");
-			}
-			else//If it has text in it, copy it.
-			{
-				Clipboard.SetText(PasswordTextBox.Text);
-			}
+			Clipboard.SetText(!string.IsNullOrEmpty(PasswordTextBox.Text) ? PasswordTextBox.Text : " ");
 		}
 
 		//Set all the checkboxes enable property as true or false whether check is true or false.

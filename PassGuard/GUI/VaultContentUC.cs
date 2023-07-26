@@ -1787,7 +1787,9 @@ namespace PassGuard.GUI
 
 								}
 							}
-							Clipboard.SetText(crypt.DecryptText(key: cKey, src: query.GetPassword(name: encNameToCopy)[3]));
+							var data = crypt.DecryptText(key: cKey, src: query.GetPassword(name: encNameToCopy)[3]);
+							Clipboard.SetText(!string.IsNullOrEmpty(data) ? data : " ");
+							
 
 							//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
 							crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
@@ -1898,7 +1900,8 @@ namespace PassGuard.GUI
 					case "CategoryColumn":
 					case "NotesColumn":
 						// Copy the button text to clipboard
-						Clipboard.SetText(clickedCell.Value.ToString());
+						Clipboard.SetText(!string.IsNullOrEmpty(clickedCell.Value.ToString()) ? clickedCell.Value.ToString() : " ");
+						
 						break;
 					default:
 						break;
