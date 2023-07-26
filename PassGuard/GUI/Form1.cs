@@ -219,6 +219,7 @@ namespace PassGuard
 		{
 			TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
 			GUI.CreateNewVaultUC cnv = new(); //Set new UC for the action.
+			cnv.Dock = DockStyle.Fill;
 			ContentPanel.Controls.Clear(); //Clear everything inside the Content Panel
 			ContentPanel.Controls.Add(cnv); //Add the UC to the panel
 		}
@@ -240,6 +241,7 @@ namespace PassGuard
 		{
 			TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
 			GUI.LoadVaultUC lv = new(false); //Set new UC for the action.
+			lv.Dock = DockStyle.Fill;
 			ContentPanel.Controls.Clear(); 
 			ContentPanel.Controls.Add(lv);
 		}
@@ -411,6 +413,7 @@ namespace PassGuard
 		{
 			TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
 			GUI.CreateQuickPassUC cqr = new(); //Set new UC for the action.
+			cqr.Dock = DockStyle.Fill;
 			ContentPanel.Controls.Clear();
 			ContentPanel.Controls.Add(cqr);
 		}
