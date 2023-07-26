@@ -170,7 +170,7 @@ namespace PassGuard.GUI
 			// 
 			this.LoadVaultButton.FlatAppearance.BorderSize = 0;
 			this.LoadVaultButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.LoadVaultButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.LoadVaultButton.Location = new System.Drawing.Point(420, 426);
 			this.LoadVaultButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.LoadVaultButton.Name = "LoadVaultButton";
