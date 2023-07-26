@@ -65,7 +65,7 @@ namespace PassGuard.GUI
 			}
 			catch (Exception)
 			{
-				Clipboard.SetText(e.LinkText);
+				Clipboard.SetText(!string.IsNullOrEmpty(e.LinkText) ? e.LinkText : " ");
 				MessageBox.Show(text: "ERROR: The following webpage: \n\n" + e.LinkText + "\n\ncould not be opened. However, the link has been copied to your clipboard. You can paste it in your favourite web browser :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 		}

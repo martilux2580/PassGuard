@@ -159,7 +159,7 @@ namespace PassGuard.GUI
 
 					//Inform user
 					var data = "\t• Vault Name: " + VaultNameTextbox.Text + "\n\t• Filename: " + VaultNameTextbox.Text + ".encrypted" + "\n\t• Email: " + VaultEmailTextbox.Text + "\n\t• Vault Password: " + VaultPassTextbox.Text + "\n\t• Security Key: " + rndsalt;
-					Clipboard.SetText(data);
+					Clipboard.SetText(!string.IsNullOrEmpty(data) ? data : " ");
 					GUI.InfoNewVaultCreatedForm info = new(data)
 					{
 						BackColor = this.BackColor

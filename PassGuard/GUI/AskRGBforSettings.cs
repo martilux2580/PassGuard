@@ -323,7 +323,7 @@ namespace PassGuard.GUI
 			}
 			catch (Exception)
 			{
-				Clipboard.SetText(url);
+				Clipboard.SetText(!string.IsNullOrEmpty(url) ? url : " ");
 				MessageBox.Show(text: "ERROR: The following webpage: \n\n" + url + "\n\ncould not be opened. However, the link has been copied to your clipboard. You can paste it in your favourite web browser :)", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 		}
@@ -601,7 +601,7 @@ namespace PassGuard.GUI
 					case "Green":
 					case "Blue":
 						//Todos los de arriba solo copias los valores al clipboard.
-						Clipboard.SetText(ColourContentDGV.CurrentCell.Value.ToString());
+						Clipboard.SetText(!string.IsNullOrEmpty(ColourContentDGV.CurrentCell.Value.ToString()) ? ColourContentDGV.CurrentCell.Value.ToString() : " ");
 						break;
 					case "ChosenConfig":
 						if ((ColourContentDGV.CurrentCell != null) && (!Convert.ToBoolean(ColourContentDGV.CurrentCell.Value))) //If checkbox is not checked then we do something...

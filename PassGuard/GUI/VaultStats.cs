@@ -72,15 +72,20 @@ namespace PassGuard.GUI
 
 					break;
 				case "Security Properties":
-					Able(false);
-					var someSecData = allData.Select(arr => new string[] { arr[1], arr[3], arr[6] }).ToList(); //Get just Name, Pass and Importance from all data.
-					var someSecDataDecrypted = someSecData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
+					var dialog = MessageBox.Show(text: "The generation of this statistics is costly, if they don't appear right away please consider waiting a bit. Do you still want to generate these statistics?\n\nNote: As an estimate, for 400 passwords it took 2.5 minutes.", 
+						caption: "Information", icon: MessageBoxIcon.Information, buttons: MessageBoxButtons.OKCancel);
 
-					StatsPanel.Controls.Clear();
-					GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
-					StatsPanel.Controls.Add(stat1);
-					Able(true);
+					if(dialog == DialogResult.OK)
+					{
+						Able(false);
+						var someSecData = allData.Select(arr => new string[] { arr[1], arr[3], arr[6] }).ToList(); //Get just Name, Pass and Importance from all data.
+						var someSecDataDecrypted = someSecData.Select(arr => arr.Select(x => crypt.DecryptText(Key, x)).ToArray()).ToList();
 
+						StatsPanel.Controls.Clear();
+						GUI.SecurityStatsUC stat1 = new(someSecDataDecrypted, contextColour);
+						StatsPanel.Controls.Add(stat1);
+						Able(true);
+					}
 					break;
 				default:
 					break;

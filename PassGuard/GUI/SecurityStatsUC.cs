@@ -268,25 +268,25 @@ namespace PassGuard.GUI
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseEnter(object sender, EventArgs e)
 		{
-			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseLeave(object sender, EventArgs e)
 		{
-			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseEnter(object sender, EventArgs e)
 		{
-			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseLeave(object sender, EventArgs e)
 		{
-			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
+			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
 		}
 	}
 }
