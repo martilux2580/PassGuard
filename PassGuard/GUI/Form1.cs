@@ -155,8 +155,8 @@ namespace PassGuard
 			{
 				if(Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"])) { setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to run on startup"; }
 				else { setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup"; }
-				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"])) { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to minimize to tray"; }
-				else { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray"; }
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"])) { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to open and minimize to tray"; }
+				else { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to open and minimize to tray"; }
 				AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
 				SetConfigTheme(); //Set theme based on saved config.
 				SetConfigColours(); //Set outline colours based on saved config.				
@@ -240,7 +240,7 @@ namespace PassGuard
 		private void LoadVaultButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
-			GUI.LoadVaultUC lv = new(false); //Set new UC for the action.
+			GUI.LoadVaultUC lv = new(); //Set new UC for the action.
 			lv.Dock = DockStyle.Fill;
 			ContentPanel.Controls.Clear(); 
 			ContentPanel.Controls.Add(lv);
@@ -543,24 +543,25 @@ namespace PassGuard
 		{
 			try
 			{
+				if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
+				{
+					if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
+					{
+						if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+						{
+							MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+						}
+						else
+						{
+							MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+						}
+					}
+
+				}
+
 				// Check if the form is closing
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
-					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
-					{
-						if (2 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"])) //If app is closing and the mode is 2 (after each close of app), make backup.
-						{
-							if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
-							{
-								MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
-							}
-							else
-							{
-								MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
-							}
-						}
-
-					}
 
 					if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
 					{
@@ -660,23 +661,23 @@ namespace PassGuard
 
 				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
 				{
-					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from minimizing to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from opening and minimizing to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
 					if (dialog == DialogResult.Yes)
 					{
 						config.AppSettings.Settings["MinimizeToTrayState"].Value = false.ToString();
-						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to minimize to tray";
+						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to open and minimize to tray";
 					}
 
 				}
 				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == false)
 				{
-					var dialog = MessageBox.Show(text: "Do you want Passguard to minimize to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+					var dialog = MessageBox.Show(text: "Do you want Passguard to open and minimize to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
 					if (dialog == DialogResult.Yes)
 					{
 						config.AppSettings.Settings["MinimizeToTrayState"].Value = true.ToString();
-						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to minimize to tray";
+						setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to open and minimize to tray";
 					}
 
 

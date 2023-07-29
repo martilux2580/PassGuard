@@ -21,13 +21,10 @@ namespace PassGuard.GUI
 	//UC Component to obtain the credentials to login to a selected Vault.
 	public partial class LoadVaultUC : UserControl
 	{
-		private readonly bool settings;
 
-		public LoadVaultUC(bool setts)
+		public LoadVaultUC()
 		{
 			InitializeComponent();
-			settings = setts;
-			if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
 
 		}
 
@@ -74,99 +71,37 @@ namespace PassGuard.GUI
 				String[] lastValue = saveEncryptedVaultPath[saveEncryptedVaultPath.Length - 1].Split('.'); //[filename, filextension]
 				lastValue[lastValue.Length - 1] = "db3"; //FileExtension
 
-				var encVault = Path.Combine(saveEncryptedVaultPath); //Set path for encrypted vault.
-				var decVault = (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])); //Set path for decrypted vault.
-
-				if (settings) //Loading vault from settings button, so what we want is to export this loaded vault as PDF.
+				try
 				{
-					try
+					//Calculate key to decrypt vault
+					var key = kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(SecurityKeyTextbox.Text), bytes: 32);
+
+					//Show all the contents of the vault (UserControl).
+					GUI.VaultContentUC vc = new(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
+					var ContentPanel = this.Parent;
+					this.Parent.Controls.Clear(); //this.Parent.Name = ContentPanel
+					ContentPanel.Controls.Add(vc);
+					vc.Visible = true;
+				}
+				catch (Exception ex)
+				{
+					if ((ex is FormatException) || (ex is System.Security.Cryptography.CryptographicException))
 					{
-						//Calculate keys to decrypt vault.
-						var vKey = kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(SecurityKeyTextbox.Text), bytes: 32);
-						var keyVStr = Utils.StringUtils.Base64ToString(Convert.ToBase64String(vKey));
-						var skStr = Utils.StringUtils.Base64ToString(SecurityKeyTextbox.Text);
-						var cKey = kdf.GetVaultKey(password: (keyVStr + (VaultEmailTextbox.Text + VaultPassTextbox.Text)), salt: Encoding.Default.GetBytes(skStr + keyVStr), bytes: 32);
-
-						//Obtain all its decrypted elements.
-						crypt.Decrypt(key: vKey, src: encVault, dst: decVault);
-
-						query = new Query(decVault);
-						List<String[]> fullResults = query.GetAllData();
-						
-						//Decrypt data.
-						foreach (String[] row in fullResults)
-						{
-							row[0] = crypt.DecryptText(key: cKey, src: row[0]);
-							row[1] = crypt.DecryptText(key: cKey, src: row[1]);
-							row[2] = crypt.DecryptText(key: cKey, src: row[2]);
-							row[3] = crypt.DecryptText(key: cKey, src: row[3]);
-							row[4] = crypt.DecryptText(key: cKey, src: row[4]);
-							row[5] = crypt.DecryptText(key: cKey, src: row[5]);
-						}
-
-						pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
-
-						crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
-						File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
-
-						VaultEmailTextbox.Text = "";
-						VaultPassTextbox.Text = "";
-						VaultPathTextbox.Text = "";
-						SecurityKeyTextbox.Text = "";
-
+						MessageBox.Show(text: "PassGuard could not unlock your Vault. Check the input credentials.", caption: "Not correct credentials.", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 					}
-					catch (Exception ex)
+					else
 					{
-						if ((ex is FormatException) || (ex is System.Security.Cryptography.CryptographicException))
-						{
-							MessageBox.Show(text: "PassGuard could not unlock your Vault. Check the input credentials.", caption: "Not correct credentials.", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-						}
-						else
-						{
-							MessageBox.Show(text: "PassGuard could not unlock or open the Vault. Check the inserted credentials, verify the file is not corrupted and try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-						}
-					}
-					finally
-					{
-						if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3")))
-						{
-							File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3"));
-						}
+						MessageBox.Show(text: "PassGuard could not unlock or open the Vault. Check the inserted credentials, verify the file is not corrupted and try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 					}
 				}
-				else //What we want to do is to is to show the table with the data.
+				finally
 				{
-					try
+					if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3")))
 					{
-						//Calculate key to decrypt vault
-						var key = kdf.GetVaultKey(password: (VaultEmailTextbox.Text + VaultPassTextbox.Text), salt: Convert.FromBase64String(SecurityKeyTextbox.Text), bytes: 32);
-
-						//Show all the contents of the vault (UserControl).
-						GUI.VaultContentUC vc = new(Path.Combine(saveEncryptedVaultPath), VaultEmailTextbox.Text, VaultPassTextbox.Text, key, SecurityKeyTextbox.Text); //Put the main panel visible.
-						var ContentPanel = this.Parent;
-						this.Parent.Controls.Clear(); //this.Parent.Name = ContentPanel
-						ContentPanel.Controls.Add(vc);
-						vc.Visible = true;
-					}
-					catch (Exception ex)
-					{
-						if ((ex is FormatException) || (ex is System.Security.Cryptography.CryptographicException))
-						{
-							MessageBox.Show(text: "PassGuard could not unlock your Vault. Check the input credentials.", caption: "Not correct credentials.", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-						}
-						else
-						{
-							MessageBox.Show(text: "PassGuard could not unlock or open the Vault. Check the inserted credentials, verify the file is not corrupted and try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-						}
-					}
-					finally
-					{
-						if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3")))
-						{
-							File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3"));
-						}
+						File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3"));
 					}
 				}
+				
 
 			}
 		}

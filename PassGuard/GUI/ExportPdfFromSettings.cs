@@ -184,6 +184,9 @@ namespace PassGuard.GUI
 					query = new Query(decVault);
 					List<String[]> fullResults = query.GetAllData();
 
+					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
+					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+
 					//Decrypt data.
 					foreach (String[] row in fullResults)
 					{
@@ -197,9 +200,6 @@ namespace PassGuard.GUI
 					}
 
 					pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
-
-					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
-					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
 
 					VaultEmailTextbox.Text = "";
 					VaultPassTextbox.Text = "";

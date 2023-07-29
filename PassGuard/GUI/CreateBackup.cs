@@ -54,13 +54,13 @@ namespace PassGuard.GUI
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseEnter(object sender, EventArgs e)
 		{
-			SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
+			SendButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseLeave(object sender, EventArgs e)
 		{
-			SendButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Regular the text when mouse is in the button
+			SendButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Regular the text when mouse is in the button
 		}
 
 		private void SendButton_Click(object sender, EventArgs e)
@@ -83,23 +83,6 @@ namespace PassGuard.GUI
 				}
 			}
 			
-		}
-
-		[SupportedOSPlatform("windows")]
-		private void LoadSavedBackupPathButton_MouseEnter(object sender, EventArgs e)
-		{
-			LoadSavedBackupPathButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Underline the text when mouse is in the button
-		}
-
-		[SupportedOSPlatform("windows")]
-		private void LoadSavedBackupPathButton_MouseLeave(object sender, EventArgs e)
-		{
-			LoadSavedBackupPathButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Underline the text when mouse is in the button
-		}
-
-		private void LoadSavedBackupPathButton_Click(object sender, EventArgs e)
-		{
-			VaultBackupPathTextbox.Text = ConfigurationManager.AppSettings["dstBackupPathForSave"]; //Modify data in the config file for future executions.
 		}
 
 		private void SelectVaultPathButton_Click(object sender, EventArgs e)
