@@ -167,6 +167,7 @@ namespace PassGuard.GUI
 			this.FrequencyCombobox.Enabled = false;
 			this.FrequencyCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.FrequencyCombobox.FormattingEnabled = true;
+			this.FrequencyCombobox.IntegralHeight = false;
 			this.FrequencyCombobox.Location = new System.Drawing.Point(314, 174);
 			this.FrequencyCombobox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.FrequencyCombobox.MaxLength = 2100;
@@ -186,7 +187,6 @@ namespace PassGuard.GUI
 			// 
 			// AutoBackup
 			// 
-			this.AcceptButton = this.SetupAutoBackupButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 301);

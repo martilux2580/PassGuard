@@ -68,6 +68,7 @@
 			this.StatTypeCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.StatTypeCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.StatTypeCombobox.FormattingEnabled = true;
+			this.StatTypeCombobox.IntegralHeight = false;
 			this.StatTypeCombobox.Items.AddRange(new object[] {
             "",
             "Content Properties",
@@ -123,7 +124,6 @@
 			// 
 			// VaultStats
 			// 
-			this.AcceptButton = this.SearchButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1168, 578);

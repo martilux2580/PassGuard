@@ -837,7 +837,6 @@ namespace PassGuard.GUI
 			// 
 			// AskRGBforSettings
 			// 
-			this.AcceptButton = this.SendButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(968, 583);
