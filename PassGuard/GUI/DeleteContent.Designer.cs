@@ -101,6 +101,7 @@ namespace PassGuard.GUI
 			this.NameCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.NameCombobox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.NameCombobox.FormattingEnabled = true;
+			this.NameCombobox.IntegralHeight = false;
 			this.NameCombobox.Location = new System.Drawing.Point(451, 7);
 			this.NameCombobox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.NameCombobox.MaxLength = 2100;

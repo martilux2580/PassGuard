@@ -29,19 +29,6 @@ namespace PassGuard.GUI
 			settings = setts;
 			if (setts) { LoadVaultButton.Text = "Export Vault as PDF"; }
 
-			SetAcceptButton();
-		}
-
-		private void SetAcceptButton()
-		{
-			// Get the parent form of the user control
-			Form parentForm = this.FindForm();
-
-			// Set the button1 as the AcceptButton for the parent form
-			if (parentForm != null)
-			{
-				parentForm.AcceptButton = LoadVaultButton;
-			}
 		}
 
 		public void TrimComponents()

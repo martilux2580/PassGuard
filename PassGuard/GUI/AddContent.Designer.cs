@@ -221,6 +221,7 @@ namespace PassGuard.GUI
 			// CategoryCombobox
 			// 
 			this.CategoryCombobox.FormattingEnabled = true;
+			this.CategoryCombobox.IntegralHeight = false;
 			this.CategoryCombobox.Location = new System.Drawing.Point(251, 220);
 			this.CategoryCombobox.MaxLength = 2100;
 			this.CategoryCombobox.Name = "CategoryCombobox";
@@ -230,7 +231,6 @@ namespace PassGuard.GUI
 			// 
 			// AddContent
 			// 
-			this.AcceptButton = this.AddButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(796, 434);

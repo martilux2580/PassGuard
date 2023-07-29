@@ -57,20 +57,6 @@ namespace PassGuard.GUI
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 
-			SetAcceptButton();
-		}
-
-		private void SetAcceptButton()
-		{
-			// Set the button1 as the AcceptButton for the parent form
-			if ((DeleteAllButton.Enabled == true) && (DeleteButton.Enabled == false))
-			{
-				this.AcceptButton = DeleteAllButton;
-			}
-			else if ((DeleteButton.Enabled == true) && (DeleteAllButton.Enabled == false))
-			{
-				this.AcceptButton = DeleteButton;
-			}
 		}
 
 		public void TrimComponents()
@@ -105,7 +91,6 @@ namespace PassGuard.GUI
 				DeleteAllButton.Enabled = true;
 				DeleteButton.Enabled = false;
 
-				SetAcceptButton();
 			}
 			else if (EnableDeleteAllCheckbox.Checked == false)
 			{
@@ -116,7 +101,6 @@ namespace PassGuard.GUI
 				DeleteButton.Enabled = true;
 				NameCombobox.Enabled = true;
 
-				SetAcceptButton();
 			}
 		}
 

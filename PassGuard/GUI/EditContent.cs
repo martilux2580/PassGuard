@@ -282,5 +282,7 @@ namespace PassGuard.GUI
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
+
+	
 	}
 }
