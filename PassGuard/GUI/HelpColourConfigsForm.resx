@@ -58,7 +58,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ContentRichTextbox.Text" xml:space="preserve">
-    <value>In this panel your saved Colour Configs will be shown. This panel is composed of a table with eight columns (buttons) that show the saved data of each of your configs, a Search Textbox with two associated buttons to Reset and Search, and six buttons at the right side of the form where you can Add, Edit, Delete, Import data from JSON file, Export as PDF or as a JSON file or get Help on how this window works.
+    <value>In this panel your saved Colour Configs will be shown. This panel is composed of a table with eight columns (buttons) that show the saved data of each of your configs, a Search Textbox with two associated buttons to Reset and Search as well as the Help button to get more info about how this part of the program works, and six buttons at the right side of the form where you can Add, Edit, Delete, Import data from JSON file, Export as PDF or as a JSON file and Send Changes done to the actual configuration.
 
 If you click in any of the column headers (except Viewer, ChosenConfig and Delete Row column headers), you can select to order your configs by that column you´ve clicked in Normal Order (just as they were added), Ascending Order (from A-Z) or Descending Order (from Z-A). If you are ordering by Favourite Column alphabetically ascending or descending the configs marked as favourite will be ordered on top always and in the order selected. Initially everything is ordered in Normal Order. The table cannot be ordered by two or more columns simultaneously. 
 
@@ -80,7 +80,7 @@ Five buttons at the right side of the form will be displayed:
 	• Export as PDF: Exports all the data from the current saved configs into either PDF or JSON file format. The file will be stored in your My Documents folder in Windows OS. This action could take some minutes depending on the amount of data to export.
 	• Help: Displays this window with information about how to manage your outline colours configs.
 
-At the bottom part of the form there are 6 Numeric Up Down (NUD) laid on a 3x2 setup , the 3 on top represent the RGB values that will be used in the next execution of the program (once program restarts), the 3 on bottom instead represent the RGB values that will be used in the current execution once changes are sent.
+At the bottom part of the form there are 6 Numeric Up Down (NUD) laid on a 3x2 setup, the 3 on top represent the RGB values that will be used in the next execution of the program (once program restarts), the 3 on bottom instead represent the RGB values that will be used in the current execution once changes are sent.
 
 						   Have a good day :)</value>
   </data>

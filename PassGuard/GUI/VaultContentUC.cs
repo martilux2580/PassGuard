@@ -431,7 +431,6 @@ namespace PassGuard.GUI
 			{
 				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))) //If error occurred and state is compromised, delete changes in Vault.
 				{
-					Thread.Sleep(1000);
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 				}
 			}
@@ -1531,7 +1530,9 @@ namespace PassGuard.GUI
 				query = new Query(decVault);
 
 				List<String[]> fullResults = query.GetAllData();
-				
+				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath));
+				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
+
 				//Decrypt data.
 				foreach (String[] row in fullResults)
 				{
@@ -1546,8 +1547,6 @@ namespace PassGuard.GUI
 
 				pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings["Email"], ConfigurationManager.AppSettings["SecurityKey"]);
 
-				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1])), Path.Combine(saveEncryptedVaultPath)); 
-				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + "." + lastValue[1]));
 			}
 			catch (Exception ex)
 			{
@@ -1741,6 +1740,26 @@ namespace PassGuard.GUI
 									//Load the ordered content depending on column and order, and set toolstrip check property.
 									LoadContent(actualOrder, actualColumn);
 								}
+
+								//Check autobackup state
+								if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
+								{
+									//Check the change in current vault is the vault autobackup has configured to be backed up.
+									if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings["PathVaultForAutoBackup"]), b: Path.GetFullPath(encryptedVaultPath)))
+									{
+										if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
+										{
+											if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+											{
+												MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+											}
+											else
+											{
+												MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+											}
+										}
+									}
+								}
 							}
 							catch(Exception ex)
 							{
@@ -1865,6 +1884,25 @@ namespace PassGuard.GUI
 									LoadContent(actualOrder, actualColumn);
 								}
 
+								//Check autobackup state
+								if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
+								{
+									//Check the change in current vault is the vault autobackup has configured to be backed up.
+									if (String.Equals(a: Path.GetFullPath(ConfigurationManager.AppSettings["PathVaultForAutoBackup"]), b: Path.GetFullPath(encryptedVaultPath)))
+									{
+										if (1 == Int32.Parse(ConfigurationManager.AppSettings["FrequencyAutoBackup"]))
+										{
+											if (Backup.SystemBackup.CreateBackup(srcPath: ConfigurationManager.AppSettings["PathVaultForAutoBackup"], dstPath: ConfigurationManager.AppSettings["dstBackupPathForSave"]))
+											{
+												MessageBox.Show(text: "AutoBackup was created successfully.", caption: "Success", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
+											}
+											else
+											{
+												MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+											}
+										}
+									}
+								}
 							}
 							else
 							{

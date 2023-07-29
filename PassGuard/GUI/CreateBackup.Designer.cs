@@ -33,7 +33,6 @@ namespace PassGuard.GUI
 			this.BackupPathLabel = new System.Windows.Forms.Label();
 			this.SelectVaultBackupPathButton = new System.Windows.Forms.Button();
 			this.VaultBackupPathTextbox = new System.Windows.Forms.TextBox();
-			this.LoadSavedBackupPathButton = new System.Windows.Forms.Button();
 			this.VaultPathTextbox = new System.Windows.Forms.TextBox();
 			this.VaultPathLabel = new System.Windows.Forms.Label();
 			this.SelectVaultPathButton = new System.Windows.Forms.Button();
@@ -43,8 +42,8 @@ namespace PassGuard.GUI
 			// 
 			this.SendButton.FlatAppearance.BorderSize = 0;
 			this.SendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.SendButton.Location = new System.Drawing.Point(316, 127);
+			this.SendButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.SendButton.Location = new System.Drawing.Point(178, 115);
 			this.SendButton.Margin = new System.Windows.Forms.Padding(2);
 			this.SendButton.Name = "SendButton";
 			this.SendButton.Size = new System.Drawing.Size(135, 36);
@@ -91,22 +90,6 @@ namespace PassGuard.GUI
 			this.VaultBackupPathTextbox.Size = new System.Drawing.Size(302, 24);
 			this.VaultBackupPathTextbox.TabIndex = 20;
 			// 
-			// LoadSavedBackupPathButton
-			// 
-			this.LoadSavedBackupPathButton.FlatAppearance.BorderSize = 0;
-			this.LoadSavedBackupPathButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.LoadSavedBackupPathButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.LoadSavedBackupPathButton.Location = new System.Drawing.Point(18, 127);
-			this.LoadSavedBackupPathButton.Margin = new System.Windows.Forms.Padding(2);
-			this.LoadSavedBackupPathButton.Name = "LoadSavedBackupPathButton";
-			this.LoadSavedBackupPathButton.Size = new System.Drawing.Size(209, 36);
-			this.LoadSavedBackupPathButton.TabIndex = 22;
-			this.LoadSavedBackupPathButton.Text = "Load Saved AutoBackup Path";
-			this.LoadSavedBackupPathButton.UseVisualStyleBackColor = true;
-			this.LoadSavedBackupPathButton.Click += new System.EventHandler(this.LoadSavedBackupPathButton_Click);
-			this.LoadSavedBackupPathButton.MouseEnter += new System.EventHandler(this.LoadSavedBackupPathButton_MouseEnter);
-			this.LoadSavedBackupPathButton.MouseLeave += new System.EventHandler(this.LoadSavedBackupPathButton_MouseLeave);
-			// 
 			// VaultPathTextbox
 			// 
 			this.VaultPathTextbox.Enabled = false;
@@ -147,11 +130,10 @@ namespace PassGuard.GUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(484, 186);
+			this.ClientSize = new System.Drawing.Size(484, 162);
 			this.Controls.Add(this.SelectVaultPathButton);
 			this.Controls.Add(this.VaultPathTextbox);
 			this.Controls.Add(this.VaultPathLabel);
-			this.Controls.Add(this.LoadSavedBackupPathButton);
 			this.Controls.Add(this.SelectVaultBackupPathButton);
 			this.Controls.Add(this.VaultBackupPathTextbox);
 			this.Controls.Add(this.SendButton);
@@ -174,7 +156,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.Label BackupPathLabel;
         private System.Windows.Forms.Button SelectVaultBackupPathButton;
         private System.Windows.Forms.TextBox VaultBackupPathTextbox;
-        private System.Windows.Forms.Button LoadSavedBackupPathButton;
         private System.Windows.Forms.TextBox VaultPathTextbox;
         private System.Windows.Forms.Label VaultPathLabel;
         private System.Windows.Forms.Button SelectVaultPathButton;
