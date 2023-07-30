@@ -218,8 +218,10 @@ namespace PassGuard
 		private void CreateVaultButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
-			GUI.CreateNewVaultUC cnv = new(); //Set new UC for the action.
-			cnv.Dock = DockStyle.Fill;
+			GUI.CreateNewVaultUC cnv = new()
+			{
+				Dock = DockStyle.Fill
+			}; //Set new UC for the action.
 			ContentPanel.Controls.Clear(); //Clear everything inside the Content Panel
 			ContentPanel.Controls.Add(cnv); //Add the UC to the panel
 		}
@@ -240,8 +242,10 @@ namespace PassGuard
 		private void LoadVaultButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
-			GUI.LoadVaultUC lv = new(); //Set new UC for the action.
-			lv.Dock = DockStyle.Fill;
+			GUI.LoadVaultUC lv = new()
+			{
+				Dock = DockStyle.Fill
+			}; //Set new UC for the action.
 			ContentPanel.Controls.Clear(); 
 			ContentPanel.Controls.Add(lv);
 		}
@@ -330,7 +334,7 @@ namespace PassGuard
 
 
 				//Get values
-				int[] newValues = rgb.finalCalibratedColours;
+				int[] newValues = rgb.FinalCalibratedColours;
 
 				MenuPanel.BackColor = Color.FromArgb(newValues[0], newValues[1], newValues[2]);
 				LogoPanel.BackColor = Color.FromArgb(newValues[3], newValues[4], newValues[5]);
@@ -412,8 +416,10 @@ namespace PassGuard
 		private void CreateQuickPassButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
-			GUI.CreateQuickPassUC cqr = new(); //Set new UC for the action.
-			cqr.Dock = DockStyle.Fill;
+			GUI.CreateQuickPassUC cqr = new()
+			{
+				Dock = DockStyle.Fill
+			}; //Set new UC for the action.
 			ContentPanel.Controls.Clear();
 			ContentPanel.Controls.Add(cqr);
 		}
@@ -426,7 +432,7 @@ namespace PassGuard
 			};
 			cb.ShowDialog();
 
-			if (cb.success)
+			if (cb.Success)
 			{
 				MessageBox.Show(text: "Backup of the selected Vault was created successfully :)", caption: "Success", buttons: MessageBoxButtons.OK); 
 				
@@ -448,13 +454,13 @@ namespace PassGuard
 				};
 				ab.ShowDialog();
 
-				if (ab.setupSuccess) //If we exited autobackup form from the bottom, then everything was set up correctly.
+				if (ab.SetupSuccess) //If we exited autobackup form from the bottom, then everything was set up correctly.
 				{
 					var newState = ab.AutoBackupState;
-					var newVaultPath = ab.pathOfVaultBackedUp;
-					var newBackupsPath = ab.pathForBackups;
-					var newFrequencyAutoBackup = ab.frequencyBackup;
-					var newLastDateBackup = ab.lastDateBackup;
+					var newVaultPath = ab.PathOfVaultBackedUp;
+					var newBackupsPath = ab.PathForBackups;
+					var newFrequencyAutoBackup = ab.FrequencyBackup;
+					var newLastDateBackup = ab.LastDateBackup;
 
 					if (newState == "false") //Your new state is AutoBackup deactivated
 					{

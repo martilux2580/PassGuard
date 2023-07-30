@@ -21,11 +21,11 @@ namespace PassGuard.GUI
 		private readonly List<String> namesInDB;
 		private readonly byte[] Key;
 		private readonly String decPath;
-		public bool deletedSuccess { get; private set; } //Signal for delete one password.
-		public bool deletedAllSuccess { get; private set; } //Signal for delete all passwords
-		public String nameToBeDeleted { get; private set; }
+		public bool DeletedSuccess { get; private set; } //Signal for delete one password.
+		public bool DeletedAllSuccess { get; private set; } //Signal for delete all passwords
+		public String NameToBeDeleted { get; private set; }
 		private readonly Dictionary<String, String> map; //No duplicate keys, (encryptedName, decryptedName)
-		private ICrypt crypt = new AESAlgorithm();
+		private readonly ICrypt crypt = new AESAlgorithm();
 
 		public DeleteContent(List<String> names, byte[] key, String decpath)
 		{
@@ -45,8 +45,8 @@ namespace PassGuard.GUI
 			{
 				NameCombobox.Items.Add(crypt.DecryptText(key: Key, src: name));
 			}
-			deletedSuccess = false;
-			deletedAllSuccess = false;
+			DeletedSuccess = false;
+			DeletedAllSuccess = false;
 
 			try
 			{
@@ -117,8 +117,8 @@ namespace PassGuard.GUI
 				DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete the element with name '" + NameTextbox.Text + "' from your Vault?\n\nNote: This action cannot be undone.", caption: "Confirm the deletion of the element", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 				if (dialog == DialogResult.Yes)
 				{
-					nameToBeDeleted = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Get encrypted name to be deleted.
-					deletedSuccess = true;
+					NameToBeDeleted = map.FirstOrDefault(x => x.Value == NameCombobox.Text).Key; //Get encrypted name to be deleted.
+					DeletedSuccess = true;
 					this.Close();
 
 				}
@@ -131,7 +131,7 @@ namespace PassGuard.GUI
 			DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete all the elements in your Vault? After this action, your Vault will be completely empty. \n\nNote: This action cannot be undone.", caption: "Confirm the deletion of all the elements", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 			if (dialog == DialogResult.Yes)
 			{
-				deletedAllSuccess = true;
+				DeletedAllSuccess = true;
 				this.Close();
 
 			}

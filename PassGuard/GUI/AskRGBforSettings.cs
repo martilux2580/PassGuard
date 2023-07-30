@@ -41,9 +41,9 @@ namespace PassGuard.GUI
 			Blue,
 			Favourite
 		}
-		public Configuration config { get; private set; }
+		public Configuration Config { get; private set; }
 		private int[] actualColours;
-		public int[] finalCalibratedColours { get; private set; }
+		public int[] FinalCalibratedColours { get; private set; }
 		private CFColumns actualColumn;
 		private Order actualOrder;
 		private bool isSearched;
@@ -65,7 +65,7 @@ namespace PassGuard.GUI
 				SetCMS(); //Set CMSs elements
 
 				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
-				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
+				FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(colours[0], colours[1], colours[2]);
 
 				LoadContent(CFColumns.NULLVALUESS, Order.Normal);
 			}
@@ -74,10 +74,10 @@ namespace PassGuard.GUI
 				MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 			
-			config = configg;
+			Config = configg;
 
 		}
-
+		
 		public void TrimComponents()
 		{
 			SearchTextbox.Text = SearchTextbox.Text.Trim();
@@ -334,7 +334,7 @@ namespace PassGuard.GUI
 			{
 				//Calibrate colours and set the result variable, because we cannot get the NUD values if he have this.Close() the form.
 				//ORDER: RMenu, GMenu, BMenu, RLogo, GLogo, BLogo, ROptic, GOptic, BOptic
-				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNowNUD.Value, (int)GreenNowNUD.Value, (int)BlueNowNUD.Value);
+				FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours((int)RedNowNUD.Value, (int)GreenNowNUD.Value, (int)BlueNowNUD.Value);
 
 				this.Close();
 			}
@@ -354,44 +354,44 @@ namespace PassGuard.GUI
 			};
 			add.ShowDialog();
 
-			if (add.addedSuccess)
+			if (add.AddedSuccess)
 			{
 				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				if (add.chosen == 1)
+				if (add.Chosen == 1)
 				{
-					if (add.persists == 1) 
+					if (add.Persists == 1) 
 					{
-						RedNextNUD.Value = add.red;
-						GreenNextNUD.Value = add.green;
-						BlueNextNUD.Value = add.blue;
+						RedNextNUD.Value = add.Red;
+						GreenNextNUD.Value = add.Green;
+						BlueNextNUD.Value = add.Blue;
 
-						finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
+						FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.Red, add.Green, add.Blue);
 
-						config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
-						config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
-						config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
-						config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
-						config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
-						config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
-						config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
-						config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
-						config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
+						Config.AppSettings.Settings["RedMenu"].Value = FinalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+						Config.AppSettings.Settings["GreenMenu"].Value = FinalCalibratedColours[1].ToString();
+						Config.AppSettings.Settings["BlueMenu"].Value = FinalCalibratedColours[2].ToString();
+						Config.AppSettings.Settings["RedLogo"].Value = FinalCalibratedColours[3].ToString();
+						Config.AppSettings.Settings["GreenLogo"].Value = FinalCalibratedColours[4].ToString();
+						Config.AppSettings.Settings["BlueLogo"].Value = FinalCalibratedColours[5].ToString();
+						Config.AppSettings.Settings["RedOptions"].Value = FinalCalibratedColours[6].ToString();
+						Config.AppSettings.Settings["GreenOptions"].Value = FinalCalibratedColours[7].ToString();
+						Config.AppSettings.Settings["BlueOptions"].Value = FinalCalibratedColours[8].ToString();
 					}
 
-					RedNowNUD.Value = add.red;
-					GreenNowNUD.Value = add.green;
-					BlueNowNUD.Value = add.blue;
+					RedNowNUD.Value = add.Red;
+					GreenNowNUD.Value = add.Green;
+					BlueNowNUD.Value = add.Blue;
 
-					actualColours = new int[] { add.red, add.green, add.blue };
-					finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.red, add.green, add.blue);
+					actualColours = new int[] { add.Red, add.Green, add.Blue };
+					FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.Red, add.Green, add.Blue);
 				}
 
-				data.Add(key: add.name, value: new List<int> { add.red, add.green, add.blue, add.favourite });
+				data.Add(key: add.name, value: new List<int> { add.Red, add.Green, add.Blue, add.Favourite });
 				string newData = JsonSerializer.Serialize(data);
 
-				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
-				config.Save(ConfigurationSaveMode.Modified);
+				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+				Config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -425,44 +425,44 @@ namespace PassGuard.GUI
 			};
 			edit.ShowDialog();
 
-			if (edit.editedSuccess)
+			if (edit.EditedSuccess)
 			{
 				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-				finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(edit.red, edit.green, edit.blue);
+				FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(edit.Red, edit.Green, edit.Blue);
 
-				if (edit.chosen == 1)
+				if (edit.Chosen == 1)
 				{
-					if (edit.persists == 1)
+					if (edit.Persists == 1)
 					{
-						RedNextNUD.Value = edit.red;
-						GreenNextNUD.Value = edit.green;
-						BlueNextNUD.Value = edit.blue;
+						RedNextNUD.Value = edit.Red;
+						GreenNextNUD.Value = edit.Green;
+						BlueNextNUD.Value = edit.Blue;
 
-						config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
-						config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
-						config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
-						config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
-						config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
-						config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
-						config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
-						config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
-						config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
+						Config.AppSettings.Settings["RedMenu"].Value = FinalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+						Config.AppSettings.Settings["GreenMenu"].Value = FinalCalibratedColours[1].ToString();
+						Config.AppSettings.Settings["BlueMenu"].Value = FinalCalibratedColours[2].ToString();
+						Config.AppSettings.Settings["RedLogo"].Value = FinalCalibratedColours[3].ToString();
+						Config.AppSettings.Settings["GreenLogo"].Value = FinalCalibratedColours[4].ToString();
+						Config.AppSettings.Settings["BlueLogo"].Value = FinalCalibratedColours[5].ToString();
+						Config.AppSettings.Settings["RedOptions"].Value = FinalCalibratedColours[6].ToString();
+						Config.AppSettings.Settings["GreenOptions"].Value = FinalCalibratedColours[7].ToString();
+						Config.AppSettings.Settings["BlueOptions"].Value = FinalCalibratedColours[8].ToString();
 					}
 
-					actualColours = new int[] { edit.red, edit.green, edit.blue };
+					actualColours = new int[] { edit.Red, edit.Green, edit.Blue };
 
-					RedNowNUD.Value = edit.red;
-					GreenNowNUD.Value = edit.green;
-					BlueNowNUD.Value = edit.blue;
+					RedNowNUD.Value = edit.Red;
+					GreenNowNUD.Value = edit.Green;
+					BlueNowNUD.Value = edit.Blue;
 
 				}
 
-				data.Remove(edit.oldname);
-				data.Add(key: edit.name, value: new List<int> { edit.red, edit.green, edit.blue, edit.favourite });
+				data.Remove(edit.Oldname);
+				data.Add(key: edit.name, value: new List<int> { edit.Red, edit.Green, edit.Blue, edit.Favourite });
 				string newData = JsonSerializer.Serialize(data);
 
-				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
-				config.Save(ConfigurationSaveMode.Modified);
+				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+				Config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -498,15 +498,15 @@ namespace PassGuard.GUI
 			};
 			del.ShowDialog();
 
-			if (del.deletedSuccess)
+			if (del.DeletedSuccess)
 			{
 				values.Remove(del.name);
 				if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144, 1 }); }
 
 				String newData = JsonSerializer.Serialize(values);
 
-				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
-				config.Save(ConfigurationSaveMode.Modified);
+				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+				Config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -521,15 +521,15 @@ namespace PassGuard.GUI
 				}
 
 			}
-			else if (del.deletedAllSuccess)
+			else if (del.DeletedAllSuccess)
 			{
 				values.Clear();
 				values.Add("Default", new List<int> { 0, 191, 144, 1 });
 
 				String newData = JsonSerializer.Serialize(values);
 
-				config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
-				config.Save(ConfigurationSaveMode.Modified);
+				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
+				Config.Save(ConfigurationSaveMode.Modified);
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -624,20 +624,20 @@ namespace PassGuard.GUI
 
 									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
 
-									finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
 									
-									config.AppSettings.Settings["RedMenu"].Value = finalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
-									config.AppSettings.Settings["GreenMenu"].Value = finalCalibratedColours[1].ToString();
-									config.AppSettings.Settings["BlueMenu"].Value = finalCalibratedColours[2].ToString();
-									config.AppSettings.Settings["RedLogo"].Value = finalCalibratedColours[3].ToString();
-									config.AppSettings.Settings["GreenLogo"].Value = finalCalibratedColours[4].ToString();
-									config.AppSettings.Settings["BlueLogo"].Value = finalCalibratedColours[5].ToString();
-									config.AppSettings.Settings["RedOptions"].Value = finalCalibratedColours[6].ToString();
-									config.AppSettings.Settings["GreenOptions"].Value = finalCalibratedColours[7].ToString();
-									config.AppSettings.Settings["BlueOptions"].Value = finalCalibratedColours[8].ToString();
+									Config.AppSettings.Settings["RedMenu"].Value = FinalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
+									Config.AppSettings.Settings["GreenMenu"].Value = FinalCalibratedColours[1].ToString();
+									Config.AppSettings.Settings["BlueMenu"].Value = FinalCalibratedColours[2].ToString();
+									Config.AppSettings.Settings["RedLogo"].Value = FinalCalibratedColours[3].ToString();
+									Config.AppSettings.Settings["GreenLogo"].Value = FinalCalibratedColours[4].ToString();
+									Config.AppSettings.Settings["BlueLogo"].Value = FinalCalibratedColours[5].ToString();
+									Config.AppSettings.Settings["RedOptions"].Value = FinalCalibratedColours[6].ToString();
+									Config.AppSettings.Settings["GreenOptions"].Value = FinalCalibratedColours[7].ToString();
+									Config.AppSettings.Settings["BlueOptions"].Value = FinalCalibratedColours[8].ToString();
 
-									config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
-									config.Save(ConfigurationSaveMode.Modified);
+									Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
+									Config.Save(ConfigurationSaveMode.Modified);
 									ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -659,7 +659,7 @@ namespace PassGuard.GUI
 
 									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
 
-									finalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
 
 									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
 									if (isSearched)
@@ -695,8 +695,8 @@ namespace PassGuard.GUI
 								//Set NUDs and chosen to 1...
 								data[row.Cells[0].Value.ToString()][3] = 0; //Set favourite in the row...
 
-								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
-								config.Save(ConfigurationSaveMode.Modified);
+								Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+								Config.Save(ConfigurationSaveMode.Modified);
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -728,8 +728,8 @@ namespace PassGuard.GUI
 								//Set NUDs and chosen to 1...
 								data[row.Cells[0].Value.ToString()][3] = 1; //Set favourite in the row...
 
-								config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
-								config.Save(ConfigurationSaveMode.Modified);
+								Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
+								Config.Save(ConfigurationSaveMode.Modified);
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -761,8 +761,8 @@ namespace PassGuard.GUI
 							//Set NUDs and chosen to 1...
 							data.Remove(rowToBeDeleted.Cells[0].Value.ToString()); //Remove row from data
 
-							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
-							config.Save(ConfigurationSaveMode.Modified);
+							Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
+							Config.Save(ConfigurationSaveMode.Modified);
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
@@ -1454,22 +1454,22 @@ namespace PassGuard.GUI
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseEnter(object sender, EventArgs e)
 		{
-			HelpButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the butto
+			HelpFormButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the butto
 		}
 
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseLeave(object sender, EventArgs e)
 		{
-			HelpButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
+			HelpFormButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
-			GUI.HelpColourConfigsForm help = new()
+			GUI.HelpColourConfigsForm helpForm = new()
 			{
 				BackColor = this.BackColor
-			}; ;
-			help.ShowDialog();
+			};
+			helpForm.ShowDialog();
 		}
 
 		[SupportedOSPlatform("windows")]
@@ -1526,8 +1526,8 @@ namespace PassGuard.GUI
 							{
 								newData.Add("Default", new List<int> { 0, 191, 144, 1 });
 							}
-							config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(newData); //Modify data in the config file for future executions.
-							config.Save(ConfigurationSaveMode.Modified);
+							Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(newData); //Modify data in the config file for future executions.
+							Config.Save(ConfigurationSaveMode.Modified);
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear();
@@ -1546,7 +1546,7 @@ namespace PassGuard.GUI
 
 		}
 
-		private bool ValidateJsonFormat(string rawData)
+		private static bool ValidateJsonFormat(string rawData)
 		{
 			try
 			{
@@ -1561,7 +1561,7 @@ namespace PassGuard.GUI
 			}
 		}
 
-		private Dictionary<string, List<int>> ValidateAndGetJsonContent(Dictionary<string, List<int>> rawData)
+		private static Dictionary<string, List<int>> ValidateAndGetJsonContent(Dictionary<string, List<int>> rawData)
 		{
 			//If all values are OK, we will return them. If not, we will return an empty dict.
 			//With all this conditions for the JSON, we are pretty much controlling JSON Injections....
@@ -1611,7 +1611,7 @@ namespace PassGuard.GUI
 			return result;
 		}
 
-		public bool CheckAddConfigConditions(Dictionary<string, List<int>> content, string key, List<int> values)
+		private static bool CheckAddConfigConditions(Dictionary<string, List<int>> content, string key, List<int> values)
 		{
 			if ((String.IsNullOrWhiteSpace(key)) || (content.ContainsKey(key))
 			|| (!Utils.BooleanUtils.IsValidColour(values[0], values[1], values[2]))
@@ -1640,7 +1640,7 @@ namespace PassGuard.GUI
 			ColourContentDGV.Rows.Clear();
 			LoadContent(actualColumn, actualOrder);
 
-			List<DataGridViewRow> matchingRows = new List<DataGridViewRow>();
+			List<DataGridViewRow> matchingRows = new();
 
 			foreach (DataGridViewRow row in ColourContentDGV.Rows)
 			{

@@ -25,7 +25,7 @@ namespace PassGuard.Pwned
 			}
 			catch (HttpRequestException) //Error control
 			{
-				return "";
+				return "-1";
 			}
 
 		}
@@ -38,6 +38,8 @@ namespace PassGuard.Pwned
 			string hash = sha1.Compute(password, 160); //Compute SHA1
 			string headhash = hash.Substring(0, 5); //Compute first part of hash in order to check hashes.
 			string PwnedHashes = await GetHashes(headhash);
+
+			if((PwnedHashes == "-1") || (String.IsNullOrWhiteSpace(PwnedHashes))) { throw new Exception(); } //No need of Else because throw Exception goes out of the function.
 
 			StringReader reader = new(PwnedHashes);
 			string line, tailHash;

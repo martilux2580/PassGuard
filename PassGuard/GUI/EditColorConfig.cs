@@ -18,23 +18,23 @@ namespace PassGuard.GUI
 	public partial class EditColorConfig : Form
 	{
 
-		public bool editedSuccess { get; private set; }
-		public string oldname { get; private set; }
+		public bool EditedSuccess { get; private set; }
+		public string Oldname { get; private set; }
 		public string name { get; private set; }
-		public int red { get; private set; }
-		public int green { get; private set; }
-		public int blue { get; private set; }
-		public int chosen { get; private set; }
-		public int favourite { get; private set; }
-		public int persists { get; private set; } //Know if config will stay for future executions...
-		private Dictionary<String, List<int>> storedConfigs;
-		private string actualChosenName; //Name of config that has chosen checkbox checked...
+		public int Red { get; private set; }
+		public int Green { get; private set; }
+		public int Blue { get; private set; }
+		public int Chosen { get; private set; }
+		public int Favourite { get; private set; }
+		public int Persists { get; private set; } //Know if config will stay for future executions...
+		private readonly Dictionary<String, List<int>> storedConfigs;
+		private readonly string actualChosenName; //Name of config that has chosen checkbox checked...
 
 		public EditColorConfig(Dictionary<String, List<int>> configs, string ActuallyChosenName)
 		{
 			InitializeComponent();
 
-			editedSuccess = false;
+			EditedSuccess = false;
 			storedConfigs = configs;
 			actualChosenName = ActuallyChosenName;
 			NameCombobox.Items.Add("");
@@ -46,7 +46,7 @@ namespace PassGuard.GUI
 				NameCombobox.Items.Add(name);
 			}
 
-			persists = 0;
+			Persists = 0;
 
 			try
 			{
@@ -107,23 +107,23 @@ namespace PassGuard.GUI
 
 					if(!rgbEqual && !storedConfigs.ContainsKey(NameTextbox.Text))
 					{
-						oldname = NameCombobox.Text;
+						Oldname = NameCombobox.Text;
 						name = NameTextbox.Text;
-						red = (int)RedNUD.Value;
-						green = (int)GreenNUD.Value;
-						blue = (int)BlueNUD.Value;
-						if (FavouriteCheckbox.Checked) { favourite = 1; }
-						else { favourite = 0; }
+						Red = (int)RedNUD.Value;
+						Green = (int)GreenNUD.Value;
+						Blue = (int)BlueNUD.Value;
+						if (FavouriteCheckbox.Checked) { Favourite = 1; }
+						else { Favourite = 0; }
 						if (ChosenCheckbox.Checked)
 						{
-							chosen = 1;
+							Chosen = 1;
 							DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-							if (dialog2 == DialogResult.Yes) { persists = 1; }
-							else { persists = 0; }
+							if (dialog2 == DialogResult.Yes) { Persists = 1; }
+							else { Persists = 0; }
 						}
-						else { chosen = 0; }
+						else { Chosen = 0; }
 
-						editedSuccess = true;
+						EditedSuccess = true;
 						this.Close();
 					}
 					else
@@ -136,23 +136,23 @@ namespace PassGuard.GUI
 					// Just check if new name isnt already saved...
 					if (!storedConfigs.ContainsKey(NameTextbox.Text))
 					{
-						oldname = NameCombobox.Text;
+						Oldname = NameCombobox.Text;
 						name = NameTextbox.Text;
-						red = (int)RedNUD.Value;
-						green = (int)GreenNUD.Value;
-						blue = (int)BlueNUD.Value;
-						if (FavouriteCheckbox.Checked) { favourite = 1; }
-						else { favourite = 0; }
+						Red = (int)RedNUD.Value;
+						Green = (int)GreenNUD.Value;
+						Blue = (int)BlueNUD.Value;
+						if (FavouriteCheckbox.Checked) { Favourite = 1; }
+						else { Favourite = 0; }
 						if (ChosenCheckbox.Checked)
 						{
-							chosen = 1;
+							Chosen = 1;
 							DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-							if (dialog2 == DialogResult.Yes) { persists = 1; }
-							else { persists = 0; }
+							if (dialog2 == DialogResult.Yes) { Persists = 1; }
+							else { Persists = 0; }
 						}
-						else { chosen = 0; }
+						else { Chosen = 0; }
 
-						editedSuccess = true;
+						EditedSuccess = true;
 						this.Close();
 					}
 					else 
@@ -174,23 +174,23 @@ namespace PassGuard.GUI
 					}
 					if (!rgbEqual)
 					{
-						oldname = NameCombobox.Text;
+						Oldname = NameCombobox.Text;
 						name = NameTextbox.Text;
-						red = (int)RedNUD.Value;
-						green = (int)GreenNUD.Value;
-						blue = (int)BlueNUD.Value;
-						if (FavouriteCheckbox.Checked) { favourite = 1; }
-						else { favourite = 0; }
+						Red = (int)RedNUD.Value;
+						Green = (int)GreenNUD.Value;
+						Blue = (int)BlueNUD.Value;
+						if (FavouriteCheckbox.Checked) { Favourite = 1; }
+						else { Favourite = 0; }
 						if (ChosenCheckbox.Checked)
 						{
-							chosen = 1;
+							Chosen = 1;
 							DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-							if (dialog2 == DialogResult.Yes) { persists = 1; }
-							else { persists = 0; }
+							if (dialog2 == DialogResult.Yes) { Persists = 1; }
+							else { Persists = 0; }
 						}
-						else { chosen = 0; }
+						else { Chosen = 0; }
 
-						editedSuccess = true;
+						EditedSuccess = true;
 						this.Close();
 					}
 					else
@@ -200,23 +200,23 @@ namespace PassGuard.GUI
 					break;
 				case "110": //Checks changed
 					// Just save it, no need to check anything...
-					oldname = NameCombobox.Text;
+					Oldname = NameCombobox.Text;
 					name = NameTextbox.Text;
-					red = (int)RedNUD.Value;
-					green = (int)GreenNUD.Value;
-					blue = (int)BlueNUD.Value;
-					if (FavouriteCheckbox.Checked) { favourite = 1; }
-					else { favourite = 0; }
+					Red = (int)RedNUD.Value;
+					Green = (int)GreenNUD.Value;
+					Blue = (int)BlueNUD.Value;
+					if (FavouriteCheckbox.Checked) { Favourite = 1; }
+					else { Favourite = 0; }
 					if (ChosenCheckbox.Checked)
 					{
-						chosen = 1;
+						Chosen = 1;
 						DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-						if (dialog2 == DialogResult.Yes) { persists = 1; }
-						else { persists = 0; }
+						if (dialog2 == DialogResult.Yes) { Persists = 1; }
+						else { Persists = 0; }
 					}
-					else { chosen = 0; }
+					else { Chosen = 0; }
 
-					editedSuccess = true;
+					EditedSuccess = true;
 					this.Close();
 					break;
 				case "111": //Nothing changed

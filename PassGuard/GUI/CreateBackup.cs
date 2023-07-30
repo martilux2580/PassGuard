@@ -16,7 +16,7 @@ namespace PassGuard.GUI
 	//Form to create a backup of a selected Vault in a selected dstPath
 	public partial class CreateBackup : Form
 	{
-		public bool success { get; private set; }
+		public bool Success { get; private set; }
 
 		public CreateBackup()
 		{
@@ -30,7 +30,7 @@ namespace PassGuard.GUI
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 			VaultBackupPathTextbox.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); //Set default text to Desktop folder.
-			success = false;
+			Success = false;
 		}
 
 		public void TrimComponents()

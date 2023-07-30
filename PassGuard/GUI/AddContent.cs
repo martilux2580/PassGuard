@@ -18,19 +18,19 @@ namespace PassGuard.GUI
 	public partial class AddContent : Form
 	{
 		//Attributes to save the new data.
-		public String url {get; private set;}
+		public String Url {get; private set;}
 		public String name { get; private set; }
-		public String username { get; private set; }
-		public String password { get; private set; }
-		public String category { get; private set; }
-		public String notes { get; private set; }
-		public String important { get; private set; }
-		private List<String> namesInDB; //List of names already in Vault.
+		public String Username { get; private set; }
+		public String Password { get; private set; }
+		public String Category { get; private set; }
+		public String Notes { get; private set; }
+		public String Important { get; private set; }
+		private readonly List<String> namesInDB; //List of names already in Vault.
 		private List<String> categories; 
-		public bool addedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
+		public bool AddedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
 		private readonly byte[] Key; //Key 
-		private ICrypt crypt = new AESAlgorithm();
-
+		private readonly ICrypt crypt = new AESAlgorithm();
+		
 		public AddContent(List<String> names, byte[] key, List<String> rawCategories)
 		{
 			InitializeComponent();
@@ -41,7 +41,7 @@ namespace PassGuard.GUI
 			{
 				namesInDB[i] = crypt.DecryptText(key: Key, src: namesInDB[i]);
 			}
-			addedSuccess = false;
+			AddedSuccess = false;
 			categories = new();
 
 			LoadCategoryCombobox(rawCategories);
@@ -116,16 +116,16 @@ namespace PassGuard.GUI
 			}
 			else //No error in params, set params.
 			{
-				url = crypt.EncryptText(key: Key, src: URLTextbox.Text);
+				Url = crypt.EncryptText(key: Key, src: URLTextbox.Text);
 				name = crypt.EncryptText(key: Key, src: NameTextbox.Text);
-				username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
-				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
-				category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
-				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
-				if(ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
-				else { important = crypt.EncryptText(key: Key, src: "0"); }
+				Username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
+				Password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
+				Category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
+				Notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
+				if(ImportantCheckbox.Checked) { Important = crypt.EncryptText(key: Key, src: "1"); }
+				else { Important = crypt.EncryptText(key: Key, src: "0"); }
 
-				addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
+				AddedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 
 				this.Close();
 
