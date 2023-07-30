@@ -16,14 +16,14 @@ namespace PassGuard.GUI
 	{
 
 		public string name { get; private set; }
-		public int red { get; private set; }
-		public int green { get; private set; }
-		public int blue { get; private set; }
-		public int chosen { get; private set; }
-		public int favourite { get; private set; }
-		public int persists { get; private set; }
-		private Dictionary<String, List<int>> storedConfigs;
-		public bool addedSuccess { get; private set; }
+		public int Red { get; private set; }
+		public int Green { get; private set; }
+		public int Blue { get; private set; }
+		public int Chosen { get; private set; }
+		public int Favourite { get; private set; }
+		public int Persists { get; private set; }
+		private readonly Dictionary<String, List<int>> storedConfigs;
+		public bool AddedSuccess { get; private set; }
 
 		public AddColorConfig(Dictionary<String, List<int>> configs)
 		{
@@ -32,8 +32,8 @@ namespace PassGuard.GUI
 			this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
 
 			storedConfigs = configs;
-			addedSuccess = false;
-			persists = 0;
+			AddedSuccess = false;
+			Persists = 0;
 		}
 
 		public void TrimComponents()
@@ -75,22 +75,22 @@ namespace PassGuard.GUI
 			else //No error in params, set params.
 			{
 				name = NameTextbox.Text;
-				red = (int)RedNUD.Value;
-				green = (int)GreenNUD.Value;
-				blue = (int)BlueNUD.Value;
-				if (FavouriteCheckbox.Checked) { favourite = 1; }
-				else { favourite = 0; }
+				Red = (int)RedNUD.Value;
+				Green = (int)GreenNUD.Value;
+				Blue = (int)BlueNUD.Value;
+				if (FavouriteCheckbox.Checked) { Favourite = 1; }
+				else { Favourite = 0; }
 				if (ChosenCheckbox.Checked)
 				{
-					chosen = 1;
+					Chosen = 1;
 					DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-					if (dialog2 == DialogResult.Yes) { persists = 1; }
-					else { persists = 0; }
+					if (dialog2 == DialogResult.Yes) { Persists = 1; }
+					else { Persists = 0; }
 				}
-				else { chosen = 0; }
+				else { Chosen = 0; }
 				
 
-				addedSuccess = true; //Everything went correct, send this signal to update correctly the table.
+				AddedSuccess = true; //Everything went correct, send this signal to update correctly the table.
 
 				this.Close();
 			}

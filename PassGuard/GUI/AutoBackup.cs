@@ -17,13 +17,13 @@ namespace PassGuard.GUI
 	//Form to configure an AutoBackup of a selected Vault in a selected pathForBackups and with selected frequency.
 	public partial class AutoBackup : Form
 	{
-		private Dictionary<int, String> frequencies = new();
+		private readonly Dictionary<int, String> frequencies = new();
 		public String AutoBackupState { get; private set; } //AutoBackup true (activated) or false
-		public String pathOfVaultBackedUp { get; private set; } //Path of the Vault to be backed up.
-		public String pathForBackups { get; private set; } //Path where the Backups will be saved.
-		public String lastDateBackup { get; private set; } //Date when the last backup was made (more oriented to modes 3, 4, 5).
-		public String frequencyBackup { get; private set; } //Mode for the frequency
-		public bool setupSuccess { get; private set; }
+		public String PathOfVaultBackedUp { get; private set; } //Path of the Vault to be backed up.
+		public String PathForBackups { get; private set; } //Path where the Backups will be saved.
+		public String LastDateBackup { get; private set; } //Date when the last backup was made (more oriented to modes 3, 4, 5).
+		public String FrequencyBackup { get; private set; } //Mode for the frequency
+		public bool SetupSuccess { get; private set; }
 
 		public AutoBackup()
 		{
@@ -36,7 +36,7 @@ namespace PassGuard.GUI
 			{
 				MessageBox.Show(text: "PassGuard could not load some images.", caption: "Images not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
-			setupSuccess = false;
+			SetupSuccess = false;
 			SetupFrequencyCombobox();
 			try
 			{
@@ -120,12 +120,12 @@ namespace PassGuard.GUI
 			if (ActivateBackupCheckbox.Checked == false) //It it was deactivated...
 			{
 				AutoBackupState = "false";
-				pathOfVaultBackedUp = VaultPathTextbox.Text; //Empty string
-				pathForBackups = BackupPathFilesTextbox.Text;
-				lastDateBackup = DateTime.Now.ToString(); //If it is the very first time we set AutoBackup, no value will be saved in config, with this we set a value and prevent errors.
-				frequencyBackup = "0";
+				PathOfVaultBackedUp = VaultPathTextbox.Text; //Empty string
+				PathForBackups = BackupPathFilesTextbox.Text;
+				LastDateBackup = DateTime.Now.ToString(); //If it is the very first time we set AutoBackup, no value will be saved in config, with this we set a value and prevent errors.
+				FrequencyBackup = "0";
 
-				setupSuccess = true; //Everything was set correctly, activate signal for Form1
+				SetupSuccess = true; //Everything was set correctly, activate signal for Form1
 
 				this.Close();
 
@@ -146,12 +146,12 @@ namespace PassGuard.GUI
 				else //Activated Autobackup
 				{
 					AutoBackupState = "true";
-					pathOfVaultBackedUp = VaultPathTextbox.Text; 
-					pathForBackups = BackupPathFilesTextbox.Text;
-					lastDateBackup = DateTime.Now.ToString(); 
-					frequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString(); //String value of int mode of the frequency.
+					PathOfVaultBackedUp = VaultPathTextbox.Text; 
+					PathForBackups = BackupPathFilesTextbox.Text;
+					LastDateBackup = DateTime.Now.ToString(); 
+					FrequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString(); //String value of int mode of the frequency.
 
-					setupSuccess = true; //Everything was set correctly, activate signal for Form1
+					SetupSuccess = true; //Everything was set correctly, activate signal for Form1
 
 					this.Close();
 

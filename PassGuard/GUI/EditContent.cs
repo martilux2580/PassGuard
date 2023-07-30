@@ -18,24 +18,24 @@ namespace PassGuard.GUI
 	//Form to edit the data of a Password in the Vault (Similar to other UC...)
 	public partial class EditContent : Form
 	{
-		public String url { get; private set; }
+		public String Url { get; private set; }
 		public String name { get; private set; }
-		public String username { get; private set; }
-		public String password { get; private set; }
-		public String category { get; private set; }
-		public String notes { get; private set; }
-		public String important { get; private set; }
+		public String Username { get; private set; }
+		public String Password { get; private set; }
+		public String Category { get; private set; }
+		public String Notes { get; private set; }
+		public String Important { get; private set; }
 
-		private List<String> namesInDB; //Names already in the Vault
+		private readonly List<String> namesInDB; //Names already in the Vault
 		private List<String> categories; 
 		private readonly byte[] Key;
 		private readonly String decPath;
-		public bool editedSuccess { get; private set; }
-		public String nameToBeEdited { get; private set; }
+		public bool EditedSuccess { get; private set; }
+		public String NameToBeEdited { get; private set; }
 		private readonly Dictionary<String, String> map; //No duplicate keys, EncryptedName/DecryptedName
-		private ICrypt crypt = new AESAlgorithm();
+		private readonly ICrypt crypt = new AESAlgorithm();
 
-		internal String getHashofName(String name)
+		internal String GetHashofName(String name)
 		{
 			return map.FirstOrDefault(x => x.Value == name).Key; //Return the key, given the value.
 		}
@@ -59,7 +59,7 @@ namespace PassGuard.GUI
 			{
 				NameCombobox.Items.Add(crypt.DecryptText(key: Key, src: name));
 			}
-			editedSuccess = false;
+			EditedSuccess = false;
 			categories = new();
 
 			LoadCategoryCombobox(rawCategories);
@@ -125,18 +125,18 @@ namespace PassGuard.GUI
 			}
 			else //No error in params, create vault.
 			{
-				nameToBeEdited = NameCombobox.Text; //Get encrypted name of the values to be edited.
+				NameToBeEdited = NameCombobox.Text; //Get encrypted name of the values to be edited.
 
-				url = crypt.EncryptText(key: Key, src: URLTextbox.Text);
+				Url = crypt.EncryptText(key: Key, src: URLTextbox.Text);
 				name = crypt.EncryptText(key: Key, src: NameTextbox.Text);
-				username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
-				password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
-				category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
-				notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
-				if (ImportantCheckbox.Checked) { important = crypt.EncryptText(key: Key, src: "1"); }
-				else { important = crypt.EncryptText(key: Key, src: "0"); }
+				Username = crypt.EncryptText(key: Key, src: UsernameTextbox.Text);
+				Password = crypt.EncryptText(key: Key, src: PasswordTextbox.Text);
+				Category = crypt.EncryptText(key: Key, src: CategoryCombobox.Text);
+				Notes = crypt.EncryptText(key: Key, src: NotesTextbox.Text);
+				if (ImportantCheckbox.Checked) { Important = crypt.EncryptText(key: Key, src: "1"); }
+				else { Important = crypt.EncryptText(key: Key, src: "0"); }
 
-				editedSuccess = true;
+				EditedSuccess = true;
 
 				this.Close();
 

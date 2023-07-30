@@ -16,19 +16,19 @@ namespace PassGuard.GUI
 	public partial class DeleteColorConfig : Form
 	{
 
-		public bool deletedSuccess { get; private set; }
-		public bool deletedAllSuccess { get; private set; }
+		public bool DeletedSuccess { get; private set; }
+		public bool DeletedAllSuccess { get; private set; }
 		public string name { get; private set; }
-		private List<String> namesStored;
-		private string actualChosenName;
+		private readonly List<String> namesStored;
+		private readonly string actualChosenName;
 
 		public DeleteColorConfig(List<String> names, string ActualChosenName)
 		{
 			InitializeComponent();
 
 			namesStored = names;
-			deletedAllSuccess = false;
-			deletedSuccess = false;
+			DeletedAllSuccess = false;
+			DeletedSuccess = false;
 			actualChosenName = ActualChosenName;
 
 			NameCombobox.Items.Add("");
@@ -56,7 +56,7 @@ namespace PassGuard.GUI
 
 		private void DeleteAllButton_Click(object sender, EventArgs e)
 		{
-			deletedAllSuccess = true;
+			DeletedAllSuccess = true;
 			this.Close();
 		}
 
@@ -65,7 +65,7 @@ namespace PassGuard.GUI
 			TrimComponents();
 
 			name = NameCombobox.Text;
-			deletedSuccess = true;
+			DeletedSuccess = true;
 			this.Close();
 
 		}

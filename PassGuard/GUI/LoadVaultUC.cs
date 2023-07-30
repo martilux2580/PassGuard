@@ -52,10 +52,7 @@ namespace PassGuard.GUI
 		private void LoadVaultButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
-			ICrypt crypt = new AESAlgorithm();
-			IPDF pdf = new PDFCreator();
 			IKDF kdf = new PBKDF2Function();
-			IQuery query;
 
 			//If any field is blank.
 			if ((String.IsNullOrWhiteSpace(VaultEmailTextbox.Text)) || (String.IsNullOrWhiteSpace(VaultPassTextbox.Text)) || (String.IsNullOrWhiteSpace(SecurityKeyTextbox.Text)) || (String.IsNullOrWhiteSpace(VaultPathTextbox.Text)))

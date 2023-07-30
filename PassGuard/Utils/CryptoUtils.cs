@@ -11,7 +11,7 @@ namespace PassGuard.Utils
 	{
 		//https://stackoverflow.com/questions/32932679/using-rngcryptoserviceprovider-to-generate-random-string
 		//https://stackoverflow.com/questions/32932679/using-rngcryptoserviceprovider-to-generate-random-string/32932789#32932789
-		internal static string GenerateSecurePassword(int length, string validCharacters) //StackOverflow xD
+		internal static string GenerateSecurePassword(int length, string validCharacters) //StackOverflow
 		{
 			StringBuilder res = new();
 

@@ -26,9 +26,9 @@ namespace PassGuard.GUI
 {
 	public partial class ContentStatsUC : UserControl
 	{
-		private List<String[]> myData = new();
-		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
-		private Dictionary<String, List<String>> compositionNames = new()
+		private readonly List<String[]> myData = new();
+		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
+		private readonly Dictionary<String, List<String>> compositionNames = new()
 		{
 			{ "N/A", new() },
 			{ "L+N", new() },
@@ -38,7 +38,7 @@ namespace PassGuard.GUI
 			{ "S+U+L", new() },
 			{ "S+U+L+N", new() }
 		};
-		private List<List<String>> lengthNames = new()
+		private readonly List<List<String>> lengthNames = new()
 		{
 			new(),
 			new(),
@@ -96,7 +96,7 @@ namespace PassGuard.GUI
 				StrokeThickness = 1
 			};
 
-			var passLengths = calculatePassLengthsAndSum();
+			var passLengths = CalculatePassLengthsAndSum();
 			// Set the data for the bars
 			series.Items.Add(new BarItem { Value = passLengths[0], CategoryIndex = 0 });
 			series.Items.Add(new BarItem { Value = passLengths[1], CategoryIndex = 1 });
@@ -149,7 +149,7 @@ namespace PassGuard.GUI
 				StrokeThickness = 1
 			};
 
-			var passCompositions = calculatePassCompositions();
+			var passCompositions = CalculatePassCompositions();
 			// Set the data for the bars
 			series1.Items.Add(new BarItem { Value = passCompositions[0], CategoryIndex = 0 });
 			series1.Items.Add(new BarItem { Value = passCompositions[1], CategoryIndex = 1 });
@@ -188,7 +188,7 @@ namespace PassGuard.GUI
 
 		}
 
-		private List<int> calculatePassCompositions()
+		private List<int> CalculatePassCompositions()
 		{
 			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
 			List<int> results = new() { 0, 0, 0, 0, 0, 0, 0};
@@ -214,11 +214,11 @@ namespace PassGuard.GUI
 			return results;
 		}
 
-		private List<int> calculatePassLengthsAndSum()
+		private List<int> CalculatePassLengthsAndSum()
 		{
 			int[] lengths = { 6, 9, 12, 15, 18, 21 };
 			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
-			List<int> results = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
+			List<int> results = new() { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
 
 
 			foreach(String[] pass in myData)

@@ -16,9 +16,9 @@ namespace PassGuard.GUI
 	public partial class VaultStats : Form
 	{
 		private readonly byte[] Key; //Content
-		private ICrypt crypt = new AESAlgorithm();
+		private readonly ICrypt crypt = new AESAlgorithm();
 		private readonly List<string[]> allData = new();
-		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
+		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
 		public VaultStats(byte[] cKey, List<string[]> Data, int[] ContextColour)
 		{

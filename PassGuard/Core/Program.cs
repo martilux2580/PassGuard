@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Threading;
+using System.Runtime.Versioning;
 
 namespace PassGuard
 {
@@ -14,25 +15,19 @@ namespace PassGuard
         /// Punto de entrada principal para la aplicación.
         /// </summary>
         [STAThread]
-        static void Main()
+		[SupportedOSPlatform("windows")]
+		static void Main()
         {
-
-			bool createdNew;
-
 			//Just one instance of the app running...
-			using (Mutex mutex = new Mutex(true, "YourUniqueMutexName", out createdNew))
+			using Mutex mutex = new(true, "UniqueMutex", out bool createdNew);
+			if (createdNew)
 			{
-				if (createdNew)
-				{
-					Application.EnableVisualStyles();
-					Application.SetHighDpiMode(HighDpiMode.SystemAware);
-					Application.SetCompatibleTextRenderingDefault(false);
-					Application.Run(new mainWindow());
-				}
+				Application.EnableVisualStyles();
+				Application.SetHighDpiMode(HighDpiMode.SystemAware);
+				Application.SetCompatibleTextRenderingDefault(false);
+				Application.Run(new mainWindow());
 			}
 
-
-			
-        }
+		}
     }
 }

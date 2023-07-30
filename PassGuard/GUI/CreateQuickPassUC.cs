@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,19 +16,33 @@ namespace PassGuard.GUI
 	//UserControl for the Create Quick Password Menu
 	public partial class CreateQuickPassUC : UserControl
 	{
+
+		//Dictionaries containing the relation between a checkbox and the char/text it represents.
+		private Dictionary<CheckBox, string> Characters { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
+		private Dictionary<CheckBox, string> Symbols { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
+
 		public CreateQuickPassUC()
 		{
 			this.Anchor = AnchorStyles.None;
 			InitializeComponent();
+
+			NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
 		}
 
-		//Dictionaries containing the relation between a checkbox and the char/text it represents.
-		private Dictionary<CheckBox, string> characters { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
-		private Dictionary<CheckBox, string> symbols { get; set; } = new Dictionary<CheckBox, string>(); //No duplicates
+		private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+		{
+			if (!e.IsAvailable)
+			{
+				// Internet is not available, display the MessageBox or take appropriate action
+				MessageBox.Show(text: "Internet connection lost. If you were generating unpwned passwords, this operation will be stopped. When Internet is available again the operation will continue, if it doesn´t then restart the app.", caption: "No Internet",
+								buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Warning);
+
+			}
+		}
 
 
 		//Fill the dictionary with corresponding pair CheckBox(characters)-String
-		private Dictionary<CheckBox, string> fillCharDict (Dictionary<CheckBox, string> characters)
+		private Dictionary<CheckBox, string> FillCharDict (Dictionary<CheckBox, string> characters)
 		{   
 			const string lower = "abcdefghijklmnopqrstuvwxyz";
 			const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -41,7 +56,7 @@ namespace PassGuard.GUI
 		}
 
 		//Fill the dictionary with corresponding pair CheckBox(symbols)-String
-		private Dictionary<CheckBox, string> fillSymbolsDict(Dictionary<CheckBox, string> symbols)
+		private Dictionary<CheckBox, string> FillSymbolsDict(Dictionary<CheckBox, string> symbols)
 		{
 			// !$%&/\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡
 			symbols.Add(CheckBoxExclamation, "!");
@@ -91,8 +106,8 @@ namespace PassGuard.GUI
 		private void CreateQuickPassUC_Load(object sender, EventArgs e)
 		{
 			//Load Dictionaries with their corresponding values.
-			characters = fillCharDict(characters);
-			symbols = fillSymbolsDict(symbols);
+			Characters = FillCharDict(Characters);
+			Symbols = FillSymbolsDict(Symbols);
 			//Set tooltip texts
 			SymbolsTooltip.SetToolTip(SymbolsCheckbox, "If this option and at least one or more symbols are checked, only one or more \nof these symbols (at least one, it is unlikely that all symbols will be displayed) \nwill be displayed in the password.");
 			ClipboardToolTip.SetToolTip(CheckPwnageCheckbox, "Recommended as it implies more secure passwords, however it consumes \nmuch more time when number of passwords requested grows.");
@@ -103,7 +118,7 @@ namespace PassGuard.GUI
 		{
 			if (SymbolsCheckbox.Checked == false)//If it has been deactivated...
 			{
-				foreach(KeyValuePair<CheckBox, string> pair in symbols)//Disable all checkboxes and uncheck them.
+				foreach(KeyValuePair<CheckBox, string> pair in Symbols)//Disable all checkboxes and uncheck them.
 				{
 					pair.Key.Enabled = false; //Although they are disabled, if they are checked you could do whatever in the ifs of later functions.
 					pair.Key.Checked = false;
@@ -114,7 +129,7 @@ namespace PassGuard.GUI
 
 			if (SymbolsCheckbox.Checked == true)//If it has been activated...
 			{
-				foreach (KeyValuePair<CheckBox, string> pair in symbols)//Enable all symbol checkboxes.
+				foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Enable all symbol checkboxes.
 				{
 					pair.Key.Enabled = true;
 				}
@@ -156,7 +171,7 @@ namespace PassGuard.GUI
 				//Create a string with the valid characters
 				StringBuilder sb = new();
 
-				foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
+				foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
 				{
 					if (pair.Key.Checked == true)
 					{
@@ -167,7 +182,7 @@ namespace PassGuard.GUI
 				if (SymbolsCheckbox.Checked == true)//Check symbols only if primary checkbox is enabled.
 				{
 
-					foreach (KeyValuePair<CheckBox, string> pair in symbols)//Check if any char checkbox is activated.
+					foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
 					{
 						if (pair.Key.Checked == true)
 						{
@@ -200,7 +215,7 @@ namespace PassGuard.GUI
 								//Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
 								missingChar = false; //If chars are missing, we won´t enter the block of code of generating not pwned passwords.
 													 //Check (if checkbox is checked) if genPass contains the characters selected.
-								foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
+								foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
 								{
 									if (pair.Key.Checked == true)
 									{
@@ -227,7 +242,7 @@ namespace PassGuard.GUI
 								{
 									if (!missingChar)
 									{
-										foreach (KeyValuePair<CheckBox, string> pair in symbols)//Check if any char checkbox is activated.
+										foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
 										{
 											if (pair.Key.Checked == true)
 											{
@@ -278,7 +293,7 @@ namespace PassGuard.GUI
 							missingChar = false;
 
 							//Equal Part as above
-							foreach (KeyValuePair<CheckBox, string> pair in characters)//Check if any char checkbox is activated.
+							foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
 							{
 								if (pair.Key.Checked == true)
 								{
@@ -306,7 +321,7 @@ namespace PassGuard.GUI
 							{
 								if (!missingChar)
 								{
-									foreach (KeyValuePair<CheckBox, string> pair in symbols)//Check if any char checkbox is activated.
+									foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
 									{
 										if (pair.Key.Checked == true)
 										{
@@ -339,7 +354,7 @@ namespace PassGuard.GUI
 			}
 			catch (Exception)
 			{
-				MessageBox.Show(text: "PassGuard could not generate the requested passwords, please try again later", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				MessageBox.Show(text: "PassGuard could not generate the requested passwords. Either your Internet or the webpage is down, please try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
 			finally
 			{
@@ -374,7 +389,7 @@ namespace PassGuard.GUI
 			{
 				if (SelectAllSymbolsButton.Text == "Select All Symbols") //If true check all
 				{
-					foreach (CheckBox box in symbols.Keys)
+					foreach (CheckBox box in Symbols.Keys)
 					{
 						box.Checked = true;
 					}
@@ -383,7 +398,7 @@ namespace PassGuard.GUI
 				}
 				else if (SelectAllSymbolsButton.Text == "Unselect All Symbols") //If not true, uncheck all.
 				{
-					foreach (CheckBox box in symbols.Keys)
+					foreach (CheckBox box in Symbols.Keys)
 					{
 						box.Checked = false;
 					}

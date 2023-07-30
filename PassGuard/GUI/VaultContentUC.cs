@@ -55,7 +55,7 @@ namespace PassGuard.GUI
 		private readonly String vaultPass;
 		private readonly byte[] vKey; //Vault
 		private readonly byte[] cKey; //Content
-		private ICrypt crypt = new AESAlgorithm();
+		private readonly ICrypt crypt = new AESAlgorithm();
 		private IQuery query;
 		private DBColumns actualColumn;
 		private Order actualOrder;
@@ -212,7 +212,7 @@ namespace PassGuard.GUI
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+							tempImportant == "1" //If decrypts to "1" it is important, else is not.
 						);
 					}
 				}
@@ -253,7 +253,7 @@ namespace PassGuard.GUI
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+							tempImportant == "1" //If decrypts to "1" it is important, else is not.
 						);
 					}
 
@@ -274,7 +274,7 @@ namespace PassGuard.GUI
 							String.Concat(Enumerable.Repeat("*", 15)), //Hide the password
 							crypt.DecryptText(key: cKey, src: row[4]),
 							crypt.DecryptText(key: cKey, src: row[5]),
-							tempImportant == "1" ? true : false //If decrypts to "1" it is important, else is not.
+							tempImportant == "1" //If decrypts to "1" it is important, else is not.
 					);
 				}
 			}
@@ -362,15 +362,15 @@ namespace PassGuard.GUI
 				}; //Invoke Form and retrieve new data
 				add.ShowDialog();
 
-				if (add.addedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
+				if (add.AddedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
 				{
-					String newUrl = add.url;
+					String newUrl = add.Url;
 					String newName = add.name;
-					String newUsername = add.username;
-					String newPassword = add.password;
-					String newCategory = add.category;
-					String newNotes = add.notes;
-					String newImportant = add.important;
+					String newUsername = add.Username;
+					String newPassword = add.Password;
+					String newCategory = add.Category;
+					String newNotes = add.Notes;
+					String newImportant = add.Important;
 
 					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant);
 
@@ -390,7 +390,7 @@ namespace PassGuard.GUI
 					
 				}
 				
-				if (add.addedSuccess) //If autobackup is enabled after each change in the Vault, create backup
+				if (add.AddedSuccess) //If autobackup is enabled after each change in the Vault, create backup
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true")
 					{
@@ -455,12 +455,12 @@ namespace PassGuard.GUI
 				}; //Invoke delete form and get data for deletion of one row or all database.
 				del.ShowDialog();
 
-				if (del.deletedSuccess) //If valid data is for deleting one row.
+				if (del.DeletedSuccess) //If valid data is for deleting one row.
 				{
-					query.DeletePassword(del.nameToBeDeleted);
+					query.DeletePassword(del.NameToBeDeleted);
 
 				}
-				else if (del.deletedAllSuccess) //If valid data is for deleting all contents in the Vault.
+				else if (del.DeletedAllSuccess) //If valid data is for deleting all contents in the Vault.
 				{
 					query.DeleteAllData();
 				}
@@ -479,7 +479,7 @@ namespace PassGuard.GUI
 					LoadContent(actualOrder, actualColumn);
 				}
 
-				if (del.deletedSuccess || del.deletedAllSuccess) 
+				if (del.DeletedSuccess || del.DeletedAllSuccess) 
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set for every change in the Vault
 					{
@@ -546,17 +546,17 @@ namespace PassGuard.GUI
 				}; //Invoke edit form and retrieve data
 				edit.ShowDialog();
 
-				if (edit.editedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
+				if (edit.EditedSuccess) //Exited add dialog from the add button, so we have valid data to insert. We didnt exit through AltF4 or X button.
 				{
-					String newUrl = edit.url;
+					String newUrl = edit.Url;
 					String newName = edit.name;
-					String newUsername = edit.username;
-					String newPassword = edit.password;
-					String newCategory = edit.category;
-					String newNotes = edit.notes;
-					String newImportant = edit.important;
+					String newUsername = edit.Username;
+					String newPassword = edit.Password;
+					String newCategory = edit.Category;
+					String newNotes = edit.Notes;
+					String newImportant = edit.Important;
 
-					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant, edit.getHashofName(name: edit.nameToBeEdited));
+					query.UpdateData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant, edit.GetHashofName(name: edit.NameToBeEdited));
 					//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
 					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
@@ -572,7 +572,7 @@ namespace PassGuard.GUI
 					}
 				}
 
-				if (edit.editedSuccess) 
+				if (edit.EditedSuccess) 
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set to every change in the Vault....
 					{
@@ -1955,7 +1955,7 @@ namespace PassGuard.GUI
 			VaultContentDGV.Rows.Clear();
 			LoadContent(actualOrder, actualColumn);
 
-			List<DataGridViewRow> matchingRows = new List<DataGridViewRow>();
+			List<DataGridViewRow> matchingRows = new();
 
 			foreach (DataGridViewRow row in VaultContentDGV.Rows)
 			{

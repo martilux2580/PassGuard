@@ -20,14 +20,15 @@ using System.Windows.Input;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json.Nodes;
+using System.Net.NetworkInformation;
 
 namespace PassGuard.GUI
 {
 	public partial class SecurityStatsUC : UserControl
 	{
-		private List<String[]> myData = new();
-		private List<String> passes = new();
-		private int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
+		private readonly List<String[]> myData = new();
+		private readonly List<String> passes = new();
+		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
 		private Dictionary<String, int[]> pwns = new();
 
@@ -41,112 +42,133 @@ namespace PassGuard.GUI
 			contextColour = ContextColour;
 
 			LoadStats();
+
+			NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+		}
+
+		private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+		{
+			if (!e.IsAvailable)
+			{
+				// Internet is not available, display the MessageBox or take appropriate action
+				MessageBox.Show(text: "Internet connection lost. If you were generating Security Statistics, this operation will be stopped. When Internet is available again the operation will continue, if it doesn´t then restart the app.", caption: "No Internet",
+								buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Warning);
+
+			}
 		}
 
 		private async void LoadStats()
 		{
-			//Piechart1
-			// Create the plot model
-			var plotModel1 = new PlotModel
+			try
 			{
-				Title = "Distinct Password Pwnage"
-			};
+				//Piechart1
+				// Create the plot model
+				var plotModel1 = new PlotModel
+				{
+					Title = "Distinct Password Pwnage"
+				};
 
-			// Create the pie series
-			var pieSeries1 = new PieSeries
+				// Create the pie series
+				var pieSeries1 = new PieSeries
+				{
+					StrokeThickness = 1.0,
+					InsideLabelPosition = 0.8,
+					AngleSpan = 360,
+					StartAngle = 0,
+					OutsideLabelFormat = "{0:0.000}%" // Format specifier for 3 decimal places
+				};
+
+				// Add data to the pie series
+				pwns = await CalculatePwns();
+				double percentagePwns = Convert.ToDouble((((decimal)pwns.Values.Count(arr => arr[0] != 0) / pwns.Count) * 100));
+				//double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
+
+				var slice11 = new PieSlice("Pwned", Math.Round(percentagePwns, 3))
+				{
+					Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
+				};
+
+				var complementaryColour = IntUtils.GetComplementaryRGB(contextColour[0], contextColour[1], contextColour[2]);
+				var slice22 = new PieSlice("Unpwned", Math.Round(100 - percentagePwns, 3))
+				{
+					Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
+				};
+
+
+				pieSeries1.Slices.Add(slice11);
+				pieSeries1.Slices.Add(slice22);
+
+				// Add the pie series to the plot model
+				plotModel1.Series.Add(pieSeries1);
+
+
+
+				//PieChart2
+				// Create the plot model
+				var plotModel = new PlotModel
+				{
+					Title = "Distinct Password Repetition"
+				};
+
+				// Create the pie series
+				var pieSeries = new PieSeries
+				{
+					StrokeThickness = 1.0,
+					InsideLabelPosition = 0.8,
+					AngleSpan = 360,
+					StartAngle = 0,
+					OutsideLabelFormat = "{0:0.000}%" // Format specifier for 3 decimal places
+				};
+
+				// Add data to the pie series
+
+				decimal percentageUnique = (((decimal)passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count() / passes.Distinct().Count()) * 100);
+				var slice1 = new PieSlice("Unique", Math.Round(Convert.ToDouble(percentageUnique), 3))
+				{
+					Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
+				};
+
+				var slice2 = new PieSlice("Duplicated/Repeated", Math.Round(Convert.ToDouble(100 - percentageUnique), 3))
+				{
+					Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
+				};
+
+
+				pieSeries.Slices.Add(slice1);
+				pieSeries.Slices.Add(slice2);
+
+				// Add the pie series to the plot model
+				plotModel.Series.Add(pieSeries);
+
+
+
+				//Show both histograms at same time....
+				Histogram1Plotview.Model = plotModel1;
+				Histogram2Plotview.Model = plotModel;
+
+
+
+				//StatsText
+				StringBuilder sb = new();
+
+				sb.Append("Total saved passwords: " + myData.Count.ToString() + " passwords.");
+				sb.Append("        Total number of passwords used once (Unique): " + passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count().ToString() + " passwords.");
+				sb.Append("\nTotal number repetitions of passwords: " + (passes.Count - passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count()).ToString() + " passwords.");
+				sb.Append("        Number of distinct saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
+				sb.Append("\nDistinct pwned passwords: " + pwns.Values.Count(arr => arr[0] != 0).ToString() + " passwords.");
+				sb.Append("        Total pwned passwords: " + pwns.Values.Sum(arr => arr[0]).ToString() + " passwords.");
+				sb.Append("        Total pwned passwords marked as Important: " + pwns.Values.Where(arr => arr[1] == 1).Sum(arr => arr[0]).ToString() + " passwords.");
+				TextStatsLabel.Text = sb.ToString();
+				H2InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
+				H1InfoLabel.Text = "Distinct passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
+				DownloadData1Button.Text = "Download Pwned Data Details";
+				DownloadData2Button.Text = "Download Password Repetition Details";
+
+			}
+			catch (Exception)
 			{
-				StrokeThickness = 1.0,
-				InsideLabelPosition = 0.8,
-				AngleSpan = 360,
-				StartAngle = 0,
-				OutsideLabelFormat = "{0:0.000}%" // Format specifier for 3 decimal places
-			};
-
-			// Add data to the pie series
-			pwns = await CalculatePwns();
-			double percentagePwns = Convert.ToDouble((((decimal)pwns.Values.Count(arr => arr[0] != 0) / pwns.Count()) * 100));
-			//double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
-
-			var slice11 = new PieSlice("Pwned", Math.Round(percentagePwns, 3))
-			{
-				Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
-			};
-
-			var complementaryColour = IntUtils.GetComplementaryRGB(contextColour[0], contextColour[1], contextColour[2]);
-			var slice22 = new PieSlice("Unpwned", Math.Round(100 - percentagePwns, 3))
-			{
-				Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
-			};
-
-
-			pieSeries1.Slices.Add(slice11);
-			pieSeries1.Slices.Add(slice22);
-
-			// Add the pie series to the plot model
-			plotModel1.Series.Add(pieSeries1);
-
-
-
-			//PieChart2
-			// Create the plot model
-			var plotModel = new PlotModel
-			{
-				Title = "Distinct Password Repetition"
-			};
-
-			// Create the pie series
-			var pieSeries = new PieSeries
-			{
-				StrokeThickness = 1.0,
-				InsideLabelPosition = 0.8,
-				AngleSpan = 360,
-				StartAngle = 0,
-				OutsideLabelFormat = "{0:0.000}%" // Format specifier for 3 decimal places
-			};
-
-			// Add data to the pie series
-
-			decimal percentageUnique = (((decimal)passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count() / passes.Distinct().Count()) * 100);
-			var slice1 = new PieSlice("Unique", Math.Round(Convert.ToDouble(percentageUnique), 3))
-			{
-				Fill = OxyColor.FromRgb(Convert.ToByte(contextColour[0]), Convert.ToByte(contextColour[1]), Convert.ToByte(contextColour[2]))
-			};
-
-			var slice2 = new PieSlice("Duplicated/Repeated", Math.Round(Convert.ToDouble(100 - percentageUnique), 3))
-			{
-				Fill = OxyColor.FromRgb(Convert.ToByte(complementaryColour[0]), Convert.ToByte(complementaryColour[1]), Convert.ToByte(complementaryColour[2]))
-			};
-
-
-			pieSeries.Slices.Add(slice1);
-			pieSeries.Slices.Add(slice2);
-
-			// Add the pie series to the plot model
-			plotModel.Series.Add(pieSeries);
-
-
-
-			//Show both histograms at same time....
-			Histogram1Plotview.Model = plotModel1;
-			Histogram2Plotview.Model = plotModel;
-
-
-
-			//StatsText
-			StringBuilder sb = new();
-
-			sb.Append("Total saved passwords: " + myData.Count.ToString() + " passwords.");
-			sb.Append("        Total number of passwords used once (Unique): " + passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count().ToString() + " passwords.");
-			sb.Append("\nTotal number repetitions of passwords: " + (passes.Count - passes.GroupBy(x => x).Where(g => g.Count() == 1).Select(g => g.Key).Count()).ToString() + " passwords.");
-			sb.Append("        Number of distinct saved passwords: " + passes.Distinct().Count().ToString() + " passwords.");
-			sb.Append("\nDistinct pwned passwords: " + pwns.Values.Count(arr => arr[0] != 0).ToString() + " passwords.");
-			sb.Append("        Total pwned passwords: " + pwns.Values.Sum(arr => arr[0]).ToString() + " passwords.");
-			sb.Append("        Total pwned passwords marked as Important: " + pwns.Values.Where(arr => arr[1] == 1).Sum(arr => arr[0]).ToString() + " passwords.");
-			TextStatsLabel.Text = sb.ToString();
-			H2InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
-			H1InfoLabel.Text = "Distinct passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
-			DownloadData1Button.Text = "Download Pwned Data Details";
-			DownloadData2Button.Text = "Download Password Repetition Details";
+				MessageBox.Show(text: "PassGuard could not generate the requested statistics. The problem might be either your Internet or the webpage is down, please try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+			}
 
 		}
 
@@ -208,7 +230,7 @@ namespace PassGuard.GUI
 
 
 				// Create a JSON object with some data
-				Dictionary<string, List<string>> jsonObject = new Dictionary<string, List<string>>
+				Dictionary<string, List<string>> jsonObject = new()
 				{
 					{ "PwnedPasswordNames", pwnedNames },
 					{ "NotPwnedPasswordNames", notPwnedNames },
@@ -244,7 +266,7 @@ namespace PassGuard.GUI
 
 
 				// Create a JSON object with some data
-				Dictionary<string, List<string>> jsonObject = new Dictionary<string, List<string>>
+				Dictionary<string, List<string>> jsonObject = new ()
 				{
 					{ "PasswordNames with repeated passwords", repeatedNames },
 					{ "PasswordNames with unique passwords", notRepeatedNames },
