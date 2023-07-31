@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Utils
 {
+	/// <summary>
+	/// Static Utils class for methods that involve String handling.
+	/// </summary>
 	internal static class StringUtils
 	{
-		//Function to check if a string has Lower, Upper, Number or Symbol characters, based on those modes (Lower, Upper, Number, Symbol).
+		/// <summary>
+		/// Function to check if a string has Lower, Upper, Number or Symbol characters, based on those modes (Lower, Upper, Number, Symbol).
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="mode">Can be Lower, Upper, Number or Symbol</param>
+		/// <returns></returns>
 		internal static bool Check(String str, String mode)
 		{
 			switch (mode)
@@ -43,7 +51,11 @@ namespace PassGuard.Utils
 			}
 		}
 
-		//Returns a String in Default Encoding given a src string in base64.
+		/// <summary>
+		/// Returns a String in Default Encoding given a src string in base64.
+		/// </summary>
+		/// <param name="src"></param>
+		/// <returns></returns>
 		internal static String Base64ToString(String src)
 		{
 			var base64EncodedBytes = Convert.FromBase64String(src);

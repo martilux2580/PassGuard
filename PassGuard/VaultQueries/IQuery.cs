@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PassGuard.VaultQueries
 {
+	/// <summary>
+	/// Interface that defines the methods a class (that represents a DBMS like SQLite, H2O, Postgres...) must implement to be able to interact with a Vault.
+	/// </summary>
 	internal interface IQuery
 	{
 		public void CreateNewVault();

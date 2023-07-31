@@ -9,9 +9,17 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Pwned
 {
+	/// <summary>
+	/// Static class that handles functions for checking, calculating or interacting with Pwned passwords.
+	/// </summary>
 	internal static class Pwned
 	{
 		//Obtain all the hashes that start with headHash from an API of pwned passwords.
+		/// <summary>
+		/// Makes an HTTP Request (curl) with the Hash Header so that the API returns us all the pwned passwords that have as SHA1 header hash that hash header.
+		/// </summary>
+		/// <param name="headHash"></param>
+		/// <returns></returns>
 		internal static async Task<string> GetHashes(string headHash)
 		{
 			string instruction = "https://api.pwnedpasswords.com/range/";
@@ -31,6 +39,12 @@ namespace PassGuard.Pwned
 		}
 
 		//Compound the SHA1 of password, get all the hashes with a headhash, and if the compound is in the hashes returns true as password has been pwned, if not returns false
+		/// <summary>
+		/// Checks if password has been pwned by computing the SHA1 of the given pass and checking if in the API that hash has been pwned in a data breach...
+		/// </summary>
+		/// <param name="password"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		internal static async Task<bool> CheckPwnage(string password)
 		{
 			IHash sha1 = new SHA1Algorithm();

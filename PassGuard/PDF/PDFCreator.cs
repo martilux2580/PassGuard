@@ -17,16 +17,25 @@ using System.Windows.Forms;
 
 namespace PassGuard.PDF
 {
+	/// <summary>
+	/// Handles functions to create the requested PDFs, implementing IPDF interface....
+	/// </summary>
 	internal class PDFCreator : IPDF
 	{
-		//Create a PDF given the results of all the rows, name of Vault, Email and SK.
+		/// <summary>
+		/// Given all data in results and some extra data like name of vault, saved email and security key SK, generates Vault PDF.
+		/// </summary>
+		/// <param name="results"></param>
+		/// <param name="Vault"></param>
+		/// <param name="Email"></param>
+		/// <param name="sk"></param>
 		public void CreatePDF(List<String[]> results, String Vault, String Email, String sk)
 		{
 			var pdfLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\VaultTable-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".pdf"; //Name of file
 			if (!File.Exists(pdfLocation))
 			{
 				var file = File.Create(pdfLocation);
-				file.Close(); //Close so Create is not using the file.
+				file.Close(); //Close so Create() is not using the file.
 
 				PdfWriter writer = new(pdfLocation);
 				PdfDocument pdf = new(writer);
@@ -37,6 +46,7 @@ namespace PassGuard.PDF
 				title.SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
 				doc.Add(title);
 
+				//Date
 				var intro = new Paragraph("Date: " + DateTime.Now.ToString("D", new CultureInfo("en-US")) + ", " + DateTime.Now.ToString("HH:mm:ss")).SetFontSize(12); //Date
 				intro.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
 				intro.SetFixedLeading(14);
@@ -101,6 +111,9 @@ namespace PassGuard.PDF
 		}
 
 		//Create a PDF given the results of all the rows, name of Vault, Email and SK.
+		/// <summary>
+		/// Generate the PDF of the saved RGBs configuration
+		/// </summary>
 		public void CreateOutlinePDF()
 		{
 			var values = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]));
@@ -111,7 +124,7 @@ namespace PassGuard.PDF
 			if (!File.Exists(pdfLocation))
 			{
 				var file = File.Create(pdfLocation);
-				file.Close(); //Close so Create is not using the file.
+				file.Close(); //Close so Create() is not using the file.
 
 				PdfWriter writer = new(pdfLocation);
 				PdfDocument pdf = new(writer);
