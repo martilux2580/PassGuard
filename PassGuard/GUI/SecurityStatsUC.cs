@@ -24,10 +24,13 @@ using System.Net.NetworkInformation;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Shows security stats, like pwned passwords and password repetition.
+	/// </summary>
 	public partial class SecurityStatsUC : UserControl
 	{
-		private readonly List<String[]> myData = new();
-		private readonly List<String> passes = new();
+		private readonly List<String[]> myData = new(); //All decrypted data [Name, Pass, Importance]
+		private readonly List<String> passes = new(); //Will contain only the passes, for easier use...
 		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
 
 		private Dictionary<String, int[]> pwns = new();
@@ -37,15 +40,20 @@ namespace PassGuard.GUI
 			InitializeComponent();
 
 			myData = someData;
-			// Separate the first and second values using LINQ
 			passes = myData.Select(item => item[1]).ToList();
 			contextColour = ContextColour;
 
-			LoadStats();
+			LoadStats(); //Load Statistics
 
+			//As it is using HTTP content, if Internet goes down stop the calculations and inform user...
 			NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
 		}
 
+		/// <summary>
+		/// If internet goes down, inform users and stop generating the stats until internet is up again...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
 		{
 			if (!e.IsAvailable)
@@ -57,6 +65,10 @@ namespace PassGuard.GUI
 			}
 		}
 
+
+		/// <summary>
+		/// Gets the data necessary to generate the stats, calculate the stats and show them
+		/// </summary>
 		private async void LoadStats()
 		{
 			try
@@ -81,7 +93,6 @@ namespace PassGuard.GUI
 				// Add data to the pie series
 				pwns = await CalculatePwns();
 				double percentagePwns = Convert.ToDouble((((decimal)pwns.Values.Count(arr => arr[0] != 0) / pwns.Count) * 100));
-				//double percentageImportance = Convert.ToDouble((((decimal)pwnsAndImportance[1] / pwnsAndImportance[0]) * 100));
 
 				var slice11 = new PieSlice("Pwned", Math.Round(percentagePwns, 3))
 				{
@@ -161,6 +172,7 @@ namespace PassGuard.GUI
 				TextStatsLabel.Text = sb.ToString();
 				H2InfoLabel.Text = "Distinct passwords that appear only once in whole vault (Unique) VS Password that appear more than once.";
 				H1InfoLabel.Text = "Distinct passwords that have been found in previous data breaches (Pwned) or not (Unpwned).";
+				//Set the text now so that text and graphics appear at the same time...
 				DownloadData1Button.Text = "Download Pwned Data Details";
 				DownloadData2Button.Text = "Download Password Repetition Details";
 
@@ -172,6 +184,10 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Get a dictionary with key the password an int[2] {timesPwned, importance}, timesPwned is how many times that password has been pwned, it is util as the user can repeat that password with different password names....
+		/// </summary>
+		/// <returns></returns>
 		private async Task<Dictionary<String, int[]>> CalculatePwns()
 		{
 			Dictionary<String, int[]> passAndPwns = new();
@@ -216,6 +232,11 @@ namespace PassGuard.GUI
 			return passAndPwns;
 		}
 
+		/// <summary>
+		/// Creates a JSON Object with data of the names of passwords that have been pwned and not pwned, so you can download that as a json file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DownloadData1Button_Click(object sender, EventArgs e)
 		{
 			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\PwnageStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
@@ -240,8 +261,8 @@ namespace PassGuard.GUI
 				// Serialize the dictionary to a JSON string
 				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
 				{
-					WriteIndented = true,
-					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+					WriteIndented = true, //Indents the JSON file...
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping //Permit special characters.
 				});
 
 				// Export the JSON string to a JSON file
@@ -252,6 +273,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Creates a JSON object with data of password repetition, so you can download that as a JSON file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DownloadData2Button_Click(object sender, EventArgs e)
 		{
 			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RepetitionStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
@@ -287,24 +313,28 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse entering button underlines button text.
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseEnter(object sender, EventArgs e)
 		{
 			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse exiting button regularises button text.
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseLeave(object sender, EventArgs e)
 		{
 			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
 		}
 
+		//Mouse entering button underlines button text.
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseEnter(object sender, EventArgs e)
 		{
 			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse exiting button regularises button text.
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseLeave(object sender, EventArgs e)
 		{

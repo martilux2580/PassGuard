@@ -24,13 +24,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PassGuard.GUI
 {
-	//ScrollBar is 61px
 
-	//UC Component that shows the table with the content of your Vault and more components to manage the data of it.
+	/// <summary>
+	/// UC Component that shows the table with the content of your Vault and more components to manage and generate the data of it.
+	/// </summary>
 	public partial class VaultContentUC : UserControl
 	{
 		private enum Order //Enum for the order of each column
@@ -41,7 +41,7 @@ namespace PassGuard.GUI
 		}
 		private enum DBColumns //Enum for the valid names 
 		{
-			NULLVALUESS,
+			NULLVALUESS, //No column selected
 			Url,
 			Name,
 			Username,
@@ -59,7 +59,7 @@ namespace PassGuard.GUI
 		private IQuery query;
 		private DBColumns actualColumn;
 		private Order actualOrder;
-		private bool isSearched;
+		private bool isSearched; //True if a search is going on and VaultContentDGV is showing the result of a search.
 
 		[SupportedOSPlatform("windows")]
 		public VaultContentUC(String path, String email, String pass, byte[] key, String SK)
@@ -86,13 +86,18 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Any text in a component in this view will get trimmed (lead and trail spaces out...)
+		/// </summary>
 		public void TrimComponents()
 		{
 			SearchTextbox.Text = SearchTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Sets the contents for the CMS of each header button (except SitePassword and DeleteRow)
+		/// </summary>
 		[SupportedOSPlatform("windows")]
-		//Sets the contents for the CMS of each header button (except SitePassword)
 		private void SetCMS()
 		{
 			var titleURL = new ToolStripLabel("ORDER BY URL")
@@ -146,6 +151,11 @@ namespace PassGuard.GUI
 			ImportantCMS.Items.Insert(0, titleImportant);
 		}
 
+		/// <summary>
+		/// Loads the content of the encrypted vault (get that from encryptedvaultpath) following the order of a column provided....
+		/// </summary>
+		/// <param name="order"></param>
+		/// <param name="col"></param>
 		private void LoadContent(Order order, DBColumns col)
 		{
 			//Set Path for encrypted Vault (for the Path.Combine())
@@ -191,7 +201,7 @@ namespace PassGuard.GUI
 					}
 
 					List<String[]> fullResults = new();
-					foreach (String[] columnPair in nameAndImportance) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
+					foreach (String[] columnPair in nameAndImportance) //We will delete the names we add to the results from the map, if there are dups the function will always return the firstordefault()
 					{
 						var keyToSearch = map.FirstOrDefault(x => (x.Value == columnPair[0])).Key; //Get the encrypted key of the row
 
@@ -232,7 +242,7 @@ namespace PassGuard.GUI
 					sortedList = ColList.OrderBy(p => (!String.IsNullOrEmpty(p) || !String.IsNullOrWhiteSpace(p))).ThenBy(p => p).ToList<String>();
 					if (order == Order.Desc) { sortedList.Reverse(); }
 
-					foreach (String column in sortedList) //ir eliminando los que vayamos sacando, ya que sino si hay repetidos sacará siempre el mismo...ERROR
+					foreach (String column in sortedList) //We will delete the names we add to the results from the map, if there are dups the function will always return the firstordefault()
 					{
 						var keyToSearch = map.FirstOrDefault(x => (x.Value == column)).Key; //Get the encrypted key of the row
 						
@@ -284,6 +294,10 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Reset CMS to Normal, and if actualSelects is true then reset them...
+		/// </summary>
+		/// <param name="actualSelects"></param>
 		private void ResetToNormalOrdering(bool actualSelects)
 		{
 			if (actualSelects)
@@ -317,6 +331,9 @@ namespace PassGuard.GUI
 			ImportantDescendingCMS.Checked = false;
 		}
 
+		/// <summary>
+		/// Unchecks all CMS
+		/// </summary>
 		private void UncheckOrdering()
 		{
 			URLNormalCMS.Checked = false;
@@ -344,16 +361,22 @@ namespace PassGuard.GUI
 			ImportantDescendingCMS.Checked = false;
 		}
 
+		/// <summary>
+		/// Handles the action of adding a password.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AddButton_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.'); //Path for decryption
 			try
 			{
-				crypt.Decrypt(vKey, encryptedVaultPath, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")));
+				crypt.Decrypt(vKey, encryptedVaultPath, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"))); //Decrypt vault
 
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
-				List<String> names = query.GetColumn(DBColumns.Name.ToString());
+				//Gett all names and categories already in vault....for checking that new password has a name already in vault and category isnt already there
+				List<String> names = query.GetColumn(DBColumns.Name.ToString()); 
 				List<String> categories = query.GetColumn(DBColumns.Category.ToString());
 
 				GUI.AddContent add = new(names, cKey, categories)
@@ -372,12 +395,13 @@ namespace PassGuard.GUI
 					String newNotes = add.Notes;
 					String newImportant = add.Important;
 
-					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant);
+					query.InsertData(newUrl, newName, newUsername, newPassword, newCategory, newNotes, newImportant); //Insert in decrypted vault.
 
 					//Encrypt the decrypted vault with the new changes (Encrypted vault now has old data), so that then LoadCOntent decrypts it and loads updated data.
 					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
+					//If there was a search ongoing, redo the search...
 					if(isSearched)
 					{
 						SearchButton.PerformClick();
@@ -437,6 +461,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Handle the deletion of a password or whole vault...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -447,7 +476,7 @@ namespace PassGuard.GUI
 				crypt.Decrypt(vKey, encryptedVaultPath, decVault);
 
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
-				List<String> names = query.GetColumn(DBColumns.Name.ToString());
+				List<String> names = query.GetColumn(DBColumns.Name.ToString()); //Get names for the combobox in the delete from
 
 				GUI.DeleteContent del = new(names, cKey, decVault)
 				{
@@ -455,12 +484,12 @@ namespace PassGuard.GUI
 				}; //Invoke delete form and get data for deletion of one row or all database.
 				del.ShowDialog();
 
-				if (del.DeletedSuccess) //If valid data is for deleting one row.
+				if (del.DeletedSuccess) //If valid data is for deleting one row (we didnt exit through AltF4 or X button).
 				{
 					query.DeletePassword(del.NameToBeDeleted);
 
 				}
-				else if (del.DeletedAllSuccess) //If valid data is for deleting all contents in the Vault.
+				else if (del.DeletedAllSuccess) //If valid data is for deleting all contents in the Vault (we didnt exit through AltF4 or X button).
 				{
 					query.DeleteAllData();
 				}
@@ -469,6 +498,7 @@ namespace PassGuard.GUI
 				crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
+				//If there was a search going on, redo the search....
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
@@ -479,6 +509,7 @@ namespace PassGuard.GUI
 					LoadContent(actualOrder, actualColumn);
 				}
 
+				//Handle autobackup
 				if (del.DeletedSuccess || del.DeletedAllSuccess) 
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set for every change in the Vault
@@ -526,6 +557,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Handles the editing of a password
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EditButton_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -534,9 +570,10 @@ namespace PassGuard.GUI
 
 			try
 			{
-				crypt.Decrypt(vKey, encryptedVaultPath, decVault);
+				crypt.Decrypt(vKey, encryptedVaultPath, decVault); //Decrypt vault
 				query = new Query(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
 
+				//Get names and categories for when editing checking new name and category are distinct from ones in vault....
 				List<String> names = query.GetColumn(DBColumns.Name.ToString());
 				List<String> categories = query.GetColumn(DBColumns.Category.ToString());
 
@@ -561,6 +598,8 @@ namespace PassGuard.GUI
 					crypt.Encrypt(vKey, (Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")), encryptedVaultPath); //Encrypt changes
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")); //Delete old data
 
+
+					//If there was a search ongoing, redo search....
 					if (isSearched)
 					{
 						SearchButton.PerformClick();
@@ -572,6 +611,7 @@ namespace PassGuard.GUI
 					}
 				}
 
+				//Handle autobackup
 				if (edit.EditedSuccess) 
 				{
 					if (ConfigurationManager.AppSettings["AutoBackupState"] == "true") //If autobackup was set to every change in the Vault....
@@ -619,6 +659,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Opens the form with help text for this view.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
 			GUI.HelpVaultForm help = new()
@@ -628,16 +673,23 @@ namespace PassGuard.GUI
 			help.ShowDialog();
 		}
 
+		/// <summary>
+		/// Sets the order and column and resets the table to show the normal ordered data by url.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void URLNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				//Set new order
 				actualOrder = Order.Normal;
 				actualColumn = DBColumns.Url;
 
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				//If there was a search ongoing, redo search...
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
@@ -648,6 +700,7 @@ namespace PassGuard.GUI
 					LoadContent(actualOrder, actualColumn);
 				}
 
+				//Set all CMS to normal, because if we search in normal mode in fact it is for all columns, not just url....
 				ResetToNormalOrdering(false);
 				
 			}
@@ -665,10 +718,11 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true); //If error, reset all orders and CMS.
 			}
 			finally
 			{
+				//If error, return to normal state
 				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
@@ -677,16 +731,23 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Sets the order and column and resets the table to show the ascending ordered data by url.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void URLAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				//Set new order
 				actualOrder = Order.Asc;
 				actualColumn = DBColumns.Url;
 
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				//If there was a search ongoing redo the search...
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
@@ -697,8 +758,9 @@ namespace PassGuard.GUI
 					LoadContent(actualOrder, actualColumn);
 				}
 
+				//Uncheck all the CMS...
 				UncheckOrdering();
-				URLAscendingCMS.Checked = true;
+				URLAscendingCMS.Checked = true; //Check the CMS of the new order...
 
 			}
 			catch (Exception ex)
@@ -715,10 +777,11 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true); //If error, reset all orders and CMS.
 			}
 			finally
 			{
+				//If error, reset to good state...
 				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
@@ -727,16 +790,23 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Sets the order and column and resets the table to show the descending ordered data by url.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void URLDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
 			var vaultpath = lastvalue[lastvalue.Length - 1].Split('.');
 			try
 			{
+				//Set the new order...
 				actualOrder = Order.Desc;
 				actualColumn = DBColumns.Url;
 
 				VaultContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
+				//If there was a search ongoing then redo the search...
 				if (isSearched)
 				{
 					SearchButton.PerformClick();
@@ -747,7 +817,9 @@ namespace PassGuard.GUI
 					LoadContent(actualOrder, actualColumn);
 				}
 
+				//Uncheck all the cms...
 				UncheckOrdering();
+				//Check the cms according to the new order....
 				URLDescendingCMS.Checked = true;
 			}
 			catch (Exception ex)
@@ -764,10 +836,11 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true);//If error, reset all orders and CMS.
 			}
 			finally
 			{
+				//If there was an error, reset vault to good state...
 				if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3")))
 				{
 					File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (vaultpath[0] + ".db3"));
@@ -775,6 +848,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by name.
+		///  Review doc of method URLNormalCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -823,6 +902,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the ascending ordered data by name.
+		///  Review doc of method URLAscendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -873,6 +958,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the descending ordered data by name.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -923,6 +1014,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by username.
+		///  Review doc of method URLNormalCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UsernameNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -971,6 +1068,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the ascending ordered data by username.
+		///  Review doc of method URLAscendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UsernameAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1020,6 +1123,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the descending ordered data by username.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UsernameDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1069,6 +1178,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by category.
+		///  Review doc of method URLNormalCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CategoryNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1117,6 +1232,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the ascending ordered data by category.
+		///  Review doc of method URLAscendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CategoryAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1167,6 +1288,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the descending ordered data by category.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CategoryDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1217,6 +1344,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by notes.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NotesNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1266,6 +1399,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the ascending ordered data by notes.
+		///  Review doc of method URLAscendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NotesAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1315,6 +1454,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by notes.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NotesDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1365,6 +1510,12 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the normal ordered data by Important.
+		///  Review doc of method URLNormalCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ImportantNormalCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1413,6 +1564,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the ascending ordered data by Important.
+		///  Review doc of method URLAscendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ImportantAscendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1462,6 +1619,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		///  Sets the order and column and resets the table to show the descending ordered data by Important.
+		///  Review doc of method URLDescendingCMS_Click() to check more details, as this is a similar method...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ImportantDescendingCMS_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -1511,6 +1674,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Gets all the data, decrypts it and creates a pdf with that
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ExportAsPdfButton_Click(object sender, EventArgs e)
 		{
 			IPDF pdf = new PDFCreator();
@@ -1577,6 +1745,11 @@ namespace PassGuard.GUI
 			
 		}
 
+		/// <summary>
+		/// In case theme changes, set new theme for all components and also for the trickier ones like textbox...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void VaultContentUC_BackColorChanged(object sender, EventArgs e)
 		{
 			// Set the back color of the DataGridView
@@ -1596,66 +1769,81 @@ namespace PassGuard.GUI
 
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseEnter(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseLeave(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseEnter(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseLeave(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseLeave(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ExportAsPdfButton_MouseEnter(object sender, EventArgs e)
 		{
 			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void ExportAsPdfButton_MouseLeave(object sender, EventArgs e)
 		{
 			ExportAsPdfButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseEnter(object sender, EventArgs e)
 		{
 			HelpButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseLeave(object sender, EventArgs e)
 		{
 			HelpButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		/// <summary>
+		/// Depending on the column header clicked we show corresponding CMS
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void VaultContentDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
@@ -1691,6 +1879,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Handles click over any cell in the table...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void VaultContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (e.RowIndex >= 0) //Check that cell clicked is a row and not a column header....
@@ -1702,7 +1895,7 @@ namespace PassGuard.GUI
 				DataGridViewCell clickedCell = VaultContentDGV.Rows[e.RowIndex].Cells[e.ColumnIndex];
 				switch (VaultContentDGV.Columns[e.ColumnIndex].Name)
 				{
-					case "DeleteRowColumn":
+					case "DeleteRowColumn": //Wants to delete that row, ask for action confirmation, get the name related to that row and delete it from vault...if there was search ongoing redo search..
 						var decNameToDelete = VaultContentDGV.Rows[e.RowIndex].Cells[1].Value.ToString();
 						DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete the password with name '" + decNameToDelete + "' from your Vault? \n\nNote: " +
 							"This action cannot be undone.", caption: "Delete password from Vault", buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question);
@@ -1786,7 +1979,7 @@ namespace PassGuard.GUI
 						}
 
 						break;
-					case "PasswordColumn":
+					case "PasswordColumn": //Get the name associated for that password so that you can copy it to clipboard, otherwise you would copy ************
 						//Get the Name(PK) of that row, to retrieve the data....
 						var decNameOfPassword = VaultContentDGV.Rows[e.RowIndex].Cells[1].Value.ToString();
 
@@ -1839,7 +2032,7 @@ namespace PassGuard.GUI
 							}
 						}
 						break;
-					case "ImportantColumn":
+					case "ImportantColumn": //Mark or unmark password as important, just get the new state, get the name associated with that row and edit that row....
 						try
 						{
 							var initialState = VaultContentDGV.CurrentCell.Value;
@@ -1932,6 +2125,7 @@ namespace PassGuard.GUI
 							}
 						}
 						break;
+					//Copy the button text to clipboard...
 					case "URLColumn":
 					case "NameColumn":
 					case "SiteUsernameColumn":
@@ -1947,6 +2141,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Search that name in the table...applying a filter to the whole content of table....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SearchButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -1974,22 +2173,30 @@ namespace PassGuard.GUI
 			VaultContentDGV.Rows.Clear();
 			VaultContentDGV.Rows.AddRange(matchingRows.ToArray());
 
+			//Enable reset and set to true the flag of searching something...
 			ResetButton.Enabled = true;
 			isSearched = true;
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SearchButton_MouseEnter(object sender, EventArgs e)
 		{
 			SearchButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SearchButton_MouseLeave(object sender, EventArgs e)
 		{
 			SearchButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
 		}
 
+		/// <summary>
+		/// Reset the contents of the textboxes, enables buttons and load the whole content of vault according to order and column....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ResetButton_Click(object sender, EventArgs e)
 		{
 			VaultContentDGV.Rows.Clear();
@@ -2001,18 +2208,25 @@ namespace PassGuard.GUI
 
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ResetButton_MouseEnter(object sender, EventArgs e)
 		{
 			ResetButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void ResetButton_MouseLeave(object sender, EventArgs e)
 		{
 			ResetButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); 
 		}
 
+		/// <summary>
+		/// If searchtextbox has text, then you can enable searchbutton...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SearchTextbox_TextChanged(object sender, EventArgs e)
 		{
 			if (!String.IsNullOrWhiteSpace(SearchTextbox.Text))
@@ -2022,6 +2236,11 @@ namespace PassGuard.GUI
 			else { SearchButton.Enabled = false; }
 		}
 
+		/// <summary>
+		/// Checks if there are at least 10 passwords saved, if so gets all encrypted data and shows new form, sending actualColours for colouring the bar and pie charts....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void StatsButton_Click(object sender, EventArgs e)
 		{
 			String[] lastvalue = encryptedVaultPath.Split('\\');
@@ -2071,12 +2290,14 @@ namespace PassGuard.GUI
 		
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void StatsButton_MouseEnter(object sender, EventArgs e)
 		{
 			StatsButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void StatsButton_MouseLeave(object sender, EventArgs e)
 		{
