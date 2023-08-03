@@ -16,6 +16,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Form to select the file format to export the colour configs...
+	/// </summary>
 	public partial class ExportVaultConfigs : Form
 	{
 		public ExportVaultConfigs()
@@ -25,6 +28,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// If PDF is selected then create pdf, if JSON is selected then create the variable and then serialize it and write it in a file....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ExportButton_Click(object sender, EventArgs e)
 		{
 			if (PdfRadioButton.Checked)
@@ -57,6 +65,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// If pdf is checked, then json must be unchecked
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PdfRadioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			if (PdfRadioButton.Checked)
@@ -65,6 +78,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// If json is checked, pdf must be unchecked...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void JsonRadioButton_CheckedChanged(object sender, EventArgs e)
 		{
 			if (JsonRadioButton.Checked)
@@ -73,12 +91,14 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ExportButton_MouseEnter(object sender, EventArgs e)
 		{
 			ExportButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the butto
 		}
 
+		//Mouse leaves button regularises button text.
 		[SupportedOSPlatform("windows")]
 		private void ExportButton_MouseLeave(object sender, EventArgs e)
 		{

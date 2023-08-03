@@ -58,6 +58,8 @@
 			this.UnderstoodButton.Text = "Understood";
 			this.UnderstoodButton.UseVisualStyleBackColor = true;
 			this.UnderstoodButton.Click += new System.EventHandler(this.UnderstoodButton_Click);
+			this.UnderstoodButton.MouseEnter += new System.EventHandler(this.UnderstoodButton_MouseEnter);
+			this.UnderstoodButton.MouseLeave += new System.EventHandler(this.UnderstoodButton_MouseLeave);
 			// 
 			// InfoPwnageForm
 			// 

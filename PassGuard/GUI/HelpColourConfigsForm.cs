@@ -13,6 +13,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>.
+	/// Shows help text regarding your saved colour configurations
+	/// </summary>
 	public partial class HelpColourConfigsForm : Form
 	{
 		public HelpColourConfigsForm()
@@ -22,23 +25,35 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Closes form
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UnderstoodButton_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void UnderstoodButton_MouseEnter(object sender, EventArgs e)
 		{
 			UnderstoodButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void UnderstoodButton_MouseLeave(object sender, EventArgs e)
 		{
 			UnderstoodButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 
+		/// <summary>
+		/// Changes components theme when theme changes...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void HelpColourConfigsForm_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -53,6 +68,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Opens link in your webbrowser, otherwise copies link to clipboard
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ContentRichTextbox_LinkClicked(object sender, LinkClickedEventArgs e)
 		{
 			try
