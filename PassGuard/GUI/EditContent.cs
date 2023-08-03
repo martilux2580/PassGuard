@@ -15,9 +15,12 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form to edit the data of a Password in the Vault (Similar to other UC...)
+	/// <summary>
+	/// Form to edit the data of a Password in the Vault
+	/// </summary>
 	public partial class EditContent : Form
 	{
+		//Atributes to hold new edited values
 		public String Url { get; private set; }
 		public String name { get; private set; }
 		public String Username { get; private set; }
@@ -27,14 +30,19 @@ namespace PassGuard.GUI
 		public String Important { get; private set; }
 
 		private readonly List<String> namesInDB; //Names already in the Vault
-		private List<String> categories; 
-		private readonly byte[] Key;
+		private List<String> categories; //Categories already in the Vault
+		private readonly byte[] Key; //cKey
 		private readonly String decPath;
-		public bool EditedSuccess { get; private set; }
-		public String NameToBeEdited { get; private set; }
+		public bool EditedSuccess { get; private set; } //In the calling form will be the indicator of the user inputting good data....
+		public String NameToBeEdited { get; private set; } //Hold the name of the password that will be edited...
 		private readonly Dictionary<String, String> map; //No duplicate keys, EncryptedName/DecryptedName
 		private readonly ICrypt crypt = new AESAlgorithm();
 
+		/// <summary>
+		/// Given decrypted text, get encrypted text....
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		internal String GetHashofName(String name)
 		{
 			return map.FirstOrDefault(x => x.Value == name).Key; //Return the key, given the value.
@@ -54,7 +62,7 @@ namespace PassGuard.GUI
 				map.Add(enc, crypt.DecryptText(key: Key, src: enc));
 			}
 
-			NameCombobox.Items.Add("");
+			NameCombobox.Items.Add(""); //So that the user can somehow reset the combobox selected text
 			foreach (String name in namesInDB) //Decrypt names in DB.
 			{
 				NameCombobox.Items.Add(crypt.DecryptText(key: Key, src: name));
@@ -62,7 +70,7 @@ namespace PassGuard.GUI
 			EditedSuccess = false;
 			categories = new();
 
-			LoadCategoryCombobox(rawCategories);
+			LoadCategoryCombobox(rawCategories); //Load unique categories
 
 			try
 			{
@@ -74,6 +82,9 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			NameCombobox.Text = NameCombobox.Text.Trim();
@@ -85,6 +96,10 @@ namespace PassGuard.GUI
 			NotesTextbox.Text = NotesTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Adds unique categories to combobox by decrypting them and inserting them in a structure that doesnt allow duplicates...
+		/// </summary>
+		/// <param name="categorias"></param>
 		private void LoadCategoryCombobox(List<String> categorias)
 		{
 			var rawCategories = new List<String>();
@@ -101,6 +116,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Check if data is valid, if so set params and close form...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EditButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -145,6 +165,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// If a name is selected, get the data from that password and fill in the textboxes...if password not selected disable textboxes...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			IQuery query;
@@ -212,6 +237,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Shows or hides plaintext password from the user....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PassVisibilityButton_Click(object sender, EventArgs e)
 		{
 			if (PasswordTextbox.UseSystemPasswordChar)
@@ -226,6 +256,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// If a category named netflix exists, if user puts a new category NETFLIX, in reality it is the same as netflix....so this method will check that and if a similar case occurs select the appropiate category already in vault...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CategoryCombobox_Validating(object sender, CancelEventArgs e)
 		{
 			string enteredValue = CategoryCombobox.Text;
@@ -245,6 +280,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Change components theme if theme changes
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EditContent_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -271,12 +311,14 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseEnter(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaving button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseLeave(object sender, EventArgs e)
 		{

@@ -21,11 +21,13 @@ using Microsoft.Win32;
 
 namespace PassGuard
 {
-	//MainWindow of the Application
+	/// <summary>
+	/// Main window of the application
+	/// </summary>
 	public partial class mainWindow : Form
 	{
 
-		internal Task autobackup = null;
+		internal Task autobackup = null; //Task that will check the autobackup state for each day, week, depending on frequencty
 		private NotifyIcon trayIcon;
 		private ContextMenuStrip trayMenu;
 
@@ -39,7 +41,9 @@ namespace PassGuard
 			
 		}
 
-
+		/// <summary>
+		/// Set the trayicon and traymenu with the elements and its respective functions...
+		/// </summary>
 		private void SetTray()
 		{
 			// Initialize the system tray icon
@@ -69,14 +73,13 @@ namespace PassGuard
 			trayIcon.ContextMenuStrip = trayMenu;
 		}
 
-		// Click event handler for the "Show Window" menu item
+		// Click event handler for the "Exit" menu item
 		private void OnExitClick(object sender, EventArgs e)
 		{
-			//Implement "Save Changes" Part? Things already are saved in each change by encrypting again.
 			Application.Exit(); //Close Application
 		}
 
-		// Click event handler for the "Show Window" menu item
+		// Click event handler for the "New Password Vault" menu item
 		private void OnNewVaultClick(object sender, EventArgs e)
 		{
 			// Show the form when the menu item is clicked
@@ -85,7 +88,7 @@ namespace PassGuard
 			CreateVaultButton.PerformClick();
 		}
 
-		// Click event handler for the "Show Window" menu item
+		// Click event handler for the "Load Password Vault" menu item
 		private void OnLoadVaultClick(object sender, EventArgs e)
 		{
 			// Show the form when the menu item is clicked
@@ -94,7 +97,7 @@ namespace PassGuard
 			LoadVaultButton.PerformClick();
 		}
 
-		// Click event handler for the "Show Window" menu item
+		// Click event handler for the "Create Quick Password" menu item
 		private void OnCreatePasswordClick(object sender, EventArgs e)
 		{
 			// Show the form when the menu item is clicked
@@ -103,15 +106,16 @@ namespace PassGuard
 			CreateQuickPassButton.PerformClick();
 		}
 
-		// Click event handler for the "Show Window" menu item
+		// Click event handler for the "Passguard" menu item
 		private void OnShowWindowMenuItemClick(object sender, EventArgs e)
 		{
 			// Show the form when the menu item is clicked
 			this.Show();
 			this.WindowState = FormWindowState.Normal;
-			LogoPictureBox_MouseClick(LogoPictureBox, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
+			LogoPictureBox_MouseClick(LogoPictureBox, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0)); //Show main view...
 		}
 
+		// Click event handler for the "Settings" menu item
 		private void OnShowSettingsClick(object sender, EventArgs e)
 		{
 			// Show the form when the menu item is clicked
@@ -120,6 +124,7 @@ namespace PassGuard
 			SettingButton.PerformClick();
 		}
 
+		//If double click on the tray icon then show window...
 		private void TrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			// Restore the main form when the icon is double-clicked
@@ -128,12 +133,13 @@ namespace PassGuard
 			trayIcon.Visible = true;
 		}
 
-		// Double-click event handler for the NotifyIcon
+		//If double click on the tray icon then show window...
 		private void OnNotifyIconDoubleClick(object sender, EventArgs e)
 		{
 			// Show the form again and hide the NotifyIcon from the system tray
 			this.Show();
 			this.WindowState = FormWindowState.Normal;
+			trayIcon.Visible = true;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -153,10 +159,12 @@ namespace PassGuard
 
 			try
 			{
+				//Check values of startup state and tray to set texts in Settings CMS
 				if(Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"])) { setPassguardToRunBackgroundToolStripMenuItem.Text = "Unset Passguard to run on startup"; }
 				else { setPassguardToRunBackgroundToolStripMenuItem.Text = "Set Passguard to run on startup"; }
 				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"])) { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Unset Passguard to open and minimize to tray"; }
 				else { setPassguardToMinimizeToTrayToolStripMenuItem.Text = "Set Passguard to open and minimize to tray"; }
+
 				AppVersionLabel.Text = ConfigurationManager.AppSettings["AppVersion"];
 				SetConfigTheme(); //Set theme based on saved config.
 				SetConfigColours(); //Set outline colours based on saved config.				
@@ -177,7 +185,10 @@ namespace PassGuard
 
 		}
 
-		//Obtain data from previous executions, and set theme from saved config.
+
+		/// <summary>
+		/// Obtain data from previous executions, and set theme from saved config.
+		/// </summary>
 		private void SetConfigTheme()
 		{
 			String sAttr = ConfigurationManager.AppSettings["Theme"];
@@ -196,7 +207,9 @@ namespace PassGuard
 
 		}
 
-		//Obtain data from previous executions, and set theme from saved config.
+		/// <summary>
+		/// Obtain data from previous executions, and set config colours from saved config.
+		/// </summary>
 		private void SetConfigColours()
 		{
 			int getRedMenu = Int32.Parse(ConfigurationManager.AppSettings["RedMenu"]);
@@ -215,6 +228,11 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// Shows UserControl for creating a new vault...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CreateVaultButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "CREATING A NEW PASSWORD VAULT"; //Change Title
@@ -226,6 +244,7 @@ namespace PassGuard
 			ContentPanel.Controls.Add(cnv); //Add the UC to the panel
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void CreateVaultButton_MouseEnter(object sender, EventArgs e)
 		{
@@ -233,12 +252,18 @@ namespace PassGuard
 			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void CreateVaultButton_MouseLeave(object sender, EventArgs e)
 		{
 			CreateVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
+		/// <summary>
+		/// Shows UserControl for inserting the credentials and loading the new vault...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LoadVaultButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "LOADING A PASSWORD VAULT"; //Change Title
@@ -250,30 +275,39 @@ namespace PassGuard
 			ContentPanel.Controls.Add(lv);
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseEnter(object sender, EventArgs e)
 		{
 			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void LoadVaultButton_MouseLeave(object sender, EventArgs e)
 		{
 			LoadVaultButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseEnter(object sender, EventArgs e)
 		{
 			DesignerLabel.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DesignerLabel_MouseLeave(object sender, EventArgs e)
 		{
 			DesignerLabel.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
+		/// <summary>
+		/// Opens the webbrowser with the link to designers github, or copies the link to clipboard....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DesignerLabel_MouseClick(object sender, MouseEventArgs e)
 		{
 			string url = "https://github.com/martilux2580?tab=repositories";
@@ -293,6 +327,7 @@ namespace PassGuard
 			}
 		}
 
+		//Shows main view of the home of the application
 		private void LogoPictureBox_MouseClick(object sender, MouseEventArgs e)
 		{
 			GUI.HomeContentUC hc = new()
@@ -306,12 +341,18 @@ namespace PassGuard
 
 		}
 
+		//Shows SettingsCMS
 		private void SettingButton_Click(object sender, EventArgs e)
 		{
 			SettingsCMS.Show(SettingButton, new Point(SettingButton.Width - SettingsCMS.Width, SettingButton.Height)); //Sets where to display the ContextMenuStrip...
 			
 		}
 
+		/// <summary>
+		/// User wants to change colours, get actual colours and open the form with the colour handler...then retrieve calibrated values and set them for each panel....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		[SupportedOSPlatform("windows")]
 		private void changeComplemenToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -347,6 +388,11 @@ namespace PassGuard
 			}
 		}
 
+		/// <summary>
+		/// User wants to set dark theme, ask if he wants to save it also for future executions (in that case, modify config file) and set it as well as the checks in CMS.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void darkToolStripMenuItem_Click(object sender, EventArgs e) //Check dark toolstrip, uncheck light one and change colors
 		{
 			try
@@ -372,6 +418,11 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// User wants to set light theme, ask if he wants to save it also for future executions (in that case, modify config file) and set it as well as the checks in CMS.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void lightToolStripMenuItem_Click(object sender, EventArgs e) //Check light toolstrip, uncheck dark one and change colors
 		{
 			try
@@ -395,24 +446,32 @@ namespace PassGuard
 			}
 		}
 
+		//Exit application
 		private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
 		{
 			//Implement "Save Changes" Part? Things already are saved in each change by encrypting again.
 			Application.Exit(); //Close Application
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseEnter(object sender, EventArgs e)
 		{
 			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void CreateQuickPassButton_MouseLeave(object sender, EventArgs e)
 		{
 			CreateQuickPassButton.Font = new Font("Microsoft Sans Serif", 14, FontStyle.Regular); //Regularise the text when mouse is not in the button
 		}
 
+		/// <summary>
+		/// Shows UserControl for generating a new password...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CreateQuickPassButton_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "CREATING SAFE PASSWORDS"; //Change text
@@ -424,6 +483,11 @@ namespace PassGuard
 			ContentPanel.Controls.Add(cqr);
 		}
 
+		/// <summary>
+		/// Opens the form for creating a backup, and if the state returned is success inform the user...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void createABackupOfYourVaultToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			GUI.CreateBackup cb = new()
@@ -440,10 +504,16 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// Shows the autobackup form, and later readjust the autobackup with the input of the user....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void configureAnAutoBackupOfAVaultToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
 			{
+				//Get previous states and frequencies...
 				var previousState = ConfigurationManager.AppSettings["AutoBackupState"];
 				var previousFrequency = ConfigurationManager.AppSettings["FrequencyAutoBackup"];
 				int[] timeCodes = new int[] { 3, 4, 5 }; //Codes for time modes (everyday, everyweek, everymonth)
@@ -505,13 +575,13 @@ namespace PassGuard
 							config.Save(ConfigurationSaveMode.Modified, true);
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
-							if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup))) //Autobackup before wasnt set, so start a task.
+							if (timeCodes.Contains(Int32.Parse(newFrequencyAutoBackup))) //Autobackup before wasnt set, so start a task if autobackup was set for a time interval.
 							{
 								autobackup = Task.Factory.StartNew(() => Backup.SystemBackup.AutoBackupTime()); //Start task with autobackup.
 							}
 
 						}
-						else if (previousState == "true")
+						else if (previousState == "true") //Before, Autobackup was activated, so task may be running...
 						{
 							Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 							config.AppSettings.Settings["AutoBackupState"].Value = newState; //Modify data in the config file for future executions.
@@ -545,6 +615,11 @@ namespace PassGuard
 			}
 		}
 
+		/// <summary>
+		/// Before form closes, check autobackup and depending on the values of tray, maintain the app on tray or exit app...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			try
@@ -565,11 +640,11 @@ namespace PassGuard
 
 				}
 
-				// Check if the form is closing
+				// Check if the form is closing because of the user and not because AltF4 or something...
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
 
-					if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
+					if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true) //If minimize to tray is set to true...
 					{
 						// Prevent the form from closing
 						e.Cancel = true;
@@ -591,6 +666,11 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// Calls the method that creates the PDF for the saaved colour configurations...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void exportOutlineColoursAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			IPDF pdf = new PDFCreator();
@@ -598,6 +678,11 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// Shows the UserControl that handles the export of a vaults content as PDF without login...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void exportAVaultsContentAsPDFToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			TitleLabel.Text = "EXPORTING A VAULT AS PDF"; //Change Title
@@ -607,6 +692,11 @@ namespace PassGuard
 
 		}
 
+		/// <summary>
+		/// Sets or unset the app for running from startup, by putting in the registry a key with the path of our application for startup and setting the value in the config....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		[SupportedOSPlatform("windows")]
 		private void setPassguardToRunBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -614,7 +704,7 @@ namespace PassGuard
 			{
 				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-				if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == true)
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == true) //If it was activated we need to deactivate it....
 				{
 					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from running on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
@@ -631,7 +721,7 @@ namespace PassGuard
 					}
 
 				}
-				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == false)
+				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["StartupState"]) == false) //If it was deactivated we need to activate it...
 				{
 					var dialog = MessageBox.Show(text: "Do you want Passguard to run on Windows startup?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Startup", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
@@ -659,13 +749,18 @@ namespace PassGuard
 			
 		}
 
+		/// <summary>
+		/// Sets or unsets the app to minimize and open on tray...when we close it we will just hide it...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void setPassguardToMinimizeToTrayToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
 			{
 				Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true)
+				if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true) //If it was set then we have to unset it
 				{
 					var dialog = MessageBox.Show(text: "Do you want to remove Passguard from opening and minimizing to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
@@ -676,7 +771,7 @@ namespace PassGuard
 					}
 
 				}
-				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == false)
+				else if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == false) //If it was unset then we have to set it
 				{
 					var dialog = MessageBox.Show(text: "Do you want Passguard to open and minimize to tray?\n\nNote: You can change this setting at the Settings button in Passguard's Home view.", caption: "Passguard on Tray", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
@@ -698,6 +793,11 @@ namespace PassGuard
 			}
 		}
 
+		/// <summary>
+		/// When form is shown for the first time, if it is set to minimize and open on tray then open it on tray....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void mainWindow_Shown(object sender, EventArgs e)
 		{
 			if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]))

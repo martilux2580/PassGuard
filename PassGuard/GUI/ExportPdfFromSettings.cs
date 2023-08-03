@@ -17,6 +17,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// UC to handle exporting the vaults data as a pdf from outside the login
+	/// </summary>
 	public partial class ExportPdfFromSettings : UserControl
 	{
 		public ExportPdfFromSettings()
@@ -25,6 +28,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Removes leading and trailing spaces from textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			VaultEmailTextbox.Text = VaultEmailTextbox.Text.Trim();
@@ -33,6 +39,11 @@ namespace PassGuard.GUI
 			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Load saved email into email textbox...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LoadSavedEmailButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -45,6 +56,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Saves the text in the email textbox in the config file...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SaveEmailButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -60,6 +76,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Shows or hides the plaintext of the password in the textbox.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PassVisibilityButton_Click(object sender, EventArgs e)
 		{
 			if (VaultPassTextbox.UseSystemPasswordChar)
@@ -74,6 +95,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Shows or hides the plaintext of the SK in the textbox.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SKVisibilityButton_Click(object sender, EventArgs e)
 		{
 			if (SecurityKeyTextbox.UseSystemPasswordChar)
@@ -88,6 +114,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Loads the saved Security Key in the SK Textbox...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void LoadSavedSKButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -100,6 +131,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Saves the text of the SK textbox in the config file...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SaveSKButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -115,6 +151,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Opens the file dialog to select .encrypted files...and handles if the user does other thing like exiting or selecting another file extension
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectVaultPathButton_Click(object sender, EventArgs e)
 		{
 			//Select and Save filepath and extension.
@@ -144,6 +185,11 @@ namespace PassGuard.GUI
 			VaultPathTextbox.Text = filepath;
 		}
 
+		/// <summary>
+		/// Decrypt the vault and its content, and export that decrypted data as PDF.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ExportPDFButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -199,8 +245,10 @@ namespace PassGuard.GUI
 						row[6] = crypt.DecryptText(key: cKey, src: row[6]);
 					}
 
+					//Create PDF
 					pdf.CreatePDF(fullResults, lastValue[0], ConfigurationManager.AppSettings.Get("Email"), ConfigurationManager.AppSettings.Get("SecurityKey"));
 
+					//Reset textboxes
 					VaultEmailTextbox.Text = "";
 					VaultPassTextbox.Text = "";
 					VaultPathTextbox.Text = "";
@@ -220,6 +268,7 @@ namespace PassGuard.GUI
 				}
 				finally
 				{
+					//If any error, reset vault to normal state...
 					if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3")))
 					{
 						File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + (lastValue[0] + ".db3"));
@@ -228,6 +277,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Change components theme when theme is changed
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ExportPdfFromSettings_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -248,48 +302,56 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void LoadSavedEmailButton_MouseEnter(object sender, EventArgs e)
 		{
 			LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void LoadSavedEmailButton_MouseLeave(object sender, EventArgs e)
 		{
 			LoadSavedEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SaveEmailButton_MouseEnter(object sender, EventArgs e)
 		{
 			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SaveEmailButton_MouseLeave(object sender, EventArgs e)
 		{
 			SaveEmailButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void LoadSavedSKButton_MouseEnter(object sender, EventArgs e)
 		{
 			LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void LoadSavedSKButton_MouseLeave(object sender, EventArgs e)
 		{
 			LoadSavedSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SaveSKButton_MouseEnter(object sender, EventArgs e)
 		{
 			SaveSKButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SaveSKButton_MouseLeave(object sender, EventArgs e)
 		{

@@ -12,15 +12,22 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Shows info about the new created form and the data user needs to remember...
+	/// </summary>
 	public partial class InfoNewVaultCreatedForm : Form
 	{
 		public InfoNewVaultCreatedForm(string data)
 		{
 			InitializeComponent();
 			this.Icon = Properties.Resources.LogoIcon64123; //Loads Icon from Image folder.
-			LoadText(data);
+			LoadText(data); //Load "dynamic text"
 		}
 
+		/// <summary>
+		/// Loads the text with the necessary data details...
+		/// </summary>
+		/// <param name="data"></param>
 		private void LoadText(string data)
 		{
 			var message = "Congrats! Your new Password Vault has been created successfully!\nThe information you must store and remember in order to load and access to your Password Vault is the following: \n\n"
@@ -31,23 +38,35 @@ namespace PassGuard.GUI
 			ContentRichTextbox.AppendText(message);
 		}
 
+		/// <summary>
+		/// Closes the form...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UnderstoodButton_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void UnderstoodButton_MouseEnter(object sender, EventArgs e)
 		{
 			UnderstoodButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void UnderstoodButton_MouseLeave(object sender, EventArgs e)
 		{
 			UnderstoodButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 
+		/// <summary>
+		/// Changes components theme if theme is changed...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void InfoNewVaultCreatedForm_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -62,6 +81,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Opens clicked link in textbox in your browser, otherwise copies link to clipboard
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ContentRichTextbox_LinkClicked(object sender, LinkClickedEventArgs e)
 		{
 			try
