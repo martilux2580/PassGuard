@@ -15,15 +15,17 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form to delete a password from the Vault, or all passwords from the Vault.
+	/// <summary>
+	/// Form to delete a password from the Vault, or all passwords from the Vault.
+	/// </summary>
 	public partial class DeleteContent : Form
 	{
-		private readonly List<String> namesInDB;
-		private readonly byte[] Key;
+		private readonly List<String> namesInDB; //Names already in vault.
+		private readonly byte[] Key; //ckey
 		private readonly String decPath;
-		public bool DeletedSuccess { get; private set; } //Signal for delete one password.
-		public bool DeletedAllSuccess { get; private set; } //Signal for delete all passwords
-		public String NameToBeDeleted { get; private set; }
+		public bool DeletedSuccess { get; private set; } //Signal for user deleted one password.
+		public bool DeletedAllSuccess { get; private set; } //Signal for user deleted all passwords
+		public String NameToBeDeleted { get; private set; } //Name the user wants to delete
 		private readonly Dictionary<String, String> map; //No duplicate keys, (encryptedName, decryptedName)
 		private readonly ICrypt crypt = new AESAlgorithm();
 
@@ -40,7 +42,7 @@ namespace PassGuard.GUI
 				map.Add(enc, crypt.DecryptText(key: Key, src: enc));
 			}
 
-			NameCombobox.Items.Add("");
+			NameCombobox.Items.Add(""); //Allow user to reset combobox text
 			foreach (String name in namesInDB) //Decrypt names in db.
 			{
 				NameCombobox.Items.Add(crypt.DecryptText(key: Key, src: name));
@@ -59,6 +61,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces of textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			NameCombobox.Text = NameCombobox.Text.Trim();
@@ -70,9 +75,14 @@ namespace PassGuard.GUI
 			NotesTextbox.Text = NotesTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Handle enabling/disabling components when the user wants to either delete all passwords or just one
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EnableDeleteAllCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
-			if(EnableDeleteAllCheckbox.Checked == true)
+			if(EnableDeleteAllCheckbox.Checked == true) //User wants to delete all passwords.
 			{
 				//Null textboxes
 				URLTextbox.Text = null;
@@ -92,7 +102,7 @@ namespace PassGuard.GUI
 				DeleteButton.Enabled = false;
 
 			}
-			else if (EnableDeleteAllCheckbox.Checked == false)
+			else if (EnableDeleteAllCheckbox.Checked == false) //User wants to delete one password...
 			{
 				TitleLabel.Text = "Select the name of the password you want to delete: ";
 
@@ -104,6 +114,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Gets the encrypted name to be deleted and closes the form if everything went okey...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -126,6 +141,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+
+		/// <summary>
+		/// Activates DeletedAllSuccess flag to send to the calling function that user wants to delete all passwords....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteAllButton_Click(object sender, EventArgs e)
 		{
 			DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete all the elements in your Vault? After this action, your Vault will be completely empty. \n\nNote: This action cannot be undone.", caption: "Confirm the deletion of all the elements", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
@@ -137,6 +158,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Gets the data of the selected name and fills textboxes, or resets them if selected name is null
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			IQuery query;
@@ -172,9 +198,14 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Shows or hides plaintext password....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PassVisibilityButton_Click(object sender, EventArgs e)
 		{
-			if (PasswordTextbox.UseSystemPasswordChar)
+			if (PasswordTextbox.UseSystemPasswordChar) //Password is hidden, show it
 			{
 				PasswordTextbox.UseSystemPasswordChar = false;
 				PassVisibilityButton.Image = Properties.Resources.VisibilityOff24;
@@ -186,6 +217,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Changes components theme accordingly to the new set theme
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteContent_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -212,24 +248,28 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text.
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text.
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseLeave(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 
+		//Mouse enters button underlines button text.
 		[SupportedOSPlatform("windows")]
 		private void DeleteAllButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteAllButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text.
 		[SupportedOSPlatform("windows")]
 		private void DeleteAllButton_MouseLeave(object sender, EventArgs e)
 		{

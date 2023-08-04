@@ -45,6 +45,7 @@ namespace PassGuard.GUI
 			this.SaveEmailCheckbox = new System.Windows.Forms.CheckBox();
 			this.SaveEmailTooltip = new System.Windows.Forms.ToolTip(this.components);
 			this.PassVisibilityButton = new System.Windows.Forms.Button();
+			this.ConfirmPassVisibilityButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// VaultNameTextbox
@@ -144,9 +145,9 @@ namespace PassGuard.GUI
 			this.ConfirmPassVaultTextbox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.ConfirmPassVaultTextbox.MaxLength = 2100;
 			this.ConfirmPassVaultTextbox.Name = "ConfirmPassVaultTextbox";
-			this.ConfirmPassVaultTextbox.PasswordChar = '*';
-			this.ConfirmPassVaultTextbox.Size = new System.Drawing.Size(493, 24);
+			this.ConfirmPassVaultTextbox.Size = new System.Drawing.Size(457, 24);
 			this.ConfirmPassVaultTextbox.TabIndex = 7;
+			this.ConfirmPassVaultTextbox.UseSystemPasswordChar = true;
 			// 
 			// UserEmailLabel
 			// 
@@ -218,11 +219,26 @@ namespace PassGuard.GUI
 			this.PassVisibilityButton.UseVisualStyleBackColor = true;
 			this.PassVisibilityButton.Click += new System.EventHandler(this.PassVisibilityButton_Click);
 			// 
+			// ConfirmPassVisibilityButton
+			// 
+			this.ConfirmPassVisibilityButton.FlatAppearance.BorderSize = 0;
+			this.ConfirmPassVisibilityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.ConfirmPassVisibilityButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.ConfirmPassVisibilityButton.Image = global::PassGuard.Properties.Resources.VisibilityOn24;
+			this.ConfirmPassVisibilityButton.Location = new System.Drawing.Point(870, 282);
+			this.ConfirmPassVisibilityButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.ConfirmPassVisibilityButton.Name = "ConfirmPassVisibilityButton";
+			this.ConfirmPassVisibilityButton.Size = new System.Drawing.Size(29, 29);
+			this.ConfirmPassVisibilityButton.TabIndex = 43;
+			this.ConfirmPassVisibilityButton.UseVisualStyleBackColor = true;
+			this.ConfirmPassVisibilityButton.Click += new System.EventHandler(this.ConfirmPassVisibilityButton_Click);
+			// 
 			// CreateNewVaultUC
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.Controls.Add(this.ConfirmPassVisibilityButton);
 			this.Controls.Add(this.PassVisibilityButton);
 			this.Controls.Add(this.SaveEmailCheckbox);
 			this.Controls.Add(this.CreateNewVaultButton);
@@ -263,5 +279,6 @@ namespace PassGuard.GUI
         private System.Windows.Forms.CheckBox SaveEmailCheckbox;
         private System.Windows.Forms.ToolTip SaveEmailTooltip;
 		private System.Windows.Forms.Button PassVisibilityButton;
+		private System.Windows.Forms.Button ConfirmPassVisibilityButton;
 	}
 }

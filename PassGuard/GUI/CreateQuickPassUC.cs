@@ -13,7 +13,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//UserControl for the Create Quick Password Menu
+	/// <summary>
+	/// UserControl for the Create Quick Password Menu
+	/// </summary>
 	public partial class CreateQuickPassUC : UserControl
 	{
 
@@ -26,9 +28,14 @@ namespace PassGuard.GUI
 			this.Anchor = AnchorStyles.None;
 			InitializeComponent();
 
-			NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+			NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged; //If the internet status changes, call this method...
 		}
 
+		/// <summary>
+		/// If internet shuts down, notice the user....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
 		{
 			if (!e.IsAvailable)
@@ -41,7 +48,11 @@ namespace PassGuard.GUI
 		}
 
 
-		//Fill the dictionary with corresponding pair CheckBox(characters)-String
+		/// <summary>
+		/// Fill the characters dictionary with corresponding pair CheckBox(characters)-String
+		/// </summary>
+		/// <param name="characters"></param>
+		/// <returns></returns>
 		private Dictionary<CheckBox, string> FillCharDict (Dictionary<CheckBox, string> characters)
 		{   
 			const string lower = "abcdefghijklmnopqrstuvwxyz";
@@ -55,7 +66,11 @@ namespace PassGuard.GUI
 			return characters;
 		}
 
-		//Fill the dictionary with corresponding pair CheckBox(symbols)-String
+		/// <summary>
+		/// Fill the symbols dictionary with corresponding pair CheckBox(symbols)-String
+		/// </summary>
+		/// <param name="symbols"></param>
+		/// <returns></returns>
 		private Dictionary<CheckBox, string> FillSymbolsDict(Dictionary<CheckBox, string> symbols)
 		{
 			// !$%&/\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡
@@ -102,7 +117,12 @@ namespace PassGuard.GUI
 
 			return symbols;
 		}
-
+		
+		/// <summary>
+		/// Set data of the class...as well as some texts...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CreateQuickPassUC_Load(object sender, EventArgs e)
 		{
 			//Load Dictionaries with their corresponding values.
@@ -114,6 +134,11 @@ namespace PassGuard.GUI
 		
 		}
 
+		/// <summary>
+		/// When symbolscheckbox enabled, enable all individual checkboxes of symbols, otherwise uncheck and disable the,
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SymbolsCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (SymbolsCheckbox.Checked == false)//If it has been deactivated...
@@ -138,12 +163,20 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Copies the generated passwords to the clipboard...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CopyClipboardButton_Click(object sender, EventArgs e)
 		{
 			Clipboard.SetText(!string.IsNullOrEmpty(PasswordTextBox.Text) ? PasswordTextBox.Text : " ");
 		}
 
-		//Set all the checkboxes enable property as true or false whether check is true or false.
+		/// <summary>
+		/// Enables or disables all checkboxes....it will be used while generating passwords so the user doesnt interrupt the generation.
+		/// </summary>
+		/// <param name="check"></param>
 		private void SetEnabled(bool check)
 		{
 			if(check)
@@ -156,6 +189,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Handles generation of pwned/unpwned passwords...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void GenPassButton_Click(object sender, EventArgs e)
 		{
 			try
@@ -203,8 +241,9 @@ namespace PassGuard.GUI
 					//Check if user wants unique and safe passwords.
 					if (CheckPwnageCheckbox.Checked == true) //Checkbox pwn true
 					{
-						if (LowerCheckbox.Checked == true || UpperCheckbox.Checked == true || NumbersCheckbox.Checked == true) //So that it actually can find no pwned passwords.
+						if (LowerCheckbox.Checked == true || UpperCheckbox.Checked == true) //If we are generating not pwned passwords, at least we need letters, would be really difficult with only numbers or symbols.....
 						{
+							//We will generate passwords, check if conditions of checkboxes are met, if so add it....
 							int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
 							bool missingChar;
 							while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords
@@ -259,7 +298,7 @@ namespace PassGuard.GUI
 										}
 									}
 								}
-								if (!missingChar) //If genPass has ALL characters requested 
+								if (!missingChar) //If genPass has ALL characters requested then 
 								{
 									bool check = await Pwned.Pwned.CheckPwnage(genPass);
 									if (check == false) //No pwnage found for genPass
@@ -278,11 +317,11 @@ namespace PassGuard.GUI
 						else //Any of lower, upper or numbers checkboxes were checked, we cannot go on...
 						{
 							PercentageLabel.Visible = false;
-							MessageBox.Show(text: "When generating not pwned passwords, at least lower or upper case letters or numbers checkboxes must be checked.", caption: "Notes about conditions of generating not pwned passwords");
+							MessageBox.Show(text: "When generating not pwned passwords, at least lower or upper case letters must be checked.", caption: "Notes about conditions of generating not pwned passwords");
 						}
 
 					}
-					else //Checkbox pwn false
+					else //Checkbox pwn false, user wants normal password...
 					{
 						int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
 						bool missingChar; //Will be true if a requested char is missing
@@ -316,7 +355,7 @@ namespace PassGuard.GUI
 								}
 							}
 
-
+							//Same check but with symbols, in case the corresponding checkboxes are checked and there are not already missing characters
 							if (SymbolsCheckbox.Checked == true)
 							{
 								if (!missingChar)
@@ -338,6 +377,7 @@ namespace PassGuard.GUI
 									}
 								}
 							}
+
 							//End Equal Part as above
 							if (!missingChar)
 							{
@@ -362,6 +402,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Shows info about how the application checks if a password has been pwned or not....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void InfoPwnageButton_Click(object sender, EventArgs e)
 		{
 			GUI.InfoPwnageForm info = new()
@@ -371,18 +416,25 @@ namespace PassGuard.GUI
 			info.ShowDialog();
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SelectAllSymbolsButton_MouseEnter(object sender, EventArgs e)
 		{
 			SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline);//If mouse over button, underline text
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SelectAllSymbolsButton_MouseLeave(object sender, EventArgs e)
 		{
 			SelectAllSymbolsButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //If mouse leaves button, regular text
 		}
 
+		/// <summary>
+		/// Checks or unchecks all the symbols checkboxes at once....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectAllSymbolsButton_Click(object sender, EventArgs e)
 		{
 			if (SymbolsCheckbox.Checked == true)
@@ -408,6 +460,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// If user wants not pwned passwords, we want at least 16 characters for each passwords...user wanting normal passwords will have minimum 5 characters
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CheckPwnageCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if(CheckPwnageCheckbox.Checked == true)
@@ -424,35 +481,49 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Shows info about how symbols work when generating passwords...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NoteSymbolsButton_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show(text: "If one or more symbols are checked, only one or more of these symbols (at least one, it is unlikely that all symbols will be displayed) will be displayed in the password.", caption: "Information about symbols in passwords");
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void NoteSymbolsButton_MouseEnter(object sender, EventArgs e)
 		{
 			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Underline);//If mouse over button, underline text
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void NoteSymbolsButton_MouseLeave(object sender, EventArgs e)
 		{
 			NoteSymbolsButton.Font = new Font("Microsoft Sans Serif", 9, FontStyle.Regular); //If mouse leaves button, regular text
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void GenPassButton_MouseEnter(object sender, EventArgs e)
 		{
 			GenPassButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);//If mouse over button, underline text
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void GenPassButton_MouseLeave(object sender, EventArgs e)
 		{
 			GenPassButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //If mouse leaves button, regular text
 		}
 
+		/// <summary>
+		/// Changes components theme when general theme is set...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CreateQuickPassUC_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))

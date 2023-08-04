@@ -14,16 +14,18 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form to configure an AutoBackup of a selected Vault in a selected pathForBackups and with selected frequency.
+	/// <summary>
+	/// Form to configure an AutoBackup of a selected Vault in a selected pathForBackups and with selected frequency.
+	/// </summary>
 	public partial class AutoBackup : Form
 	{
-		private readonly Dictionary<int, String> frequencies = new();
+		private readonly Dictionary<int, String> frequencies = new(); //Maps numeric mode to text description of frequencies of autobackup...
 		public String AutoBackupState { get; private set; } //AutoBackup true (activated) or false
 		public String PathOfVaultBackedUp { get; private set; } //Path of the Vault to be backed up.
 		public String PathForBackups { get; private set; } //Path where the Backups will be saved.
 		public String LastDateBackup { get; private set; } //Date when the last backup was made (more oriented to modes 3, 4, 5).
 		public String FrequencyBackup { get; private set; } //Mode for the frequency
-		public bool SetupSuccess { get; private set; }
+		public bool SetupSuccess { get; private set; } //Flag for checking if the setup was correct, or user clicked X or AltF4....
 
 		public AutoBackup()
 		{
@@ -49,6 +51,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
@@ -57,7 +62,9 @@ namespace PassGuard.GUI
 
 		}
 
-		//Loads the values saved from previous configurations of AutoBackup
+		/// <summary>
+		/// Loads the values saved from previous configurations of AutoBackup
+		/// </summary>
 		private void SetupInitialValues()
 		{
 			if (ConfigurationManager.AppSettings["AutoBackupState"] == "false")
@@ -94,7 +101,9 @@ namespace PassGuard.GUI
 
 		}
 
-		//Add to Dictionary the equivalence of int mode - String text description of frequency
+		/// <summary>
+		/// Add to Dictionary the equivalence of int mode - String text description of frequency, and sets data of frequency combobox
+		/// </summary>
 		private void SetupFrequencyCombobox()
 		{
 			FrequencyCombobox.Items.Add("");
@@ -113,11 +122,16 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// If data inputted by user was ok, sets up variables with the information of the new configuration of autobackup and closes window....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SetupAutoBackupButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
 
-			if (ActivateBackupCheckbox.Checked == false) //It it was deactivated...
+			if (ActivateBackupCheckbox.Checked == false) //Users sets deactivated autobackup
 			{
 				AutoBackupState = "false";
 				PathOfVaultBackedUp = VaultPathTextbox.Text; //Empty string
@@ -130,7 +144,7 @@ namespace PassGuard.GUI
 				this.Close();
 
 			}
-			else
+			else //Users sets activated autobackup
 			{
 				String errorMessages = "";
 				if (String.IsNullOrEmpty(VaultPathTextbox.Text) || String.IsNullOrEmpty(BackupPathFilesTextbox.Text) || String.IsNullOrEmpty(FrequencyCombobox.Text))
@@ -149,7 +163,7 @@ namespace PassGuard.GUI
 					PathOfVaultBackedUp = VaultPathTextbox.Text; 
 					PathForBackups = BackupPathFilesTextbox.Text;
 					LastDateBackup = DateTime.Now.ToString(); 
-					FrequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString(); //String value of int mode of the frequency.
+					FrequencyBackup = frequencies.FirstOrDefault(x => (x.Value == FrequencyCombobox.Text)).Key.ToString(); //Int value of string description of the frequency combobox.
 
 					SetupSuccess = true; //Everything was set correctly, activate signal for Form1
 
@@ -160,6 +174,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Enables or disables components whether the user activates or deactivates autobackup...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ActivateBackupCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if(ActivateBackupCheckbox.Checked == true)
@@ -185,6 +204,7 @@ namespace PassGuard.GUI
 				SelectVaultBackupFilesPathButton.Enabled = false;
 				FrequencyLabel.Enabled = false;
 
+				//Reset content, disabling component doesnt remove components text/content
 				VaultPathTextbox.Text = "";
 				BackupPathFilesTextbox.Text = "";
 				FrequencyCombobox.Text = "";
@@ -192,6 +212,11 @@ namespace PassGuard.GUI
 			
 		}
 
+		/// <summary>
+		/// Opens the folder dialog to select the vault to be backed up....and handles if the user selects a random file or exits....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectVaultPathButton_Click(object sender, EventArgs e)
 		{
 			//Select and Save filepath and extension.
@@ -221,6 +246,11 @@ namespace PassGuard.GUI
 			VaultPathTextbox.Text = filepath;
 		}
 
+		/// <summary>
+		/// Opens the folder dialog to select a path where the autobackup backups will be saved...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectVaultBackupFilesPathButton_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog fbd = new(); //Folder selector
@@ -233,6 +263,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Changes the components theme when the general theme is changed....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AutoBackup_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -251,12 +286,14 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SetupAutoBackupButton_MouseEnter(object sender, EventArgs e)
 		{
 			SetupAutoBackupButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SetupAutoBackupButton_MouseLeave(object sender, EventArgs e)
 		{

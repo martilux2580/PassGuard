@@ -12,13 +12,13 @@ namespace PassGuard
     static class Program
     {
         /// <summary>
-        /// Punto de entrada principal para la aplicación.
+        /// Starting point of the app
         /// </summary>
         [STAThread]
 		[SupportedOSPlatform("windows")]
 		static void Main()
         {
-			//Just one instance of the app running...
+			//In order to just one instance of the app running...
 			using Mutex mutex = new(true, "UniqueMutex", out bool createdNew);
 			if (createdNew)
 			{
