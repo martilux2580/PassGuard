@@ -10,25 +10,25 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static iText.Kernel.Pdf.Colorspace.PdfDeviceCs;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Form that allows editing a colour config
+	/// </summary>
 	public partial class EditColorConfig : Form
 	{
-
-		public bool EditedSuccess { get; private set; }
-		public string Oldname { get; private set; }
-		public string name { get; private set; }
+		public bool EditedSuccess { get; private set; } //Sets whether user inputted and exited correctly form, or aborted operation
+		public string Oldname { get; private set; } //Name of password to be edited
+		public string name { get; private set; } //New value for the OldName
 		public int Red { get; private set; }
 		public int Green { get; private set; }
 		public int Blue { get; private set; }
 		public int Chosen { get; private set; }
 		public int Favourite { get; private set; }
 		public int Persists { get; private set; } //Know if config will stay for future executions...
-		private readonly Dictionary<String, List<int>> storedConfigs;
-		private readonly string actualChosenName; //Name of config that has chosen checkbox checked...
+		private readonly Dictionary<String, List<int>> storedConfigs; //Previously stored configurations
+		private readonly string actualChosenName; //Name of config that has chosen checkbox checked, config that is being used in the current execution...
 
 		public EditColorConfig(Dictionary<String, List<int>> configs, string ActuallyChosenName)
 		{
@@ -37,16 +37,14 @@ namespace PassGuard.GUI
 			EditedSuccess = false;
 			storedConfigs = configs;
 			actualChosenName = ActuallyChosenName;
-			NameCombobox.Items.Add("");
-			NameTextbox.BackColor = Color.FromArgb(116, 118, 117);
-			RedNUD.BackColor =  Color.FromArgb(116, 118, 117);
 
+			NameCombobox.Items.Add(""); //Lets user reset combobox text
 			foreach (String name in storedConfigs.Keys)
 			{
 				NameCombobox.Items.Add(name);
 			}
 
-			Persists = 0;
+			Persists = 0; //Kind of a bool value
 
 			try
 			{
@@ -58,6 +56,9 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Removes leading and trailing spaces from text and comboboxes...
+		/// </summary>
 		public void TrimComponents()
 		{
 			NameCombobox.Text = NameCombobox.Text.Trim();
@@ -70,11 +71,15 @@ namespace PassGuard.GUI
 			 *	Name changes or not
 			 *	RGB values changes or not
 			 *	Checkboxes changes or not (either fav or chosen)
+			 *	
+			 *	The order for the bits is Name, RGB (any of the 3), Checkboxes (any of the 2)...
+			 *	
+			 *	We will calculate the resulting binary number with the changes ocurred, and handle the case appropiately
 			 **/
 
 			TrimComponents();
 
-			//3 variables checking if those 3 things changed, if they changed value is 0, not changed is 1
+			//3 bool variables checking if those 3 things changed, if they changed value is 0, not changed is 1
 			bool nameEqual = NameTextbox.Text == NameCombobox.Text;
 
 			var colorConfig = new List<int> { (int)RedNUD.Value, (int)GreenNUD.Value, (int)BlueNUD.Value };
@@ -99,13 +104,12 @@ namespace PassGuard.GUI
 					{
 						if ((savedConfig[0] == colorConfig[0]) && (savedConfig[1] == colorConfig[1]) && (savedConfig[2] == colorConfig[2])) //.Contains() does not work.
 						{
-							//errorMessages += "\nThere is already a saved config with that RGB configuration.";
-							rgbEqual = true;
+							rgbEqual = true; //There is already a saved rgb with those values, reuse variable....
 							break;
 						}
 					}
 
-					if(!rgbEqual && !storedConfigs.ContainsKey(NameTextbox.Text))
+					if(!rgbEqual && !storedConfigs.ContainsKey(NameTextbox.Text)) //If rgbs arent equal and name isnt already saved....then set values.
 					{
 						Oldname = NameCombobox.Text;
 						name = NameTextbox.Text;
@@ -167,12 +171,11 @@ namespace PassGuard.GUI
 					{
 						if ((savedConfig[0] == colorConfig[0]) && (savedConfig[1] == colorConfig[1]) && (savedConfig[2] == colorConfig[2])) //.Contains() does not work.
 						{
-							//errorMessages += "\nThere is already a saved config with that RGB configuration.";
-							rgbEqual = true;
+							rgbEqual = true; //There is already a saved rgb with those values, reuse variable....
 							break;
 						}
 					}
-					if (!rgbEqual)
+					if (!rgbEqual) //If rgbs arent equal....
 					{
 						Oldname = NameCombobox.Text;
 						name = NameTextbox.Text;
@@ -230,6 +233,10 @@ namespace PassGuard.GUI
 				
 		}
 
+		/// <summary>
+		/// Enable or disable all components depending on flag...
+		/// </summary>
+		/// <param name="flag"></param>
 		private void Check(bool flag)
 		{
 			if(flag)
@@ -262,6 +269,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Display data associated to that name of password and enable components....if no name is selected reset components data and disable them...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(!String.IsNullOrWhiteSpace(NameCombobox.Text))
@@ -291,6 +303,11 @@ namespace PassGuard.GUI
 			
 		}
 
+		/// <summary>
+		/// Set theme of components when theme changes....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EditColorConfig_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -312,13 +329,15 @@ namespace PassGuard.GUI
 
 			}
 		}
-
+		
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseEnter(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseLeave(object sender, EventArgs e)
 		{

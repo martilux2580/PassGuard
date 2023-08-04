@@ -13,10 +13,12 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form to create a backup of a selected Vault in a selected dstPath
+	/// <summary>
+	/// Form to create a backup of a selected Vault in a selected dstPath
+	/// </summary>
 	public partial class CreateBackup : Form
 	{
-		public bool Success { get; private set; }
+		public bool Success { get; private set; } //Sets whether user inputted good params and exited ok, not by X or AltF4....
 
 		public CreateBackup()
 		{
@@ -33,12 +35,20 @@ namespace PassGuard.GUI
 			Success = false;
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			VaultPathTextbox.Text = VaultPathTextbox.Text.Trim();
 			VaultBackupPathTextbox.Text = VaultBackupPathTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Opens the folder dialog to select the path where the backups of the vault will be saved....., handles also if the user doesnt select a file with requested extension or leave.....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectVaultBackupPathButton_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog fbd = new(); //Folder Selector
@@ -51,18 +61,25 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseEnter(object sender, EventArgs e)
 		{
 			SendButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseLeave(object sender, EventArgs e)
 		{
 			SendButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Regular the text when mouse is in the button
 		}
 
+		/// <summary>
+		/// If input is OK, creates backup
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SendButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -85,6 +102,11 @@ namespace PassGuard.GUI
 			
 		}
 
+		/// <summary>
+		/// Opens the folder dialog to select the path of the vault to be backup up, handles also if the user doesnt select a file with requested extension or leave.....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SelectVaultPathButton_Click(object sender, EventArgs e)
 		{
 			//Select and Save filepath and extension.
@@ -114,6 +136,11 @@ namespace PassGuard.GUI
 			VaultPathTextbox.Text = filepath;
 		}
 
+		/// <summary>
+		/// Changes components theme when general theme changes...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CreateBackup_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))

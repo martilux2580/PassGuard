@@ -24,29 +24,32 @@ using System.IO;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// User control that shows graphical statistics about the content of them: password length and composition
+	/// </summary>
 	public partial class ContentStatsUC : UserControl
 	{
-		private readonly List<String[]> myData = new();
-		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Default colour
-		private readonly Dictionary<String, List<String>> compositionNames = new()
+		private readonly List<String[]> myData = new(); //Name, Password and Importance
+		private readonly int[] contextColour = new int[3] { 0, 191, 144 }; //Will contain actual color used in this execution, otherwise use default color....
+		private readonly Dictionary<String, List<String>> compositionNames = new() //Will contain list of names that fall on each category...
 		{
-			{ "N/A", new() },
-			{ "L+N", new() },
-			{ "U+L", new() },
-			{ "U+L+N", new() },
-			{ "S+L+N", new() },
-			{ "S+U+L", new() },
-			{ "S+U+L+N", new() }
+			{ "N/A", new() }, //Not applicable
+			{ "L+N", new() }, //Lowercase + numbers
+			{ "U+L", new() }, //Upper and lower case
+			{ "U+L+N", new() }, // Upper, lower and numbers
+			{ "S+L+N", new() }, // Symbols, lower and numbers
+			{ "S+U+L", new() }, // Symbols, upper and lower
+			{ "S+U+L+N", new() } // Symbols, upper and lower, and numbers
 		};
-		private readonly List<List<String>> lengthNames = new()
+		private readonly List<List<String>> lengthNames = new() //Hold the names of the passwords that fall on each category
 		{
-			new(),
-			new(),
-			new(),
-			new(),
-			new(),
-			new(),
-			new()
+			new(), //<6chars
+			new(), //6+chars
+			new(), //9+chars
+			new(), //12+chars
+			new(), //15+chars
+			new(), //18+chars
+			new()  //21+chars
 		};
 
 		public ContentStatsUC(List<String[]> someData, int[] ContextColour)
@@ -60,6 +63,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Collects the data necessary and shows the graphical stats...
+		/// </summary>
 		private void LoadStats()
 		{
 			//Histogram1
@@ -183,14 +189,19 @@ namespace PassGuard.GUI
 			sb.Append("\nPercentage of important passwords from total: " + passLengths[8].ToString() + "/" + myData.Count.ToString() + " = " + Math.Round(d3, 3).ToString() + "%.");
 			TextStatsLabel.Text = sb.ToString();
 			H2InfoLabel.Text = "Legend: S = Symbols (@#%...), U = Upper Case letters (ABC...), L = Lower Case letters (abc...), N = Numbers (012...).";
+			//Set the button texts now, so that everything appears at the same time....
 			DownloadData1Button.Text = "Password Length Details";
 			DownloadData2Button.Text = "Password Composition Details";
 
 		}
 
+		/// <summary>
+		/// For each password, check its composition and add the name to the corresponding category....
+		/// </summary>
+		/// <returns></returns>
 		private List<int> CalculatePassCompositions()
 		{
-			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
+			//Order from left to right: <6chars, 6+, 9+, 12+, 15+, 18+, 21+
 			List<int> results = new() { 0, 0, 0, 0, 0, 0, 0};
 			string symbols = "!$%&/\\()|@#€<>[]{}+-*.:_,;ñÑ¿?=çÇ¡";
 
@@ -214,10 +225,14 @@ namespace PassGuard.GUI
 			return results;
 		}
 
+		/// <summary>
+		/// For each password calculates its length and categorizes it accordingly
+		/// </summary>
+		/// <returns></returns>
 		private List<int> CalculatePassLengthsAndSum()
 		{
 			int[] lengths = { 6, 9, 12, 15, 18, 21 };
-			//Second last number will hold the sum of characters, to later calculate the average..., last number will contain the count of important passwords...
+			//Order from left to right: <6chars, 6+, 9+, 12+, 15+, 18+, 21+, sum of total characters (for later average), count of passwords marked as important
 			List<int> results = new() { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
 
 
@@ -248,6 +263,11 @@ namespace PassGuard.GUI
 			return results;
 		}
 
+		/// <summary>
+		/// Creates a json object with the data of the lengths and exports it as a json file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DownloadData1Button_Click(object sender, EventArgs e)
 		{
 			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LengthStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
@@ -272,7 +292,7 @@ namespace PassGuard.GUI
 				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
 				{
 					WriteIndented = true,
-					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping //Enables using special characters
 				});
 
 				// Export the JSON string to a JSON file
@@ -283,6 +303,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Creates a json object with the data of the compositions of the passwords and exports it as a json file.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DownloadData2Button_Click(object sender, EventArgs e)
 		{
 			string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\CompositionStats-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".json"; // Replace with the desired file path
@@ -298,7 +323,7 @@ namespace PassGuard.GUI
 				string jsonString = JsonSerializer.Serialize(jsonObject, new JsonSerializerOptions
 				{
 					WriteIndented = true,
-					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+					Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping //Enables using special characters
 				});
 
 				// Export the JSON string to a JSON file
@@ -308,24 +333,28 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enter button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseEnter(object sender, EventArgs e)
 		{
 			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DownloadData1Button_MouseLeave(object sender, EventArgs e)
 		{
 			DownloadData1Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 
+		//Mouse enter button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseEnter(object sender, EventArgs e)
 		{
 			DownloadData2Button.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DownloadData2Button_MouseLeave(object sender, EventArgs e)
 		{

@@ -13,14 +13,17 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Form to delete a color configuration, or all of them
+	/// </summary>
 	public partial class DeleteColorConfig : Form
 	{
 
-		public bool DeletedSuccess { get; private set; }
-		public bool DeletedAllSuccess { get; private set; }
-		public string name { get; private set; }
-		private readonly List<String> namesStored;
-		private readonly string actualChosenName;
+		public bool DeletedSuccess { get; private set; } //Flag if user deletes one config
+		public bool DeletedAllSuccess { get; private set; } //Flag if user deletes all
+		public string name { get; private set; } //Name of the config to delete
+		private readonly List<String> namesStored; //All config names stored
+		private readonly string actualChosenName; //Name of the config already in use in this execution....
 
 		public DeleteColorConfig(List<String> names, string ActualChosenName)
 		{
@@ -31,7 +34,7 @@ namespace PassGuard.GUI
 			DeletedSuccess = false;
 			actualChosenName = ActualChosenName;
 
-			NameCombobox.Items.Add("");
+			NameCombobox.Items.Add(""); //Allows user to reset combobox text
 			foreach (String name in namesStored)
 			{
 				NameCombobox.Items.Add(name);
@@ -48,18 +51,31 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes...
+		/// </summary>
 		public void TrimComponents()
 		{
 			NameTextbox.Text = NameTextbox.Text.Trim();
 			NameCombobox.Text = NameCombobox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Sets the flag of deleteAll and closes form
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteAllButton_Click(object sender, EventArgs e)
 		{
 			DeletedAllSuccess = true;
 			this.Close();
 		}
 
+		/// <summary>
+		/// Gets the name of the config to remove, sets the corresponding flag and closes form...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -70,6 +86,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Sets the parameters in the corresponding components on the selected config name..., otherwise reset those components content
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameCombobox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!String.IsNullOrWhiteSpace(NameCombobox.Text))
@@ -95,6 +116,10 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Enables or disables components whether flag is set to true or false
+		/// </summary>
+		/// <param name="flag"></param>
 		private void Check(bool flag)
 		{
 			if (flag)
@@ -143,6 +168,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Enables or disables components whether user wants to delete all passwords or just one....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EnableDeleteAllCheckbox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (EnableDeleteAllCheckbox.Checked == true)
@@ -155,6 +185,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Changes components theme when general theme is changed
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteColorConfig_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -177,24 +212,28 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseLeave(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular);
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteAllButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteAllButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline);
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteAllButton_MouseLeave(object sender, EventArgs e)
 		{
