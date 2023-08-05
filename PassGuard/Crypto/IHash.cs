@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Crypto
 {
+	/// <summary>
+	/// Interface that holds all the methods for each Hash Fucntion classes implemented
+	/// </summary>
 	internal interface IHash
 	{
-		public string Compute(string password, int bits);
+		public string Compute(string password, int bits); //SHA1 Hash function
 	}
 }

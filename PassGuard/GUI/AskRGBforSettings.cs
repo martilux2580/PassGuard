@@ -23,7 +23,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form to obtain new RGB values for the outline colours.
+	/// <summary>
+	/// Form to obtain new RGB values for the outline colours.
+	/// </summary>
 	public partial class AskRGBforSettings : Form
 	{
 		private enum Order //Enum for the order of each column
@@ -34,19 +36,19 @@ namespace PassGuard.GUI
 		}
 		private enum CFColumns //Enum for the valid names 
 		{
-			NULLVALUESS,
+			NULLVALUESS, //No order
 			Name,
 			Red,
 			Green,
 			Blue,
 			Favourite
 		}
-		public Configuration Config { get; private set; }
-		private int[] actualColours;
-		public int[] FinalCalibratedColours { get; private set; }
-		private CFColumns actualColumn;
-		private Order actualOrder;
-		private bool isSearched;
+		public Configuration Config { get; private set; } //Send config, so that there is only one instance of config file opening...
+		private int[] actualColours; //Actual colours used in current execution
+		public int[] FinalCalibratedColours { get; private set; } //Set the final calibrated colours of the execution...
+		private CFColumns actualColumn; //Actual column to order
+		private Order actualOrder; //Actual ordering way to order
+		private bool isSearched; //Flag that tells if a search is ongoing
 
 		[SupportedOSPlatform("windows")]
 		public AskRGBforSettings(int[] colours, Configuration configg)
@@ -60,7 +62,7 @@ namespace PassGuard.GUI
 			
 			try
 			{
-				SetNUDs();
+				SetNUDs(); //Set values of the 6 nuds...
 
 				SetCMS(); //Set CMSs elements
 
@@ -78,14 +80,22 @@ namespace PassGuard.GUI
 
 		}
 		
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes...
+		/// </summary>
 		public void TrimComponents()
 		{
 			SearchTextbox.Text = SearchTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Given a pair of values, generates a row with the corresponding format and content for the ColourContentDGV component
+		/// </summary>
+		/// <param name="configPair"></param>
+		/// <returns></returns>
 		private DataGridViewRow GenerateNewRow(KeyValuePair<String, List<int>> configPair)
 		{
-			DataGridViewRow row = new();
+			DataGridViewRow row = new(); //Cell for the name
 			DataGridViewCell chosenNameCell = new DataGridViewButtonCell
 			{
 				Value = configPair.Key,
@@ -93,28 +103,28 @@ namespace PassGuard.GUI
 			};
 			chosenNameCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell redCell = new DataGridViewButtonCell
+			DataGridViewCell redCell = new DataGridViewButtonCell //Cell for the Red component of RGB
 			{
 				Value = configPair.Value[0].ToString(),
 				FlatStyle = FlatStyle.Flat
 			};
 			redCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell greenCell = new DataGridViewButtonCell
+			DataGridViewCell greenCell = new DataGridViewButtonCell //Cell for the Green component of RGB
 			{
 				Value = configPair.Value[1].ToString(),
 				FlatStyle = FlatStyle.Flat
 			};
 			greenCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell blueCell = new DataGridViewButtonCell
+			DataGridViewCell blueCell = new DataGridViewButtonCell //Cell for the Blue component of RGB
 			{
 				Value = configPair.Value[2].ToString(),
 				FlatStyle = FlatStyle.Flat
 			};
 			blueCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-			DataGridViewCell viewerCell = new DataGridViewButtonCell
+			DataGridViewCell viewerCell = new DataGridViewButtonCell //Cell for the viewer panel of the rgb colour...
 			{
 				Value = "    ",
 				FlatStyle = FlatStyle.Flat
@@ -127,7 +137,7 @@ namespace PassGuard.GUI
 			{
 				Selected = false
 			};
-			if (configPair.Value[0] == actualColours[0] //
+			if (configPair.Value[0] == actualColours[0] //If the pair we evaluating is the same as the actualcolor used, then mark the config as chosen
 				&& configPair.Value[1] == actualColours[1]
 				&& configPair.Value[2] == actualColours[2])
 			{
@@ -135,7 +145,7 @@ namespace PassGuard.GUI
 			}
 
 			//Favourite
-			DataGridViewCell favouriteCell = new DataGridViewCheckBoxCell
+			DataGridViewCell favouriteCell = new DataGridViewCheckBoxCell //Cell for the Important value of the color configuration
 			{
 				Selected = false
 			};
@@ -153,17 +163,22 @@ namespace PassGuard.GUI
 			return row;
 		}
 
+		/// <summary>
+		/// Loads the saved colour configurations in the specified order by the specified column
+		/// </summary>
+		/// <param name="col"></param>
+		/// <param name="order"></param>
 		private void LoadContent(CFColumns col, Order order)
 		{
-			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
-			Dictionary<String, List<int>> valuesToShow = new();
+			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]); //Saved configs as they are
+			Dictionary<String, List<int>> valuesToShow = new(); //Will hold the elements to show (all), in the order by the column specified
 
-			if (order == Order.Normal) { valuesToShow = values; }
+			if (order == Order.Normal) { valuesToShow = values; } //Ordering is normal, show data as it is....
 			else if((order == Order.Asc) || (order == Order.Desc))
 			{
 				switch (col)
 				{
-					case CFColumns.Name:
+					case CFColumns.Name: //Ascending or descending by name, order by name ascending and if order is descending then reverse list
 						var sortedNames = new SortedDictionary<String, List<int>>(JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"])).ToDictionary(x => x.Key, x => x.Value);
 						if(order == Order.Desc)
 						{
@@ -173,8 +188,7 @@ namespace PassGuard.GUI
 						valuesToShow = sortedNames;
 						break;
 
-					case CFColumns.Red:
-						// Sort the dictionary by the fourth element of the list and then by name
+					case CFColumns.Red: //Ascending or descending by Red, order by red (if equals by name and same ordering) ascending and if order is descending then reverse list
 						Dictionary<string, List<int>> sortedReds = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(0))
 														.ThenBy(kvp => kvp.Key)
 														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -185,8 +199,7 @@ namespace PassGuard.GUI
 						}
 						valuesToShow = sortedReds;
 						break;
-					case CFColumns.Green:
-						// Sort the dictionary by the fourth element of the list and then by name
+					case CFColumns.Green: //Ascending or descending by Green, order by green (if equals by name and same ordering) ascending and if order is descending then reverse list
 						Dictionary<string, List<int>> sortedGreens = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(1))
 														.ThenBy(kvp => kvp.Key)
 														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -198,8 +211,7 @@ namespace PassGuard.GUI
 						}
 						valuesToShow = sortedGreens;
 						break;
-					case CFColumns.Blue:
-						// Sort the dictionary by the fourth element of the list and then by name
+					case CFColumns.Blue: //Ascending or descending by Blue, order by blue (if equals by name and same ordering) ascending and if order is descending then reverse list
 						Dictionary<string, List<int>> sortedBlues = values.OrderBy(kvp => kvp.Value.ElementAtOrDefault(2))
 														.ThenBy(kvp => kvp.Key)
 														.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -211,9 +223,10 @@ namespace PassGuard.GUI
 						}
 						valuesToShow = sortedBlues;
 						break;
-					case CFColumns.Favourite:
-						// Sort the dictionary by the fourth element of the list and then by name
-						//Sustituye los 1 del Favourite por cero para así ordenar ascendente y que los Favourite queden arriba, ya que pasan a ser 0 en vez de 1.
+					case CFColumns.Favourite:  //Ascending or descending by Favourite, order by favourite (if equals by name and same ordering) ascending and if order is descending then reverse list. Favourite passwords will be ordered always on top
+
+											   //Substitutes the 1s of Favourite column to 0s (and viceversa) in the OrderBy, first thenBy orders ascending by Favourite (all favourites will be up and normal will be down), last thenBy unevens the ordering
+											   //	by ordering by Name and same ordering as Favourite.
 						Dictionary<string, List<int>> sortedFavs = values.OrderBy(kv => kv.Value[3] == 1 ? 0 : 1).ThenBy(kv => kv.Value[3]).ThenBy(kv => kv.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 						if (order == Order.Desc)
 						{
@@ -226,6 +239,7 @@ namespace PassGuard.GUI
 				}
 			}
 
+			//Add new rows with the data to show and put them inside the ColourContentDGV....
 			ColourContentDGV.Rows.Clear();
 			foreach (KeyValuePair<String, List<int>> configColor in valuesToShow)
 			{
@@ -235,6 +249,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Sets the initial values of the NUDs of this execution and next execution.
+		/// </summary>
 		private void SetNUDs() //Set NumericUpDowns to the colours set right now in the Content Panel of Form1
 		{
 			RedNextNUD.Value = int.Parse(ConfigurationManager.AppSettings["RedLogo"]); //Modify data in the config file for future executions.
@@ -246,6 +263,10 @@ namespace PassGuard.GUI
 			BlueNowNUD.Value = actualColours[2]; //Modify data in the config file for future executions.
 		}
 
+		/// <summary>
+		/// Resets all the CMS to normal ordering, and if actualSelects also the variables that hold the actualOrder aand actualColumn....
+		/// </summary>
+		/// <param name="actualSelects"></param>
 		private void ResetToNormalOrdering(bool actualSelects)
 		{
 			if (actualSelects)
@@ -275,6 +296,9 @@ namespace PassGuard.GUI
 			FavouriteDescendingCMS.Checked = false;
 		}
 
+		/// <summary>
+		/// Unchecks all the CMS...
+		/// </summary>
 		private void UncheckOrdering()
 		{
 			NameNormalCMS.Checked = false;
@@ -310,6 +334,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Opens your webbrowser with the link to get help with rgb, otherwise copies that link to the clipboard and informs the user.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void WebHelpRGB_Click(object sender, EventArgs e)
 		{
 			string url = "https://htmlcolorcodes.com/es";
@@ -328,6 +357,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Takes the selected RGB and gets the RGB values for the 3 panels of the main view, and closes the window....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SendButton_Click(object sender, EventArgs e)
 		{
 			if (Utils.BooleanUtils.IsValidColour((int)RedNowNUD.Value, (int)GreenNowNUD.Value, (int)BlueNowNUD.Value)) //Check lightness of colour to check if it is valid. Double Check.
@@ -344,29 +378,35 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Handles the addition of a new config....opens the form and when it is closed retrieves the values and saves the values depending of the user needs....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AddButton_Click(object sender, EventArgs e)
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+			//Open window with the data available....
 			GUI.AddColorConfig add = new(values)
 			{
 				BackColor = this.BackColor
 			};
 			add.ShowDialog();
 
-			if (add.AddedSuccess)
+			if (add.AddedSuccess) //If everything went ok (no altf4 or something strange)
 			{
 				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-				if (add.Chosen == 1)
+				if (add.Chosen == 1) //User wants to use the config, but we dont know if just for this execution or future ones
 				{
-					if (add.Persists == 1) 
+					if (add.Persists == 1)  //User wants the config to stay for future executions
 					{
 						RedNextNUD.Value = add.Red;
 						GreenNextNUD.Value = add.Green;
 						BlueNextNUD.Value = add.Blue;
 
-						FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.Red, add.Green, add.Blue);
+						FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.Red, add.Green, add.Blue); //Calibrate and save values for future executions
 
 						Config.AppSettings.Settings["RedMenu"].Value = FinalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
 						Config.AppSettings.Settings["GreenMenu"].Value = FinalCalibratedColours[1].ToString();
@@ -379,15 +419,16 @@ namespace PassGuard.GUI
 						Config.AppSettings.Settings["BlueOptions"].Value = FinalCalibratedColours[8].ToString();
 					}
 
+					//User may have wanted to use this config for future executions, but if it is chosen then at least he wants to use it for this execution
 					RedNowNUD.Value = add.Red;
 					GreenNowNUD.Value = add.Green;
 					BlueNowNUD.Value = add.Blue;
 
-					actualColours = new int[] { add.Red, add.Green, add.Blue };
+					actualColours = new int[] { add.Red, add.Green, add.Blue }; //New actualcolours for this execution
 					FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(add.Red, add.Green, add.Blue);
 				}
 
-				data.Add(key: add.name, value: new List<int> { add.Red, add.Green, add.Blue, add.Favourite });
+				data.Add(key: add.name, value: new List<int> { add.Red, add.Green, add.Blue, add.Favourite }); //Add the new config and save it
 				string newData = JsonSerializer.Serialize(data);
 
 				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
@@ -395,7 +436,7 @@ namespace PassGuard.GUI
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If there was a search ongoing, redo it....
 				{
 					SearchButton.PerformClick();
 				}
@@ -409,30 +450,37 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Handles the editing of a new config....opens the form and when it is closed retrieves the values and saves the new valuess....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void EditButton_Click(object sender, EventArgs e)
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
+			//Get the name of the actual configuration used in this execution
 			var actualNameChosen = ColourContentDGV.Rows.Cast<DataGridViewRow>().FirstOrDefault(
 				row => row.Cells["RedColumn"].Value.ToString() == RedNowNUD.Value.ToString() &&
 						row.Cells["GreenColumn"].Value.ToString() == GreenNowNUD.Value.ToString() &&
 						row.Cells["BlueColumn"].Value.ToString() == BlueNowNUD.Value.ToString())?
 						.Cells["ConfigNameColumn"].Value.ToString();
 
+			//Opens the form and gives it the needed parameters
 			GUI.EditColorConfig edit = new(values, actualNameChosen)
 			{
 				BackColor = this.BackColor
 			};
 			edit.ShowDialog();
 
-			if (edit.EditedSuccess)
+			if (edit.EditedSuccess) //If everything went ok (no altf4 or something strange)
 			{
 				var data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 				FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(edit.Red, edit.Green, edit.Blue);
 
-				if (edit.Chosen == 1)
+				if (edit.Chosen == 1) //User wants to use the config in this execution, but dunno about next executions
 				{
-					if (edit.Persists == 1)
+					if (edit.Persists == 1) //Users want to use config also for future executions...so set the NUDs and save the data.
 					{
 						RedNextNUD.Value = edit.Red;
 						GreenNextNUD.Value = edit.Green;
@@ -449,6 +497,7 @@ namespace PassGuard.GUI
 						Config.AppSettings.Settings["BlueOptions"].Value = FinalCalibratedColours[8].ToString();
 					}
 
+					//New actual colours for the new chosen configuration
 					actualColours = new int[] { edit.Red, edit.Green, edit.Blue };
 
 					RedNowNUD.Value = edit.Red;
@@ -457,8 +506,8 @@ namespace PassGuard.GUI
 
 				}
 
-				data.Remove(edit.Oldname);
-				data.Add(key: edit.name, value: new List<int> { edit.Red, edit.Green, edit.Blue, edit.Favourite });
+				data.Remove(edit.Oldname); //Remove previous configuration with that name
+				data.Add(key: edit.name, value: new List<int> { edit.Red, edit.Green, edit.Blue, edit.Favourite }); //Insert a new configuration with the new data....
 				string newData = JsonSerializer.Serialize(data);
 
 				Config.AppSettings.Settings["OutlineSavedColours"].Value = newData; //Modify data in the config file for future executions.
@@ -466,7 +515,7 @@ namespace PassGuard.GUI
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing, redo search
 				{
 					SearchButton.PerformClick();
 				}
@@ -480,17 +529,24 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Handles the deletion of one or all configs saved...opens the form and when it is closed retrieves the values and depending on the mode of deletion proceeds....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void DeleteButton_Click(object sender, EventArgs e)
 		{
 			Dictionary<String, List<int>> values = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-			var namesList = new List<String>(values.Keys);
-			var actualNameChosen = ColourContentDGV.Rows.Cast<DataGridViewRow>().FirstOrDefault(
+			var namesList = new List<String>(values.Keys); //All the names of saved configs
+			//Get the name of the actual config used in this execution
+			var actualNameChosen = ColourContentDGV.Rows.Cast<DataGridViewRow>().FirstOrDefault( 
 				row => row.Cells["RedColumn"].Value.ToString() == RedNowNUD.Value.ToString() &&
 						row.Cells["GreenColumn"].Value.ToString() == GreenNowNUD.Value.ToString() &&
 						row.Cells["BlueColumn"].Value.ToString() == BlueNowNUD.Value.ToString())?
 						.Cells["ConfigNameColumn"].Value.ToString();
 
+			//Opens form and send corresponding parameters to it...
 			GUI.DeleteColorConfig del = new(namesList, actualNameChosen)
 			{
 				BackColor = this.BackColor,
@@ -498,10 +554,10 @@ namespace PassGuard.GUI
 			};
 			del.ShowDialog();
 
-			if (del.DeletedSuccess)
+			if (del.DeletedSuccess) //User wants to delete one colour config
 			{
-				values.Remove(del.name);
-				if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144, 1 }); }
+				values.Remove(del.name); //Removes the config
+				if(values.Count < 1) { values.Add("Default", new List<int> { 0, 191, 144, 1 }); } //If it was the last saved config, readd the default config....
 
 				String newData = JsonSerializer.Serialize(values);
 
@@ -510,7 +566,7 @@ namespace PassGuard.GUI
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing, redo it
 				{
 					SearchButton.PerformClick();
 				}
@@ -521,10 +577,10 @@ namespace PassGuard.GUI
 				}
 
 			}
-			else if (del.DeletedAllSuccess)
+			else if (del.DeletedAllSuccess) //User wants to delete all configurations
 			{
-				values.Clear();
-				values.Add("Default", new List<int> { 0, 191, 144, 1 });
+				values.Clear(); //Delete all configs
+				values.Add("Default", new List<int> { 0, 191, 144, 1 }); //Add the default configuration
 
 				String newData = JsonSerializer.Serialize(values);
 
@@ -533,7 +589,7 @@ namespace PassGuard.GUI
 				ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing, redo it
 				{
 					SearchButton.PerformClick();
 				}
@@ -548,6 +604,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Changes the components theme when general theme is changed
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AskRGBforSettings_BackColorChanged(object sender, EventArgs e)
 		{
 			// Set the back color of the DataGridView
@@ -586,6 +647,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Handles the actions when the user clicks a cell in the ColourContentDGV component
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ColourContentDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if(e.RowIndex >= 0) //It is a normal cell, not a column header....
@@ -600,20 +666,20 @@ namespace PassGuard.GUI
 					case "Red":
 					case "Green":
 					case "Blue":
-						//Todos los de arriba solo copias los valores al clipboard.
+						//All columns above just copy the text of the button to clipboard....
 						Clipboard.SetText(!string.IsNullOrEmpty(ColourContentDGV.CurrentCell.Value.ToString()) ? ColourContentDGV.CurrentCell.Value.ToString() : " ");
 						break;
-					case "ChosenConfig":
+					case "ChosenConfig": //User wants to use this config at least in this execution
 						if ((ColourContentDGV.CurrentCell != null) && (!Convert.ToBoolean(ColourContentDGV.CurrentCell.Value))) //If checkbox is not checked then we do something...
 						{
 							var row = ColourContentDGV.Rows[e.RowIndex];
 							var dialog = MessageBox.Show(text: "Do you want to select and use the config with name '" + row.Cells[0].Value.ToString() + "'?", caption: "Select and Use Config", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-							if (dialog == DialogResult.Yes)
+							if (dialog == DialogResult.Yes) //User indeed wants to use this config at least in this execution
 							{
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
 								DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-								if (dialog2 == DialogResult.Yes)
+								if (dialog2 == DialogResult.Yes) //User wants to use this config in next executions also
 								{
 									RedNextNUD.Value = data[row.Cells[0].Value.ToString()][0];
 									GreenNextNUD.Value = data[row.Cells[0].Value.ToString()][1];
@@ -622,9 +688,9 @@ namespace PassGuard.GUI
 									GreenNowNUD.Value = data[row.Cells[0].Value.ToString()][1];
 									BlueNowNUD.Value = data[row.Cells[0].Value.ToString()][2];
 
-									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
+									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] }; //set new actual colours
 
-									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]); //calibrate for the three panels, then save
 									
 									Config.AppSettings.Settings["RedMenu"].Value = FinalCalibratedColours[0].ToString(); //Modify data in the config file for future executions.
 									Config.AppSettings.Settings["GreenMenu"].Value = FinalCalibratedColours[1].ToString();
@@ -641,7 +707,7 @@ namespace PassGuard.GUI
 									ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-									if (isSearched)
+									if (isSearched) //If search was ongoing, redo it
 									{
 										SearchButton.PerformClick();
 									}
@@ -651,18 +717,18 @@ namespace PassGuard.GUI
 										LoadContent(actualColumn, actualOrder);
 									}
 								}
-								else
+								else //User just wants to use it for this execution
 								{
 									RedNowNUD.Value = data[row.Cells[0].Value.ToString()][0];
 									GreenNowNUD.Value = data[row.Cells[0].Value.ToString()][1];
 									BlueNowNUD.Value = data[row.Cells[0].Value.ToString()][2];
 
-									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] };
+									actualColours = new int[] { data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2] }; //set new actual colours
 
-									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]);
+									FinalCalibratedColours = Utils.IntUtils.CalibrateAllColours(data[row.Cells[0].Value.ToString()][0], data[row.Cells[0].Value.ToString()][1], data[row.Cells[0].Value.ToString()][2]); //calibrate for the three panels
 
 									ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-									if (isSearched)
+									if (isSearched) //If search was ongoing, then redo it
 									{
 										SearchButton.PerformClick();
 									}
@@ -681,26 +747,24 @@ namespace PassGuard.GUI
 						}
 
 						break;
-					case "Favourite":
-						//Seleccionar esto como favourite y poner esto con mgbox, ademas de guardar en array....
+					case "Favourite": //User wants to mark or unmark this as favourite
 						if (Convert.ToBoolean(ColourContentDGV.CurrentCell.Value)) //If checkbox is checked....
 						{
 							var row = ColourContentDGV.Rows[e.RowIndex];
 							var dialog = MessageBox.Show(text: "Do you want to unmark the config with name '" + row.Cells[0].Value.ToString() + "' as favourite?", caption: "Unmark config as favourite.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
-							if (dialog == DialogResult.Yes)
+							if (dialog == DialogResult.Yes) //User wants to unmark config as favourite
 							{
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-								//Set NUDs and chosen to 1...
-								data[row.Cells[0].Value.ToString()][3] = 0; //Set favourite in the row...
+								data[row.Cells[0].Value.ToString()][3] = 0; //Unset favourite
 
 								Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
 								Config.Save(ConfigurationSaveMode.Modified);
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-								if (isSearched)
+								if (isSearched) //If search was ongoing, then redo it
 								{
 									SearchButton.PerformClick();
 								}
@@ -721,11 +785,10 @@ namespace PassGuard.GUI
 							var row = ColourContentDGV.Rows[e.RowIndex];
 							var dialog = MessageBox.Show(text: "Do you want to mark the config with name '" + row.Cells[0].Value.ToString() + "' as favourite?", caption: "Mark config as favourite.", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
 
-							if (dialog == DialogResult.Yes)
+							if (dialog == DialogResult.Yes) //User wants to mark this config as favourite
 							{
 								Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-								//Set NUDs and chosen to 1...
 								data[row.Cells[0].Value.ToString()][3] = 1; //Set favourite in the row...
 
 								Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); ; //Modify data in the config file for future executions.
@@ -733,7 +796,7 @@ namespace PassGuard.GUI
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-								if (isSearched)
+								if (isSearched //If search was ongoing, then redo it
 								{
 									SearchButton.PerformClick();
 								}
@@ -750,15 +813,14 @@ namespace PassGuard.GUI
 							}
 						}
 						break;
-					case "Delete Row":
+					case "Delete Row": //User wants to delete that colour configuration
 						var rowToBeDeleted = ColourContentDGV.Rows[e.RowIndex];
 						var deleteDialog = MessageBox.Show(text: "Do you want to delete the config with name '" + rowToBeDeleted.Cells[0].Value.ToString() + "'? \n\nNote: This action cannot be undone.", caption: "Delete config.", icon: MessageBoxIcon.Exclamation, buttons: MessageBoxButtons.YesNo);
 
-						if (deleteDialog == DialogResult.Yes)
+						if (deleteDialog == DialogResult.Yes) //User wants to delete that colour config
 						{
 							Dictionary<String, List<int>> data = JsonSerializer.Deserialize<Dictionary<String, List<int>>>(ConfigurationManager.AppSettings["OutlineSavedColours"]);
 
-							//Set NUDs and chosen to 1...
 							data.Remove(rowToBeDeleted.Cells[0].Value.ToString()); //Remove row from data
 
 							Config.AppSettings.Settings["OutlineSavedColours"].Value = JsonSerializer.Serialize(data); //Modify data in the config file for future executions.
@@ -766,7 +828,7 @@ namespace PassGuard.GUI
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-							if (isSearched)
+							if (isSearched) //If search was ongoing, then redo it
 							{
 								SearchButton.PerformClick();
 							}
@@ -785,11 +847,13 @@ namespace PassGuard.GUI
 
 		}
 
-		//Sets the contents for the CMS of each header button (except SitePassword)
+		/// <summary>
+		/// Sets the contents for the CMS of each header button (except Viewer, ChosenConfig and DeleteRow)
+		/// </summary>
 		[SupportedOSPlatform("windows")]
 		private void SetCMS()
 		{
-			var titleName = new ToolStripLabel("ORDER BY NAME")
+			var titleName = new ToolStripLabel("ORDER BY NAME") //Create CMS for Name
 			{
 				Font = new Font("Segoe UI", 10, FontStyle.Bold),
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -797,7 +861,7 @@ namespace PassGuard.GUI
 			};
 			NameCMS.Items.Insert(0, titleName);
 
-			var titleRed = new ToolStripLabel("ORDER BY RED")
+			var titleRed = new ToolStripLabel("ORDER BY RED") //Create CMS for Red
 			{
 				Font = new Font("Segoe UI", 10, FontStyle.Bold),
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -805,7 +869,7 @@ namespace PassGuard.GUI
 			};
 			RedCMS.Items.Insert(0, titleRed);
 
-			var titleGreen = new ToolStripLabel("ORDER BY GREEN")
+			var titleGreen = new ToolStripLabel("ORDER BY GREEN") //Create CMS for Green
 			{
 				Font = new Font("Segoe UI", 10, FontStyle.Bold),
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -813,7 +877,7 @@ namespace PassGuard.GUI
 			};
 			GreenCMS.Items.Insert(0, titleGreen);
 
-			var titleBlue = new ToolStripLabel("ORDER BY BLUE")
+			var titleBlue = new ToolStripLabel("ORDER BY BLUE") //Create CMS for Blue
 			{
 				Font = new Font("Segoe UI", 10, FontStyle.Bold),
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -821,7 +885,7 @@ namespace PassGuard.GUI
 			};
 			BlueCMS.Items.Insert(0, titleBlue);
 
-			var titleFavourite = new ToolStripLabel("ORDER BY FAVOURITE")
+			var titleFavourite = new ToolStripLabel("ORDER BY FAVOURITE") //Create CMS for Favourite
 			{
 				Font = new Font("Segoe UI", 10, FontStyle.Bold),
 				TextAlign = ContentAlignment.MiddleCenter,
@@ -830,6 +894,11 @@ namespace PassGuard.GUI
 			FavouriteCMS.Items.Insert(0, titleFavourite);
 		}
 
+		/// <summary>
+		/// If a column header is clicked and it has associated CMS then show that CMS...(for Name, Red, Green, Blue, Favourite)
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ColourContentDGV_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if ((e.Button == MouseButtons.Left) && (e.RowIndex < 0)) //It is a column header, not a normal row
@@ -862,15 +931,21 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the normal order of column Name
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameNormalCMS_Click(object sender, EventArgs e)
 		{
 			try
 			{
+				//Sets order for then calling the loading metthod
 				actualOrder = Order.Normal;
 				actualColumn = CFColumns.Name;
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing, then redo search
 				{
 					SearchButton.PerformClick();
 				}
@@ -880,7 +955,7 @@ namespace PassGuard.GUI
 					LoadContent(actualColumn, actualOrder);
 				}
 
-				ResetToNormalOrdering(false);
+				ResetToNormalOrdering(false); //Set all the CMS to normal, as if you are ordering by normal it is in reality for all columns and not just for name
 			}
 			catch (Exception ex)
 			{
@@ -892,19 +967,25 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true); //Any error should reset actual orderings and all CMS to normal mode....
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the ascending order of column Name
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameAscendingCMS_Click(object sender, EventArgs e)
 		{
 			try
 			{
+				//Sets order for then calling the loading method
 				actualOrder = Order.Asc;
 				actualColumn = CFColumns.Name;
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing, then redo search
 				{
 					SearchButton.PerformClick();
 				}
@@ -914,8 +995,8 @@ namespace PassGuard.GUI
 					LoadContent(actualColumn, actualOrder);
 				}
 
-				UncheckOrdering();
-				NameAscendingCMS.Checked = true;
+				UncheckOrdering(); //Unchecks all CMS.
+				NameAscendingCMS.Checked = true; //Checks the CMS for the ordering we are doing.
 			}
 			catch (Exception ex)
 			{
@@ -927,19 +1008,25 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true); //Any error should reset actual orderings and all CMS to normal mode....
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the descending order of column Name
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void NameDescendingCMS_Click(object sender, EventArgs e)
 		{
 			try
 			{
+				//Sets order for then calling the loading method
 				actualOrder = Order.Desc;
 				actualColumn = CFColumns.Name;
 
 				ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-				if (isSearched)
+				if (isSearched) //If search was ongoing then redo it
 				{
 					SearchButton.PerformClick();
 				}
@@ -949,8 +1036,8 @@ namespace PassGuard.GUI
 					LoadContent(actualColumn, actualOrder);
 				}
 
-				UncheckOrdering();
-				NameDescendingCMS.Checked = true;
+				UncheckOrdering(); //Unchecks all CMS.
+				NameDescendingCMS.Checked = true; //Checks the CMS for the ordering we are doing.
 			}
 			catch (Exception ex)
 			{
@@ -962,10 +1049,16 @@ namespace PassGuard.GUI
 				{
 					MessageBox.Show(text: "PassGuard could not fulfill this operation.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 				}
-				ResetToNormalOrdering(true);
+				ResetToNormalOrdering(true); //Any error should reset actual orderings and all CMS to normal mode....
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the normal order of column Red
+		/// Review documentation for method NameNormalCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void RedNormalCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1000,6 +1093,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the ascending order of column Red
+		/// Review documentation for method NameAscendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void RedAscendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1035,6 +1134,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the descending order of column Red
+		/// Review documentation for method NameDescendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void RedDescendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1070,6 +1175,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the normal order of column Green
+		/// Review documentation for method NameNormalCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void GreenNormalCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1104,6 +1215,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the ascending order of column Green
+		/// Review documentation for method NameAscendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void GreenAscendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1139,6 +1256,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the descending order of column Green
+		/// Review documentation for method NameDescendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void GreenDescendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1174,6 +1297,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the normal order of column Blue
+		/// Review documentation for method NameNormalCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BlueNormalCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1208,6 +1337,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the ascending order of column Blue
+		/// Review documentation for method NameAscendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BlueAscendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1243,6 +1378,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the descending order of column Blue
+		/// Review documentation for method NameDescendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void BlueDescendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1278,6 +1419,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the normal order of column Favourite
+		/// Review documentation for method NameNormalCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FavouriteNormalCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1312,6 +1459,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the ascending order of column Favourite
+		/// Review documentation for method NameAscendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FavouriteAscendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1347,6 +1500,12 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Orders the content of the ColourConfigDGV by the descending order of column Favourite
+		/// Review documentation for method NameDescendingCMS_Click(), as it is really similar to this one...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void FavouriteDescendingCMS_Click(object sender, EventArgs e)
 		{
 			try
@@ -1382,66 +1541,81 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ExportButton_MouseEnter(object sender, EventArgs e)
 		{
 			ExportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void ExportButton_MouseLeave(object sender, EventArgs e)
 		{
 			ExportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseEnter(object sender, EventArgs e)
 		{
 			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseLeave(object sender, EventArgs e)
 		{
 			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseEnter(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void DeleteButton_MouseLeave(object sender, EventArgs e)
 		{
 			DeleteButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseEnter(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void EditButton_MouseLeave(object sender, EventArgs e)
 		{
 			EditButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseEnter(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseLeave(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		/// <summary>
+		/// Shows the form where user can select whether to export the configs as JSON file or PDF file....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ExportButton_Click(object sender, EventArgs e)
 		{
 			ExportVaultConfigs export = new()
@@ -1451,18 +1625,25 @@ namespace PassGuard.GUI
 			export.ShowDialog();
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseEnter(object sender, EventArgs e)
 		{
 			HelpFormButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the butto
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void HelpButton_MouseLeave(object sender, EventArgs e)
 		{
 			HelpFormButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		/// <summary>
+		/// Shows the help form with info about how to handle this view of colour configurations
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void HelpButton_Click(object sender, EventArgs e)
 		{
 			GUI.HelpColourConfigsForm helpForm = new()
@@ -1472,6 +1653,7 @@ namespace PassGuard.GUI
 			helpForm.ShowDialog();
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ImportButton_MouseEnter(object sender, EventArgs e)
 		{
@@ -1484,11 +1666,18 @@ namespace PassGuard.GUI
 			ImportButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		/// <summary>
+		/// Handles the import of colour configurations from a JSON file, selects correct json file, validates its content and saves it for future executions as well as shows it in the ColourContentDGV....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ImportButton_Click(object sender, EventArgs e)
 		{
 			DialogResult confirmation = MessageBox.Show(text: "If you import configurations from a file, your saved configurations will be replaced by the imported configurations, and cannot be recovered.\n\nAre you sure you want to continue with the import process?", caption: "Import confirmation", buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question);
-			if (confirmation == DialogResult.Yes)
+			if (confirmation == DialogResult.Yes) //User wants to import data from JSON file
 			{
+				//Part1: Select JSON file
+
 				//Select and Save filepath and extension.
 				string filepath = "";
 				string ext = ""; //File extension
@@ -1513,16 +1702,18 @@ namespace PassGuard.GUI
 						MessageBox.Show(text: "Selected file must have .json extension.", caption: "Wrong File", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
 					}
 				}
-				if (filepath != "")
+
+				//Part2: If there is a path for selected file and user didnt exit the folder selector dialog with altF4 or something...., validate the data form (structure of json) and content
+				if (filepath != "") 
 				{
-					if (ValidateJsonFormat(File.ReadAllText(filepath)))
+					if (ValidateJsonFormat(File.ReadAllText(filepath))) //Validate the format of the content, not the content....
 					{
 						// Deserialize JSON content into an object
 						var goodFormData = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(File.ReadAllText(filepath));
-						var newData = ValidateAndGetJsonContent(goodFormData);
-						if (newData != null)
+						var newData = ValidateAndGetJsonContent(goodFormData); //Validate file content
+						if (newData != null) //We can either have empty data or values
 						{
-							if(newData.Count == 0)
+							if(newData.Count == 0) //If empty data then add default value...
 							{
 								newData.Add("Default", new List<int> { 0, 191, 144, 1 });
 							}
@@ -1531,8 +1722,8 @@ namespace PassGuard.GUI
 							ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 							ColourContentDGV.Rows.Clear();
+							LoadContent(actualColumn, actualOrder); //Load new content saved
 							//When we import, I assume we want to see all the content and not the result of a previous search from a previous set of configs....
-							LoadContent(actualColumn, actualOrder);
 							ResetButton.PerformClick();
 
 						}
@@ -1546,6 +1737,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Just validates json format, not content, by parsing the string rawdata to a dictionary object, which has similar structure to a json....
+		/// </summary>
+		/// <param name="rawData"></param>
+		/// <returns></returns>
 		private static bool ValidateJsonFormat(string rawData)
 		{
 			try
@@ -1561,6 +1757,16 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Validates the content of the JSON file, needs to fulfill these requirements:
+		///		Key must be a string and value must be a list of just 4 integers
+		///		3 first integers in list must be between 0 and 255
+		///		4th integer must be either 0 or 1.
+		///		With those above conditions we would add the config, but we need to check also if the rgbs or the name are already in the list we are building to later display in the ColourContentDGV
+		///			Summarizing, we need to check the conditions we would check in the AddColorConfig view....
+		/// </summary>
+		/// <param name="rawData"></param>
+		/// <returns></returns>
 		private static Dictionary<string, List<int>> ValidateAndGetJsonContent(Dictionary<string, List<int>> rawData)
 		{
 			//If all values are OK, we will return them. If not, we will return an empty dict.
@@ -1597,7 +1803,7 @@ namespace PassGuard.GUI
 				// Check all the things you would check when you add a new config
 				if (!(result == null || result.Count <= 0))
 				{
-					bool areValuesValid = CheckAddConfigConditions(result, key, values);
+					bool areValuesValid = CheckAddConfigConditions(result, key, values); //Check add conditions in regard to the rest of evaluated configs....
 					if (!areValuesValid)
 					{
 						result = null;
@@ -1611,6 +1817,16 @@ namespace PassGuard.GUI
 			return result;
 		}
 
+		/// <summary>
+		/// Checks adding conditions of a new config with regard to a list of existing configs....
+		///		Checks if name is already in and not null or whitespaces....
+		///		Checks if rgb config is already there....
+		///		Checks if config is valid colour (not too bright or dark)
+		/// </summary>
+		/// <param name="content"></param>
+		/// <param name="key"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
 		private static bool CheckAddConfigConditions(Dictionary<string, List<int>> content, string key, List<int> values)
 		{
 			if ((String.IsNullOrWhiteSpace(key)) || (content.ContainsKey(key))
@@ -1632,6 +1848,11 @@ namespace PassGuard.GUI
 			return true;
 		}
 
+		/// <summary>
+		/// Applies a filter on the contents of the ColourContentDGV with the specified searching parameters for the config name
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SearchButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -1642,6 +1863,7 @@ namespace PassGuard.GUI
 
 			List<DataGridViewRow> matchingRows = new();
 
+			//Get the matching names based on the filter
 			foreach (DataGridViewRow row in ColourContentDGV.Rows)
 			{
 				if (row.Cells["ConfigNameColumn"].Value != null)
@@ -1659,34 +1881,43 @@ namespace PassGuard.GUI
 			ColourContentDGV.Rows.Clear();
 			ColourContentDGV.Rows.AddRange(matchingRows.ToArray());
 
-			ResetButton.Enabled = true;
-			isSearched = true;
+			ResetButton.Enabled = true; //Enable reset as we have done a search
+			isSearched = true; //We have done a search, it is ongoing....
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void SearchButton_MouseEnter(object sender, EventArgs e)
 		{
 			SearchButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void SearchButton_MouseLeave(object sender, EventArgs e)
 		{
 			SearchButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		//Mouse enters button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void ResetButton_MouseEnter(object sender, EventArgs e)
 		{
 			ResetButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Underline the text when mouse leaves
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void ResetButton_MouseLeave(object sender, EventArgs e)
 		{
 			ResetButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular); //Dont underline the text when mouse leaves
 		}
 
+		/// <summary>
+		/// Loads all the saved content, and resets the search parameters
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ResetButton_Click(object sender, EventArgs e)
 		{
 			ColourContentDGV.Rows.Clear();
@@ -1694,9 +1925,14 @@ namespace PassGuard.GUI
 			LoadContent(actualColumn, actualOrder);
 
 			ResetButton.Enabled = false;
-			isSearched = false;
+			isSearched = false; //We arent in a search anymore
 		}
 
+		/// <summary>
+		/// If there are contents in the textbox, then we can enable the search button to search that content....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SearchTextbox_TextChanged(object sender, EventArgs e)
 		{
 			if (!String.IsNullOrWhiteSpace(SearchTextbox.Text))
