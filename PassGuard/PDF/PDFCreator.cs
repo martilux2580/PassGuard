@@ -110,7 +110,6 @@ namespace PassGuard.PDF
 			else { MessageBox.Show(text: "There is already a file with the name of the PDF. Please try again later.", caption: "File with same name at path", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error); }
 		}
 
-		//Create a PDF given the results of all the rows, name of Vault, Email and SK.
 		/// <summary>
 		/// Generate the PDF of the saved RGBs configuration
 		/// </summary>

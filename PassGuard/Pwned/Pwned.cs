@@ -14,9 +14,10 @@ namespace PassGuard.Pwned
 	/// </summary>
 	internal static class Pwned
 	{
-		//Obtain all the hashes that start with headHash from an API of pwned passwords.
 		/// <summary>
 		/// Makes an HTTP Request (curl) with the Hash Header so that the API returns us all the pwned passwords that have as SHA1 header hash that hash header.
+		/// 
+		/// Obtain all the hashes that start with headHash from an API of pwned passwords.
 		/// </summary>
 		/// <param name="headHash"></param>
 		/// <returns></returns>

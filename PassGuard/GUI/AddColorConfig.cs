@@ -12,18 +12,21 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
+	/// <summary>
+	/// Handles the addition of a new colour config....
+	/// </summary>
 	public partial class AddColorConfig : Form
 	{
-
+		//Attributes that will hold the final values of the new addition
 		public string name { get; private set; }
 		public int Red { get; private set; }
 		public int Green { get; private set; }
 		public int Blue { get; private set; }
-		public int Chosen { get; private set; }
+		public int Chosen { get; private set; } //Sets whether the user wants to use this config in this execution
 		public int Favourite { get; private set; }
-		public int Persists { get; private set; }
-		private readonly Dictionary<String, List<int>> storedConfigs;
-		public bool AddedSuccess { get; private set; }
+		public int Persists { get; private set; } //Sets whether the user wants to use this config for following execution
+		private readonly Dictionary<String, List<int>> storedConfigs; //All saved configs
+		public bool AddedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
 
 		public AddColorConfig(Dictionary<String, List<int>> configs)
 		{
@@ -36,11 +39,19 @@ namespace PassGuard.GUI
 			Persists = 0;
 		}
 
+		/// <summary>
+		/// Removes leading and trailing spaces from the textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			NameTextbox.Text = NameTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Handles addition of new config: need to check that config name and rgb arent already saved or blank before seting the parameters for addition
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void SendButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -80,11 +91,11 @@ namespace PassGuard.GUI
 				Blue = (int)BlueNUD.Value;
 				if (FavouriteCheckbox.Checked) { Favourite = 1; }
 				else { Favourite = 0; }
-				if (ChosenCheckbox.Checked)
+				if (ChosenCheckbox.Checked) //User wants to use the config in this execution
 				{
 					Chosen = 1;
 					DialogResult dialog2 = MessageBox.Show(text: "Would you like to save this outline colour configuration for next executions?", caption: "Save outline colour configuration", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
-					if (dialog2 == DialogResult.Yes) { Persists = 1; }
+					if (dialog2 == DialogResult.Yes) { Persists = 1; } //User wants to save config for future executions...
 					else { Persists = 0; }
 				}
 				else { Chosen = 0; }
@@ -98,6 +109,11 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Changes components theme when general theme is changed...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AddColorConfig_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
@@ -118,12 +134,14 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse enters button underlines button text...
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseEnter(object sender, EventArgs e)
 		{
 			SendButton.Font = new Font("Microsoft Sans Serif", 10, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text...
 		[SupportedOSPlatform("windows")]
 		private void SendButton_MouseLeave(object sender, EventArgs e)
 		{

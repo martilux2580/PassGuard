@@ -49,7 +49,7 @@ namespace PassGuard
 			// Initialize the system tray icon
 			trayIcon = new()
 			{
-				Icon = Properties.Resources.LogoIcon64123, // Replace "YourIcon.ico" with the path to your application's icon
+				Icon = Properties.Resources.LogoIcon64123,
 				Text = "Passguard",
 				Visible = true
 			};
@@ -447,7 +447,7 @@ namespace PassGuard
 		}
 
 		//Exit application
-		private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes (pending)
+		private void saveChangesClosePassGuardToolStripMenuItem_Click(object sender, EventArgs e) //Exit app saving changes
 		{
 			//Implement "Save Changes" Part? Things already are saved in each change by encrypting again.
 			Application.Exit(); //Close Application

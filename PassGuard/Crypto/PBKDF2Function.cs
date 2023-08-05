@@ -7,12 +7,21 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Crypto
 {
+	/// <summary>
+	/// Class that implements Interface IKDF as it holds functions for PBKDF2 Key Derivation Function....
+	/// </summary>
 	internal class PBKDF2Function : IKDF
 	{
-		//Function to derive a 256bit key (with PBKDF2) given a password and a salt.
+		/// <summary>
+		/// Function to derive a 256bit key (with PBKDF2) given a password and a salt.
+		/// </summary>
+		/// <param name="password"></param>
+		/// <param name="salt"></param>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
 		public byte[] GetVaultKey(String password, byte[] salt, int bytes)
 		{
-			Rfc2898DeriveBytes d1;
+			Rfc2898DeriveBytes d1; //Given bits, calculate PBKDF2 with corresponding hash algorithm and iterations
 			switch (bytes*8)
 			{
 				case 256:
@@ -29,7 +38,7 @@ namespace PassGuard.Crypto
 					break;
 			}
 			
-			return d1.GetBytes(bytes); //256bit key.
+			return d1.GetBytes(bytes); //Get key...
 		}
 	}
 }

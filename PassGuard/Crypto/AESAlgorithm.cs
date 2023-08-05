@@ -8,9 +8,19 @@ using System.Threading.Tasks;
 
 namespace PassGuard.Crypto
 {
+	/// <summary>
+	/// Class that implements Interface ICrypt as it holds functions for AES Encryption/Decryption algorithm....
+	///	
+	/// As a note, if we encrypt the same text (files should do also) two times, diff ciphertext (or cipherfile) will be returned due to random IV.
+	/// </summary>
 	internal class AESAlgorithm : ICrypt
 	{
-		//Function to encrypt a src file into a dst file given a key with AES.
+		/// <summary>
+		/// Function to encrypt a src file into a dst file given a key with AES.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="src"></param>
+		/// <param name="dst"></param>
 		public void Encrypt(byte[] key, String src, String dst)
 		{
 			// Encrypt the source file and write it to the destination file.
@@ -32,7 +42,12 @@ namespace PassGuard.Crypto
 			}
 		}
 
-		//Function to decrypt a src file into a dst file given a key with AES.
+		/// <summary>
+		/// Function to decrypt a src file into a dst file given a key with AES.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="src"></param>
+		/// <param name="dst"></param>
 		public void Decrypt(byte[] key, String src, String dst)
 		{
 			// Decrypt the source file and write it to the destination file.
@@ -50,12 +65,14 @@ namespace PassGuard.Crypto
 			}
 		}
 
-		//Encrypt/Decrypt need key and salt.
-		//EncryptText/DecryptText need key and IV.
-		//If we encrypt the same text two times, diff ciphertext will be returned due to random IV.
-		//Not sure what happens if we encrypt with same key and salt two times the same file.
+		
 
-		//Encrypt a src text with a key using AES, IV is prepended initially.
+		/// <summary>
+		/// Encrypt a src text with a key using AES, IV is prepended initially otherwise would be difficult to decrypt.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="src"></param>
+		/// <returns></returns>
 		public String EncryptText(byte[] key, String src)
 		{
 			try
@@ -63,6 +80,7 @@ namespace PassGuard.Crypto
 				byte[] encrypted;
 				byte[] IV;
 
+				//Encrypt text
 				using (var provider = Aes.Create())
 				{
 					provider.Key = key;
@@ -87,6 +105,7 @@ namespace PassGuard.Crypto
 
 				}
 
+				//Join the byte arrays of the IV prepended to the byte array of the ciphertext
 				var combinedIvCt = new byte[IV.Length + encrypted.Length];
 				Array.Copy(IV, 0, combinedIvCt, 0, IV.Length);
 				Array.Copy(encrypted, 0, combinedIvCt, IV.Length, encrypted.Length);
@@ -100,7 +119,12 @@ namespace PassGuard.Crypto
 			}
 		}
 
-		//Decrypts a src text with a key, separating IV from ciphertext.
+		/// <summary>
+		/// Decrypts a src text with a key, separating IV from ciphertext.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="src"></param>
+		/// <returns></returns>
 		public String DecryptText(byte[] key, String src)
 		{
 			try
@@ -117,6 +141,7 @@ namespace PassGuard.Crypto
 					byte[] IV = new byte[provider.BlockSize / 8];
 					byte[] cipherText = new byte[cipherTextCombined.Length - IV.Length];
 
+					//Get the IV that is prepended from the ciphertext...
 					Array.Copy(cipherTextCombined, IV, IV.Length);
 					Array.Copy(cipherTextCombined, IV.Length, cipherText, 0, cipherText.Length);
 

@@ -14,7 +14,9 @@ using System.Windows.Forms;
 
 namespace PassGuard.GUI
 {
-	//Form that saves the data of a new entry in the Vault.
+	/// <summary>
+	/// Form that saves the data of a new entry in the Vault.
+	/// </summary>
 	public partial class AddContent : Form
 	{
 		//Attributes to save the new data.
@@ -26,9 +28,9 @@ namespace PassGuard.GUI
 		public String Notes { get; private set; }
 		public String Important { get; private set; }
 		private readonly List<String> namesInDB; //List of names already in Vault.
-		private List<String> categories; 
+		private List<String> categories; //List of categories already in Vault.
 		public bool AddedSuccess { get; private set; } //Bool for checking that the closing of the form was due to the button click, not from AltF4 or other methods.
-		private readonly byte[] Key; //Key 
+		private readonly byte[] Key; //cKey 
 		private readonly ICrypt crypt = new AESAlgorithm();
 		
 		public AddContent(List<String> names, byte[] key, List<String> rawCategories)
@@ -44,7 +46,7 @@ namespace PassGuard.GUI
 			AddedSuccess = false;
 			categories = new();
 
-			LoadCategoryCombobox(rawCategories);
+			LoadCategoryCombobox(rawCategories); 
 
 			try
 			{
@@ -57,6 +59,9 @@ namespace PassGuard.GUI
 
 		}
 
+		/// <summary>
+		/// Removes leading and trailing whitespaces from textboxes
+		/// </summary>
 		public void TrimComponents()
 		{
 			URLTextbox.Text = URLTextbox.Text.Trim();
@@ -67,6 +72,11 @@ namespace PassGuard.GUI
 			NotesTextbox.Text = NotesTextbox.Text.Trim();
 		}
 
+		/// <summary>
+		/// Loads unique categories into the combobox, as multiple passwords can have the same category so it would be duplicated... 
+		/// It decrypts all texts and use hashset data structure to remove duplicates
+		/// </summary>
+		/// <param name="categorias"></param>
 		private void LoadCategoryCombobox(List<String> categorias)
 		{
 			var rawCategories = new List<String>();
@@ -83,18 +93,25 @@ namespace PassGuard.GUI
 			}
 		}
 
+		//Mouse over button underlines button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseEnter(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Underline); //Underline the text when mouse is in the button
 		}
 
+		//Mouse leaves button regularises button text
 		[SupportedOSPlatform("windows")]
 		private void AddButton_MouseLeave(object sender, EventArgs e)
 		{
 			AddButton.Font = new Font("Microsoft Sans Serif", 11, FontStyle.Regular); //Underline the text when mouse is in the button
 		}
 
+		/// <summary>
+		/// Handles addition of new password to the vault...check the name isnt already in the vault and check required parameters are filled and store the values given by the user....
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AddButton_Click(object sender, EventArgs e)
 		{
 			TrimComponents();
@@ -133,6 +150,11 @@ namespace PassGuard.GUI
 
 		 }
 
+		/// <summary>
+		/// Shows or hides plaintext password text
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PassVisibilityButton_Click(object sender, EventArgs e)
 		{
 			if (PasswordTextbox.UseSystemPasswordChar)
@@ -147,6 +169,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// If a category named netflix exists, if user puts a new category NETFLIX, in reality it is the same as netflix....so this method will check that and if a similar case occurs select the appropiate category already in vault...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CategoryCombobox_Validating(object sender, CancelEventArgs e)
 		{
 			string enteredValue = CategoryCombobox.Text;
@@ -166,6 +193,11 @@ namespace PassGuard.GUI
 			}
 		}
 
+		/// <summary>
+		/// Changes components theme when general theme changed...
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void AddContent_BackColorChanged(object sender, EventArgs e)
 		{
 			if (this.BackColor == Color.FromArgb(230, 230, 230))
