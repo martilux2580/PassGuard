@@ -796,7 +796,7 @@ namespace PassGuard.GUI
 								ConfigurationManager.RefreshSection("appSettings"); //If not, changes wont be visible for the rest of the program.
 
 								ColourContentDGV.Rows.Clear(); //Clear previous content in the list and in the table.
-								if (isSearched //If search was ongoing, then redo it
+								if (isSearched) //If search was ongoing, then redo it
 								{
 									SearchButton.PerformClick();
 								}
