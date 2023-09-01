@@ -25,16 +25,16 @@ namespace PassGuard.Crypto
 			switch (bytes*8)
 			{
 				case 256:
-					d1 = new Rfc2898DeriveBytes(password, salt, 100100, HashAlgorithmName.SHA256);
+					d1 = new Rfc2898DeriveBytes(password, salt, 650060, HashAlgorithmName.SHA256);
 					break;
 				case 384:
-					d1 = new Rfc2898DeriveBytes(password, salt, 100100, HashAlgorithmName.SHA384);
+					d1 = new Rfc2898DeriveBytes(password, salt, 650060, HashAlgorithmName.SHA384);
 					break;
 				case 512:
-					d1 = new Rfc2898DeriveBytes(password, salt, 100100, HashAlgorithmName.SHA512);
+					d1 = new Rfc2898DeriveBytes(password, salt, 650060, HashAlgorithmName.SHA512);
 					break;
 				default:
-					d1 = new Rfc2898DeriveBytes(password, salt, 100100, HashAlgorithmName.SHA256);
+					d1 = new Rfc2898DeriveBytes(password, salt, 650060, HashAlgorithmName.SHA256);
 					break;
 			}
 			

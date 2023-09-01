@@ -637,13 +637,11 @@ namespace PassGuard
 							MessageBox.Show(text: "AutoBackup could not make a backup of the specified Vault, please try again later.", caption: "Error", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
 						}
 					}
-
 				}
 
 				// Check if the form is closing because of the user and not because AltF4 or something...
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
-
 					if (Convert.ToBoolean(ConfigurationManager.AppSettings["MinimizeToTrayState"]) == true) //If minimize to tray is set to true...
 					{
 						// Prevent the form from closing
@@ -654,16 +652,11 @@ namespace PassGuard
 						trayIcon.Visible = true;
 					}
 				}
-
-				
 			}
 			catch (Exception)
 			{
 				MessageBox.Show(text: "PassGuard could not access config file, Autobackup could not check state of backup.", caption: "App Config File not found", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
 			}
-			
-			
-
 		}
 
 		/// <summary>

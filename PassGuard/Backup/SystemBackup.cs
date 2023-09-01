@@ -90,7 +90,7 @@ namespace PassGuard.Backup
 								}
 							}
 							break;
-						case 4:
+						case 4: //Weekly basis
 							if (DateTime.Now.Subtract(DateTime.Parse(lastDate)).TotalDays >= 7) //Difference between last backup and now is +1week
 							{
 								if (File.Exists(pathVault) && Directory.Exists(dstPath)) //If file and destination directory exists...
