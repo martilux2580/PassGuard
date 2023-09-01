@@ -196,64 +196,143 @@ namespace PassGuard.GUI
 		/// <param name="e"></param>
 		private async void GenPassButton_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				SetEnabled(false); //Unset every checkbox, so that meanwhile passwords are being generated there arent any errors for clicking other buttons/checkboxes.
-
-				//Clear previous content + Add Progress in label and textbox.
-				PercentageLabel.Text = "0% complete, 0/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
-				PercentageLabel.Visible = true;
-				PercentageLabel.Refresh();
-				PasswordTextBox.Clear();
-
-				//Create a string with the valid characters
-				StringBuilder sb = new();
-
-				foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
+			if(GenPassButton.Enabled == true)
+			{ 
+				try
 				{
-					if (pair.Key.Checked == true)
-					{
-						sb.Append(pair.Value); //Add characters related to that checkbox.
-					}
-				}
+					SetEnabled(false); //Unset every checkbox, so that meanwhile passwords are being generated there arent any errors for clicking other buttons/checkboxes.
 
-				if (SymbolsCheckbox.Checked == true)//Check symbols only if primary checkbox is enabled.
-				{
+					//Clear previous content + Add Progress in label and textbox.
+					PercentageLabel.Text = "0% complete, 0/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
+					PercentageLabel.Visible = true;
+					PercentageLabel.Refresh();
+					PasswordTextBox.Clear();
 
-					foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
+					//Create a string with the valid characters
+					StringBuilder sb = new();
+
+					foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
 					{
 						if (pair.Key.Checked == true)
 						{
 							sb.Append(pair.Value); //Add characters related to that checkbox.
 						}
 					}
-				}
 
-				string validCharacters = sb.ToString(); //Got the characters into a string to compose the password
-
-				//Test if validCharacters is null (no chars were selected).
-				if (String.IsNullOrEmpty(validCharacters)) //Maybe no chars were selected.
-				{
-					MessageBox.Show(text: "Cannot generate passwords without characters. \n\nPlease select at least one of the available characters or symbols.", caption: "Needed characters to generate passwords!");
-				}
-				else //We have valid characters to work with (at least one) and the password length is OK.
-				{
-					//Check if user wants unique and safe passwords.
-					if (CheckPwnageCheckbox.Checked == true) //Checkbox pwn true
+					if (SymbolsCheckbox.Checked == true)//Check symbols only if primary checkbox is enabled.
 					{
-						if (LowerCheckbox.Checked == true || UpperCheckbox.Checked == true) //If we are generating not pwned passwords, at least we need letters, would be really difficult with only numbers or symbols.....
-						{
-							//We will generate passwords, check if conditions of checkboxes are met, if so add it....
-							int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
-							bool missingChar;
-							while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords
-							{
-								//Save generated pass temporarily
-								string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
 
-								//Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
-								missingChar = false; //If chars are missing, we won´t enter the block of code of generating not pwned passwords.
-													 //Check (if checkbox is checked) if genPass contains the characters selected.
+						foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
+						{
+							if (pair.Key.Checked == true)
+							{
+								sb.Append(pair.Value); //Add characters related to that checkbox.
+							}
+						}
+					}
+
+					string validCharacters = sb.ToString(); //Got the characters into a string to compose the password
+
+					//Test if validCharacters is null (no chars were selected).
+					if (String.IsNullOrEmpty(validCharacters)) //Maybe no chars were selected.
+					{
+						MessageBox.Show(text: "Cannot generate passwords without characters. \n\nPlease select at least one of the available characters or symbols.", caption: "Needed characters to generate passwords!");
+					}
+					else //We have valid characters to work with (at least one) and the password length is OK.
+					{
+						//Check if user wants unique and safe passwords.
+						if (CheckPwnageCheckbox.Checked == true) //Checkbox pwn true
+						{
+							if (LowerCheckbox.Checked == true || UpperCheckbox.Checked == true) //If we are generating not pwned passwords, at least we need letters, would be really difficult with only numbers or symbols.....
+							{
+								//We will generate passwords, check if conditions of checkboxes are met, if so add it....
+								int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
+								bool missingChar;
+								while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords
+								{
+									//Save generated pass temporarily
+									string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters);
+
+									//Check that genPass has all requested chars (CryptoProvider provides secure random, does not guarantee all chars of validCharacters are used).
+									missingChar = false; //If chars are missing, we won´t enter the block of code of generating not pwned passwords.
+														 //Check (if checkbox is checked) if genPass contains the characters selected.
+									foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
+									{
+										if (pair.Key.Checked == true)
+										{
+											for (int i = 0; i < genPass.Length; i++)
+											{
+												if (pair.Value.Contains(genPass[i]))//If it contains the character, it is not missing and we exit the foreach
+												{
+													missingChar = false;
+													break;
+												}
+												else//If it does not contain it, it is technically missing. We will check rest of chars in genPass.
+												{
+													missingChar = true;
+												}
+											}
+											if (missingChar) //If you exit previous for loop (which means character is checked) and missingChar is true, it is missing it definitively.
+											{
+												break;
+											}
+										}
+									}
+									//Same check but with symbols, in case the corresponding checkboxes are checked and there are not already missing characters
+									if (SymbolsCheckbox.Checked == true)
+									{
+										if (!missingChar)
+										{
+											foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
+											{
+												if (pair.Key.Checked == true)
+												{
+													if (genPass.Contains(pair.Value))//If genPass contains one of the symbols checked, we exit.
+													{
+														missingChar = false;
+														break;
+													}
+													else
+													{
+														missingChar = true; //If it does not contain a checked symbol, we exit and generate another password.
+													}
+												}
+											}
+										}
+									}
+									if (!missingChar) //If genPass has ALL characters requested then 
+									{
+										bool check = await Pwned.Pwned.CheckPwnage(genPass);
+										if (check == false) //No pwnage found for genPass
+										{
+											validCount += 1; //A valid pass has been created, so we increment it
+															 //Set Progress Label´s progress
+											decimal proportion = Decimal.Round((validCount / NPasswordsNUD.Value) * 100, 2);
+											PercentageLabel.Text = proportion.ToString() + "% complete, " + validCount.ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
+											PasswordTextBox.Text += genPass + Environment.NewLine; //Add pass to textbox
+											PasswordTextBox.Refresh();
+											PercentageLabel.Refresh();
+										}
+									}
+								}
+							}
+							else //Any of lower, upper or numbers checkboxes were checked, we cannot go on...
+							{
+								PercentageLabel.Visible = false;
+								MessageBox.Show(text: "When generating not pwned passwords, at least lower or upper case letters must be checked.", caption: "Notes about conditions of generating not pwned passwords");
+							}
+						}
+						else //Checkbox pwn false, user wants normal password...
+						{
+							int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
+							bool missingChar; //Will be true if a requested char is missing
+							while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords requested
+							{
+
+								string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
+								missingChar = false;
+
+								//Equal Part as above
 								foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
 								{
 									if (pair.Key.Checked == true)
@@ -276,6 +355,7 @@ namespace PassGuard.GUI
 										}
 									}
 								}
+
 								//Same check but with symbols, in case the corresponding checkboxes are checked and there are not already missing characters
 								if (SymbolsCheckbox.Checked == true)
 								{
@@ -285,120 +365,43 @@ namespace PassGuard.GUI
 										{
 											if (pair.Key.Checked == true)
 											{
-												if (genPass.Contains(pair.Value))//If genPass contains one of the symbols checked, we exit.
+												if (genPass.Contains(pair.Value))
 												{
 													missingChar = false;
 													break;
 												}
 												else
 												{
-													missingChar = true; //If it does not contain a checked symbol, we exit and generate another password.
+													missingChar = true;
 												}
 											}
 										}
 									}
 								}
-								if (!missingChar) //If genPass has ALL characters requested then 
-								{
-									bool check = await Pwned.Pwned.CheckPwnage(genPass);
-									if (check == false) //No pwnage found for genPass
-									{
-										validCount += 1; //A valid pass has been created, so we increment it
-														 //Set Progress Label´s progress
-										decimal proportion = Decimal.Round((validCount / NPasswordsNUD.Value) * 100, 2);
-										PercentageLabel.Text = proportion.ToString() + "% complete, " + validCount.ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
-										PasswordTextBox.Text += genPass + Environment.NewLine; //Add pass to textbox
-										PasswordTextBox.Refresh();
-										PercentageLabel.Refresh();
-									}
-								}
-							}
-						}
-						else //Any of lower, upper or numbers checkboxes were checked, we cannot go on...
-						{
-							PercentageLabel.Visible = false;
-							MessageBox.Show(text: "When generating not pwned passwords, at least lower or upper case letters must be checked.", caption: "Notes about conditions of generating not pwned passwords");
-						}
 
-					}
-					else //Checkbox pwn false, user wants normal password...
-					{
-						int validCount = 0; //Many random passwords will be generated but only the ones that contain all the characters requested will be valid.
-						bool missingChar; //Will be true if a requested char is missing
-						while (validCount != NPasswordsNUD.Value) //Until Real count of valid generated passwords does match nPasswords requested
-						{
-
-							string genPass = Utils.CryptoUtils.GenerateSecurePassword((int)PassLengthNUD.Value, validCharacters); //Generate a secure password
-							missingChar = false;
-
-							//Equal Part as above
-							foreach (KeyValuePair<CheckBox, string> pair in Characters)//Check if any char checkbox is activated.
-							{
-								if (pair.Key.Checked == true)
-								{
-									for (int i = 0; i < genPass.Length; i++)
-									{
-										if (pair.Value.Contains(genPass[i]))//If it contains the character, it is not missing and we exit the foreach
-										{
-											missingChar = false;
-											break;
-										}
-										else//If it does not contain it, it is technically missing. We will check rest of chars in genPass.
-										{
-											missingChar = true;
-										}
-									}
-									if (missingChar) //If you exit previous for loop (which means character is checked) and missingChar is true, it is missing it definitively.
-									{
-										break;
-									}
-								}
-							}
-
-							//Same check but with symbols, in case the corresponding checkboxes are checked and there are not already missing characters
-							if (SymbolsCheckbox.Checked == true)
-							{
+								//End Equal Part as above
 								if (!missingChar)
 								{
-									foreach (KeyValuePair<CheckBox, string> pair in Symbols)//Check if any char checkbox is activated.
-									{
-										if (pair.Key.Checked == true)
-										{
-											if (genPass.Contains(pair.Value))
-											{
-												missingChar = false;
-												break;
-											}
-											else
-											{
-												missingChar = true;
-											}
-										}
-									}
+									PasswordTextBox.Text += genPass + Environment.NewLine;
+									validCount++;
+									decimal proportion = Decimal.Round(((validCount) / NPasswordsNUD.Value) * 100, 2);
+									PercentageLabel.Text = proportion.ToString() + "% complete, " + (validCount).ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
+									PasswordTextBox.Refresh();
+									PercentageLabel.Refresh();
 								}
-							}
-
-							//End Equal Part as above
-							if (!missingChar)
-							{
-								PasswordTextBox.Text += genPass + Environment.NewLine;
-								validCount++;
-								decimal proportion = Decimal.Round(((validCount) / NPasswordsNUD.Value) * 100, 2);
-								PercentageLabel.Text = proportion.ToString() + "% complete, " + (validCount).ToString() + "/" + NPasswordsNUD.Value.ToString() + " passwords generated.";
-								PasswordTextBox.Refresh();
-								PercentageLabel.Refresh();
 							}
 						}
 					}
+				
 				}
-			}
-			catch (Exception)
-			{
-				MessageBox.Show(text: "PassGuard could not generate the requested passwords. Either your Internet or the webpage is down, please try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
-			}
-			finally
-			{
-				SetEnabled(true); //Re-enable checkboxes
+				catch (Exception)
+				{
+					MessageBox.Show(text: "PassGuard could not generate the requested passwords. Either your Internet or the webpage is down, please try again later.", caption: "Error", icon: MessageBoxIcon.Error, buttons: MessageBoxButtons.OK);
+				}
+				finally
+				{
+					SetEnabled(true); //Re-enable checkboxes
+				}
 			}
 		}
 
