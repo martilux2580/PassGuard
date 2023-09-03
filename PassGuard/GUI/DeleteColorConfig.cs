@@ -67,8 +67,15 @@ namespace PassGuard.GUI
 		/// <param name="e"></param>
 		private void DeleteAllButton_Click(object sender, EventArgs e)
 		{
-			DeletedAllSuccess = true;
-			this.Close();
+			DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete all your saved configurations?\n\nNote: This action cannot be undone.", caption: "Confirm the deletion of all elements", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+			if (dialog == DialogResult.Yes)
+			{
+				DeletedAllSuccess = true;
+				this.Close();
+
+			}
+
+			
 		}
 
 		/// <summary>
@@ -80,10 +87,22 @@ namespace PassGuard.GUI
 		{
 			TrimComponents();
 
-			name = NameCombobox.Text;
-			DeletedSuccess = true;
-			this.Close();
+			if (String.IsNullOrEmpty(NameCombobox.Text) || String.IsNullOrWhiteSpace(NameCombobox.Text))
+			{
+				MessageBox.Show(text: "An element must be selected in order to be deleted.", caption: "No element selected", icon: MessageBoxIcon.Warning, buttons: MessageBoxButtons.OK);
+			}
+			else
+			{
+				DialogResult dialog = MessageBox.Show(text: "Are you sure you want to delete the element with name '" + NameTextbox.Text + "' from your saved configurations?\n\nNote: This action cannot be undone.", caption: "Confirm the deletion of the element", icon: MessageBoxIcon.Question, buttons: MessageBoxButtons.YesNo);
+				if (dialog == DialogResult.Yes)
+				{
+					name = NameCombobox.Text;
+					DeletedSuccess = true;
+					this.Close();
 
+				}
+
+			}
 		}
 
 		/// <summary>
