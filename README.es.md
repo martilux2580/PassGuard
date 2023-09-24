@@ -57,7 +57,7 @@ Las dependencias según la versión son las siguientes:
     - Windows OS (Windows 10 or 11, no he probado en otras versiones), 64 bits.
     - Distribución de .NET7.0 de 64 bits.
 
--Versión **1.0**:
+- Versión **1.0**:
     - Windows OS (Windows 10, no he probado con las otras versiones), 64 bits.
     - Distribuciones tanto de 32 como de 64 bits de .NET Framework 4.6.
 
