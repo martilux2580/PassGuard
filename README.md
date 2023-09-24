@@ -5,7 +5,7 @@
     <h1><b>PassGuard</b></h1>
 </div>
 
-To the point, **PassGuard is a modern-looking, fully offline and open source password manager** whose job is to securely store and provide to the user an active management of their passwords. **PassGuard executes correctly on 64-bit distributions of Windows 10**, however **both 32-bit and 64-bit distributions of .NET Framework 4.6 are required** for its operation.
+To the point, **PassGuard is a modern-looking, fully offline and open source password manager** whose job is to securely store and provide to the user an active management of their passwords.
 
 *Read this in other languages: [English](README.md), [Spanish](README.es.md).*
 
@@ -23,24 +23,47 @@ I learned about the algorithms and security protocols that are used to store thi
 
 **PassGuard** has a variety of characteristics to suit different types of users, from beginners to advanced users. The list of those features is as follows:
 
-- **Create, load and save** PassGuard Vaults in the .encrypted format (compatible with PassGuard)
-- **Organised and secure password storage** in your PassGuard Vault
-- Strong **password generator**
-    - Possibility of **generating passwords that have not been previously cracked**.
-- **Export data** from your PassGuard Vault **to a PDF**
-- **Create backups and Automated Backups** of a selected PassGuard Vault (app must be running to do so)
-- **Light/Dark Theme and Outline Colour Customization**, saving your preferences for future executions
+- Version 1.1:
+    - Added ability to **mark passwords as important**, and to sort them at the top.
+    - Improved **outline color manager**, with possibility to **import and export colour settings**.
+    - Added ability to **generate and download statistics about saved passwords**.
+    - Added option to **run Passguard at Windows startup**, or **keep it running in the background** when closing it.
+
+- Version 1.0:
+    - **Create, load and save** PassGuard Vaults in the .encrypted format (compatible with PassGuard)
+    - **Organised and secure password storage** in your PassGuard Vault
+    - Strong **password generator**
+        - Possibility of **generating passwords that have not been previously cracked**.
+    - **Export data** from your PassGuard Vault **to a PDF**
+    - **Create backups and Automated Backups** of a selected PassGuard Vault (app must be running to do so)
+    - **Light/Dark Theme and Outline Colour Customization**, saving your preferences for future executions
 
 Create and use strong passwords, save and manage them and **stop worrying about the management and security of your passwords with PassGuard**.
 
-## Installation
--------------------
+## Ideas for future versions
+-------------------------------
+Surely there are ways to leave me ideas for future versions. Some ideas I am contemplating are the following:
+- Window size not fixed and maximizable.
+- Improve visual aspect on screens with different resolutions and sizes, since for 24" monitors or 15" laptops, both with 1080p resolution, the application works fine, however with other configurations there may be glitches.
+- Add more statistics to the password part, and evaluate it for the outline colors part.
 
-<p>Right now <b>PassGuard is only available for 64-bit distributions of Windows 10</b> (gotta check Windows 11 though). <br>
+## Installation and Dependencies
+--------------------------------
 
-For **basic users**, in the **Releases section of this repository** you can find the **stable versions of the application**. Inside each Release you will find the `.zip` file with the installers for each supported OS. To **install the application** on your system just **download** the `.zip` file corresponding to your operating system, **unzip** it and **run** the `setup.exe` file.<br>
+**PassGuard runs correctly on 64-bit distributions of Windows**, however, depending on the version of Passguard, different dependencies are required.
 
-For **advanced users** who want to compile and modify the code, the `.sln` file for Visual Studio (preferably 2019 or newer editions) is available in the main branch of this repository. </p>
+Dependencies for each version are the following:
+- Version **1.1**:
+    - Windows OS (Windows 10 or 11, haven´t checked on the other ones), 64 bits.
+    - .NET7.0 distribution for 64 bits.
+
+- Version **1.0**:
+    - Windows OS (Windows 10, haven´t checked on the other ones), 64 bits.
+    - Both 32 and 64 bit distributions of .NET Framework 4.6.
+
+For **basic users**, in the **Releases section of this repository** you can find the **stable versions of the application**. Inside each Release you will find the `.zip` file with the `.exe` installers for each supported OS. To **install the application** on your system just **download** the `.zip` file corresponding to your operating system, **unzip** it and **run** the `setup.exe` file.<br>
+
+For **advanced users** who want to compile and modify the code, the `.sln` file for Visual Studio (preferably 2019 or newer editions, depending on Passguard version) is available in the main branch of this repository. </p>
 
 ## Disclaimer
 -------------

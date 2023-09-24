@@ -1,0 +1,12 @@
+General Public:
+	.NET 7.0 Desktop Runtime (v7.0.9) - Windows x64 Installer
+		Link: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.9-windows-x64-installer
+
+	ASP.NET Core 7.0 Runtime (v7.0.9) - Windows x64 Installer
+		Link: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-aspnetcore-7.0.9-windows-x64-installer
+
+Developers:
+	.NET SDK 7.0 - Windows x64 Installer
+		Link: https://dotnet.microsoft.com/es-es/download/dotnet/thank-you/sdk-7.0.400-windows-x64-installer
+	Visual Studio 2022 - Windows x64 Installer
+		Link: https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage
