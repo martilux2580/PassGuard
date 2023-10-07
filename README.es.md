@@ -46,6 +46,7 @@ Seguramente hay maneras de dejarme ideas para futuras versiones. Algunas ideas q
 - Tamaño de ventana no fijo y maximizable.
 - Mejorar aspecto visual en pantallas con diferentes resoluciones y tamaños, ya que para monitores de 24 pulgadas o portatiles de 15 pulgadas, ambos con resolucion 1080p, la aplicación funciona bien, sin embargo con otras configuraciones pueden haber glitches.
 - Añadir más estadísticas a la parte de contraseñas, y evaluarlo para la parte de colores de contorno.
+- En acciones que consuman cierto tiempo, añadir el cursor WaitCursor o poner un aviso de que la acción está en progreso.
 
 ## Instalación y Dependencias
 -----------------------------
