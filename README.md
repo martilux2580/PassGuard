@@ -46,6 +46,7 @@ Surely there are ways to leave me ideas for future versions. Some ideas I am con
 - Window size not fixed and maximizable.
 - Improve visual aspect on screens with different resolutions and sizes, since for 24" monitors or 15" laptops, both with 1080p resolution, the application works fine, however with other configurations there may be glitches.
 - Add more statistics to the password part, and evaluate it for the outline colors part.
+- For time-consuming actions, add the WaitCursor cursor or put a warning that the action is in progress.
 
 ## Installation and Dependencies
 --------------------------------
