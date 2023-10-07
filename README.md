@@ -12,7 +12,7 @@ To the point, **PassGuard is a modern-looking, fully offline and open source pas
 ## Why does PassGuard exist? PassGuard Origins
 ----------------------------------------------
 
-<p>The idea of creating a password manager came firstly from the <b>desire to create a personal project</b> using the knowledge obtained in the first semesters of the Computer Engineering degree.<br> 
+<p>The idea of creating a password manager came firstly from the <b>desire to create a personal project</b> using the knowledge obtained in the first semesters of the Computer Science degree.<br> 
 The first thing I did was to <b>look for (IT-related) processes in my life</b> that I could optimise. Among the first processes I thought of was the idea of creating a password manager. 
 Within my close circle only one person uses a professional password manager, the rest of the people saved their passwords in a plain text file, wrote them by hand on a piece of paper or used the same password with small variations.<br>
 In my case, <b>although the current password managers on the market have good reviews</b>, some have suffered security breaches (apparently without consequences for the users), and <b>the fact of saving all your valuable passwords in one place made me wary of these services</b>. That's why <b>I decided to create my own password manager :)</b><br>
