@@ -387,3 +387,13 @@ FodyWeavers.xsd
 *.out
 *.synctex.gz
 *.toc
+
+# React Native / Expo
+node_modules/
+dist/
+.expo/
+
+# Android build artifacts
+PassGuardMobile/android/.gradle/
+PassGuardMobile/android/app/build/
+PassGuardMobile/android/build/
