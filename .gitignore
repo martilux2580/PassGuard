@@ -398,7 +398,32 @@ PassGuardMobile/android/.gradle/
 PassGuardMobile/android/app/build/
 PassGuardMobile/android/build/
 
-# Claves de firma: no se suben nunca (cada uno crea la suya)
+# ---- Claves, certificados y secretos: no se suben nunca ----
+# Ninguno hace falta para compilar: cada uno crea los suyos en su equipo.
 *.keystore
 *.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.snk
+*.cer
+*.crt
+*.mobileprovision
 key.properties
+keystore.properties
+local.properties
+.env
+.env.*
+!.env.example
+secrets.*
+*.secret
+credentials.json
+service-account*.json
+google-services.json
+GoogleService-Info.plist
+
+# ---- Registros y copias locales (pueden llevar rutas o datos de tu equipo) ----
+*.log
+*.clef
+*.bak
