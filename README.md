@@ -66,6 +66,14 @@ For **basic users**, in the **Releases section of this repository** you can find
 
 For **advanced users** who want to compile and modify the code, the `.sln` file for Visual Studio (preferably 2019 or newer editions, depending on Passguard version) is available in the main branch of this repository. </p>
 
+**PassGuard Mobile (Android):** this repository doesn't include any signing key. Before the first build, create the standard Android debug key inside `PassGuardMobile/android/app`:
+
+```
+keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+```
+
+Then run `npx expo run:android` from `PassGuardMobile`.
+
 ## Disclaimer
 -------------
 

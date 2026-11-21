@@ -397,3 +397,8 @@ dist/
 PassGuardMobile/android/.gradle/
 PassGuardMobile/android/app/build/
 PassGuardMobile/android/build/
+
+# Claves de firma: no se suben nunca (cada uno crea la suya)
+*.keystore
+*.jks
+key.properties

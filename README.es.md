@@ -66,6 +66,14 @@ Para los **usuarios básicos**, en la **sección de Releases de este repositorio
 
 Para los **usuarios avanzados** que quieran compilar y modificar el código, en la rama principal de este repositorio está disponible el archivo `.sln` para Visual Studio (preferiblemente ediciones 2019 o más recientes según la versión de Passguard).
 
+**PassGuard Mobile (Android):** este repositorio no incluye ninguna clave de firma. Antes de compilar por primera vez, crea la clave de depuración estándar de Android dentro de `PassGuardMobile/android/app`:
+
+```
+keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+```
+
+Después ejecuta `npx expo run:android` desde `PassGuardMobile`.
+
 ## Aviso Legal
 --------------
 
